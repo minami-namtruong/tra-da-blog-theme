@@ -387,18 +387,6 @@ a:hover {
   background: rgba(19, 27, 46, 0.88);
 }
 
-/* Header container spans full width of the screen */
-.site-header .site-wrapper {
-  max-width: 100%;
-  width: 100%;
-  padding: 0 2.5rem;
-}
-@media (max-width: 768px) {
-  .site-header .site-wrapper {
-    padding: 0 1rem;
-  }
-}
-
 .header-inner {
   display: flex;
   align-items: center;
