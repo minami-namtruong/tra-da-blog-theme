@@ -446,7 +446,7 @@ a:hover {
 #nav-menu-section {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin: 0;
   padding: 0;
 }
@@ -458,7 +458,8 @@ a:hover {
 .nav-menu-wrapper {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  margin-left: 2rem;
 }
 
 .nav-menu {
@@ -548,6 +549,7 @@ a:hover {
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .btn-icon {
@@ -869,10 +871,39 @@ a:hover {
   line-height: 1.25;
 }
 .profile-bio {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.65;
   color: var(--text-muted);
-  font-size: 0.95rem;
-  margin: 0 0 0.75rem;
-  line-height: 1.5;
+  margin: 0.35rem 0 0.85rem;
+  max-width: 600px;
+}
+
+.profile-bio::before {
+  content: '“';
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-right: 0.2rem;
+  line-height: 0;
+  vertical-align: -0.1rem;
+  display: inline-block;
+  opacity: 0.85;
+}
+
+.profile-bio::after {
+  content: '”';
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-left: 0.2rem;
+  line-height: 0;
+  vertical-align: -0.1rem;
+  display: inline-block;
+  opacity: 0.85;
 }
 
 /* Social Icons Row */
@@ -1000,7 +1031,7 @@ a:hover {
   .cover-info-card { padding: 0 1.25rem 1.5rem; }
   .avatar-wrapper { margin-top: -45px; }
   .profile-avatar { width: 90px; height: 90px; }
-  .profile-name { font-size: 1.35rem; }
+  .profile-bio { font-size: 0.95rem; }
   .profile-cover-section.is-mini .cover-image-wrapper { height: 70px; }
   .profile-cover-section.is-mini .avatar-wrapper { margin-top: -30px; }
   .profile-cover-section.is-mini .profile-avatar { width: 60px; height: 60px; }
@@ -3045,13 +3076,6 @@ a:hover {
                   <div class='profile-meta'>
                     <h1 class='profile-name'><data:blog.title/></h1>
                     <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                    <div class='profile-social-icons'>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
-                    </div>
                   </div>
                   <div class='profile-cta-area'>
                     <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
@@ -3074,13 +3098,6 @@ a:hover {
                   <div class='profile-meta'>
                     <div class='profile-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
                     <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                    <div class='profile-social-icons'>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
-                    </div>
                   </div>
                   <div class='profile-cta-area'>
                     <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>

@@ -345,13 +345,6 @@ ${combinedCss}
                   <div class='profile-meta'>
                     <h1 class='profile-name'><data:blog.title/></h1>
                     <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                    <div class='profile-social-icons'>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
-                    </div>
                   </div>
                   <div class='profile-cta-area'>
                     <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
@@ -374,13 +367,6 @@ ${combinedCss}
                   <div class='profile-meta'>
                     <div class='profile-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
                     <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                    <div class='profile-social-icons'>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
-                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
-                    </div>
                   </div>
                   <div class='profile-cta-area'>
                     <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>

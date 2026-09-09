@@ -184,9 +184,9 @@ Theme tự động sinh cấu trúc dữ liệu JSON-LD chuẩn xác theo Google
   - Hỗ trợ thay ảnh nền tùy ý thông qua widget `HTML1` trong trang Bố cục (Layout).
 - **Khung thông tin tác giả (Overlap Card)**:
   - **Avatar tròn**: Đường kính `120px` (Desktop) hoặc `90px` (Mobile), có viền trắng dày `4px` đè lên mép dưới ảnh bìa (`margin-top: -60px`).
-  - **Tên tác giả & Slogan/Bio**: Hiển thị tên lớn (H1/H2) và dòng mô tả ngắn 1-2 câu về định vị bản thân.
-  - **Thanh Mạng Xã Hội Cá Nhân**: Icon Facebook, X/Twitter, Threads, LinkedIn, Instagram,...
-  - **Nút CTA Nổi bật**: Nút `[ 💌 Nhận Bản Tin ]` cuộn nhanh xuống form đăng ký nhận email.
+  - **Tên tác giả & Dòng Status / Châm ngôn sống**: Hiển thị tên lớn (H1/H2) và câu trích dẫn/status triết lý sống.
+  - **Không chứa icon mạng xã hội**: Đã lược bỏ toàn bộ cụm icon mạng xã hội ở Banner để giữ sự tinh gọn, sang trọng và tập trung vào câu status (các icon kết nối mạng xã hội được đặt đúng vị trí tại Widget "Về tác giả" ở Sidebar và Footer).
+  - **Nút CTA Nổi bật**: Nút duy nhất `[ 💌 Nhận Bản Tin ]` cuộn nhanh xuống form đăng ký nhận email.
 - **Hành vi trên Trang Bài Viết**: Giữ nguyên kích thước chuẩn giống trang chủ (theo yêu cầu của tác giả), tối ưu SEO bằng cách đặt tên blog dạng link về trang chủ thay vì H1.
 
 ### 4.3. Fullscreen Editorial Timeline Archive (Mục Lục Toàn Thư & Cây Dòng Thời Gian Dọc)
