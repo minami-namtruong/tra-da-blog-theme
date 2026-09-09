@@ -41,11 +41,12 @@
 
   <!-- PREVIEW MODE TOGGLE BAR -->
   <div style="background: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 0.6rem 1.5rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 99999;">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
       <span style="font-weight: 700; color: var(--primary);">⚙️ CHẾ ĐỘ XEM TRƯỚC:</span>
       <button id="view-mode-home" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s;">🏠 Trang Chủ (Feed)</button>
       <button id="view-mode-post" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">📄 Trang Đọc Bài Viết (Single Post)</button>
       <button id="view-mode-archive" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">⏳ Dòng Thời Gian (Archive Page)</button>
+      <button id="toggle-logo-mode" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px dashed var(--primary); background: var(--bg-card); color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.2s;">🖼️ Thử Logo: [Văn Bản] ⇄ [Hình Ảnh]</button>
     </div>
     <span style="color: var(--text-muted); font-size: 0.82rem;">💡 Đặc tả: FEAT-TIMELINE-PAGE-V3 (/p/muc-luc.html)</span>
   </div>
@@ -761,6 +762,31 @@
           });
         }
       });
+
+      // Toggle Logo Mode (Text vs Image Demo)
+      var toggleLogoBtn = document.getElementById("toggle-logo-mode");
+      var isImageLogo = false;
+      var textLogoHTML = 'Nam Trương<span class="dot">.</span>';
+      // Inline SVG data URI demo logo
+      var imgLogoHTML = '<img class="brand-logo-img" alt="Nam Trương" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 170 38\' height=\'38\' width=\'170\'><rect width=\'100%25\' height=\'100%25\' rx=\'8\' fill=\'%232d3748\'/><text x=\'14\' y=\'25\' font-family=\'Outfit, sans-serif\' font-size=\'18\' font-weight=\'800\' fill=\'%23ffffff\'>Nam Trương<tspan fill=\'%23e67e22\'>.</tspan></text></svg>"/>';
+
+      if (toggleLogoBtn) {
+        toggleLogoBtn.addEventListener("click", function() {
+          isImageLogo = !isImageLogo;
+          var headerLogoLink = document.getElementById("header-logo-link");
+          var drawerLogo = document.querySelector(".nav-drawer-header .brand-logo");
+
+          if (headerLogoLink) {
+            headerLogoLink.innerHTML = isImageLogo ? imgLogoHTML : textLogoHTML;
+          }
+          if (drawerLogo) {
+            drawerLogo.innerHTML = isImageLogo ? imgLogoHTML : textLogoHTML;
+          }
+
+          toggleLogoBtn.innerText = isImageLogo ? "🖼️ Đang dùng: [HÌNH ẢNH] (Bấm đổi Text)" : "✍️ Đang dùng: [VĂN BẢN] (Bấm đổi Ảnh)";
+          toggleLogoBtn.style.borderColor = isImageLogo ? "var(--primary)" : "var(--border-color)";
+        });
+      }
 
       // Clicking any post card title in feed switches to Single Post view
       var postLinks = document.querySelectorAll(".view-post-link");

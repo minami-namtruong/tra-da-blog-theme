@@ -18,6 +18,14 @@
     }
   }
 
+  function syncDrawerLogo() {
+    var headerLogoImg = document.querySelector('.site-header .brand-logo img.brand-logo-img');
+    var drawerLogo = document.querySelector('.nav-drawer-header .brand-logo');
+    if (headerLogoImg && drawerLogo) {
+      drawerLogo.innerHTML = headerLogoImg.outerHTML;
+    }
+  }
+
   function initMobileNav() {
     hamburgerBtn = document.getElementById('hamburger-btn');
     navDrawer = document.getElementById('nav-drawer');
@@ -25,6 +33,7 @@
     navDrawerClose = document.getElementById('nav-drawer-close');
 
     syncDrawerMenu();
+    syncDrawerLogo();
 
     if (!hamburgerBtn || !navDrawer) return;
 

@@ -245,10 +245,35 @@ ${combinedCss}
     <div class='site-wrapper'>
       <div class='header-inner'>
 
-        <!-- Brand Logo -->
-        <div class='brand-logo'>
-          <a expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
-        </div>
+        <!-- Brand Logo (Configurable via Layout > Header1: Text or Image) -->
+        <b:section class='brand-logo-section' id='header-logo-section' maxwidgets='1' name='Tiêu Đề &amp; Logo Blog' showaddelement='no'>
+          <b:widget id='Header1' locked='true' title='Tiêu Đề &amp; Logo Blog' type='Header' version='2'>
+            <b:widget-settings>
+              <b:widget-setting name='displayUrl'/>
+              <b:widget-setting name='displayHeight'>0</b:widget-setting>
+              <b:widget-setting name='sectionWidth'>-1</b:widget-setting>
+              <b:widget-setting name='useImage'>false</b:widget-setting>
+              <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
+              <b:widget-setting name='imagePlacement'>REPLACE</b:widget-setting>
+              <b:widget-setting name='displayWidth'>0</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <div class='brand-logo'>
+                <a expr:href='data:blog.homepageUrl' expr:title='data:title ? data:title : data:blog.title'>
+                  <b:if cond='data:image'>
+                    <img class='brand-logo-img' expr:alt='data:title ? data:title : data:blog.title' expr:src='data:image'/>
+                  <b:else/>
+                    <b:if cond='data:title'>
+                      <data:title/><span class='dot'>.</span>
+                    <b:else/>
+                      <data:blog.title/><span class='dot'>.</span>
+                    </b:if>
+                  </b:if>
+                </a>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
         <!-- Desktop Navigation (Single Source of Truth) -->
         <b:section id='nav-menu-section' name='Menu Điều Hướng Chính' maxwidgets='1' showaddelement='yes'>

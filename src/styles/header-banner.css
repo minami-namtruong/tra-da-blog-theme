@@ -52,6 +52,16 @@
 }
 
 /* Brand Logo */
+.brand-logo-section {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.brand-logo-section .widget {
+  margin: 0;
+  padding: 0;
+}
 .brand-logo {
   font-size: 1.35rem;
   font-weight: 800;
@@ -73,10 +83,35 @@
 .brand-logo .dot {
   color: var(--primary);
 }
+.brand-logo-img {
+  max-height: 38px;
+  max-width: 190px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: var(--transition);
+}
+.nav-drawer-header .brand-logo-img {
+  max-height: 32px;
+  max-width: 150px;
+}
 
 /* ==========================================
    DESKTOP NAVIGATION MENU
    ========================================== */
+#nav-menu-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+#nav-menu-section .widget {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
 .nav-menu-wrapper {
   flex: 1;
   display: flex;
