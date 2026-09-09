@@ -1,0 +1,4558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:responsive='true' b:version='2'
+      xmlns='http://www.w3.org/1999/xhtml'
+      xmlns:b='http://www.google.com/2005/gml/b'
+      xmlns:data='http://www.google.com/2005/gml/data'
+      xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta content='width=device-width, initial-scale=1, minimum-scale=1' name='viewport'/>
+  <meta charset='UTF-8'/>
+
+  <!-- Dynamic Title & Meta -->
+  <b:if cond='data:view.isSingleItem'>
+    <title><data:blog.pageName/> | <data:blog.title/></title>
+    <meta expr:content='data:blog.metaDescription' name='description'/>
+    <meta expr:content='data:blog.pageName' property='og:title'/>
+    <meta expr:content='data:blog.metaDescription' property='og:description'/>
+    <b:if cond='data:blog.postImageThumbnailUrl'>
+      <meta expr:content='data:blog.postImageThumbnailUrl' property='og:image'/>
+    </b:if>
+    <meta content='article' property='og:type'/>
+  <b:else/>
+    <title><data:blog.pageTitle/></title>
+    <meta expr:content='data:blog.metaDescription' name='description'/>
+    <meta expr:content='data:blog.pageTitle' property='og:title'/>
+    <meta content='website' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.url' property='og:url'/>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  <meta content='summary_large_image' name='twitter:card'/>
+
+  <!-- Canonical URL (strips ?m=1 / ?m=0 mobile params) -->
+  <b:if cond='data:view.isSingleItem'>
+    <link expr:href='data:post.url' rel='canonical'/>
+  <b:else/>
+    <link expr:href='data:blog.homepageUrl' rel='canonical'/>
+  </b:if>
+
+  <!-- Google Fonts -->
+  <link rel='preconnect' href='https://fonts.googleapis.com'/>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin='anonymous'/>
+  <link href='https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Lora:ital,wght@0,500;1,400&amp;display=swap' rel='stylesheet'/>
+
+  <!-- Blogger head content (RSS, widgets, etc.) -->
+  <b:include data='blog' name='all-head-content'/>
+
+  <!-- Zero-FOUC Dark Mode (must be in <head>) -->
+  <script>
+  //<![CDATA[
+/* Zero-FOUC Dark Mode Switcher */
+(function() {
+  const currentTheme = localStorage.getItem("theme") || 
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", currentTheme);
+
+  window.toggleTheme = function() {
+    const active = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", active);
+    localStorage.setItem("theme", active);
+    updateThemeIcon();
+  };
+
+  function updateThemeIcon() {
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const btn = document.getElementById("theme-toggle-btn");
+    if (btn) btn.innerHTML = isDark ? "☀️" : "🌙";
+  }
+
+  document.addEventListener("DOMContentLoaded", updateThemeIcon);
+})();
+
+  //]]>
+  </script>
+
+  <!-- Blogger Theme Designer Variables + Styles -->
+  <b:skin><![CDATA[
+<Variable name="body.background" description="Màu nền toàn trang" type="color" default="#f8fafc" value="#f8fafc"/>
+<Variable name="card.background" description="Màu nền thẻ Card &amp; Bài viết" type="color" default="#ffffff" value="#ffffff"/>
+<Variable name="primary.color" description="Màu chủ đạo (Buttons, Links, Badges)" type="color" default="#2563eb" value="#2563eb"/>
+<Variable name="accent.color" description="Màu nhấn (Review, Đánh giá Sao)" type="color" default="#f59e0b" value="#f59e0b"/>
+<Variable name="text.main" description="Màu chữ chính" type="color" default="#0f172a" value="#0f172a"/>
+<Variable name="text.muted" description="Màu chữ phụ (Metadata, Snippet)" type="color" default="#475569" value="#475569"/>
+<Variable name="font.family" description="Phông chữ chính" type="font" default="normal 400 16px 'Be Vietnam Pro', sans-serif" value="normal 400 16px 'Be Vietnam Pro', sans-serif"/>
+
+/* ==========================================
+   DESIGN TOKENS & CSS VARIABLES
+   ========================================== */
+:root {
+  /* Colors - Light Theme */
+  --bg-body: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-surface: #f1f5f9;
+  --bg-input: #ffffff;
+  --text-main: #0f172a;       /* Slate 900 */
+  --text-muted: #475569;      /* Slate 600 */
+  --text-light: #94a3b8;      /* Slate 400 */
+  --border-color: #e2e8f0;    /* Slate 200 */
+  --border-hover: #cbd5e1;    /* Slate 300 */
+
+  /* Brand & Accent Colors */
+  --primary: #2563eb;         /* Blue 600 */
+  --primary-hover: #1d4ed8;   /* Blue 700 */
+  --primary-light: #eff6ff;   /* Blue 50 */
+  --accent: #f59e0b;          /* Amber 500 */
+  --success: #10b981;         /* Emerald 500 */
+  --warning: #f59e0b;         /* Amber 500 */
+  --danger: #ef4444;          /* Red 500 */
+
+  /* Typography */
+  --font-main: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Lora", "Merriweather", Georgia, serif;
+  --font-mono: "Fira Code", "Courier New", monospace;
+
+  /* Sizing & Spacing */
+  --max-width: 1200px;
+  --content-max-width: 740px;
+  --header-height: 64px;
+  --sidebar-width: 340px;
+  --cover-height-desktop: 240px;
+  --cover-height-tablet: 200px;
+  --cover-height-mobile: 160px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.08);
+
+  /* Transitions */
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] {
+  --bg-body: #090d16;         /* Deep Navy Night */
+  --bg-card: #131b2e;         /* Dark Slate Card */
+  --bg-surface: #1e293b;      /* Surface Elements */
+  --bg-input: #1a233a;
+  --text-main: #f1f5f9;       /* Slate 100 */
+  --text-muted: #94a3b8;      /* Slate 400 */
+  --text-light: #64748b;      /* Slate 500 */
+  --border-color: #1e293b;
+  --border-hover: #334155;
+
+  --primary: #3b82f6;         /* Blue 500 */
+  --primary-hover: #60a5fa;   /* Blue 400 */
+  --primary-light: rgba(59, 130, 246, 0.15);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ==========================================
+   TYPOGRAPHY & CONTENT STYLING
+   ========================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+}
+
+h1 { font-size: 2.25rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; }
+h2 { font-size: 1.75rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
+h3 { font-size: 1.35rem; font-weight: 700; }
+h4 { font-size: 1.15rem; font-weight: 600; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1.4em;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* ==========================================
+   POST BODY TYPOGRAPHY (reading-optimized)
+   ========================================== */
+.post-body {
+  font-size: 1.15rem;   /* ~18.5px */
+  line-height: 1.8;
+  color: var(--text-main);
+  word-wrap: break-word;
+  max-width: var(--content-max-width);
+}
+
+.post-body p {
+  margin-bottom: 1.6em;
+}
+
+.post-body h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.post-body h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 1.6em;
+}
+
+.post-body h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.post-body blockquote {
+  margin: 2em 0;
+  padding: 1.25em 1.75em;
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--text-main);
+}
+.post-body blockquote p:last-child { margin-bottom: 0; }
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 1.5em auto;
+  display: block;
+  box-shadow: var(--shadow-sm);
+}
+
+.post-body ul, .post-body ol {
+  padding-left: 1.6em;
+  margin-bottom: 1.6em;
+}
+
+.post-body li {
+  margin-bottom: 0.6em;
+  line-height: 1.75;
+}
+
+.post-body pre, .post-body code {
+  font-family: var(--font-mono);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+}
+.post-body code {
+  padding: 0.2em 0.45em;
+  font-size: 0.88em;
+  color: var(--primary);
+  border: 1px solid var(--border-color);
+}
+.post-body pre code {
+  padding: 0;
+  color: inherit;
+  border: none;
+  background: none;
+}
+.post-body pre {
+  padding: 1.5em;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  margin: 1.75em 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75em 0;
+  font-size: 0.95rem;
+}
+.post-body th, .post-body td {
+  padding: 0.75em 1em;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+.post-body th {
+  background: var(--bg-surface);
+  font-weight: 700;
+}
+.post-body tr:nth-child(even) td {
+  background: rgba(0,0,0,0.02);
+}
+[data-theme="dark"] .post-body tr:nth-child(even) td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Responsive iframes & video embeds */
+.post-body iframe,
+.post-body .responsive-iframe,
+.post-body .video-wrapper iframe {
+  max-width: 100%;
+}
+.post-body .video-wrapper,
+.post-body .responsive-video {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin: 1.75em 0;
+}
+.post-body .video-wrapper iframe,
+.post-body .responsive-video iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+  border-radius: var(--radius-md);
+}
+
+
+/* ==========================================
+   HEADER, NAVIGATION & PROFILE COVER BANNER
+   ========================================== */
+
+.site-wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+@media (max-width: 768px) {
+  .site-wrapper { padding: 0 1rem; }
+}
+
+/* Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ==========================================
+   STICKY HEADER (Glassmorphism)
+   ========================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+[data-theme="dark"] .site-header {
+  background: rgba(19, 27, 46, 0.88);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+/* Brand Logo */
+.brand-logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.brand-logo a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+.brand-logo .dot {
+  color: var(--primary);
+}
+
+/* ==========================================
+   DESKTOP NAVIGATION MENU
+   ========================================== */
+.nav-menu-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu > li {
+  position: relative;
+}
+
+.nav-menu > li > a {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.85rem;
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+.nav-menu > li > a:hover,
+.nav-menu > li > a.active {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Dropdown indicator */
+.nav-menu > li.has-dropdown > a::after {
+  content: "▾";
+  font-size: 0.75em;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+.nav-menu > li.has-dropdown:hover > a::after {
+  transform: rotate(-180deg);
+}
+
+/* Dropdown submenu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 180px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+}
+.nav-menu > li.has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.dropdown-menu li a {
+  display: block;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+.dropdown-menu li a:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ==========================================
+   HEADER ACTIONS (Dark Mode + Search)
+   ========================================== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.btn-icon:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+/* Hamburger Button (Mobile only) */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 6px;
+  transition: var(--transition);
+}
+.hamburger-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-muted);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+.hamburger-btn.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger-btn.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger-btn.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.hamburger-btn:hover {
+  background: var(--bg-surface);
+}
+
+/* ==========================================
+   SEARCH MODAL
+   ========================================== */
+.search-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.search-modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-20px) scale(0.96);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 1rem;
+}
+.search-modal-overlay.is-open .search-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+.search-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.search-modal-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.search-close-btn {
+  background: var(--bg-surface);
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.search-close-btn:hover { background: var(--danger); color: #fff; }
+
+.search-input-wrap {
+  display: flex;
+  gap: 0.5rem;
+}
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1.1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 1rem;
+  font-family: var(--font-main);
+  outline: none;
+  transition: var(--transition);
+}
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.search-submit-btn {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.search-submit-btn:hover { background: var(--primary-hover); }
+
+/* ==========================================
+   MOBILE NAVIGATION DRAWER
+   ========================================== */
+.nav-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.nav-drawer-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: var(--bg-card);
+  z-index: 1600;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+}
+.nav-drawer.is-open {
+  transform: translateX(0);
+}
+
+.nav-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.nav-drawer-close {
+  background: var(--bg-surface);
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.nav-drawer-close:hover { background: var(--danger); color: #fff; }
+
+.nav-drawer-menu {
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0;
+  flex: 1;
+}
+.nav-drawer-menu li { }
+.nav-drawer-menu li a {
+  display: block;
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--text-muted);
+  border-left: 3px solid transparent;
+  transition: var(--transition);
+}
+.nav-drawer-menu li a:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+.nav-drawer-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-drawer-submenu li a {
+  padding-left: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ==========================================
+   PROFILE COVER HERO SECTION
+   ========================================== */
+.profile-cover-section {
+  margin: 1.5rem auto 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.cover-image-wrapper {
+  position: relative;
+  height: var(--cover-height-desktop);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.cover-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.25) 100%);
+}
+
+.cover-info-card {
+  padding: 0 2rem 2rem;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.avatar-wrapper {
+  margin-top: -60px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  border: 4px solid var(--bg-card);
+  box-shadow: var(--shadow-md);
+  object-fit: cover;
+  background: var(--bg-surface);
+  display: block;
+}
+
+.profile-meta {
+  flex: 1;
+  min-width: 200px;
+  margin-top: 0.5rem;
+}
+.profile-name {
+  font-size: 1.65rem;
+  font-weight: 800;
+  margin: 0 0 0.3rem;
+  line-height: 1.25;
+}
+.profile-bio {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+
+/* Social Icons Row */
+.profile-social-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.social-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: var(--transition);
+  text-decoration: none;
+}
+.social-icon-link:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* CTA Button Area */
+.profile-cta-area {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.btn-subscribe {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  border: none;
+  cursor: pointer;
+}
+.btn-subscribe:hover {
+  background: var(--primary-hover);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* Profile mini (on post pages) */
+.profile-cover-section.is-mini .cover-image-wrapper {
+  height: 100px;
+}
+.profile-cover-section.is-mini .profile-name {
+  font-size: 1.1rem;
+}
+.profile-cover-section.is-mini .profile-bio {
+  display: none;
+}
+.profile-cover-section.is-mini .avatar-wrapper {
+  margin-top: -36px;
+}
+.profile-cover-section.is-mini .profile-avatar {
+  width: 72px;
+  height: 72px;
+}
+
+/* ==========================================
+   DYNAMIC CATEGORY TABS
+   ========================================== */
+.category-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1.25rem 0 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.category-tabs-bar::-webkit-scrollbar { display: none; }
+
+.tab-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: var(--transition);
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tab-pill:hover, .tab-pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+  .nav-menu-wrapper { display: none; }
+  .hamburger-btn { display: flex; }
+  .cover-image-wrapper { height: var(--cover-height-mobile); }
+  .cover-info-card { padding: 0 1.25rem 1.5rem; }
+  .avatar-wrapper { margin-top: -45px; }
+  .profile-avatar { width: 90px; height: 90px; }
+  .profile-name { font-size: 1.35rem; }
+  .profile-cover-section.is-mini .cover-image-wrapper { height: 70px; }
+  .profile-cover-section.is-mini .avatar-wrapper { margin-top: -30px; }
+  .profile-cover-section.is-mini .profile-avatar { width: 60px; height: 60px; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cover-image-wrapper { height: var(--cover-height-tablet); }
+}
+
+/* Profile mini (on post pages) additions */
+.profile-cover-section.is-mini {
+  margin-top: 1rem;
+}
+.profile-cover-section.is-mini .cover-info-card {
+  padding: 0 1.5rem 1rem;
+}
+.profile-cover-section.is-mini .profile-cta-area .btn-subscribe {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+
+/* ==========================================
+   POST LAYOUT, MAIN FEED & SINGLE POST
+   ========================================== */
+
+/* Main 2-column grid */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr var(--sidebar-width);
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+  align-items: start;
+}
+
+/* ==========================================
+   POST CARDS FEED (Homepage / Archive)
+   ========================================== */
+.posts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.post-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 1.5rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
+}
+
+.post-card-thumb {
+  width: 100%;
+  height: 150px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--bg-surface);
+  display: block;
+}
+
+.post-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.post-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+}
+.post-badge:hover { color: var(--primary-hover); }
+
+.post-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  line-height: 1.4;
+}
+.post-card-title a { color: var(--text-main); text-decoration: none; }
+.post-card-title a:hover { color: var(--primary); }
+
+.post-card-snippet {
+  color: var(--text-muted);
+  font-size: 0.91rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  flex-wrap: wrap;
+}
+.post-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================
+   NUMBERED PAGINATION
+   ========================================== */
+.blog-pager, .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 2.5rem 0 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-num, .blog-pager a, .pager-link, .pagination a, .pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.page-num:hover, .blog-pager a:hover, .pagination a:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.page-num.active, .pagination .current, .blog-pager a.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.blog-pager .home-link,
+.blog-pager-older-link,
+.blog-pager-newer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.blog-pager-older-link:hover, .blog-pager-newer-link:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ==========================================
+   SINGLE POST CONTAINER
+   ========================================== */
+.single-post-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  font-size: 0.83rem;
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.breadcrumbs a { color: var(--text-muted); }
+.breadcrumbs a:hover { color: var(--primary); }
+.breadcrumbs .separator {
+  color: var(--text-light);
+  font-size: 0.75rem;
+}
+
+/* Post Title H1 */
+.single-post-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+/* Post Meta Header Row */
+.post-meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+
+.author-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.author-avatar-sm {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.author-meta-text .author-name-link {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+.author-meta-details {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.1rem;
+}
+
+/* Bilingual Switcher */
+.bilingual-switcher {
+  display: inline-flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 3px;
+}
+.lang-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-main);
+}
+.lang-btn.active {
+  background: var(--primary);
+  color: #fff;
+}
+.bilingual-switcher-wrapper {
+  display: none; /* hidden by default, shown by JS when bilingual content detected */
+}
+.bilingual-switcher-wrapper.is-visible {
+  display: flex;
+}
+
+/* Auto Table of Contents */
+.table-of-contents {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+.toc-title {
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  gap: 0.5rem;
+}
+.toc-toggle-icon {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.toc-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.92rem;
+}
+.toc-list li { margin: 0.5rem 0; }
+.toc-list li.toc-h3 { padding-left: 1.25rem; }
+.toc-list a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.toc-list a:hover { color: var(--primary); }
+.toc-list a.toc-active {
+  color: var(--primary);
+  font-weight: 600;
+}
+.toc-list a.toc-active::before {
+  content: '▸';
+  font-size: 0.7rem;
+  color: var(--primary);
+}
+
+/* Social Share Bar */
+.social-share-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+.share-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-right: 0.25rem;
+}
+.btn-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  background: var(--bg-card);
+}
+.btn-share:hover {
+  color: #fff;
+}
+.btn-share.btn-share-fb:hover { background: #1877F2; border-color: #1877F2; }
+.btn-share.btn-share-tw:hover { background: #000; border-color: #000; }
+.btn-share.btn-share-li:hover { background: #0A66C2; border-color: #0A66C2; }
+.btn-share.btn-share-copy:hover { background: var(--success); border-color: var(--success); color: #fff; }
+
+/* ==========================================
+   AUTHOR BIO BOX
+   ========================================== */
+.author-bio-box {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin: 2.5rem 0;
+  align-items: flex-start;
+}
+.author-bio-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid var(--border-color);
+}
+.author-bio-content { flex: 1; min-width: 0; }
+.author-bio-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin-bottom: 0.3rem;
+}
+.author-bio-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 0.6rem;
+}
+.author-bio-text {
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin: 0 0 1rem;
+}
+.author-bio-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================
+   NEXT / PREV POST NAVIGATION
+   ========================================== */
+.post-nav-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 2.5rem 0;
+}
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.post-nav-link:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.post-nav-link.post-nav-next {
+  text-align: right;
+}
+.post-nav-direction {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+}
+.post-nav-title {
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================
+   RELATED POSTS (3-column grid)
+   ========================================== */
+.related-posts-section {
+  margin: 2.5rem 0;
+}
+.related-posts-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+.related-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.related-post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-decoration: none;
+  transition: var(--transition);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+.related-post-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+}
+.related-post-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--bg-surface);
+}
+.related-post-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.related-post-card:hover .related-post-title {
+  color: var(--primary);
+}
+.related-post-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+/* ==========================================
+   COMMENTS SECTION
+   ========================================== */
+.comments-section {
+  margin: 2.5rem 0 0;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border-color);
+}
+.comments-section .comment-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+}
+
+/* ==========================================
+   SIDEBAR
+   ========================================== */
+.sidebar {
+  position: sticky;
+  top: calc(var(--header-height) + 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.sidebar-widget {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+.sidebar-widget-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1.1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* About Me widget */
+.sidebar-about-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  margin-bottom: 0.75rem;
+  border: 3px solid var(--border-color);
+}
+.sidebar-about-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin: 0 0 1rem;
+}
+.sidebar-socials {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Popular Posts widget */
+.popular-posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.popular-post-item {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.popular-post-item:hover .popular-post-title {
+  color: var(--primary);
+}
+.popular-post-num {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--border-color);
+  line-height: 1.2;
+  flex-shrink: 0;
+  min-width: 32px;
+  font-variant-numeric: tabular-nums;
+}
+.popular-post-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+}
+.popular-post-info { flex: 1; min-width: 0; }
+.popular-post-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: var(--transition);
+}
+.popular-post-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.2rem;
+}
+
+/* Sidebar Newsletter */
+.sidebar-newsletter-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 0.85rem;
+}
+.sidebar-newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.sidebar-email-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  font-family: var(--font-main);
+  outline: none;
+  transition: var(--transition);
+}
+.sidebar-email-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.sidebar-submit-btn {
+  padding: 0.65rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.88rem;
+  font-family: var(--font-main);
+}
+.sidebar-submit-btn:hover { background: var(--primary-hover); }
+
+/* Sidebar AdSense */
+.adsense-sidebar {
+  width: 100%;
+}
+
+/* ==========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================== */
+@media (max-width: 1024px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+  }
+  .related-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .post-card {
+    grid-template-columns: 1fr;
+  }
+  .post-card-thumb { height: 200px; }
+
+  .single-post-container { padding: 1.5rem; }
+  .single-post-title { font-size: 1.75rem; }
+
+  .post-nav-container {
+    grid-template-columns: 1fr;
+  }
+  .post-nav-link.post-nav-next { text-align: left; }
+
+  .related-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .author-bio-box {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+  .author-bio-avatar { width: 64px; height: 64px; }
+}
+
+
+/* ==========================================
+   AFFILIATE & EDITORIAL UI KIT
+   ========================================== */
+
+/* Callout Boxes */
+.callout {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  margin: 1.75rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+}
+.callout-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.callout-content { flex: 1; font-size: 0.97rem; line-height: 1.7; }
+.callout-content p:last-child { margin-bottom: 0; }
+.callout-content strong { display: block; margin-bottom: 0.25rem; font-weight: 700; }
+
+.callout-warning {
+  border-left-color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+.callout-tip {
+  border-left-color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+.callout-danger {
+  border-left-color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ==========================================
+   PRODUCT REVIEW CARD (Affiliate Box)
+   ========================================== */
+.review-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin: 2.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.review-product-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.3;
+}
+.review-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+.review-stars {
+  color: var(--accent);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+.review-score {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+.review-score-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.review-pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.review-pros, .review-cons {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+.review-pros h5, .review-cons h5 {
+  margin: 0 0 0.6rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.review-pros h5 { color: var(--success); }
+.review-cons h5 { color: var(--danger); }
+
+.review-pros ul, .review-cons ul {
+  padding-left: 0;
+  margin: 0;
+  font-size: 0.88rem;
+  list-style: none;
+}
+.review-pros li, .review-cons li {
+  padding: 0.25rem 0;
+  display: flex;
+  gap: 0.4rem;
+  line-height: 1.5;
+}
+.review-pros li::before {
+  content: "✓";
+  color: var(--success);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.review-cons li::before {
+  content: "✗";
+  color: var(--danger);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.review-cta {
+  text-align: center;
+}
+
+/* ==========================================
+   AFFILIATE CTA BUTTON
+   ========================================== */
+.btn-affiliate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: var(--transition);
+  text-decoration: none !important;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-main);
+}
+.btn-affiliate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
+  color: #fff !important;
+}
+.btn-affiliate:active {
+  transform: translateY(0);
+}
+
+.btn-coffee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  transition: var(--transition);
+  text-decoration: none !important;
+  cursor: pointer;
+  border: none;
+}
+.btn-coffee:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  color: #fff !important;
+}
+
+/* ==========================================
+   ANTI-CLS ADSENSE SLOTS
+   ========================================== */
+.adsense-slot {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  text-align: center;
+}
+.adsense-slot::before {
+  content: "QUẢNG CÁO";
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.adsense-top    { min-height: 100px; }
+.adsense-infeed { min-height: 250px; }
+.adsense-bottom { min-height: 250px; }
+.adsense-sidebar {
+  min-height: 300px;
+  position: sticky;
+  top: calc(var(--header-height) + 1rem);
+  margin: 0;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 600px) {
+  .review-pros-cons {
+    grid-template-columns: 1fr;
+  }
+  .btn-affiliate { width: 100%; }
+}
+
+
+/* ==========================================
+   FOOTER - 4 COLUMN LAYOUT
+   ========================================== */
+.site-footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  padding: 4rem 0 0;
+  margin-top: 4rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-col h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 1.1rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.footer-brand-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  color: var(--text-main);
+  text-decoration: none;
+}
+.footer-brand-logo .dot { color: var(--primary); }
+
+.footer-tagline {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin: 0 0 1.25rem;
+}
+
+.footer-copyright-text {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+
+/* Footer links list */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.footer-links li a {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.footer-links li a:hover {
+  color: var(--primary);
+  transform: translateX(3px);
+}
+.footer-links li a::before {
+  content: '›';
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+/* Social Icons Grid */
+.footer-social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+.footer-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-social-icon:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Newsletter form in footer */
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.input-email {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  font-family: var(--font-main);
+  outline: none;
+  transition: var(--transition);
+}
+.input-email:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.btn-submit {
+  padding: 0.65rem 1.1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.88rem;
+  font-family: var(--font-main);
+  white-space: nowrap;
+}
+.btn-submit:hover { background: var(--primary-hover); }
+
+/* Footer bottom bar */
+.footer-bottom {
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.scroll-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.scroll-top-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .newsletter-form {
+    flex-direction: column;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+
+/* ==========================================
+   ARCHIVE PAGE (MỤC LỤC TOÀN THƯ) — v3.0
+   Đặc tả: specs/TIMELINE_ARCHIVE_PAGE_SPECIFICATION.md
+   - Trang tĩnh độc lập (Dedicated Static Page) chuẩn Blogger
+   - Bố cục nhất quán với trang chủ và trang đọc bài viết
+   - Flat Post Cards + Dynamic Category Pills + Collapsible Year Accordions
+   - Hỗ trợ Dark Mode & Responsive toàn diện
+   ========================================== */
+
+/* ── Container chính trang Mục Lục ── */
+.editorial-archive-page {
+  padding: 0 0 3rem;
+  min-height: 50vh;
+}
+
+.archive-breadcrumbs,
+.archive-hero-header,
+.archive-category-pills,
+.archive-controls-row,
+.archive-year-count {
+  display: none !important;
+}
+
+/* ── Breadcrumb ── */
+.archive-breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.archive-breadcrumbs a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.archive-breadcrumbs a:hover {
+  color: var(--primary);
+}
+
+.archive-breadcrumbs .separator {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.archive-breadcrumbs .current {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* ── Hero Header ── */
+.archive-hero-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.archive-hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4vw, 2.85rem);
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 0.85rem;
+}
+
+.archive-hero-title .dot {
+  color: var(--primary);
+}
+
+.archive-hero-desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 720px;
+  margin: 0 0 1.25rem;
+}
+
+/* ── Stats Badges ── */
+.archive-stats-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.archive-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease;
+}
+
+.archive-stat-badge:hover {
+  border-color: var(--primary);
+}
+
+.archive-stat-badge strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+/* ── Thanh Tìm Kiếm Tức Thì (Instant Search Toolbar) ── */
+.archive-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.archive-search-icon {
+  position: absolute;
+  left: 1.1rem;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.archive-search-input {
+  width: 100%;
+  padding: 0.85rem 2.8rem 0.85rem 2.85rem;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.archive-search-input::placeholder {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.archive-search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3.5px var(--primary-light);
+}
+
+.archive-search-clear {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.archive-search-clear:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ── Dynamic Category Filter Pills ── */
+.archive-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.archive-category-pills::-webkit-scrollbar {
+  height: 4px;
+}
+
+.archive-category-pills::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.archive-cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.38rem 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.archive-cat-pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-surface);
+}
+
+.archive-cat-pill.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.archive-cat-pill .pill-count {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ── Thanh Điều Khiển Thu Gọn (Controls Row) ── */
+.archive-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0 0.85rem;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  border-bottom: 1px dashed var(--border-color);
+  margin-bottom: 1.25rem;
+}
+
+.archive-controls-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.archive-btn-toggle {
+  background: none;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  font-family: var(--font-main);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.archive-btn-toggle:hover {
+  color: var(--primary);
+  background: var(--bg-surface);
+}
+
+.archive-controls-divider {
+  color: var(--text-light);
+}
+
+.archive-results-info {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ── Container Nhóm Năm (Year Groups) ── */
+.archive-tree-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.archive-year-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Node Năm — NO STICKY, trôi tự nhiên theo nhịp đọc */
+.archive-year-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.25rem;
+  cursor: pointer;
+  user-select: none;
+  position: static;
+  background: transparent;
+  transition: opacity 0.15s ease;
+}
+
+.archive-year-header:hover {
+  opacity: 0.85;
+}
+
+.archive-year-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.archive-year-num {
+  font-size: 1.65rem;
+  font-weight: 800;
+  font-family: var(--font-main);
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.archive-year-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.archive-year-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+  min-width: 20px;
+}
+
+.archive-year-chevron {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.archive-year-chevron svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  transition: transform 0.25s ease;
+}
+
+.archive-year-group.is-expanded .archive-year-chevron svg {
+  transform: rotate(180deg);
+}
+
+.archive-year-group.is-collapsed .archive-year-chevron svg {
+  transform: rotate(0deg);
+}
+
+.archive-year-header:hover .archive-year-chevron {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Danh sách bài viết trong năm */
+.archive-year-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+.archive-year-group.is-collapsed .archive-year-posts {
+  display: none;
+}
+
+.archive-year-group.is-expanded .archive-year-posts {
+  display: flex;
+}
+
+/* ── Thẻ Bài Viết Dạng Phẳng (Flat Horizontal Post Cards) ── */
+.archive-post-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.95rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.18s ease,
+              box-shadow 0.18s ease;
+}
+
+.archive-post-card:hover {
+  transform: translateY(-2px) translateX(3px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* Cột 1: Chuyên mục */
+.archive-post-cat-pill {
+  flex-shrink: 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px solid transparent;
+  padding: 0.24rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  line-height: 1.3;
+}
+
+.archive-post-card:hover .archive-post-cat-pill {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Cột 2: Tiêu đề bài viết */
+.archive-post-card-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-main);
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.45;
+  transition: color 0.15s ease;
+}
+
+.archive-post-card:hover .archive-post-card-title {
+  color: var(--primary);
+}
+
+/* Cột 3: Ngày tháng + Mũi tên */
+.archive-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.archive-post-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.archive-post-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.archive-post-card:hover .archive-post-arrow {
+  background: var(--primary);
+  color: #fff;
+  transform: translateX(3px);
+}
+
+/* ── Trạng Thái Rỗng / Loading (Empty / Loading States) ── */
+.archive-empty-state {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+.archive-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.archive-empty-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.archive-empty-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.archive-btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.archive-btn-reset:hover {
+  opacity: 0.9;
+}
+
+.archive-loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.archive-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid var(--border-color);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: archiveSpin 0.75s linear infinite;
+}
+
+@keyframes archiveSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Dark Mode Adaptations ── */
+[data-theme="dark"] .archive-stat-badge {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .archive-post-card {
+  background: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .archive-post-card:hover {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .archive-post-cat-pill {
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .archive-year-count,
+[data-theme="dark"] .archive-year-chevron,
+[data-theme="dark"] .archive-post-arrow {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Mobile Responsive (≤ 768px) ── */
+@media (max-width: 768px) {
+  .editorial-archive-page {
+    padding: 1rem 0 2.5rem;
+  }
+
+  .archive-hero-title {
+    font-size: 1.85rem;
+  }
+
+  .archive-post-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .archive-post-card-title {
+    font-size: 0.925rem;
+    width: 100%;
+  }
+
+  .archive-post-meta {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 0.35rem;
+    border-top: 1px dashed var(--border-color);
+    margin-top: 0.15rem;
+  }
+
+  .archive-search-input {
+    font-size: 0.88rem;
+    padding: 0.75rem 2.5rem 0.75rem 2.6rem;
+  }
+
+  .archive-year-num {
+    font-size: 1.4rem;
+  }
+}
+
+
+/* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
+:root {
+  --bg-body: $(body.background);
+  --bg-card: $(card.background);
+  --primary: $(primary.color);
+  --primary-hover: $(primary.color);
+  --accent: $(accent.color);
+  --text-main: $(text.main);
+  --text-muted: $(text.muted);
+  --font-main: $(font.family);
+}
+  ]]></b:skin>
+
+  <!-- SEO Schema.org JSON-LD -->
+  <b:if cond='data:view.isHomepage'>
+  <script type='application/ld+json'>
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "<data:blog.title/>",
+        "url": "<data:blog.homepageUrl/>",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "<data:blog.homepageUrl/>search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "<data:blog.title/>",
+        "url": "<data:blog.homepageUrl/>"
+      }
+    ]
+  }
+  </script>
+  </b:if>
+  <b:if cond='data:view.isSingleItem'>
+  <b:loop values='data:posts' var='post'>
+  <script type='application/ld+json'>
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "<data:post.title/>",
+    "description": "<data:post.snippet/>",
+    "datePublished": "<data:post.date.iso8601/>",
+    "dateModified": "<data:post.lastUpdated.iso8601/>",
+    "author": {
+      "@type": "Person",
+      "name": "<data:post.author.name/>"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "<data:blog.title/>"
+    },
+    "url": "<data:post.url/>",
+    "mainEntityOfPage": "<data:post.url/>",
+    "image": "<data:post.featuredImage/>"
+  }
+  </script>
+  <script type='application/ld+json'>
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Trang chủ",
+        "item": "<data:blog.homepageUrl/>"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "<data:post.title/>",
+        "item": "<data:post.url/>"
+      }
+    ]
+  }
+  </script>
+  </b:loop>
+  </b:if>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class='reading-progress-bar' id='reading-progress-bar'/>
+
+  <!-- Search Modal -->
+  <div class='search-modal-overlay' id='search-modal-overlay' role='dialog' aria-modal='true' aria-label='Tìm kiếm'>
+    <div class='search-modal-box'>
+      <div class='search-modal-header'>
+        <span class='search-modal-title'>🔍 Tìm kiếm bài viết</span>
+        <button class='search-close-btn' id='search-close-btn' aria-label='Đóng tìm kiếm'>✕</button>
+      </div>
+      <form class='search-input-wrap' id='search-form' role='search'>
+        <input class='search-input' id='search-input' type='search' placeholder='Nhập từ khóa tìm kiếm...' autocomplete='off'/>
+        <button class='search-submit-btn' type='submit'>Tìm</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Nav Drawer Backdrop -->
+  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'/>
+
+  <!-- Mobile Navigation Drawer (auto-synced from LinkList1) -->
+  <nav class='nav-drawer' id='nav-drawer' aria-label='Menu điều hướng mobile'>
+    <div class='nav-drawer-header'>
+      <span class='brand-logo'><data:blog.title/><span class='dot'>.</span></span>
+      <button class='nav-drawer-close' id='nav-drawer-close' aria-label='Đóng menu'>✕</button>
+    </div>
+    <ul class='nav-drawer-menu' id='nav-drawer-menu'>
+      <!-- Auto-populated from Desktop Menu by mobile-nav.js -->
+    </ul>
+  </nav>
+
+  <!-- ==========================================
+       STICKY HEADER
+       ========================================== -->
+  <header class='site-header' id='site-header'>
+    <div class='site-wrapper'>
+      <div class='header-inner'>
+
+        <!-- Brand Logo -->
+        <div class='brand-logo'>
+          <a expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
+        </div>
+
+        <!-- Desktop Navigation (Single Source of Truth) -->
+        <b:section id='nav-menu-section' name='Menu Điều Hướng Chính' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='LinkList1' type='LinkList' version='2'>
+            <b:includable id='main'>
+              <nav class='nav-menu-wrapper' aria-label='Menu chính'>
+                <ul class='nav-menu'>
+                  <b:loop values='data:links' var='link'>
+                    <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
+                      <li class='has-dropdown'>
+                        <a href='#'><data:link.name.substring(1)/></a>
+                        <ul class='dropdown-menu'>
+                          <li><a expr:href='data:link.target'><data:link.name.substring(1)/></a></li>
+                        </ul>
+                      </li>
+                    <b:else/>
+                      <li><a expr:href='data:link.target'><data:link.name/></a></li>
+                    </b:if>
+                  </b:loop>
+                </ul>
+              </nav>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- Header Actions -->
+        <div class='header-actions'>
+          <!-- Search -->
+          <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
+          <!-- Dark Mode Toggle -->
+          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Hamburger (mobile) -->
+          <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
+            <span/>
+            <span/>
+            <span/>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN SITE WRAPPER
+       ========================================== -->
+  <div class='site-wrapper'>
+
+    <!-- Profile Cover Hero Section (Persists Across Subpages) -->
+    <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='2' showaddelement='yes'>
+      <b:widget id='HTML1' type='HTML' version='2'>
+        <b:includable id='main'>
+          <b:if cond='data:content != &quot;&quot;'>
+            <data:content/>
+          <b:else/>
+            <b:if cond='data:view.isHomepage or data:view.isMultipleItems or (data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html")))'>
+              <!-- Full Profile Cover on Homepage / Archive -->
+              <div class='profile-cover-section' id='profile-cover-section'>
+                <div class='cover-image-wrapper' id='cover-image-wrapper'
+                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
+                </div>
+                <div class='cover-info-card'>
+                  <div class='avatar-wrapper'>
+                    <img class='profile-avatar'
+                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
+                         alt='Avatar tác giả'
+                         width='120' height='120'/>
+                  </div>
+                  <div class='profile-meta'>
+                    <h1 class='profile-name'><data:blog.title/></h1>
+                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+                    <div class='profile-social-icons'>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
+                    </div>
+                  </div>
+                  <div class='profile-cta-area'>
+                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+                  </div>
+                </div>
+              </div>
+            <b:else/>
+              <!-- Full Profile Cover on Single Post / Subpages (identical size to homepage) -->
+              <div class='profile-cover-section' id='profile-cover-section'>
+                <div class='cover-image-wrapper' id='cover-image-wrapper'
+                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
+                </div>
+                <div class='cover-info-card'>
+                  <div class='avatar-wrapper'>
+                    <img class='profile-avatar'
+                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
+                         alt='Avatar tác giả'
+                         width='120' height='120'/>
+                  </div>
+                  <div class='profile-meta'>
+                    <div class='profile-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
+                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+                    <div class='profile-social-icons'>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>f</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='X / Twitter' title='X'>𝕏</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Threads' title='Threads'>@</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='LinkedIn' title='LinkedIn'>in</a>
+                      <a class='social-icon-link' href='#' target='_blank' rel='noopener noreferrer' aria-label='Instagram' title='Instagram'>ig</a>
+                    </div>
+                  </div>
+                  <div class='profile-cta-area'>
+                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+                  </div>
+                </div>
+              </div>
+            </b:if>
+          </b:if>
+        </b:includable>
+      </b:widget>
+    </b:section>
+
+    <!-- Dynamic Category Tabs (Visible Across Pages) -->
+    <b:section id='category-tabs-section' name='Thanh Chủ Đề (Tabs)' maxwidgets='1' showaddelement='yes'>
+      <b:widget id='Label1' type='Label' version='2'>
+        <b:includable id='main'>
+          <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl'>✦ Tất cả</a>
+            <b:loop values='data:labels' var='label'>
+              <a class='tab-pill' expr:href='data:label.url'><data:label.name/></a>
+            </b:loop>
+          </nav>
+        </b:includable>
+      </b:widget>
+    </b:section>
+
+    <!-- ==========================================
+         MAIN LAYOUT GRID (Posts + Sidebar)
+         ========================================== -->
+    <div class='layout-grid'>
+
+      <!-- Main Content Column -->
+      <main class='main-content' id='main-content'>
+        <b:section id='main' name='Nội Dung Bài Viết' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='Blog1' type='Blog' version='2'>
+            <b:includable id='main'>
+
+              <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
+              <b:if cond='data:view.isMultipleItems'>
+                <div class='posts-feed' role='feed'>
+                  <b:loop values='data:posts' var='post' index='idx'>
+                    <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                      <div class='post-card-body'>
+                        <div>
+                          <b:if cond='data:post.labels'>
+                            <a class='post-badge' expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
+                          </b:if>
+                          <h2 class='post-card-title' itemprop='headline'>
+                            <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
+                          </h2>
+                          <div class='post-card-snippet'><data:post.snippet/></div>
+                        </div>
+                        <div class='post-card-meta'>
+                          <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
+                          <span>⏱️ <span class='read-time-est'>5 phút</span></span>
+                        </div>
+                      </div>
+                      <b:if cond='data:post.featuredImage'>
+                        <b:if cond='data:idx == 0'>
+                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                               width='220' height='150' fetchpriority='high' decoding='async'/>
+                        <b:else/>
+                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                               width='220' height='150' loading='lazy' decoding='async'/>
+                        </b:if>
+                      </b:if>
+                    </article>
+                  </b:loop>
+                </div>
+
+                <!-- Numbered Pagination -->
+                <div class='blog-pager' role='navigation' aria-label='Phân trang'>
+                  <b:if cond='data:newerPageUrl'>
+                    <a class='blog-pager-newer-link' expr:href='data:newerPageUrl'>« Mới hơn</a>
+                  </b:if>
+                  <b:if cond='data:olderPageUrl'>
+                    <a class='blog-pager-older-link' expr:href='data:olderPageUrl'>Cũ hơn »</a>
+                  </b:if>
+                </div>
+
+              <!-- ── STATIC PAGE OR SINGLE POST VIEW ── -->
+              <b:else/>
+                <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
+                <b:if cond='data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html"))'>
+                  <div class='editorial-archive-page' id='editorial-archive-app'>
+                    <!-- Thanh Tìm Kiếm Tức Thì -->
+                    <div class='archive-search-wrap'>
+                      <span class='archive-search-icon' aria-hidden='true'>🔍</span>
+                      <input class='archive-search-input' id='archive-search-input' type='search'
+                             placeholder='Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)...'
+                             autocomplete='off' aria-label='Tìm kiếm bài viết'/>
+                      <button type='button' class='archive-search-clear' id='archive-search-clear' aria-label='Xóa tìm kiếm' style='display:none;'>✕</button>
+                    </div>
+
+                    <!-- Khung danh sách bài viết -->
+                    <div id='archive-app-body' class='archive-tree-container' aria-live='polite'>
+                      <div class='archive-loading'>
+                        <div class='archive-spinner'/>
+                        <span>Đang đồng bộ danh mục bài viết...</span>
+                      </div>
+                    </div>
+                  </div>
+                <b:else/>
+                  <b:loop values='data:posts' var='post'>
+                  <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+
+                    <!-- Breadcrumbs -->
+                    <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
+                      <a expr:href='data:blog.homepageUrl'>🏠 Trang chủ</a>
+                      <span class='separator'>›</span>
+                      <b:if cond='data:post.labels'>
+                        <a expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
+                        <span class='separator'>›</span>
+                      </b:if>
+                      <span><data:post.title/></span>
+                    </nav>
+
+                    <!-- Post H1 Title -->
+                    <h1 class='single-post-title' itemprop='headline'><data:post.title/></h1>
+
+                    <!-- Post Meta Row -->
+                    <div class='post-meta-header'>
+                      <div class='author-meta-inline'>
+                        <img class='author-avatar-sm'
+                             src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&amp;auto=format&amp;fit=crop&amp;q=80'
+                             alt='Tác giả' width='44' height='44'/>
+                        <div class='author-meta-text'>
+                          <div class='author-name-link' itemprop='author' itemscope='itemscope' itemtype='https://schema.org/Person'>
+                            <span itemprop='name'><data:post.author.name/></span>
+                          </div>
+                          <div class='author-meta-details'>
+                            <span>📅 <time expr:datetime='data:post.date.iso8601' itemprop='datePublished'><data:post.date/></time></span>
+                            <span>•</span>
+                            <span>⏱️ <span id='reading-time-val'>...</span></span>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Bilingual Switcher (auto-shown by JS if bilingual content detected) -->
+                      <div class='bilingual-switcher-wrapper'>
+                        <div class='bilingual-switcher' role='group' aria-label='Chọn ngôn ngữ'>
+                          <button class='lang-btn lang-btn-vi active' onclick="switchLanguage('vi')" aria-pressed='true'>🇻🇳 VI</button>
+                          <button class='lang-btn lang-btn-en' onclick="switchLanguage('en')" aria-pressed='false'>🇬🇧 EN</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- AdSense Slot 1: Above the fold -->
+                    <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
+                      <!-- Google AdSense code here -->
+                    </div>
+
+                    <!-- Auto Table of Contents -->
+                    <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'/>
+
+                    <!-- Post Body -->
+                    <div class='post-body' itemprop='articleBody'>
+                      <data:post.body/>
+                    </div>
+
+                    <!-- AdSense Slot 2: Bottom of post -->
+                    <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
+                      <!-- Google AdSense code here -->
+                    </div>
+
+                    <!-- Social Share Bar -->
+                    <div class='social-share-bar' role='group' aria-label='Chia sẻ bài viết'>
+                      <span class='share-title'>Chia sẻ:</span>
+                      <a class='btn-share btn-share-fb'
+                         expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
+                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên Facebook'>
+                        <b>f</b> Facebook
+                      </a>
+                      <a class='btn-share btn-share-tw'
+                         expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
+                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên X'>
+                        𝕏 X
+                      </a>
+                      <a class='btn-share btn-share-li'
+                         expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
+                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên LinkedIn'>
+                        in LinkedIn
+                      </a>
+                      <button class='btn-share btn-share-copy' id='copy-link-btn' aria-label='Sao chép link bài viết'>
+                        🔗 Sao chép link
+                      </button>
+                    </div>
+
+                    <!-- Author Bio Box -->
+                    <div class='author-bio-box'>
+                      <img class='author-bio-avatar'
+                           src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&amp;auto=format&amp;fit=crop&amp;q=80'
+                           alt='Ảnh tác giả' width='80' height='80'/>
+                      <div class='author-bio-content'>
+                        <div class='author-bio-label'>Về tác giả</div>
+                        <h3 class='author-bio-name'><data:post.author.name/></h3>
+                        <p class='author-bio-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
+                        <div class='author-bio-actions'>
+                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer'>☕ Mời tôi ly cà phê</a>
+                          <a class='btn-subscribe' href='#newsletter'>💌 Đăng ký bản tin</a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Next / Prev Post Navigation -->
+                    <div class='post-nav-container'>
+                      <b:if cond='data:newerPageUrl'>
+                        <a class='post-nav-link post-nav-prev' expr:href='data:newerPageUrl'>
+                          <span class='post-nav-direction'>« Bài trước</span>
+                          <span class='post-nav-title'>Bài viết mới hơn</span>
+                        </a>
+                      <b:else/>
+                        <div/>
+                      </b:if>
+                      <b:if cond='data:olderPageUrl'>
+                        <a class='post-nav-link post-nav-next' expr:href='data:olderPageUrl'>
+                          <span class='post-nav-direction'>Bài sau »</span>
+                          <span class='post-nav-title'>Bài viết cũ hơn</span>
+                        </a>
+                      </b:if>
+                    </div>
+
+                    <!-- Related Posts -->
+                    <div class='related-posts-section'>
+                      <h3 class='related-posts-title'>📚 Bài Viết Liên Quan</h3>
+                      <b:if cond='data:post.labels'>
+                        <div class='related-posts-grid'>
+                          <b:loop values='data:posts' var='relPost' index='rIdx'>
+                            <b:if cond='data:rIdx lt 3 and data:relPost.id != data:post.id'>
+                              <a class='related-post-card' expr:href='data:relPost.url'>
+                                <b:if cond='data:relPost.featuredImage'>
+                                  <img class='related-post-thumb'
+                                       expr:src='data:relPost.featuredImage'
+                                       expr:alt='data:relPost.title'
+                                       loading='lazy' decoding='async'/>
+                                </b:if>
+                                <span class='related-post-title'><data:relPost.title/></span>
+                                <span class='related-post-date'>📅 <data:relPost.date/></span>
+                              </a>
+                            </b:if>
+                          </b:loop>
+                        </div>
+                      </b:if>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class='comments-section'>
+                      <b:include name='comment-form'/>
+                    </div>
+
+                  </article>
+                </b:loop>
+              </b:if>
+            </b:if>
+
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- 3rd Party Widgets Under Post -->
+        <b:section id='under-post-widgets' name='Tiện Ích Dưới Bài Viết (Bên Thứ 3)' showaddelement='yes'/>
+      </main>
+
+      <!-- ==========================================
+           SIDEBAR (30%)
+           ========================================== -->
+      <aside class='sidebar' id='sidebar' aria-label='Cột bên'>
+        <b:section id='sidebar-section' name='Cột Bên (Sidebar)' showaddelement='yes'>
+
+          <!-- Widget: About Me -->
+          <b:widget id='HTML2' type='HTML' version='2'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'>👤 Về Tác Giả</h3>
+                <img class='sidebar-about-avatar'
+                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&amp;auto=format&amp;fit=crop&amp;q=80'
+                     alt='Avatar tác giả' width='64' height='64'/>
+                <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
+                <div class='sidebar-socials'>
+                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
+                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
+                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Popular Posts -->
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'>🔥 Bài Viết Nổi Bật</h3>
+                <ul class='popular-posts-list'>
+                  <b:loop values='data:posts' var='ppPost' index='ppIdx'>
+                    <li>
+                      <a class='popular-post-item' expr:href='data:ppPost.url'>
+                        <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><data:ppIdx + 1/></span>
+                        <b:if cond='data:ppPost.featuredImage'>
+                          <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
+                               expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
+                        </b:if>
+                        <div class='popular-post-info'>
+                          <div class='popular-post-title'><data:ppPost.title/></div>
+                          <div class='popular-post-date'>📅 <data:ppPost.date/></div>
+                        </div>
+                      </a>
+                    </li>
+                  </b:loop>
+                </ul>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: AdSense Sidebar (Sticky) -->
+          <b:widget id='HTML3' type='HTML' version='2'>
+            <b:includable id='main'>
+              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
+                <!-- Google AdSense 300x250 / 300x600 code here -->
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Newsletter -->
+          <b:widget id='HTML4' type='HTML' version='2'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'>📨 Nhận Bài Viết Mới</h3>
+                <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+                <div class='sidebar-newsletter-form'>
+                  <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
+                  <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+        </b:section>
+      </aside>
+
+    </div><!-- /.layout-grid -->
+  </div><!-- /.site-wrapper -->
+
+  <!-- ==========================================
+       FOOTER — 4 COLUMN
+       ========================================== -->
+  <footer class='site-footer' id='site-footer'>
+    <div class='site-wrapper'>
+      <div class='footer-grid'>
+
+        <!-- Column 1: Brand & Tagline -->
+        <div class='footer-col'>
+          <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
+          <p class='footer-tagline'>Nơi chia sẻ góc nhìn cá nhân, trải nghiệm sống chân thực và tri thức giá trị cho những ai đang trên hành trình tự khám phá bản thân.</p>
+          <div class='footer-copyright-text'>© 2026 <data:blog.title/>. All rights reserved.</div>
+        </div>
+
+        <!-- Column 2: Explore Categories -->
+        <div class='footer-col'>
+          <h4>🗂️ Khám Phá</h4>
+          <b:section id='footer-categories-section' name='Footer: Chuyên Mục' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='Label2' type='Label' version='2'>
+              <b:includable id='main'>
+                <ul class='footer-links'>
+                  <b:loop values='data:labels' var='flabel'>
+                    <li><a expr:href='data:flabel.url'><data:flabel.name/></a></li>
+                  </b:loop>
+                </ul>
+              </b:includable>
+            </b:widget>
+          </b:section>
+        </div>
+
+        <!-- Column 3: Legal & Transparency -->
+        <div class='footer-col'>
+          <h4>⚖️ Pháp Lý &amp; Minh Bạch</h4>
+          <b:section id='footer-legal-section' name='Footer: Trang Pháp Lý' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='LinkList3' type='LinkList' version='2'>
+              <b:includable id='main'>
+                <ul class='footer-links'>
+                  <b:loop values='data:links' var='llink'>
+                    <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
+                  </b:loop>
+                </ul>
+              </b:includable>
+            </b:widget>
+          </b:section>
+        </div>
+
+        <!-- Column 4: Newsletter & Social -->
+        <div class='footer-col' id='newsletter'>
+          <h4>📬 Bản Tin &amp; Mạng Xã Hội</h4>
+          <p style='font-size: 0.88rem; color: var(--text-muted); margin: 0 0 0.75rem;'>Nhận bài viết mới qua email.</p>
+          <form class='newsletter-form' onsubmit='return false;'>
+            <input class='input-email' type='email' placeholder='Email của bạn...' aria-label='Email đăng ký'/>
+            <button class='btn-submit' type='submit'>Gửi</button>
+          </form>
+          <div class='footer-social-grid'>
+            <b:section id='footer-social-section' name='Footer: Mạng Xã Hội' maxwidgets='1' showaddelement='yes'>
+              <b:widget id='LinkList4' type='LinkList' version='2'>
+                <b:includable id='main'>
+                  <b:loop values='data:links' var='slink'>
+                    <a class='footer-social-icon' expr:href='data:slink.target' target='_blank'
+                       rel='noopener noreferrer' expr:aria-label='data:slink.name'
+                       expr:title='data:slink.name'><data:slink.name/></a>
+                  </b:loop>
+                </b:includable>
+              </b:widget>
+            </b:section>
+          </div>
+        </div>
+
+      </div><!-- /.footer-grid -->
+
+      <!-- Footer Bottom Bar -->
+      <div class='footer-bottom'>
+        <span>© 2026 <data:blog.title/>. All rights reserved.</span>
+        <a class='scroll-top-btn' href='#' id='scroll-top-btn' aria-label='Cuộn lên đầu trang'>⬆ Đầu trang</a>
+      </div>
+
+    </div><!-- /.site-wrapper -->
+  </footer>
+
+  <!-- Body-end Scripts -->
+  <script>
+  //<![CDATA[
+/* ==========================================
+   MOBILE NAVIGATION - Hamburger + Drawer
+   - Auto-syncs menu items from Desktop LinkList
+   ========================================== */
+(function() {
+  'use strict';
+
+  var hamburgerBtn = null;
+  var navDrawer = null;
+  var navDrawerBackdrop = null;
+  var navDrawerClose = null;
+
+  function syncDrawerMenu() {
+    var desktopMenu = document.querySelector('.nav-menu');
+    var drawerMenu = document.querySelector('.nav-drawer-menu');
+    if (desktopMenu && drawerMenu && !drawerMenu.children.length) {
+      drawerMenu.innerHTML = desktopMenu.innerHTML;
+    }
+  }
+
+  function initMobileNav() {
+    hamburgerBtn = document.getElementById('hamburger-btn');
+    navDrawer = document.getElementById('nav-drawer');
+    navDrawerBackdrop = document.getElementById('nav-drawer-backdrop');
+    navDrawerClose = document.getElementById('nav-drawer-close');
+
+    syncDrawerMenu();
+
+    if (!hamburgerBtn || !navDrawer) return;
+
+    hamburgerBtn.addEventListener('click', openDrawer);
+    if (navDrawerClose) navDrawerClose.addEventListener('click', closeDrawer);
+    if (navDrawerBackdrop) navDrawerBackdrop.addEventListener('click', closeDrawer);
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  }
+
+  function openDrawer() {
+    if (!navDrawer) return;
+    navDrawer.classList.add('is-open');
+    if (navDrawerBackdrop) navDrawerBackdrop.classList.add('is-open');
+    if (hamburgerBtn) hamburgerBtn.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    if (!navDrawer) return;
+    navDrawer.classList.remove('is-open');
+    if (navDrawerBackdrop) navDrawerBackdrop.classList.remove('is-open');
+    if (hamburgerBtn) hamburgerBtn.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  // Close drawer on window resize to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) closeDrawer();
+  });
+
+  document.addEventListener('DOMContentLoaded', initMobileNav);
+})();
+
+
+/* ==========================================
+   SEARCH MODAL
+   ========================================== */
+(function() {
+  'use strict';
+
+  var searchOverlay = null;
+  var searchInput = null;
+  var searchOpenBtn = null;
+  var searchCloseBtn = null;
+  var searchForm = null;
+
+  function initSearchModal() {
+    searchOverlay = document.getElementById('search-modal-overlay');
+    searchInput = document.getElementById('search-input');
+    searchOpenBtn = document.getElementById('search-open-btn');
+    searchCloseBtn = document.getElementById('search-close-btn');
+    searchForm = document.getElementById('search-form');
+
+    if (!searchOverlay) return;
+
+    if (searchOpenBtn) {
+      searchOpenBtn.addEventListener('click', openSearch);
+    }
+    if (searchCloseBtn) {
+      searchCloseBtn.addEventListener('click', closeSearch);
+    }
+    // Close on backdrop click
+    searchOverlay.addEventListener('click', function(e) {
+      if (e.target === searchOverlay) closeSearch();
+    });
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeSearch();
+    });
+    // Handle form submit → Blogger search
+    if (searchForm) {
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var query = searchInput ? searchInput.value.trim() : '';
+        if (query) {
+          window.location.href = '/search?q=' + encodeURIComponent(query);
+        }
+      });
+    }
+  }
+
+  function openSearch() {
+    if (!searchOverlay) return;
+    searchOverlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Focus input after animation
+    setTimeout(function() {
+      if (searchInput) searchInput.focus();
+    }, 200);
+  }
+
+  function closeSearch() {
+    if (!searchOverlay) return;
+    searchOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', initSearchModal);
+})();
+
+
+/* ==========================================
+   ARCHIVE PAGE (MỤC LỤC TOÀN THƯ) — v3.0
+   Đặc tả: specs/TIMELINE_ARCHIVE_PAGE_SPECIFICATION.md (FEAT-TIMELINE-PAGE-V3)
+   - Tự động nhận diện trang tĩnh /p/muc-luc.html hoặc container #editorial-archive-app
+   - Thu thập & Cache Blogger JSON Feed API (500 bài)
+   - Tìm kiếm tức thì tiếng Việt có dấu/không dấu (Debounce 150ms)
+   - Lọc theo Category Pills + Accordion đóng/mở theo Năm
+   - Hỗ trợ URL Query Parameters: ?q=, ?cat=, ?year=
+   ========================================== */
+
+(function () {
+  'use strict';
+
+  var CACHE_KEY = 'blogger_archive_posts';
+  var allPosts = [];
+  var activeCategory = 'all';
+  var searchQuery = '';
+  var expandedYears = {}; // year -> boolean
+  var searchDebounceTimer = null;
+  var isAppMounted = false;
+
+  // Helper: Loại bỏ dấu tiếng Việt để tìm kiếm không dấu
+  function removeVietnameseDiacritics(str) {
+    if (!str) return '';
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D')
+      .toLowerCase()
+      .trim();
+  }
+
+  // Format ngày DD/MM từ chuỗi ISO
+  function formatDateStr(isoStr) {
+    if (!isoStr) return '';
+    var d = new Date(isoStr);
+    if (isNaN(d.getTime())) return '';
+    var dd = String(d.getDate()).padStart(2, '0');
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    return dd + '/' + mm;
+  }
+
+  // Format năm YYYY từ chuỗi ISO
+  function getYearFromDate(isoStr) {
+    if (!isoStr) return new Date().getFullYear();
+    var d = new Date(isoStr);
+    return isNaN(d.getTime()) ? new Date().getFullYear() : d.getFullYear();
+  }
+
+  // Kiểm tra xem hiện tại có phải trang Mục Lục hay không
+  function isArchivePage() {
+    var pathname = window.location.pathname.toLowerCase();
+    var href = window.location.href.toLowerCase();
+    var container = document.getElementById('editorial-archive-app');
+
+    return (
+      Boolean(container) ||
+      pathname.endsWith('/p/muc-luc.html') ||
+      pathname.endsWith('/p/archive.html') ||
+      href.indexOf('/p/muc-luc.html') !== -1 ||
+      href.indexOf('/p/archive.html') !== -1 ||
+      window.location.hash === '#archive'
+    );
+  }
+
+  // Thu thập dữ liệu bài viết (Cache -> API -> Fallback Mock Data)
+  function loadArchiveData(callback) {
+    // 1. Kiểm tra Cache trong sessionStorage
+    try {
+      var cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        var parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          allPosts = parsed;
+          if (callback) callback(allPosts);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('[Archive] sessionStorage error:', e);
+    }
+
+    // 2. Thử tải Blogger JSON Feed API
+    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500';
+    var isPreviewOrLocal =
+      window.location.protocol === 'file:' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if (!isPreviewOrLocal) {
+      fetch(feedUrl)
+        .then(function (res) {
+          if (!res.ok) throw new Error('Feed fetch failed: ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          var entries = (data.feed && data.feed.entry) || [];
+          var posts = entries.map(function (entry) {
+            var title = (entry.title && entry.title.$t) || 'Bài viết không tiêu đề';
+            var postUrl = '#';
+            if (entry.link) {
+              var altLink = entry.link.find(function (l) { return l.rel === 'alternate'; });
+              if (altLink) postUrl = altLink.href;
+            }
+            var published = (entry.published && entry.published.$t) || '';
+            var year = getYearFromDate(published);
+            var dateStr = formatDateStr(published);
+            var timestamp = published ? new Date(published).getTime() : 0;
+            var category = 'Chưa phân loại';
+            if (entry.category && entry.category.length > 0) {
+              category = entry.category[0].term || 'Chưa phân loại';
+            }
+            return {
+              title: title,
+              url: postUrl,
+              year: year,
+              dateStr: dateStr,
+              category: category,
+              timestamp: timestamp
+            };
+          });
+
+          // Sắp xếp giảm dần theo thời gian
+          posts.sort(function (a, b) { return b.timestamp - a.timestamp; });
+
+          allPosts = posts;
+          try {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(posts));
+          } catch (e) {}
+
+          if (callback) callback(allPosts);
+        })
+        .catch(function (err) {
+          console.warn('[Archive] Feed fetch failed, using fallback:', err);
+          useFallbackData(callback);
+        });
+    } else {
+      useFallbackData(callback);
+    }
+  }
+
+  // Fallback dữ liệu mock khi chạy local preview hoặc lỗi feed
+  function useFallbackData(callback) {
+    if (window.__TIMELINE_MOCK_POSTS__ && window.__TIMELINE_MOCK_POSTS__.length > 0) {
+      allPosts = window.__TIMELINE_MOCK_POSTS__.slice();
+    } else {
+      // Cố gắng trích xuất các bài viết từ DOM nếu có
+      var domCards = document.querySelectorAll('.posts-feed .post-card');
+      if (domCards.length > 0) {
+        allPosts = Array.from(domCards).map(function (card, index) {
+          var titleEl = card.querySelector('.post-card-title a, .post-card-title');
+          var badgeEl = card.querySelector('.post-badge');
+          var dateEl = card.querySelector('time');
+          var title = titleEl ? titleEl.textContent.trim() : 'Bài viết #' + (index + 1);
+          var postUrl = titleEl && titleEl.getAttribute('href') ? titleEl.getAttribute('href') : '#';
+          var category = badgeEl ? badgeEl.textContent.trim() : 'Góc Nhìn';
+          var rawDate = dateEl ? dateEl.getAttribute('datetime') || dateEl.textContent : '';
+          var year = getYearFromDate(rawDate);
+          var dateStr = formatDateStr(rawDate) || '15/08';
+          var timestamp = rawDate ? new Date(rawDate).getTime() : Date.now() - index * 86400000 * 5;
+          return {
+            title: title,
+            url: postUrl,
+            year: year,
+            dateStr: dateStr,
+            category: category,
+            timestamp: timestamp
+          };
+        });
+      } else {
+        allPosts = [];
+      }
+    }
+
+    allPosts.sort(function (a, b) { return b.timestamp - a.timestamp; });
+    if (callback) callback(allPosts);
+  }
+
+  // Đọc URL Query Parameters (?q=, ?cat=, ?year=)
+  function parseUrlParams() {
+    var params = new URLSearchParams(window.location.search);
+    var q = params.get('q');
+    var cat = params.get('cat');
+    var yr = params.get('year');
+
+    if (q) searchQuery = q.trim();
+    if (cat) activeCategory = cat.trim();
+    if (yr) {
+      var yNum = parseInt(yr, 10);
+      if (!isNaN(yNum)) {
+        expandedYears = {};
+        expandedYears[yNum] = true;
+      }
+    }
+  }
+
+  // Cập nhật URL Query Parameters mà không reload trang
+  function syncUrlParams() {
+    try {
+      var url = new URL(window.location.href);
+      if (searchQuery) {
+        url.searchParams.set('q', searchQuery);
+      } else {
+        url.searchParams.delete('q');
+      }
+
+      if (activeCategory && activeCategory !== 'all') {
+        url.searchParams.set('cat', activeCategory);
+      } else {
+        url.searchParams.delete('cat');
+      }
+
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {}
+  }
+
+  // Cập nhật các huy hiệu thống kê (Stats Badges)
+  function updateStatsBadges(postsToCount) {
+    var statPosts = document.getElementById('archive-stat-posts');
+    var statYears = document.getElementById('archive-stat-years');
+    var statCats = document.getElementById('archive-stat-cats');
+
+    var list = postsToCount || allPosts;
+    var totalPosts = list.length;
+
+    var yearsSet = new Set();
+    var catsSet = new Set();
+    list.forEach(function (p) {
+      if (p.year) yearsSet.add(p.year);
+      if (p.category && p.category !== 'Chưa phân loại') catsSet.add(p.category);
+    });
+
+    if (statPosts) statPosts.innerHTML = '<strong>📚 ' + totalPosts + '</strong> Bài viết';
+    if (statYears) statYears.innerHTML = '<strong>🗓️ ' + yearsSet.size + '</strong> Năm xuất bản';
+    if (statCats) statCats.innerHTML = '<strong>🏷️ ' + catsSet.size + '</strong> Chủ đề';
+  }
+
+  // Khởi tạo và render Category Pills
+  function renderCategoryPills(container) {
+    var pillsContainer = container.querySelector('#archive-cat-pills');
+    if (!pillsContainer) return;
+
+    // Đếm bài viết theo category
+    var catCounts = { all: allPosts.length };
+    allPosts.forEach(function (p) {
+      var cat = p.category || 'Chưa phân loại';
+      catCounts[cat] = (catCounts[cat] || 0) + 1;
+    });
+
+    var categories = Object.keys(catCounts).filter(function (c) { return c !== 'all'; });
+    categories.sort(function (a, b) { return catCounts[b] - catCounts[a]; });
+
+    var html = '';
+    // Pill Tất cả
+    var isAllActive = activeCategory === 'all' || !activeCategory;
+    html += '<button type="button" class="archive-cat-pill ' + (isAllActive ? 'is-active' : '') + '" data-cat="all">';
+    html += '✦ Tất cả <span class="pill-count">(' + catCounts.all + ')</span>';
+    html += '</button>';
+
+    categories.forEach(function (cat) {
+      var isActive = activeCategory.toLowerCase() === cat.toLowerCase();
+      html += '<button type="button" class="archive-cat-pill ' + (isActive ? 'is-active' : '') + '" data-cat="' + escapeHtml(cat) + '">';
+      html += escapeHtml(cat) + ' <span class="pill-count">(' + catCounts[cat] + ')</span>';
+      html += '</button>';
+    });
+
+    pillsContainer.innerHTML = html;
+
+    // Gắn sự kiện click cho từng pill
+    var pillBtns = pillsContainer.querySelectorAll('.archive-cat-pill');
+    pillBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pillBtns.forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        activeCategory = btn.getAttribute('data-cat') || 'all';
+        syncUrlParams();
+        applyFilterAndRender(container);
+      });
+    });
+  }
+
+  // Lọc bài viết theo searchQuery & activeCategory
+  function filterPosts() {
+    var queryRaw = searchQuery.toLowerCase().trim();
+    var queryNormalized = removeVietnameseDiacritics(searchQuery);
+
+    return allPosts.filter(function (post) {
+      // 1. Lọc theo chuyên mục
+      if (activeCategory !== 'all') {
+        var postCat = (post.category || '').toLowerCase();
+        if (postCat !== activeCategory.toLowerCase()) {
+          return false;
+        }
+      }
+
+      // 2. Lọc theo từ khóa tìm kiếm
+      if (!queryRaw) return true;
+
+      var titleRaw = (post.title || '').toLowerCase();
+      var titleNormalized = removeVietnameseDiacritics(post.title || '');
+      var catNormalized = removeVietnameseDiacritics(post.category || '');
+      var yearStr = String(post.year);
+      var dateStr = post.dateStr || '';
+
+      var matchTitle = titleRaw.indexOf(queryRaw) !== -1 || titleNormalized.indexOf(queryNormalized) !== -1;
+      var matchCat = catNormalized.indexOf(queryNormalized) !== -1;
+      var matchYear = yearStr.indexOf(queryRaw) !== -1;
+      var matchDate = dateStr.indexOf(queryRaw) !== -1;
+
+      return matchTitle || matchCat || matchYear || matchDate;
+    });
+  }
+
+  // Nhóm bài viết theo Năm (giảm dần)
+  function groupPostsByYear(posts) {
+    var groups = {};
+    posts.forEach(function (p) {
+      var yr = p.year || new Date().getFullYear();
+      if (!groups[yr]) groups[yr] = [];
+      groups[yr].push(p);
+    });
+
+    // Mảng các năm sắp xếp giảm dần
+    var years = Object.keys(groups).map(Number);
+    years.sort(function (a, b) { return b - a; });
+
+    return years.map(function (yr) {
+      return {
+        year: yr,
+        posts: groups[yr]
+      };
+    });
+  }
+
+  // Render danh sách cây năm và thẻ bài viết phẳng
+  function applyFilterAndRender(container) {
+    var body = container.querySelector('#archive-app-body');
+    if (!body) return;
+
+    var filtered = filterPosts();
+    var yearGroups = groupPostsByYear(filtered);
+
+    // Nếu không có bài viết nào phù hợp
+    if (yearGroups.length === 0) {
+      body.innerHTML = [
+        '<div class="archive-empty-state">',
+        '  <div class="archive-empty-icon">🔍</div>',
+        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào phù hợp</h3>',
+        '  <p class="archive-empty-desc">Thử tìm kiếm với từ khóa khác hoặc bấm để xem toàn bộ bài viết.</p>',
+        '  <button type="button" class="archive-btn-reset" id="archive-reset-btn">↺ Xem tất cả bài viết</button>',
+        '</div>'
+      ].join('');
+
+      var resetBtn = body.querySelector('#archive-reset-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          searchQuery = '';
+          activeCategory = 'all';
+          var searchInput = container.querySelector('#archive-search-input');
+          var clearBtn = container.querySelector('#archive-search-clear');
+          if (searchInput) searchInput.value = '';
+          if (clearBtn) clearBtn.style.display = 'none';
+
+          var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
+          tabs.forEach(function (t, idx) {
+            t.classList.toggle('active', idx === 0);
+          });
+
+          syncUrlParams();
+          applyFilterAndRender(container);
+        });
+      }
+      return;
+    }
+
+    // Xây dựng cây dòng thời gian
+    var html = '';
+    yearGroups.forEach(function (group, gIdx) {
+      // Mặc định mở tất cả các năm (trừ khi đã có trạng thái lưu)
+      var yr = group.year;
+      var isExpanded = expandedYears[yr] !== undefined ? expandedYears[yr] : true;
+
+      html += '<div class="archive-year-group ' + (isExpanded ? 'is-expanded' : 'is-collapsed') + '" data-year="' + yr + '">';
+
+      // Node Năm (Header) - Tinh gọn, chỉ có số năm, đường kẻ và chevron
+      html += '<div class="archive-year-header" role="button" tabindex="0" aria-expanded="' + isExpanded + '" aria-controls="year-posts-' + yr + '">';
+      html += '  <div class="archive-year-title-wrap">';
+      html += '    <span class="archive-year-num">' + yr + '</span>';
+      html += '  </div>';
+      html += '  <div class="archive-year-line" aria-hidden="true"></div>';
+      html += '  <div class="archive-year-chevron" aria-hidden="true">';
+      html += '    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
+      html += '  </div>';
+      html += '</div>';
+
+      // Danh sách thẻ bài viết phẳng
+      html += '<div class="archive-year-posts" id="year-posts-' + yr + '">';
+      group.posts.forEach(function (post) {
+        html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '">';
+        // Cột 1: Chuyên mục
+        html += '  <span class="archive-post-cat-pill">' + escapeHtml(post.category || 'Góc Nhìn') + '</span>';
+        // Cột 2: Tiêu đề
+        html += '  <span class="archive-post-card-title">' + escapeHtml(post.title) + '</span>';
+        // Cột 3: Ngày đăng + Mũi tên
+        html += '  <div class="archive-post-meta">';
+        html += '    <span class="archive-post-date">📅 ' + escapeHtml(post.dateStr) + '</span>';
+        html += '    <span class="archive-post-arrow" aria-hidden="true">→</span>';
+        html += '  </div>';
+        html += '</a>';
+      });
+      html += '</div>'; // /.archive-year-posts
+
+      html += '</div>'; // /.archive-year-group
+    });
+
+    body.innerHTML = html;
+
+    // Gắn sự kiện click Accordion cho các Node Năm
+    var yearHeaders = body.querySelectorAll('.archive-year-header');
+    yearHeaders.forEach(function (header) {
+      function toggleYear() {
+        var groupEl = header.closest('.archive-year-group');
+        if (!groupEl) return;
+        var yr = groupEl.getAttribute('data-year');
+        var willExpand = !groupEl.classList.contains('is-expanded');
+
+        groupEl.classList.toggle('is-expanded', willExpand);
+        groupEl.classList.toggle('is-collapsed', !willExpand);
+        header.setAttribute('aria-expanded', willExpand);
+        expandedYears[yr] = willExpand;
+      }
+
+      header.addEventListener('click', toggleYear);
+      header.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleYear();
+        }
+      });
+    });
+  }
+
+  // Khởi tạo toàn bộ sự kiện tìm kiếm & điều khiển
+  function bindArchiveEvents(container) {
+    var searchInput = container.querySelector('#archive-search-input');
+    var clearBtn = container.querySelector('#archive-search-clear');
+    var expandAllBtn = container.querySelector('#archive-expand-all');
+    var collapseAllBtn = container.querySelector('#archive-collapse-all');
+
+    // Khởi tạo giá trị ban đầu nếu có từ URL
+    if (searchInput) {
+      if (searchQuery) {
+        searchInput.value = searchQuery;
+        if (clearBtn) clearBtn.style.display = 'flex';
+      }
+
+      searchInput.addEventListener('input', function () {
+        searchQuery = searchInput.value;
+        if (clearBtn) {
+          clearBtn.style.display = searchQuery.length > 0 ? 'flex' : 'none';
+        }
+
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(function () {
+          syncUrlParams();
+          applyFilterAndRender(container);
+        }, 150); // Debounce 150ms theo spec
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        searchQuery = '';
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
+        clearBtn.style.display = 'none';
+        syncUrlParams();
+        applyFilterAndRender(container);
+      });
+    }
+
+    // Mở tất cả các năm
+    if (expandAllBtn) {
+      expandAllBtn.addEventListener('click', function () {
+        var yearGroups = container.querySelectorAll('.archive-year-group');
+        yearGroups.forEach(function (g) {
+          var yr = g.getAttribute('data-year');
+          g.classList.remove('is-collapsed');
+          g.classList.add('is-expanded');
+          var hdr = g.querySelector('.archive-year-header');
+          if (hdr) hdr.setAttribute('aria-expanded', 'true');
+          expandedYears[yr] = true;
+        });
+      });
+    }
+
+    // Thu gọn tất cả các năm
+    if (collapseAllBtn) {
+      collapseAllBtn.addEventListener('click', function () {
+        var yearGroups = container.querySelectorAll('.archive-year-group');
+        yearGroups.forEach(function (g) {
+          var yr = g.getAttribute('data-year');
+          g.classList.remove('is-expanded');
+          g.classList.add('is-collapsed');
+          var hdr = g.querySelector('.archive-year-header');
+          if (hdr) hdr.setAttribute('aria-expanded', 'false');
+          expandedYears[yr] = false;
+        });
+      });
+    }
+  }
+
+  // Tạo khung HTML hoàn chỉnh cho Dedicated Archive Page nếu chưa có sẵn
+  function createArchiveStructure(container) {
+    if (container.querySelector('.archive-search-wrap')) {
+      return; // Đã có cấu trúc sẵn
+    }
+
+    var html = [
+      '<!-- Thanh Tìm Kiếm Tức Thì -->',
+      '<div class="archive-search-wrap">',
+      '  <span class="archive-search-icon" aria-hidden="true">🔍</span>',
+      '  <input class="archive-search-input" id="archive-search-input" type="search"',
+      '         placeholder="Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)..."',
+      '         autocomplete="off" aria-label="Tìm kiếm bài viết"/>',
+      '  <button type="button" class="archive-search-clear" id="archive-search-clear" aria-label="Xóa tìm kiếm" style="display:none;">✕</button>',
+      '</div>',
+      '',
+      '<!-- Khung danh sách bài viết -->',
+      '<div id="archive-app-body" class="archive-tree-container" aria-live="polite">',
+      '  <div class="archive-loading">',
+      '    <div class="archive-spinner"></div>',
+      '    <span>Đang đồng bộ danh mục bài viết...</span>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+
+    container.innerHTML = html;
+  }
+
+  // Kết nối thanh nhãn Chuyên mục dưới banner (.category-tabs-bar) để lọc bài viết
+  function bindCategoryTabs(container) {
+    var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
+    tabs.forEach(function (pill) {
+      if (pill._archiveBound) return;
+      pill._archiveBound = true;
+
+      pill.addEventListener('click', function (e) {
+        var appEl = document.getElementById('editorial-archive-app');
+        if (appEl && appEl.offsetParent !== null) {
+          e.preventDefault();
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          pill.classList.add('active');
+
+          var catText = pill.textContent.replace('✦', '').trim();
+          activeCategory = (catText === 'Tất cả') ? 'all' : catText;
+
+          syncUrlParams();
+          applyFilterAndRender(appEl);
+        }
+      });
+    });
+  }
+
+  // Escape HTML để ngăn ngừa XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Khởi động toàn bộ ứng dụng Mục Lục
+  function mountArchiveApp(targetEl) {
+    var container = targetEl || document.getElementById('editorial-archive-app');
+    if (!container) return;
+
+    container.classList.add('editorial-archive-page');
+    createArchiveStructure(container);
+    parseUrlParams();
+    bindArchiveEvents(container);
+    bindCategoryTabs(container);
+
+    loadArchiveData(function (posts) {
+      applyFilterAndRender(container);
+    });
+
+    isAppMounted = true;
+  }
+
+  // Khởi chạy khi DOM sẵn sàng
+  function init() {
+    if (isArchivePage()) {
+      var appEl = document.getElementById('editorial-archive-app');
+      if (appEl) {
+        mountArchiveApp(appEl);
+      }
+    }
+  }
+
+  // Export API toàn cục để preview.html hoặc router có thể gọi trực tiếp
+  window.initArchivePage = function (targetEl) {
+    mountArchiveApp(targetEl);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+
+/* ==========================================
+   AUTO TABLE OF CONTENTS (TOC) GENERATOR
+   - Extracts visible h2, h3 from .post-body
+   - Supports bilingual content filtering & sync
+   - Collapsible with toggle button
+   - Smooth scroll to section on click
+   - Highlights active section during scroll
+   ========================================== */
+(function() {
+  'use strict';
+
+  var tocContainer = null;
+  var isCollapsed = false;
+  var observer = null;
+
+  function getVisibleHeadings() {
+    var postBody = document.querySelector('.post-body');
+    if (!postBody) return [];
+
+    var allHeadings = postBody.querySelectorAll('h2, h3');
+    var visibleHeadings = [];
+
+    allHeadings.forEach(function(heading) {
+      var parent = heading.parentElement;
+      var isHidden = false;
+      while (parent && parent !== postBody) {
+        if (parent.style.display === 'none' || (parent.hasAttribute('data-lang') && parent.style.display === 'none')) {
+          isHidden = true;
+          break;
+        }
+        parent = parent.parentElement;
+      }
+      if (!isHidden) {
+        visibleHeadings.push(heading);
+      }
+    });
+
+    return visibleHeadings;
+  }
+
+  function initTOC() {
+    var postBody = document.querySelector('.post-body');
+    tocContainer = document.getElementById('auto-toc');
+    if (!postBody || !tocContainer) return;
+
+    var headings = getVisibleHeadings();
+    if (headings.length < 2) {
+      tocContainer.style.display = 'none';
+      return;
+    }
+    tocContainer.style.display = '';
+
+    // Assign IDs to headings
+    headings.forEach(function(heading, idx) {
+      if (!heading.id) {
+        var slug = heading.innerText
+          .toLowerCase()
+          .replace(/[^a-z0-9À-ɏḀ-ỿ\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .trim();
+        heading.id = slug || ('heading-' + idx);
+      }
+    });
+
+    // Detect language for title
+    var isEn = document.querySelector('.lang-btn-en.active') !== null;
+    var tocTitleText = isEn ? '📑 Table of Contents' : '📑 Mục Lục Bài Viết';
+
+    // Build TOC HTML
+    var html = '<div class="toc-title" onclick="toggleTocList()" role="button" tabindex="0">' +
+               '<span>' + tocTitleText + '</span>' +
+               '<span class="toc-toggle-icon" id="toc-toggle-icon">' + (isCollapsed ? '▼' : '▲') + '</span>' +
+               '</div>' +
+               '<ul class="toc-list" id="toc-list-items"' + (isCollapsed ? ' style="display:none;"' : '') + '>';
+
+    headings.forEach(function(heading) {
+      var tagClass = heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2';
+      html += '<li class="' + tagClass + '">' +
+              '<a href="#' + heading.id + '" onclick="scrollToSection(event, \'' + heading.id + '\')">' +
+              heading.innerText + '</a></li>';
+    });
+
+    html += '</ul>';
+    tocContainer.innerHTML = html;
+
+    // Keyboard accessibility for TOC title
+    var tocTitle = tocContainer.querySelector('.toc-title');
+    if (tocTitle) {
+      tocTitle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') toggleTocList();
+      });
+    }
+
+    // Activate IntersectionObserver for highlight
+    initTOCObserver(headings);
+  }
+
+  // Toggle open/collapse
+  window.toggleTocList = function() {
+    var list = document.getElementById('toc-list-items');
+    var icon = document.getElementById('toc-toggle-icon');
+    if (!list) return;
+    isCollapsed = !isCollapsed;
+    list.style.display = isCollapsed ? 'none' : '';
+    if (icon) icon.innerText = isCollapsed ? '▼' : '▲';
+  };
+
+  // Smooth scroll to heading
+  window.scrollToSection = function(e, id) {
+    e.preventDefault();
+    var target = document.getElementById(id);
+    if (!target) return;
+    var offset = 80; // header height + gap
+    var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+    if (history.replaceState) {
+      history.replaceState(null, null, '#' + id);
+    }
+  };
+
+  // Highlight active TOC item on scroll
+  function initTOCObserver(headings) {
+    if (!('IntersectionObserver' in window)) return;
+    if (observer) observer.disconnect();
+
+    var activeId = null;
+
+    observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          activeId = entry.target.id;
+        }
+      });
+
+      if (activeId) {
+        var links = document.querySelectorAll('.toc-list a');
+        links.forEach(function(link) {
+          if (link.getAttribute('href') === '#' + activeId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    }, {
+      rootMargin: '-80px 0px -60% 0px',
+      threshold: 0
+    });
+
+    headings.forEach(function(heading) {
+      observer.observe(heading);
+    });
+  }
+
+  // Re-generate TOC on language change
+  window.addEventListener('languageChanged', function() {
+    initTOC();
+  });
+
+  document.addEventListener('DOMContentLoaded', initTOC);
+})();
+
+
+/* ==========================================
+   IN-POST BILINGUAL SWITCHER
+   - Switches VI / EN content blocks
+   - Saves preference to sessionStorage
+   - Auto-hides switcher if no bilingual content
+   - Emits languageChanged event for Auto-TOC re-render
+   ========================================== */
+(function() {
+  'use strict';
+
+  var SESSION_KEY = 'preferred_lang';
+
+  function initBilingual() {
+    var enContents = document.querySelectorAll("[data-lang='en']");
+    var switcherWrapper = document.querySelector('.bilingual-switcher-wrapper');
+
+    // If no English content blocks found, hide the switcher entirely
+    if (!enContents.length) {
+      if (switcherWrapper) switcherWrapper.style.display = 'none';
+      return;
+    }
+
+    // Show the switcher
+    if (switcherWrapper) switcherWrapper.classList.add('is-visible');
+
+    // Restore preferred language from sessionStorage
+    var preferred = sessionStorage.getItem(SESSION_KEY) || 'vi';
+    applyLanguage(preferred, false);
+  }
+
+  function applyLanguage(lang, save) {
+    var viContents = document.querySelectorAll("[data-lang='vi']");
+    var enContents = document.querySelectorAll("[data-lang='en']");
+    var viBtns = document.querySelectorAll('.lang-btn-vi');
+    var enBtns = document.querySelectorAll('.lang-btn-en');
+
+    if (lang === 'en') {
+      viContents.forEach(function(el) { el.style.display = 'none'; });
+      enContents.forEach(function(el) { el.style.display = ''; });
+      viBtns.forEach(function(btn) { btn.classList.remove('active'); btn.setAttribute('aria-pressed', 'false'); });
+      enBtns.forEach(function(btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); });
+    } else {
+      enContents.forEach(function(el) { el.style.display = 'none'; });
+      viContents.forEach(function(el) { el.style.display = ''; });
+      enBtns.forEach(function(btn) { btn.classList.remove('active'); btn.setAttribute('aria-pressed', 'false'); });
+      viBtns.forEach(function(btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); });
+    }
+
+    if (save !== false) {
+      try { sessionStorage.setItem(SESSION_KEY, lang); } catch(e) {}
+    }
+
+    // Dispatch event to inform Auto TOC to update
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
+  }
+
+  // Global function called from inline onclick
+  window.switchLanguage = function(lang) {
+    applyLanguage(lang, true);
+  };
+
+  document.addEventListener('DOMContentLoaded', initBilingual);
+})();
+
+
+/* ==========================================
+   READING PROGRESS BAR & READING TIME
+   ========================================== */
+(function() {
+  'use strict';
+
+  // Reading Progress Bar (throttled for perf)
+  var progressBar = null;
+  var ticking = false;
+
+  function updateProgress() {
+    if (!progressBar) return;
+    var winScroll = window.pageYOffset || document.documentElement.scrollTop;
+    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var pct = height > 0 ? Math.min(100, (winScroll / height) * 100) : 0;
+    progressBar.style.width = pct + '%';
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Reading Time Calculator
+  function calcReadingTime() {
+    var postBody = document.querySelector('.post-body');
+    var readTimeEl = document.getElementById('reading-time-val');
+    if (!postBody || !readTimeEl) return;
+
+    var text = postBody.innerText || postBody.textContent || '';
+    var words = text.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+    // ~200 wpm for Vietnamese readers
+    var minutes = Math.max(1, Math.ceil(words / 200));
+    readTimeEl.innerText = minutes + ' phút đọc';
+  }
+
+  // Copy share link button
+  function initCopyLink() {
+    var copyBtn = document.getElementById('copy-link-btn');
+    if (!copyBtn) return;
+    copyBtn.addEventListener('click', function() {
+      var url = window.location.href;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+          showCopiedToast();
+        }).catch(function() {
+          fallbackCopy(url);
+        });
+      } else {
+        fallbackCopy(url);
+      }
+    });
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    showCopiedToast();
+  }
+
+  function showCopiedToast() {
+    var existing = document.getElementById('copied-toast');
+    if (existing) existing.remove();
+
+    var toast = document.createElement('div');
+    toast.id = 'copied-toast';
+    toast.innerText = '✅ Đã sao chép link!';
+    toast.style.cssText = [
+      'position: fixed',
+      'bottom: 1.5rem',
+      'left: 50%',
+      'transform: translateX(-50%)',
+      'background: #0f172a',
+      'color: #fff',
+      'padding: 0.65rem 1.35rem',
+      'border-radius: 9999px',
+      'font-size: 0.88rem',
+      'font-weight: 600',
+      'z-index: 9999',
+      'box-shadow: 0 4px 20px rgba(0,0,0,0.3)',
+      'animation: fadeInUp 0.3s ease'
+    ].join(';');
+
+    // Inject keyframe once
+    if (!document.getElementById('toast-keyframe')) {
+      var style = document.createElement('style');
+      style.id = 'toast-keyframe';
+      style.textContent = '@keyframes fadeInUp { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }';
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(toast);
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(function() { toast.remove(); }, 350);
+    }, 2200);
+  }
+
+  // Scroll-to-top button
+  function initScrollTop() {
+    var btn = document.getElementById('scroll-top-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    progressBar = document.querySelector('.reading-progress-bar');
+    calcReadingTime();
+    initCopyLink();
+    initScrollTop();
+  });
+})();
+
+  //]]>
+  </script>
+
+</body>
+</html>

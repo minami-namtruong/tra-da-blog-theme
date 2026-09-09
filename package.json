@@ -1,0 +1,20 @@
+{
+  "name": "blogspot-editorial-theme",
+  "version": "1.0.0",
+  "description": "A modern, minimalist, AdSense-ready, and bilingual Blogger XML Theme",
+  "main": "scripts/build.js",
+  "scripts": {
+    "dev": "npx live-server src --port=3000 --entry-file=preview.html",
+    "build": "node scripts/build.js"
+  },
+  "keywords": [
+    "blogspot",
+    "blogger-theme",
+    "editorial",
+    "minimalist",
+    "adsense",
+    "affiliate"
+  ],
+  "author": "Antigravity & Blogger",
+  "license": "MIT"
+}

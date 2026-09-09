@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
+  <title>Nam Trương — Preview Theme</title>
+  <meta name="description" content="Preview giao diện Editorial Profile Blogger Theme v1.0.0"/>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;1,400&display=swap" rel="stylesheet"/>
+
+  <!-- Zero-FOUC Dark Mode Script -->
+  <script>
+    (function() {
+      var t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", t);
+      window.toggleTheme = function() {
+        var a = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", a);
+        localStorage.setItem("theme", a);
+        var btn = document.getElementById("theme-toggle-btn");
+        if (btn) btn.innerHTML = a === "dark" ? "☀️" : "🌙";
+      };
+      document.addEventListener("DOMContentLoaded", function() {
+        var btn = document.getElementById("theme-toggle-btn");
+        if (btn) btn.innerHTML = document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙";
+      });
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles/variables.css"/>
+  <link rel="stylesheet" href="styles/typography.css"/>
+  <link rel="stylesheet" href="styles/header-banner.css"/>
+  <link rel="stylesheet" href="styles/post-layout.css"/>
+  <link rel="stylesheet" href="styles/affiliate-ui.css"/>
+  <link rel="stylesheet" href="styles/footer.css"/>
+  <link rel="stylesheet" href="styles/archive-page.css"/>
+</head>
+<body>
+
+  <!-- PREVIEW MODE TOGGLE BAR -->
+  <div style="background: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 0.6rem 1.5rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 99999;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="font-weight: 700; color: var(--primary);">⚙️ CHẾ ĐỘ XEM TRƯỚC:</span>
+      <button id="view-mode-home" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s;">🏠 Trang Chủ (Feed)</button>
+      <button id="view-mode-post" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">📄 Trang Đọc Bài Viết (Single Post)</button>
+      <button id="view-mode-archive" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">⏳ Dòng Thời Gian (Archive Page)</button>
+    </div>
+    <span style="color: var(--text-muted); font-size: 0.82rem;">💡 Đặc tả: FEAT-TIMELINE-PAGE-V3 (/p/muc-luc.html)</span>
+  </div>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+  <!-- ── SEARCH MODAL ── -->
+  <div class="search-modal-overlay" id="search-modal-overlay">
+    <div class="search-modal-box">
+      <div class="search-modal-header">
+        <span class="search-modal-title">🔍 Tìm kiếm bài viết</span>
+        <button class="search-close-btn" id="search-close-btn">✕</button>
+      </div>
+      <form class="search-input-wrap" id="search-form">
+        <input class="search-input" id="search-input" type="search" placeholder="Nhập từ khóa tìm kiếm..." autocomplete="off"/>
+        <button class="search-submit-btn" type="submit">Tìm</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Nav Drawer Backdrop -->
+  <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
+
+  <!-- ── MOBILE NAVIGATION DRAWER ── -->
+  <nav class="nav-drawer" id="nav-drawer">
+    <div class="nav-drawer-header">
+      <span class="brand-logo">Nam Trương<span class="dot">.</span></span>
+      <button class="nav-drawer-close" id="nav-drawer-close">✕</button>
+    </div>
+    <ul class="nav-drawer-menu" id="nav-drawer-menu">
+      <li><a href="#" id="drawer-home-btn">🏠 Trang Chủ</a></li>
+      <li><a href="#archive" id="drawer-timeline-btn">⏳ Dòng Thời Gian</a></li>
+      <li><a href="#">📝 Góc Nhìn &amp; Tư Duy</a></li>
+      <li><a href="#">🌱 Trải Nghiệm Sống</a></li>
+      <li><a href="#">📚 Sách &amp; Công Cụ</a></li>
+      <li><a href="#">✉️ Liên Hệ</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── STICKY HEADER ── -->
+  <header class="site-header" id="site-header" style="top: 45px;">
+    <div class="site-wrapper">
+      <div class="header-inner">
+        <div class="brand-logo">
+          <a href="#" id="header-logo-link">Nam Trương<span class="dot">.</span></a>
+        </div>
+        <nav class="nav-menu-wrapper">
+          <ul class="nav-menu">
+            <li><a href="#" class="active" id="nav-home-btn">Trang Chủ</a></li>
+            <li><a href="#archive" id="nav-timeline-btn">Dòng Thời Gian</a></li>
+            <li><a href="#" class="nav-filter-link" data-category="Góc Nhìn">Góc Nhìn</a></li>
+            <li class="has-dropdown">
+              <a href="#">Chuyên Mục</a>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="nav-filter-link" data-category="Trải Nghiệm Sống">Trải Nghiệm Sống</a></li>
+                <li><a href="#" class="nav-filter-link" data-category="Sách &amp; Công Cụ">Sách &amp; Công Cụ</a></li>
+                <li><a href="#" class="nav-filter-link" data-category="Phát Triển Bản Thân">Phát Triển Bản Thân</a></li>
+              </ul>
+            </li>
+            <li><a href="#footer">Về Tôi</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <button class="btn-icon" id="search-open-btn" aria-label="Tìm kiếm">🔍</button>
+          <button class="btn-icon" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Đổi giao diện">🌙</button>
+          <button class="hamburger-btn" id="hamburger-btn" aria-label="Mở menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="site-wrapper">
+
+    <!-- ── PROFILE COVER HERO (DYNAMIC COMPACT ON POST VIEW) ── -->
+    <div class="profile-cover-section" id="profile-cover-hero">
+      <div class="cover-image-wrapper"
+           style="background-image: url('https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80');">
+      </div>
+      <div class="cover-info-card">
+        <div class="avatar-wrapper">
+          <img class="profile-avatar"
+               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80"
+               alt="Nam Trương" width="120" height="120"/>
+        </div>
+        <div class="profile-meta">
+          <h1 class="profile-name">Nam Trương</h1>
+          <p class="profile-bio">Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+          <div class="profile-social-icons">
+            <a class="social-icon-link" href="#" aria-label="Facebook">f</a>
+            <a class="social-icon-link" href="#" aria-label="X">𝕏</a>
+            <a class="social-icon-link" href="#" aria-label="Threads">@</a>
+            <a class="social-icon-link" href="#" aria-label="LinkedIn">in</a>
+            <a class="social-icon-link" href="#" aria-label="Instagram">ig</a>
+          </div>
+        </div>
+        <div class="profile-cta-area">
+          <a class="btn-subscribe" href="#newsletter">💌 Nhận Bản Tin</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CATEGORY TABS (XYÊN SUỐT) ── -->
+    <nav class="category-tabs-bar">
+      <a class="tab-pill active" href="#">✦ Tất cả</a>
+      <a class="tab-pill" href="#">Góc Nhìn &amp; Tư Duy</a>
+      <a class="tab-pill" href="#">Trải Nghiệm Sống</a>
+      <a class="tab-pill" href="#">Sách &amp; Công Cụ</a>
+      <a class="tab-pill" href="#">Phát Triển Bản Thân</a>
+      <a class="tab-pill" href="#">Công Nghệ</a>
+    </nav>
+
+    <!-- ── MAIN LAYOUT GRID (POSTS + SIDEBAR) ── -->
+    <div class="layout-grid">
+
+      <!-- MAIN COLUMN -->
+      <main class="main-content">
+
+        <!-- ═══════════════════════════════════
+             1. HOMEPAGE FEED VIEW WRAPPER
+             ═══════════════════════════════════ -->
+        <div id="posts-feed-wrapper">
+          <div class="posts-feed">
+
+            <!-- Post Card 1 (featured) -->
+            <article class="post-card">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#">Góc Nhìn &amp; Tư Duy</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn</a>
+                  </h2>
+                  <div class="post-card-snippet">Trong thế giới hiện đại với vô vàn lựa chọn, chúng ta thường nghĩ rằng nhiều hơn là tốt hơn. Nhưng nghiên cứu tâm lý học cho thấy điều ngược lại...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 09 tháng 9, 2026</span>
+                  <span>⏱️ 8 phút đọc</span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=440&auto=format&fit=crop&q=80"
+                   alt="Nghịch lý lựa chọn" width="220" height="150" fetchpriority="high"/>
+            </article>
+
+            <!-- Post Card 2 -->
+            <article class="post-card">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#">Trải Nghiệm Sống</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân</a>
+                  </h2>
+                  <div class="post-card-snippet">Cuộc thử nghiệm tưởng chừng đơn giản nhưng lại dạy tôi rất nhiều điều về thói quen, ý thức và cách não bộ hoạt động...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 05 tháng 9, 2026</span>
+                  <span>⏱️ 6 phút đọc</span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=440&auto=format&fit=crop&q=80"
+                   alt="30 ngày không điện thoại" width="220" height="150" loading="lazy"/>
+            </article>
+
+            <!-- Post Card 3 -->
+            <article class="post-card">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#">Sách &amp; Công Cụ</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định</a>
+                  </h2>
+                  <div class="post-card-snippet">Daniel Kahneman giải thích hai hệ thống tư duy trong não bộ. Sau khi đọc, tôi nhận ra hầu hết quyết định của mình được đưa ra ở trạng thái nào...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 01 tháng 9, 2026</span>
+                  <span>⏱️ 10 phút đọc</span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=440&auto=format&fit=crop&q=80"
+                   alt="Review sách Tư duy nhanh và chậm" width="220" height="150" loading="lazy"/>
+            </article>
+
+          </div>
+
+          <!-- Pagination -->
+          <nav class="blog-pager">
+            <span class="page-num active">1</span>
+            <a class="page-num" href="#">2</a>
+            <a class="page-num" href="#">3</a>
+            <a class="blog-pager-older-link" href="#">Cũ hơn »</a>
+          </nav>
+        </div><!-- /#posts-feed-wrapper -->
+
+        <!-- ═══════════════════════════════════
+             2. SINGLE POST VIEW WRAPPER
+             ═══════════════════════════════════ -->
+        <div id="single-post-wrapper" style="display: none;">
+          <article class="single-post-container">
+
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+              <a href="#" id="breadcrumb-home-link">🏠 Trang chủ</a>
+              <span class="separator">›</span>
+              <a href="#">Góc Nhìn &amp; Tư Duy</a>
+              <span class="separator">›</span>
+              <span>Nghịch Lý Của Việc Chọn Lựa</span>
+            </nav>
+
+            <!-- H1 Title -->
+            <h1 class="single-post-title">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn</h1>
+
+            <!-- Post Meta -->
+            <div class="post-meta-header">
+              <div class="author-meta-inline">
+                <img class="author-avatar-sm"
+                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80"
+                     alt="Nam Trương" width="44" height="44"/>
+                <div class="author-meta-text">
+                  <div class="author-name-link">Nam Trương</div>
+                  <div class="author-meta-details">
+                    <span>📅 09 tháng 9, 2026</span>
+                    <span>•</span>
+                    <span>⏱️ <span id="reading-time-val">8 phút đọc</span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="bilingual-switcher-wrapper is-visible">
+                <div class="bilingual-switcher">
+                  <button class="lang-btn lang-btn-vi active" onclick="switchLanguage('vi')">🇻🇳 VI</button>
+                  <button class="lang-btn lang-btn-en" onclick="switchLanguage('en')">🇬🇧 EN</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- AdSense Top -->
+            <div class="adsense-slot adsense-top" style="display:flex; align-items:center; justify-content:center;">
+              <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Đầu Bài (min-height: 100px) — Chống giật layout CLS=0</span>
+            </div>
+
+            <!-- Auto TOC -->
+            <div class="table-of-contents" id="auto-toc"></div>
+
+            <!-- Bilingual Content -->
+            <div class="post-body">
+              <!-- NỘI DUNG TIẾNG VIỆT -->
+              <div data-lang="vi">
+                <h2 id="phan-1">1. Nghịch Lý Barry Schwartz</h2>
+                <p>Nhà tâm lý học Barry Schwartz đã đặt ra thuật ngữ "Nghịch lý của sự lựa chọn" trong cuốn sách cùng tên xuất bản năm 2004. Ông lập luận rằng mặc dù có nhiều lựa chọn hơn có vẻ tốt hơn, nhưng thực tế lại khiến chúng ta cảm thấy tệ hơn về quyết định của mình.</p>
+
+                <h3 id="hieu-ung-maximizer">Hiệu ứng Maximizer vs Satisficer</h3>
+                <p>Schwartz chia người ra quyết định thành hai nhóm: Maximizer (những người luôn muốn tìm kiếm lựa chọn tối ưu tuyệt đối) và Satisficer (những người hài lòng với lựa chọn "đủ tốt" đáp ứng tiêu chuẩn của họ).</p>
+
+                <blockquote>
+                  ❝ Sự hoàn hảo là kẻ thù của sự hoàn thành. Trong thời đại ngập tràn thông tin, khả năng biết điểm dừng còn quan trọng hơn khả năng tìm kiếm. ❞
+                </blockquote>
+
+                <div class="callout callout-tip">
+                  <div class="callout-icon">💡</div>
+                  <div class="callout-content">
+                    <p><strong>Mẹo thực hành:</strong> Khi mua sắm hoặc ra quyết định hàng ngày, hãy đặt trước 3 tiêu chí cứng. Ngay khi tìm thấy lựa chọn thỏa mãn cả 3 tiêu chí, hãy ngừng tìm kiếm và ra quyết định ngay lập tức.</p>
+                  </div>
+                </div>
+
+                <h2 id="phan-2">2. Tại Sao Não Bộ Bị Quá Tải?</h2>
+                <p>Mỗi quyết định đều tiêu tốn một lượng năng lượng nhận thức (cognitive energy) nhất định. Khi chúng ta phải cân nhắc quá nhiều biến số, hiện tượng "Kiệt sức vì ra quyết định" (Decision Fatigue) sẽ xuất hiện.</p>
+
+                <div class="callout callout-warning">
+                  <div class="callout-icon">⚠️</div>
+                  <div class="callout-content">
+                    <p><strong>Cảnh báo:</strong> Càng về cuối ngày, chất lượng các quyết định của bạn càng giảm sút. Đừng bao giờ đưa ra các quyết định tài chính hoặc cuộc sống quan trọng sau 9 giờ tối.</p>
+                  </div>
+                </div>
+
+                <h2 id="phan-3">3. Bài Học Thực Tiễn Cho Cuộc Sống</h2>
+                <p>Dưới đây là công cụ sổ tay da thủ công và ứng dụng ghi chú tôi đã đồng hành suốt 3 năm qua để quản lý tư duy và giảm thiểu lựa chọn:</p>
+
+                <!-- REVIEW CARD / AFFILIATE BOX -->
+                <div class="review-card">
+                  <div class="review-header">
+                    <h4 class="review-product-name">📖 Sổ Tay Da Bò Thủ Công Midori Traveler's Notebook</h4>
+                    <span class="review-rating">⭐ 4.9 / 5</span>
+                  </div>
+                  <div class="review-pros-cons">
+                    <div class="review-pros">
+                      <h5>✓ Ưu điểm nổi bật</h5>
+                      <ul>
+                        <li>Chất da thật bền bỉ, càng dùng càng lên màu đẹp</li>
+                        <li>Thiết kế tối giản giúp tập trung hoàn toàn vào việc ghi chép</li>
+                        <li>Dễ dàng thay ruột sổ với nhiều định dạng giấy cao cấp</li>
+                      </ul>
+                    </div>
+                    <div class="review-cons">
+                      <h5>✗ Hạn chế</h5>
+                      <ul>
+                        <li>Giá thành ban đầu cao hơn sổ thông thường</li>
+                        <li>Cần thời gian để da mềm mại tự nhiên</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div style="text-align: center;">
+                    <a class="btn-affiliate" href="https://example.com/affiliate-link" target="_blank" rel="nofollow sponsored">
+                      👉 Xem Giá &amp; Ưu Đãi Chính Hãng
+                    </a>
+                  </div>
+                </div>
+
+                <p>Cảm ơn bạn đã đồng hành cùng tôi trên bài viết này. Hãy chia sẻ nếu bạn thấy bài viết có giá trị nhé!</p>
+              </div>
+
+              <!-- NỘI DUNG TIẾNG ANH -->
+              <div data-lang="en" style="display:none;">
+                <h2 id="en-part-1">1. The Barry Schwartz Paradox</h2>
+                <p>Psychologist Barry Schwartz coined the term "The Paradox of Choice" in his 2004 book. He argued that having more choices, while seeming liberating, actually paralyzes decision-making and reduces happiness.</p>
+
+                <h3 id="en-maximizers">Maximizers vs. Satisficers</h3>
+                <p>Schwartz divided decision-makers into two types: Maximizers (who strive to make only the absolute best choice) and Satisficers (who settle for a choice that meets their threshold of acceptability).</p>
+
+                <blockquote>
+                  ❝ Perfect is the enemy of done. In an age of endless options, knowing when good enough is truly enough is a superpower. ❞
+                </blockquote>
+
+                <h2 id="en-part-2">2. Why the Brain Suffers Cognitive Overload</h2>
+                <p>Every choice expends mental fuel. When forced to weigh countless variables, decision fatigue sets in, eroding willpower and analytical clarity.</p>
+
+                <h2 id="en-part-3">3. Practical Takeaways for Daily Life</h2>
+                <p>Every journey is personal. Thank you for reading and taking this journey of reflection with me!</p>
+              </div>
+            </div>
+
+            <!-- AdSense Bottom -->
+            <div class="adsense-slot adsense-bottom" style="display:flex; align-items:center; justify-content:center;">
+              <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Cuối Bài (min-height: 250px)</span>
+            </div>
+
+            <!-- Social Share Bar -->
+            <div class="social-share-bar">
+              <span class="share-title">Chia sẻ bài viết:</span>
+              <a class="btn-share btn-share-fb" href="#"><b>f</b> Facebook</a>
+              <a class="btn-share btn-share-tw" href="#">𝕏 X / Twitter</a>
+              <a class="btn-share btn-share-li" href="#">in LinkedIn</a>
+              <button class="btn-share btn-share-copy" id="copy-link-btn">🔗 Sao chép link</button>
+            </div>
+
+            <!-- Author Bio Box -->
+            <div class="author-bio-box">
+              <img class="author-bio-avatar"
+                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&auto=format&fit=crop&q=80"
+                   alt="Nam Trương" width="80" height="80"/>
+              <div class="author-bio-content">
+                <div class="author-bio-label">Về tác giả</div>
+                <h3 class="author-bio-name">Nam Trương</h3>
+                <p class="author-bio-text">Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
+                <div class="author-bio-actions">
+                  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer">☕ Mời tôi ly cà phê</a>
+                  <a class="btn-subscribe" href="#newsletter">💌 Đăng ký bản tin</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Post Navigation -->
+            <div class="post-nav-container">
+              <a class="post-nav-link post-nav-prev" href="#">
+                <span class="post-nav-direction">« Bài trước</span>
+                <span class="post-nav-title">30 Ngày Không Dùng Điện Thoại Buổi Sáng</span>
+              </a>
+              <a class="post-nav-link post-nav-next" href="#">
+                <span class="post-nav-direction">Bài sau »</span>
+                <span class="post-nav-title">Review Sách: Tư Duy Nhanh và Chậm</span>
+              </a>
+            </div>
+
+            <!-- Related Posts -->
+            <div class="related-posts-section">
+              <h3 class="related-posts-title">📚 Bài Viết Liên Quan</h3>
+              <div class="related-posts-grid">
+                <a class="related-post-card" href="#">
+                  <img class="related-post-thumb"
+                       src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=440&auto=format&fit=crop&q=80"
+                       alt="30 ngày không điện thoại"/>
+                  <span class="related-post-title">30 Ngày Không Dùng Điện Thoại Buổi Sáng</span>
+                  <span class="related-post-date">📅 05/09/2026</span>
+                </a>
+                <a class="related-post-card" href="#">
+                  <img class="related-post-thumb"
+                       src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=440&auto=format&fit=crop&q=80"
+                       alt="Tư duy nhanh và chậm"/>
+                  <span class="related-post-title">Review Sách: "Tư Duy Nhanh và Chậm"</span>
+                  <span class="related-post-date">📅 01/09/2026</span>
+                </a>
+              </div>
+            </div>
+
+          </article>
+        </div><!-- /#single-post-wrapper -->
+
+        <!-- ═══════════════════════════════════
+             3. DEDICATED ARCHIVE PAGE VIEW WRAPPER
+             ═══════════════════════════════════ -->
+        <div id="archive-page-wrapper" style="display: none;">
+          <div class="editorial-archive-page" id="editorial-archive-app">
+            <!-- Thanh Tìm Kiếm Tức Thì -->
+            <div class="archive-search-wrap">
+              <span class="archive-search-icon" aria-hidden="true">🔍</span>
+              <input class="archive-search-input" id="archive-search-input" type="search"
+                     placeholder="Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)..."
+                     autocomplete="off" aria-label="Tìm kiếm bài viết"/>
+              <button type="button" class="archive-search-clear" id="archive-search-clear" aria-label="Xóa tìm kiếm" style="display:none;">✕</button>
+            </div>
+
+            <!-- Khung danh sách bài viết -->
+            <div id="archive-app-body" class="archive-tree-container" aria-live="polite">
+              <div class="archive-loading">
+                <div class="archive-spinner"></div>
+                <span>Đang đồng bộ danh mục bài viết...</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- /#archive-page-wrapper -->
+
+      </main>
+
+      <!-- ═══════════════════════════════════
+           SIDEBAR (30% - ALWAYS IN RIGHT COLUMN)
+           ═══════════════════════════════════ -->
+      <aside class="sidebar" id="sidebar">
+
+        <!-- Widget 1: About Me -->
+        <div class="sidebar-widget">
+          <h3 class="sidebar-widget-title">👤 Về Tác Giả</h3>
+          <img class="sidebar-about-avatar"
+               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&auto=format&fit=crop&q=80"
+               alt="Nam Trương" width="64" height="64"/>
+          <p class="sidebar-about-text">Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
+          <div class="sidebar-socials">
+            <a class="social-icon-link" href="#" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+            <a class="social-icon-link" href="#" target="_blank" rel="noopener" aria-label="X">𝕏</a>
+            <a class="social-icon-link" href="#" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          </div>
+        </div>
+
+        <!-- Widget 2: Popular Posts -->
+        <div class="sidebar-widget">
+          <h3 class="sidebar-widget-title">🔥 Bài Viết Nổi Bật</h3>
+          <ul class="popular-posts-list">
+            <li>
+              <a class="popular-post-item" href="#">
+                <span class="popular-post-num">01</span>
+                <img class="popular-post-thumb"
+                     src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=120&auto=format&fit=crop&q=80"
+                     alt="Nghịch lý lựa chọn" width="60" height="60"/>
+                <div class="popular-post-info">
+                  <div class="popular-post-title">Nghịch Lý Của Việc Chọn Lựa</div>
+                  <div class="popular-post-date">09/09/2026</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="popular-post-item" href="#">
+                <span class="popular-post-num">02</span>
+                <img class="popular-post-thumb"
+                     src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&auto=format&fit=crop&q=80"
+                     alt="30 ngày không điện thoại" width="60" height="60"/>
+                <div class="popular-post-info">
+                  <div class="popular-post-title">30 Ngày Không Dùng Điện Thoại</div>
+                  <div class="popular-post-date">05/09/2026</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="popular-post-item" href="#">
+                <span class="popular-post-num">03</span>
+                <img class="popular-post-thumb"
+                     src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=120&auto=format&fit=crop&q=80"
+                     alt="Tư duy nhanh và chậm" width="60" height="60"/>
+                <div class="popular-post-info">
+                  <div class="popular-post-title">Review Sách: Tư Duy Nhanh và Chậm</div>
+                  <div class="popular-post-date">01/09/2026</div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Widget 3: Sticky AdSense Banner -->
+        <div class="adsense-slot adsense-sidebar" style="display: flex; align-items: center; justify-content: center;">
+          <span style="color: var(--text-light); font-size: 0.8rem;">📣 Banner Sidebar Sticky (300x250/600)</span>
+        </div>
+
+        <!-- Widget 4: Newsletter -->
+        <div class="sidebar-widget" id="newsletter">
+          <h3 class="sidebar-widget-title">📨 Nhận Bài Viết Mới</h3>
+          <p class="sidebar-newsletter-text">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+          <div class="sidebar-newsletter-form">
+            <input class="sidebar-email-input" type="email" placeholder="Email của bạn..." aria-label="Địa chỉ email"/>
+            <button class="sidebar-submit-btn" type="button">💌 Đăng Ký</button>
+          </div>
+        </div>
+
+      </aside>
+
+    </div><!-- /.layout-grid -->
+
+  </div><!-- /.site-wrapper -->
+
+  <!-- ── FOOTER (4 CỘT) ── -->
+  <footer class="site-footer" id="site-footer">
+    <div class="site-wrapper">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 0.75rem;">Nam Trương<span class="dot">.</span></div>
+          <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">Nơi chia sẻ góc nhìn cá nhân, trải nghiệm sống chân thực và tri thức giá trị cho những ai đang trên hành trình tự khám phá bản thân.</p>
+          <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 1rem;">© 2026 Nam Trương. Tất cả quyền được bảo lưu.</div>
+        </div>
+        <div class="footer-col">
+          <h4>📁 Khám Phá</h4>
+          <ul class="footer-links">
+            <li><a href="#">› Góc Nhìn &amp; Tư Duy</a></li>
+            <li><a href="#">› Trải Nghiệm Sống</a></li>
+            <li><a href="#">› Sách &amp; Công Cụ</a></li>
+            <li><a href="#">› Phát Triển Bản Thân</a></li>
+            <li><a href="#">› Công Nghệ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>⚖️ Pháp Lý &amp; Minh Bạch</h4>
+          <ul class="footer-links">
+            <li><a href="#">› Chính sách bảo mật (Privacy)</a></li>
+            <li><a href="#">› Điều khoản dịch vụ (Terms)</a></li>
+            <li><a href="#">› Tuyên bố miễn trừ Affiliate</a></li>
+            <li><a href="#">› Liên hệ &amp; Hợp tác</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>📬 Bản Tin &amp; Mạng Xã Hội</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0 0 0.75rem;">Nhận bài viết mới qua email.</p>
+          <form class="newsletter-form" onsubmit="return false;">
+            <input class="input-email" type="email" placeholder="Email của bạn..."/>
+            <button class="btn-submit" type="button">Gửi</button>
+          </form>
+          <div class="footer-social-grid">
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="X">𝕏</a>
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="Threads">@</a>
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="YouTube">▶</a>
+            <a class="footer-social-icon" href="#" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+            <a class="footer-social-icon" href="/feeds/posts/default" target="_blank" rel="noopener" aria-label="RSS Feed">RSS</a>
+          </div>
+        </div>
+      </div>
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <span>© 2026 Nam Trương. All rights reserved. · Thiết kế bởi Nam Trương.</span>
+        <a class="scroll-top-btn" href="#" id="scroll-top-btn">⬆ Đầu trang</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Timeline Mock Data (Dùng trong preview mode) -->
+  <script>
+    window.__TIMELINE_MOCK_POSTS__ = [
+      // 2026
+      { title: 'Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn', url: '#', year: 2026, dateStr: '09/09', category: 'Góc Nhìn & Tư Duy', timestamp: 1757088000000 },
+      { title: '30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân', url: '#', year: 2026, dateStr: '05/09', category: 'Trải Nghiệm Sống', timestamp: 1756742400000 },
+      { title: 'Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định', url: '#', year: 2026, dateStr: '01/09', category: 'Sách & Công Cụ', timestamp: 1756396800000 },
+      { title: 'Nghệ Thuật Nói Không: Cách Bảo Vệ Thời Gian và Năng Lượng Của Bạn', url: '#', year: 2026, dateStr: '28/08', category: 'Góc Nhìn & Tư Duy', timestamp: 1756051200000 },
+      { title: 'Tôi Đã Thử Thức Dậy Lúc 5 Giờ Sáng Trong 21 Ngày — Đây Là Kết Quả Thật Sự', url: '#', year: 2026, dateStr: '20/08', category: 'Trải Nghiệm Sống', timestamp: 1755360000000 },
+      { title: 'Kinh Tế Học Hành Vi và Những Bẫy Tư Duy Khiến Chúng Ta Mua Sắm Không Hợp Lý', url: '#', year: 2026, dateStr: '15/08', category: 'Góc Nhìn & Tư Duy', timestamp: 1754928000000 },
+      { title: 'Obsidian vs Notion: Tôi Đã Dùng Cả Hai Và Đây Là Đánh Giá Thật Của Tôi', url: '#', year: 2026, dateStr: '10/08', category: 'Sách & Công Cụ', timestamp: 1754496000000 },
+      { title: 'Ký Sự Đường Trường: 7 Ngày Một Mình Phượt Bắc Việt Nam', url: '#', year: 2026, dateStr: '01/08', category: 'Trải Nghiệm Sống', timestamp: 1753804800000 },
+      // 2025
+      { title: 'Mindfulness Không Phải Ngồi Thiền — Cách Tôi Luyện Sự Chú Tâm Trong Cuộc Sống Hàng Ngày', url: '#', year: 2025, dateStr: '15/12', category: 'Góc Nhìn & Tư Duy', timestamp: 1734220800000 },
+      { title: 'Review Sách: "Sapiens" — Lịch Sử Loài Người Qua Lăng Kính Khác Biệt', url: '#', year: 2025, dateStr: '01/12', category: 'Sách & Công Cụ', timestamp: 1733011200000 },
+      { title: 'Tại Sao Tôi Bỏ Mạng Xã Hội 3 Tháng Và Không Hối Tiếc', url: '#', year: 2025, dateStr: '10/11', category: 'Trải Nghiệm Sống', timestamp: 1731196800000 },
+      { title: 'Hệ Thống Ghi Chú Thứ Hai (Second Brain): Xây Dựng Như Thế Nào Cho Hiệu Quả?', url: '#', year: 2025, dateStr: '20/10', category: 'Sách & Công Cụ', timestamp: 1729382400000 },
+      { title: 'Cuộc Trò Chuyện Với Bố Lúc 80 Tuổi Dạy Tôi Điều Quan Trọng Nhất Về Cuộc Đời', url: '#', year: 2025, dateStr: '05/09', category: 'Trải Nghiệm Sống', timestamp: 1725494400000 },
+      { title: 'Stoicism Thực Hành: Triết Học Khắc Kỷ Ứng Dụng Vào Cuộc Sống Hiện Đại', url: '#', year: 2025, dateStr: '12/07', category: 'Góc Nhìn & Tư Duy', timestamp: 1720742400000 },
+      // 2024
+      { title: 'Bắt Đầu Blog Cá Nhân Tuổi 28: Tại Sao, Như Thế Nào và Học Được Gì?', url: '#', year: 2024, dateStr: '20/12', category: 'Trải Nghiệm Sống', timestamp: 1734652800000 - 31536000000 },
+      { title: 'Review Sách: "Atomic Habits" — 5 Điều Tôi Đã Áp Dụng Được Và 3 Điều Tôi Không Làm Được', url: '#', year: 2024, dateStr: '15/09', category: 'Sách & Công Cụ', timestamp: 1726358400000 - 31536000000 },
+      { title: 'Đi Làm Freelance 1 Năm: Tự Do Thật Sự Hay Chỉ Là Ảo Tưởng?', url: '#', year: 2024, dateStr: '03/06', category: 'Trải Nghiệm Sống', timestamp: 1717372800000 - 31536000000 },
+      { title: 'Thiên Kiến Xác Nhận: Tại Sao Chúng Ta Chỉ Tin Vào Thứ Mình Muốn Tin', url: '#', year: 2024, dateStr: '10/03', category: 'Góc Nhìn & Tư Duy', timestamp: 1710028800000 - 31536000000 }
+    ];
+  </script>
+
+  <!-- Interactive Demo Controller -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var feedWrapper = document.getElementById("posts-feed-wrapper");
+      var postWrapper = document.getElementById("single-post-wrapper");
+      var archiveWrapper = document.getElementById("archive-page-wrapper");
+      var heroBanner = document.getElementById("profile-cover-hero");
+      var categoryTabs = document.querySelector(".category-tabs-bar");
+
+      var btnHome = document.getElementById("view-mode-home");
+      var btnPost = document.getElementById("view-mode-post");
+      var btnArchive = document.getElementById("view-mode-archive");
+
+      var navHome = document.getElementById("nav-home-btn");
+      var navArchive = document.getElementById("nav-timeline-btn");
+
+      function updateActiveButtons(mode) {
+        var buttons = [
+          { btn: btnHome, active: mode === "home" },
+          { btn: btnPost, active: mode === "post" },
+          { btn: btnArchive, active: mode === "archive" }
+        ];
+        buttons.forEach(function(item) {
+          if (!item.btn) return;
+          if (item.active) {
+            item.btn.style.background = "var(--primary)";
+            item.btn.style.color = "#fff";
+            item.btn.style.borderColor = "var(--primary)";
+          } else {
+            item.btn.style.background = "var(--bg-card)";
+            item.btn.style.color = "var(--text-muted)";
+            item.btn.style.borderColor = "var(--border-color)";
+          }
+        });
+
+        // Update nav links active class
+        if (navHome) navHome.classList.toggle("active", mode === "home");
+        if (navArchive) navArchive.classList.toggle("active", mode === "archive");
+      }
+
+      window.setHomeView = function() {
+        if (feedWrapper) feedWrapper.style.display = "";
+        if (postWrapper) postWrapper.style.display = "none";
+        if (archiveWrapper) archiveWrapper.style.display = "none";
+        if (heroBanner) heroBanner.style.display = "";
+        if (categoryTabs) categoryTabs.style.display = "";
+
+        updateActiveButtons("home");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      window.setPostView = function(title) {
+        if (feedWrapper) feedWrapper.style.display = "none";
+        if (postWrapper) postWrapper.style.display = "";
+        if (archiveWrapper) archiveWrapper.style.display = "none";
+        if (heroBanner) heroBanner.style.display = "";
+        if (categoryTabs) categoryTabs.style.display = "";
+
+        if (title) {
+          var postTitleEl = document.querySelector("#single-post-wrapper .post-title-main");
+          if (postTitleEl) postTitleEl.textContent = title;
+        }
+
+        updateActiveButtons("post");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Trigger Auto-TOC re-init for single post
+        window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang: "vi" } }));
+      };
+
+      window.setArchiveView = function() {
+        if (feedWrapper) feedWrapper.style.display = "none";
+        if (postWrapper) postWrapper.style.display = "none";
+        if (archiveWrapper) archiveWrapper.style.display = "";
+        if (heroBanner) heroBanner.style.display = ""; // Giữ nguyên Cover Banner giống hệt trang chủ
+        if (categoryTabs) categoryTabs.style.display = ""; // Giữ nguyên thanh nhãn chuyên mục dưới banner
+
+        updateActiveButtons("archive");
+
+        // Init/Mount Archive Page
+        var appEl = document.getElementById("editorial-archive-app");
+        if (appEl && window.initArchivePage) {
+          window.initArchivePage(appEl);
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      if (btnHome) btnHome.addEventListener("click", window.setHomeView);
+      if (btnPost) btnPost.addEventListener("click", function() { window.setPostView(); });
+      if (btnArchive) btnArchive.addEventListener("click", window.setArchiveView);
+
+      // Links to Archive
+      var archiveTriggers = [
+        document.getElementById("nav-timeline-btn"),
+        document.getElementById("drawer-timeline-btn")
+      ];
+      archiveTriggers.forEach(function(el) {
+        if (el) {
+          el.addEventListener("click", function(e) {
+            e.preventDefault();
+            window.location.hash = "archive";
+            window.setArchiveView();
+          });
+        }
+      });
+
+      // Links to Home
+      var homeTriggers = [
+        document.getElementById("nav-home-btn"),
+        document.getElementById("drawer-home-btn"),
+        document.getElementById("header-logo-link"),
+        document.getElementById("breadcrumb-home-link"),
+        document.getElementById("archive-breadcrumb-home-link")
+      ];
+      homeTriggers.forEach(function(el) {
+        if (el) {
+          el.addEventListener("click", function(e) {
+            e.preventDefault();
+            window.location.hash = "";
+            window.setHomeView();
+          });
+        }
+      });
+
+      // Clicking any post card title in feed switches to Single Post view
+      var postLinks = document.querySelectorAll(".view-post-link");
+      postLinks.forEach(function(link) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          window.setPostView();
+        });
+      });
+
+      // Category filter tabs on homepage / archive
+      var pills = document.querySelectorAll(".category-tabs-bar .tab-pill");
+      var postCards = document.querySelectorAll(".posts-feed .post-card");
+      pills.forEach(function(pill) {
+        pill.addEventListener("click", function(e) {
+          e.preventDefault();
+          pills.forEach(function(p) { p.classList.remove("active"); });
+          pill.classList.add("active");
+          var cat = pill.innerText.replace("✦", "").trim();
+
+          // Nếu đang xem mục lục, không switch về home view
+          if (archiveWrapper && archiveWrapper.style.display !== "none") {
+            return;
+          }
+
+          postCards.forEach(function(card) {
+            var badge = card.querySelector(".post-badge");
+            var badgeText = badge ? badge.innerText.trim() : "";
+            if (cat === "Tất cả" || badgeText.toLowerCase().includes(cat.toLowerCase()) || cat.toLowerCase().includes(badgeText.toLowerCase())) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          });
+          window.setHomeView();
+        });
+      });
+
+      // Check initial hash
+      if (window.location.hash === "#archive") {
+        window.setArchiveView();
+      }
+    });
+  </script>
+
+  <!-- External scripts loaded after DOM -->
+  <script src="scripts/dark-mode.js"></script>
+  <script src="scripts/mobile-nav.js"></script>
+  <script src="scripts/search-modal.js"></script>
+  <script src="scripts/archive-page.js"></script>
+  <script src="scripts/auto-toc.js"></script>
+  <script src="scripts/bilingual.js"></script>
+  <script src="scripts/reading-time.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+/* ==========================================
+   AFFILIATE & EDITORIAL UI KIT
+   ========================================== */
+
+/* Callout Boxes */
+.callout {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  margin: 1.75rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+}
+.callout-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.callout-content { flex: 1; font-size: 0.97rem; line-height: 1.7; }
+.callout-content p:last-child { margin-bottom: 0; }
+.callout-content strong { display: block; margin-bottom: 0.25rem; font-weight: 700; }
+
+.callout-warning {
+  border-left-color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+.callout-tip {
+  border-left-color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+.callout-danger {
+  border-left-color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ==========================================
+   PRODUCT REVIEW CARD (Affiliate Box)
+   ========================================== */
+.review-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin: 2.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.review-product-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.3;
+}
+.review-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+.review-stars {
+  color: var(--accent);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+.review-score {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+.review-score-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.review-pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.review-pros, .review-cons {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+.review-pros h5, .review-cons h5 {
+  margin: 0 0 0.6rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.review-pros h5 { color: var(--success); }
+.review-cons h5 { color: var(--danger); }
+
+.review-pros ul, .review-cons ul {
+  padding-left: 0;
+  margin: 0;
+  font-size: 0.88rem;
+  list-style: none;
+}
+.review-pros li, .review-cons li {
+  padding: 0.25rem 0;
+  display: flex;
+  gap: 0.4rem;
+  line-height: 1.5;
+}
+.review-pros li::before {
+  content: "✓";
+  color: var(--success);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.review-cons li::before {
+  content: "✗";
+  color: var(--danger);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.review-cta {
+  text-align: center;
+}
+
+/* ==========================================
+   AFFILIATE CTA BUTTON
+   ========================================== */
+.btn-affiliate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: var(--transition);
+  text-decoration: none !important;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-main);
+}
+.btn-affiliate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
+  color: #fff !important;
+}
+.btn-affiliate:active {
+  transform: translateY(0);
+}
+
+.btn-coffee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  transition: var(--transition);
+  text-decoration: none !important;
+  cursor: pointer;
+  border: none;
+}
+.btn-coffee:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  color: #fff !important;
+}
+
+/* ==========================================
+   ANTI-CLS ADSENSE SLOTS
+   ========================================== */
+.adsense-slot {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  text-align: center;
+}
+.adsense-slot::before {
+  content: "QUẢNG CÁO";
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.adsense-top    { min-height: 100px; }
+.adsense-infeed { min-height: 250px; }
+.adsense-bottom { min-height: 250px; }
+.adsense-sidebar {
+  min-height: 300px;
+  position: sticky;
+  top: calc(var(--header-height) + 1rem);
+  margin: 0;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 600px) {
+  .review-pros-cons {
+    grid-template-columns: 1fr;
+  }
+  .btn-affiliate { width: 100%; }
+}
