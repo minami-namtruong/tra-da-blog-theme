@@ -1,21 +1,145 @@
 /* ==========================================
-   FOOTER - 4 COLUMN LAYOUT
+   FOOTER — 3-TIER MODULAR LAYOUT (FEAT-MODULAR-FOOTER-V3)
    ========================================== */
+
+/* ─── SITE FOOTER CONTAINER ─── */
 .site-footer {
   background: var(--bg-card);
   border-top: 1px solid var(--border-color);
-  padding: 4rem 0 0;
   margin-top: 4rem;
 }
 
-.footer-grid {
+/* ══════════════════════════════════════════
+   TẦNG 1: NỘI DUNG & TƯƠNG TÁC CHÍNH
+   ══════════════════════════════════════════ */
+.footer-tier1 {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1.8fr 1.2fr 1.5fr;
+  gap: 4rem;
+  padding: 4rem 0 3.5rem;
 }
 
-.footer-col h4 {
+/* Ensure columns stretch to the same height and push their last widgets to the bottom */
+.footer-tier1 > div,
+.footer-section-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.footer-tier1 .widget:has(.footer-coffee-wrapper),
+.footer-tier1 .widget:has(.footer-col-social) {
+  margin-top: auto;
+}
+
+/* ─── CỘT 1: THƯƠNG HIỆU & LỜI CẢM ƠN ─── */
+.footer-brand-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-brand-logo:hover {
+  color: var(--primary);
+}
+.footer-brand-logo .dot { color: var(--primary); }
+
+/* Lời cảm ơn — quote style */
+.footer-tagline {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin: 0 0 1.35rem;
+  padding: 1rem 1.1rem 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--primary-light) 0%, rgba(245, 158, 11, 0.06) 100%);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  position: relative;
+}
+.footer-tagline::before {
+  content: '\201C';
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--primary);
+  opacity: 0.5;
+  font-style: normal;
+  position: absolute;
+  top: -0.25rem;
+  left: 0.25rem;
+}
+.footer-tagline::after {
+  content: '\201D';
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--primary);
+  opacity: 0.5;
+  font-style: normal;
+  vertical-align: -0.5rem;
+  margin-left: 0.1rem;
+}
+[data-theme="dark"] .footer-tagline {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(245, 158, 11, 0.04) 100%);
+}
+
+/* ─── BUY ME A COFFEE — ATTRACTIVE PILL ─── */
+.footer-coffee-wrapper {
+  margin-top: 0.25rem;
+}
+
+.btn-coffee-compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1.5px solid #fbbf24;
+  border-radius: var(--radius-full);
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+  letter-spacing: 0.01em;
+}
+.btn-coffee-compact:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+  border-color: #f59e0b;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.45), inset 0 1px 0 rgba(255,255,255,0.5);
+  color: #78350f;
+}
+.btn-coffee-compact:active {
+  transform: translateY(-1px) scale(1.01);
+}
+[data-theme="dark"] .btn-coffee-compact {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.12) 0%, rgba(253, 230, 138, 0.08) 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fde68a;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.1);
+}
+[data-theme="dark"] .btn-coffee-compact:hover {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.2) 0%, rgba(253, 230, 138, 0.15) 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.25);
+  color: #fef3c7;
+}
+.coffee-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* ─── CỘT 2: CHÍNH SÁCH & PHÁP LÝ ─── */
+.footer-col-title {
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0 0 1.1rem;
@@ -25,32 +149,6 @@
   gap: 0.4rem;
 }
 
-.footer-brand-logo {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.1rem;
-  color: var(--text-main);
-  text-decoration: none;
-}
-.footer-brand-logo .dot { color: var(--primary); }
-
-.footer-tagline {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.65;
-  margin: 0 0 1.25rem;
-}
-
-.footer-copyright-text {
-  font-size: 0.82rem;
-  color: var(--text-light);
-}
-
-/* Footer links list */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -64,7 +162,7 @@
   font-size: 0.9rem;
   text-decoration: none;
   transition: var(--transition);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.35rem;
 }
@@ -76,46 +174,29 @@
   content: '›';
   color: var(--text-light);
   font-weight: 700;
-}
-
-/* Social Icons Grid */
-.footer-social-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1.1rem;
-}
-.footer-social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
   transition: var(--transition);
+  flex-shrink: 0;
 }
-.footer-social-icon:hover {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+.footer-links li a:hover::before {
+  color: var(--primary);
 }
 
-/* Newsletter form in footer */
+/* ─── CỘT 3: BẢN TIN & MẠNG XÃ HỘI ─── */
+.footer-newsletter-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+
 .newsletter-form {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 .input-email {
   flex: 1;
+  min-width: 0;
   padding: 0.65rem 1rem;
   background: var(--bg-input);
   border: 1px solid var(--border-color);
@@ -143,62 +224,242 @@
   font-family: var(--font-main);
   white-space: nowrap;
 }
-.btn-submit:hover { background: var(--primary-hover); }
+.btn-submit:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
 
-/* Footer bottom bar */
-.footer-bottom {
+/* Social Icons */
+.footer-social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.footer-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--bg-surface);
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.footer-social-icon:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  color: #fff;
+}
+
+/* Specific Social Brand Colors */
+.footer-social-icon[title*="Facebook"], .footer-social-icon[aria-label*="Facebook"] {
+  background: #1877F2; color: #fff;
+}
+.footer-social-icon[title*="X"], .footer-social-icon[aria-label*="X"] {
+  background: #14171A; color: #fff;
+}
+.footer-social-icon[title*="LinkedIn"], .footer-social-icon[aria-label*="LinkedIn"] {
+  background: #0A66C2; color: #fff;
+}
+.footer-social-icon[title*="YouTube"], .footer-social-icon[aria-label*="YouTube"] {
+  background: #FF0000; color: #fff;
+}
+.footer-social-icon[title*="Instagram"], .footer-social-icon[aria-label*="Instagram"] {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff;
+}
+.footer-social-icon[title*="RSS"], .footer-social-icon[aria-label*="RSS"] {
+  background: #F26522; color: #fff;
+}
+
+/* ══════════════════════════════════════════
+   TẦNG 2: ĐIỀU HƯỚNG ĐÁY TRANG & BẢN QUYỀN
+   FULL-WIDTH wrapper để border kéo dài hết màn hình
+   ══════════════════════════════════════════ */
+
+/* Full-width divider strip */
+.footer-bottom-wrapper {
   border-top: 1px solid var(--border-color);
-  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  position: relative;
+}
+
+.footer-bottom {
+  padding: 1.1rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-light);
-  font-size: 0.85rem;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
+
+/* Copyright (left) */
+.footer-copyright {
+  font-size: 0.83rem;
+  color: var(--text-light);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Bottom Navigation Menu (center) — FIX alignment */
+.footer-bottom-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.footer-bottom-nav li {
+  display: flex;
+  align-items: center;
+}
+.footer-bottom-nav li a {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  line-height: 1.4;
+  display: block;
+}
+.footer-bottom-nav li a:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Separator dots — proper vertical alignment */
+.footer-bottom-nav li + li::before {
+  content: '·';
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 0.1rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Back to Top button (right) */
 .scroll-top-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.9rem;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   color: var(--text-muted);
-  font-size: 0.83rem;
-  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   transition: var(--transition);
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 .scroll-top-btn:hover {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.scroll-top-btn svg {
+  width: 22px;
+  height: 22px;
 }
 
-/* ==========================================
+/* ══════════════════════════════════════════
+   TẦNG 3: QUẢNG CÁO CHÂN TRANG (ADS SLOT)
+   ══════════════════════════════════════════ */
+.footer-ads-tier {
+  padding: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-ads-slot {
+  width: 100%;
+  max-width: 970px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-light);
+  font-size: 0.83rem;
+  padding: 1.5rem;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+/* ══════════════════════════════════════════
    RESPONSIVE
-   ========================================== */
-@media (max-width: 1024px) {
-  .footer-grid {
+   ══════════════════════════════════════════ */
+
+/* Tablet: 768px – 1023px */
+@media (max-width: 1023px) {
+  .footer-tier1 {
     grid-template-columns: 1fr 1fr;
     gap: 2.5rem;
+    padding: 3rem 0 2.5rem;
+  }
+  .footer-col-newsletter {
+    grid-column: 1 / -1;
+  }
+  .newsletter-form {
+    max-width: 420px;
   }
 }
 
-@media (max-width: 768px) {
-  .footer-grid {
+/* Mobile: < 768px */
+@media (max-width: 767px) {
+  .footer-tier1 {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 2.5rem 0 2rem;
+  }
+  .footer-col-newsletter {
+    grid-column: auto;
   }
   .newsletter-form {
     flex-direction: column;
+    max-width: 100%;
   }
   .footer-bottom {
+    display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+  .footer-bottom-nav {
+    justify-content: center;
+  }
+  .scroll-top-btn {
+    position: static;
+    transform: none;
+    margin-top: 0.5rem;
+  }
+  .footer-ads-slot {
+    min-height: 100px;
+    max-width: 100%;
   }
 }

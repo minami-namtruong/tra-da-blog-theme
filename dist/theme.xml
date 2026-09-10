@@ -2017,23 +2017,147 @@ a:hover {
 
 
 /* ==========================================
-   FOOTER - 4 COLUMN LAYOUT
+   FOOTER — 3-TIER MODULAR LAYOUT (FEAT-MODULAR-FOOTER-V3)
    ========================================== */
+
+/* ─── SITE FOOTER CONTAINER ─── */
 .site-footer {
   background: var(--bg-card);
   border-top: 1px solid var(--border-color);
-  padding: 4rem 0 0;
   margin-top: 4rem;
 }
 
-.footer-grid {
+/* ══════════════════════════════════════════
+   TẦNG 1: NỘI DUNG & TƯƠNG TÁC CHÍNH
+   ══════════════════════════════════════════ */
+.footer-tier1 {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1.8fr 1.2fr 1.5fr;
+  gap: 4rem;
+  padding: 4rem 0 3.5rem;
 }
 
-.footer-col h4 {
+/* Ensure columns stretch to the same height and push their last widgets to the bottom */
+.footer-tier1 > div,
+.footer-section-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.footer-tier1 .widget:has(.footer-coffee-wrapper),
+.footer-tier1 .widget:has(.footer-col-social) {
+  margin-top: auto;
+}
+
+/* ─── CỘT 1: THƯƠNG HIỆU & LỜI CẢM ƠN ─── */
+.footer-brand-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-brand-logo:hover {
+  color: var(--primary);
+}
+.footer-brand-logo .dot { color: var(--primary); }
+
+/* Lời cảm ơn — quote style */
+.footer-tagline {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin: 0 0 1.35rem;
+  padding: 1rem 1.1rem 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--primary-light) 0%, rgba(245, 158, 11, 0.06) 100%);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  position: relative;
+}
+.footer-tagline::before {
+  content: '\201C';
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--primary);
+  opacity: 0.5;
+  font-style: normal;
+  position: absolute;
+  top: -0.25rem;
+  left: 0.25rem;
+}
+.footer-tagline::after {
+  content: '\201D';
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--primary);
+  opacity: 0.5;
+  font-style: normal;
+  vertical-align: -0.5rem;
+  margin-left: 0.1rem;
+}
+[data-theme="dark"] .footer-tagline {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(245, 158, 11, 0.04) 100%);
+}
+
+/* ─── BUY ME A COFFEE — ATTRACTIVE PILL ─── */
+.footer-coffee-wrapper {
+  margin-top: 0.25rem;
+}
+
+.btn-coffee-compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1.5px solid #fbbf24;
+  border-radius: var(--radius-full);
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+  letter-spacing: 0.01em;
+}
+.btn-coffee-compact:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+  border-color: #f59e0b;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.45), inset 0 1px 0 rgba(255,255,255,0.5);
+  color: #78350f;
+}
+.btn-coffee-compact:active {
+  transform: translateY(-1px) scale(1.01);
+}
+[data-theme="dark"] .btn-coffee-compact {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.12) 0%, rgba(253, 230, 138, 0.08) 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fde68a;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.1);
+}
+[data-theme="dark"] .btn-coffee-compact:hover {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.2) 0%, rgba(253, 230, 138, 0.15) 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.25);
+  color: #fef3c7;
+}
+.coffee-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* ─── CỘT 2: CHÍNH SÁCH & PHÁP LÝ ─── */
+.footer-col-title {
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0 0 1.1rem;
@@ -2043,32 +2167,6 @@ a:hover {
   gap: 0.4rem;
 }
 
-.footer-brand-logo {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.1rem;
-  color: var(--text-main);
-  text-decoration: none;
-}
-.footer-brand-logo .dot { color: var(--primary); }
-
-.footer-tagline {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.65;
-  margin: 0 0 1.25rem;
-}
-
-.footer-copyright-text {
-  font-size: 0.82rem;
-  color: var(--text-light);
-}
-
-/* Footer links list */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -2082,7 +2180,7 @@ a:hover {
   font-size: 0.9rem;
   text-decoration: none;
   transition: var(--transition);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.35rem;
 }
@@ -2094,46 +2192,29 @@ a:hover {
   content: '›';
   color: var(--text-light);
   font-weight: 700;
-}
-
-/* Social Icons Grid */
-.footer-social-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1.1rem;
-}
-.footer-social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
   transition: var(--transition);
+  flex-shrink: 0;
 }
-.footer-social-icon:hover {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+.footer-links li a:hover::before {
+  color: var(--primary);
 }
 
-/* Newsletter form in footer */
+/* ─── CỘT 3: BẢN TIN & MẠNG XÃ HỘI ─── */
+.footer-newsletter-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+
 .newsletter-form {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 .input-email {
   flex: 1;
+  min-width: 0;
   padding: 0.65rem 1rem;
   background: var(--bg-input);
   border: 1px solid var(--border-color);
@@ -2161,63 +2242,243 @@ a:hover {
   font-family: var(--font-main);
   white-space: nowrap;
 }
-.btn-submit:hover { background: var(--primary-hover); }
+.btn-submit:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
 
-/* Footer bottom bar */
-.footer-bottom {
+/* Social Icons */
+.footer-social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.footer-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--bg-surface);
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.footer-social-icon:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  color: #fff;
+}
+
+/* Specific Social Brand Colors */
+.footer-social-icon[title*="Facebook"], .footer-social-icon[aria-label*="Facebook"] {
+  background: #1877F2; color: #fff;
+}
+.footer-social-icon[title*="X"], .footer-social-icon[aria-label*="X"] {
+  background: #14171A; color: #fff;
+}
+.footer-social-icon[title*="LinkedIn"], .footer-social-icon[aria-label*="LinkedIn"] {
+  background: #0A66C2; color: #fff;
+}
+.footer-social-icon[title*="YouTube"], .footer-social-icon[aria-label*="YouTube"] {
+  background: #FF0000; color: #fff;
+}
+.footer-social-icon[title*="Instagram"], .footer-social-icon[aria-label*="Instagram"] {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff;
+}
+.footer-social-icon[title*="RSS"], .footer-social-icon[aria-label*="RSS"] {
+  background: #F26522; color: #fff;
+}
+
+/* ══════════════════════════════════════════
+   TẦNG 2: ĐIỀU HƯỚNG ĐÁY TRANG & BẢN QUYỀN
+   FULL-WIDTH wrapper để border kéo dài hết màn hình
+   ══════════════════════════════════════════ */
+
+/* Full-width divider strip */
+.footer-bottom-wrapper {
   border-top: 1px solid var(--border-color);
-  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  position: relative;
+}
+
+.footer-bottom {
+  padding: 1.1rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-light);
-  font-size: 0.85rem;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
+
+/* Copyright (left) */
+.footer-copyright {
+  font-size: 0.83rem;
+  color: var(--text-light);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Bottom Navigation Menu (center) — FIX alignment */
+.footer-bottom-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.footer-bottom-nav li {
+  display: flex;
+  align-items: center;
+}
+.footer-bottom-nav li a {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  line-height: 1.4;
+  display: block;
+}
+.footer-bottom-nav li a:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Separator dots — proper vertical alignment */
+.footer-bottom-nav li + li::before {
+  content: '·';
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 0.1rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Back to Top button (right) */
 .scroll-top-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.9rem;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   color: var(--text-muted);
-  font-size: 0.83rem;
-  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   transition: var(--transition);
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 .scroll-top-btn:hover {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.scroll-top-btn svg {
+  width: 22px;
+  height: 22px;
 }
 
-/* ==========================================
+/* ══════════════════════════════════════════
+   TẦNG 3: QUẢNG CÁO CHÂN TRANG (ADS SLOT)
+   ══════════════════════════════════════════ */
+.footer-ads-tier {
+  padding: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-ads-slot {
+  width: 100%;
+  max-width: 970px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-light);
+  font-size: 0.83rem;
+  padding: 1.5rem;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+/* ══════════════════════════════════════════
    RESPONSIVE
-   ========================================== */
-@media (max-width: 1024px) {
-  .footer-grid {
+   ══════════════════════════════════════════ */
+
+/* Tablet: 768px – 1023px */
+@media (max-width: 1023px) {
+  .footer-tier1 {
     grid-template-columns: 1fr 1fr;
     gap: 2.5rem;
+    padding: 3rem 0 2.5rem;
+  }
+  .footer-col-newsletter {
+    grid-column: 1 / -1;
+  }
+  .newsletter-form {
+    max-width: 420px;
   }
 }
 
-@media (max-width: 768px) {
-  .footer-grid {
+/* Mobile: < 768px */
+@media (max-width: 767px) {
+  .footer-tier1 {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 2.5rem 0 2rem;
+  }
+  .footer-col-newsletter {
+    grid-column: auto;
   }
   .newsletter-form {
     flex-direction: column;
+    max-width: 100%;
   }
   .footer-bottom {
+    display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+  .footer-bottom-nav {
+    justify-content: center;
+  }
+  .scroll-top-btn {
+    position: static;
+    transform: none;
+    margin-top: 0.5rem;
+  }
+  .footer-ads-slot {
+    min-height: 100px;
+    max-width: 100%;
   }
 }
 
@@ -3442,83 +3703,147 @@ a:hover {
   </div><!-- /.site-wrapper -->
 
   <!-- ==========================================
-       FOOTER — 4 COLUMN
+       FOOTER — 3-TIER MODULAR (FEAT-MODULAR-FOOTER-V3)
        ========================================== -->
   <footer class='site-footer' id='site-footer'>
+
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 1: NỘI DUNG & TƯƠNG TÁC CHÍNH
+         ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
-      <div class='footer-grid'>
+      <div class='footer-tier1'>
 
-        <!-- Column 1: Brand & Tagline -->
-        <div class='footer-col'>
-          <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
-          <p class='footer-tagline'>Nơi chia sẻ góc nhìn cá nhân, trải nghiệm sống chân thực và tri thức giá trị cho những ai đang trên hành trình tự khám phá bản thân.</p>
-          <div class='footer-copyright-text'>© 2026 <data:blog.title/>. All rights reserved.</div>
-        </div>
+        <!-- ── CỘT 1: THƯƠNG HIỆU, CẢM ƠN & MỜI CÀ PHÊ ── -->
+        <b:section id='footer-brand-section' class='footer-section-col' name='Footer: Cột 1 (Thương Hiệu &amp; Cà Phê)' maxwidgets='2' showaddelement='yes'>
+          <b:widget id='HTML3' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
+            <b:includable id='main'>
+              <div class='footer-col-brand'>
+                <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
+                <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+              </div>
+            </b:includable>
+          </b:widget>
+          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕'>
+            <b:includable id='main'>
+              <div class='footer-coffee-wrapper'>
+                <a class='btn-coffee-compact' href='https://buymeacoffee.com/yourname' target='_blank' rel='noopener noreferrer'>
+                  <span class='coffee-icon'>☕</span>
+                  <span class='coffee-label'>Mời tôi ly cà phê</span>
+                </a>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
-        <!-- Column 2: Explore Categories -->
-        <div class='footer-col'>
-          <h4>🗂️ Khám Phá</h4>
-          <b:section id='footer-categories-section' name='Footer: Chuyên Mục' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='Label2' type='Label' version='2'>
-              <b:includable id='main'>
-                <ul class='footer-links'>
-                  <b:loop values='data:labels' var='flabel'>
-                    <li><a expr:href='data:flabel.url'><data:flabel.name/></a></li>
-                  </b:loop>
-                </ul>
-              </b:includable>
-            </b:widget>
-          </b:section>
-        </div>
-
-        <!-- Column 3: Legal & Transparency -->
-        <div class='footer-col'>
-          <h4>⚖️ Pháp Lý &amp; Minh Bạch</h4>
-          <b:section id='footer-legal-section' name='Footer: Trang Pháp Lý' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='LinkList3' type='LinkList' version='2'>
-              <b:includable id='main'>
+        <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ ── -->
+        <b:section id='footer-legal-section' class='footer-section-col' name='Footer: Cột 2 (Chính Sách)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
+            <b:includable id='main'>
+              <div class='footer-col-legal'>
+                <h4 class='footer-col-title'><data:title/></h4>
                 <ul class='footer-links'>
                   <b:loop values='data:links' var='llink'>
                     <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
                   </b:loop>
                 </ul>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI ── -->
+        <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Kết Nối)' maxwidgets='2' showaddelement='yes'>
+          <b:widget id='HTML4' type='HTML' version='2' title='📬 Nhận Bài Viết Mới'>
+            <b:includable id='main'>
+              <div class='footer-col-newsletter'>
+                <h4 class='footer-col-title'>📬 Nhận Bài Viết Mới</h4>
+                <p class='footer-newsletter-desc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
+                <form class='newsletter-form' onsubmit='return false;'>
+                  <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin'/>
+                  <button class='btn-submit' id='footer-subscribe-btn' type='submit'>Đăng Ký</button>
+                </form>
+              </div>
+            </b:includable>
+          </b:widget>
+          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối'>
+            <b:includable id='main'>
+              <div class='footer-col-social'>
+                <div class='footer-social-grid'>
+                  <b:loop values='data:links' var='slink'>
+                    <a class='footer-social-icon'
+                       expr:href='data:slink.target'
+                       target='_blank'
+                       rel='noopener noreferrer'
+                       expr:aria-label='data:slink.name'
+                       expr:title='data:slink.name'><data:slink.name/></a>
+                  </b:loop>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+      </div><!-- /.footer-tier1 -->
+    </div><!-- /.site-wrapper (Tầng 1) -->
+
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 2: ĐIỀU HƯỚNG ĐÁY TRANG & BẢN QUYỀN
+         Full-width wrapper — borders kéo dài suốt màn hình
+         ═══════════════════════════════════════════════════ -->
+    <div class='footer-bottom-wrapper'>
+      <div class='site-wrapper'>
+        <div class='footer-bottom'>
+
+          <!-- Bên trái: Bản quyền -->
+          <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
+              <b:includable id='main'>
+                <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
               </b:includable>
             </b:widget>
           </b:section>
-        </div>
 
-        <!-- Column 4: Newsletter & Social -->
-        <div class='footer-col' id='newsletter'>
-          <h4>📬 Bản Tin &amp; Mạng Xã Hội</h4>
-          <p style='font-size: 0.88rem; color: var(--text-muted); margin: 0 0 0.75rem;'>Nhận bài viết mới qua email.</p>
-          <form class='newsletter-form' onsubmit='return false;'>
-            <input class='input-email' type='email' placeholder='Email của bạn...' aria-label='Email đăng ký'/>
-            <button class='btn-submit' type='submit'>Gửi</button>
-          </form>
-          <div class='footer-social-grid'>
-            <b:section id='footer-social-section' name='Footer: Mạng Xã Hội' maxwidgets='1' showaddelement='yes'>
-              <b:widget id='LinkList4' type='LinkList' version='2'>
-                <b:includable id='main'>
-                  <b:loop values='data:links' var='slink'>
-                    <a class='footer-social-icon' expr:href='data:slink.target' target='_blank'
-                       rel='noopener noreferrer' expr:aria-label='data:slink.name'
-                       expr:title='data:slink.name'><data:slink.name/></a>
-                  </b:loop>
-                </b:includable>
-              </b:widget>
-            </b:section>
-          </div>
-        </div>
+          <!-- Ở giữa: Bottom Navigation Menu -->
+          <b:section id='footer-bottom-menu-section' name='Footer Tầng 2: Bottom Menu' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='LinkList5' type='LinkList' version='2' title='Bottom Navigation Menu'>
+              <b:includable id='main'>
+                <nav aria-label='Footer navigation'>
+                  <ul class='footer-bottom-nav'>
+                    <b:loop values='data:links' var='bmlink'>
+                      <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
+                    </b:loop>
+                  </ul>
+                </nav>
+              </b:includable>
+            </b:widget>
+          </b:section>
 
-      </div><!-- /.footer-grid -->
+        </div><!-- /.footer-bottom -->
+      </div><!-- /.site-wrapper (Tầng 2) -->
 
-      <!-- Footer Bottom Bar -->
-      <div class='footer-bottom'>
-        <span>© 2026 <data:blog.title/>. All rights reserved.</span>
-        <a class='scroll-top-btn' href='#' id='scroll-top-btn' aria-label='Cuộn lên đầu trang'>⬆ Đầu trang</a>
-      </div>
+      <!-- Bên phải: Nút về đầu trang (Built-in) -->
+      <button class='scroll-top-btn' id='scroll-to-top' aria-label='Cuộn về đầu trang'>
+        <svg viewBox='0 0 24 24' stroke='currentColor' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'><polyline points='18 15 12 9 6 15'></polyline></svg>
+      </button>
+    </div><!-- /.footer-bottom-wrapper -->
 
-    </div><!-- /.site-wrapper -->
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 3: QUẢNG CÁO CHÂN TRANG (MONETIZATION SLOT)
+         ═══════════════════════════════════════════════════ -->
+    <div class='site-wrapper'>
+      <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang'>
+          <b:includable id='main'>
+            <div class='footer-ads-tier'>
+              <div class='footer-ads-slot'>
+                📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
+              </div>
+            </div>
+          </b:includable>
+        </b:widget>
+      </b:section>
+    </div><!-- /.site-wrapper (Tầng 3) -->
+
   </footer>
 
   <!-- Body-end Scripts -->
@@ -4637,6 +4962,25 @@ a:hover {
     initCopyLink();
     initScrollTop();
   });
+})();
+
+
+/**
+ * FOOTER SCRIPTS — Modular Footer (FEAT-MODULAR-FOOTER-V3)
+ * - Scroll-to-top button
+ */
+(function () {
+  'use strict';
+
+  function initScrollToTop() {
+    var btn = document.getElementById('scroll-to-top');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initScrollToTop);
 })();
 
   //]]>

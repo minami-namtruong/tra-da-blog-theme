@@ -38,6 +38,7 @@ const jsFiles = [
   "auto-toc.js",
   "bilingual.js",
   "reading-time.js",
+  "footer.js",
 ];
 const combinedJs = jsFiles
   .map(f => fs.readFileSync(path.join(scriptsDir, f), "utf8"))
@@ -709,83 +710,147 @@ ${combinedCss}
   </div><!-- /.site-wrapper -->
 
   <!-- ==========================================
-       FOOTER — 4 COLUMN
+       FOOTER — 3-TIER MODULAR (FEAT-MODULAR-FOOTER-V3)
        ========================================== -->
   <footer class='site-footer' id='site-footer'>
+
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 1: NỘI DUNG & TƯƠNG TÁC CHÍNH
+         ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
-      <div class='footer-grid'>
+      <div class='footer-tier1'>
 
-        <!-- Column 1: Brand & Tagline -->
-        <div class='footer-col'>
-          <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
-          <p class='footer-tagline'>Nơi chia sẻ góc nhìn cá nhân, trải nghiệm sống chân thực và tri thức giá trị cho những ai đang trên hành trình tự khám phá bản thân.</p>
-          <div class='footer-copyright-text'>© 2026 <data:blog.title/>. All rights reserved.</div>
-        </div>
+        <!-- ── CỘT 1: THƯƠNG HIỆU, CẢM ƠN & MỜI CÀ PHÊ ── -->
+        <b:section id='footer-brand-section' class='footer-section-col' name='Footer: Cột 1 (Thương Hiệu &amp; Cà Phê)' maxwidgets='2' showaddelement='yes'>
+          <b:widget id='HTML3' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
+            <b:includable id='main'>
+              <div class='footer-col-brand'>
+                <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
+                <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+              </div>
+            </b:includable>
+          </b:widget>
+          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕'>
+            <b:includable id='main'>
+              <div class='footer-coffee-wrapper'>
+                <a class='btn-coffee-compact' href='https://buymeacoffee.com/yourname' target='_blank' rel='noopener noreferrer'>
+                  <span class='coffee-icon'>☕</span>
+                  <span class='coffee-label'>Mời tôi ly cà phê</span>
+                </a>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
-        <!-- Column 2: Explore Categories -->
-        <div class='footer-col'>
-          <h4>🗂️ Khám Phá</h4>
-          <b:section id='footer-categories-section' name='Footer: Chuyên Mục' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='Label2' type='Label' version='2'>
-              <b:includable id='main'>
-                <ul class='footer-links'>
-                  <b:loop values='data:labels' var='flabel'>
-                    <li><a expr:href='data:flabel.url'><data:flabel.name/></a></li>
-                  </b:loop>
-                </ul>
-              </b:includable>
-            </b:widget>
-          </b:section>
-        </div>
-
-        <!-- Column 3: Legal & Transparency -->
-        <div class='footer-col'>
-          <h4>⚖️ Pháp Lý &amp; Minh Bạch</h4>
-          <b:section id='footer-legal-section' name='Footer: Trang Pháp Lý' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='LinkList3' type='LinkList' version='2'>
-              <b:includable id='main'>
+        <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ ── -->
+        <b:section id='footer-legal-section' class='footer-section-col' name='Footer: Cột 2 (Chính Sách)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
+            <b:includable id='main'>
+              <div class='footer-col-legal'>
+                <h4 class='footer-col-title'><data:title/></h4>
                 <ul class='footer-links'>
                   <b:loop values='data:links' var='llink'>
                     <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
                   </b:loop>
                 </ul>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI ── -->
+        <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Kết Nối)' maxwidgets='2' showaddelement='yes'>
+          <b:widget id='HTML4' type='HTML' version='2' title='📬 Nhận Bài Viết Mới'>
+            <b:includable id='main'>
+              <div class='footer-col-newsletter'>
+                <h4 class='footer-col-title'>📬 Nhận Bài Viết Mới</h4>
+                <p class='footer-newsletter-desc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
+                <form class='newsletter-form' onsubmit='return false;'>
+                  <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin'/>
+                  <button class='btn-submit' id='footer-subscribe-btn' type='submit'>Đăng Ký</button>
+                </form>
+              </div>
+            </b:includable>
+          </b:widget>
+          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối'>
+            <b:includable id='main'>
+              <div class='footer-col-social'>
+                <div class='footer-social-grid'>
+                  <b:loop values='data:links' var='slink'>
+                    <a class='footer-social-icon'
+                       expr:href='data:slink.target'
+                       target='_blank'
+                       rel='noopener noreferrer'
+                       expr:aria-label='data:slink.name'
+                       expr:title='data:slink.name'><data:slink.name/></a>
+                  </b:loop>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+      </div><!-- /.footer-tier1 -->
+    </div><!-- /.site-wrapper (Tầng 1) -->
+
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 2: ĐIỀU HƯỚNG ĐÁY TRANG & BẢN QUYỀN
+         Full-width wrapper — borders kéo dài suốt màn hình
+         ═══════════════════════════════════════════════════ -->
+    <div class='footer-bottom-wrapper'>
+      <div class='site-wrapper'>
+        <div class='footer-bottom'>
+
+          <!-- Bên trái: Bản quyền -->
+          <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
+              <b:includable id='main'>
+                <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
               </b:includable>
             </b:widget>
           </b:section>
-        </div>
 
-        <!-- Column 4: Newsletter & Social -->
-        <div class='footer-col' id='newsletter'>
-          <h4>📬 Bản Tin &amp; Mạng Xã Hội</h4>
-          <p style='font-size: 0.88rem; color: var(--text-muted); margin: 0 0 0.75rem;'>Nhận bài viết mới qua email.</p>
-          <form class='newsletter-form' onsubmit='return false;'>
-            <input class='input-email' type='email' placeholder='Email của bạn...' aria-label='Email đăng ký'/>
-            <button class='btn-submit' type='submit'>Gửi</button>
-          </form>
-          <div class='footer-social-grid'>
-            <b:section id='footer-social-section' name='Footer: Mạng Xã Hội' maxwidgets='1' showaddelement='yes'>
-              <b:widget id='LinkList4' type='LinkList' version='2'>
-                <b:includable id='main'>
-                  <b:loop values='data:links' var='slink'>
-                    <a class='footer-social-icon' expr:href='data:slink.target' target='_blank'
-                       rel='noopener noreferrer' expr:aria-label='data:slink.name'
-                       expr:title='data:slink.name'><data:slink.name/></a>
-                  </b:loop>
-                </b:includable>
-              </b:widget>
-            </b:section>
-          </div>
-        </div>
+          <!-- Ở giữa: Bottom Navigation Menu -->
+          <b:section id='footer-bottom-menu-section' name='Footer Tầng 2: Bottom Menu' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='LinkList5' type='LinkList' version='2' title='Bottom Navigation Menu'>
+              <b:includable id='main'>
+                <nav aria-label='Footer navigation'>
+                  <ul class='footer-bottom-nav'>
+                    <b:loop values='data:links' var='bmlink'>
+                      <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
+                    </b:loop>
+                  </ul>
+                </nav>
+              </b:includable>
+            </b:widget>
+          </b:section>
 
-      </div><!-- /.footer-grid -->
+        </div><!-- /.footer-bottom -->
+      </div><!-- /.site-wrapper (Tầng 2) -->
 
-      <!-- Footer Bottom Bar -->
-      <div class='footer-bottom'>
-        <span>© 2026 <data:blog.title/>. All rights reserved.</span>
-        <a class='scroll-top-btn' href='#' id='scroll-top-btn' aria-label='Cuộn lên đầu trang'>⬆ Đầu trang</a>
-      </div>
+      <!-- Bên phải: Nút về đầu trang (Built-in) -->
+      <button class='scroll-top-btn' id='scroll-to-top' aria-label='Cuộn về đầu trang'>
+        <svg viewBox='0 0 24 24' stroke='currentColor' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'><polyline points='18 15 12 9 6 15'></polyline></svg>
+      </button>
+    </div><!-- /.footer-bottom-wrapper -->
 
-    </div><!-- /.site-wrapper -->
+    <!-- ═══════════════════════════════════════════════════
+         TẦNG 3: QUẢNG CÁO CHÂN TRANG (MONETIZATION SLOT)
+         ═══════════════════════════════════════════════════ -->
+    <div class='site-wrapper'>
+      <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang'>
+          <b:includable id='main'>
+            <div class='footer-ads-tier'>
+              <div class='footer-ads-slot'>
+                📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
+              </div>
+            </div>
+          </b:includable>
+        </b:widget>
+      </b:section>
+    </div><!-- /.site-wrapper (Tầng 3) -->
+
   </footer>
 
   <!-- Body-end Scripts -->
