@@ -96,23 +96,32 @@
         </div>
         <nav class="nav-menu-wrapper">
           <ul class="nav-menu">
-            <li><a href="#" class="active" id="nav-home-btn">Trang Chủ</a></li>
-            <li><a href="#archive" id="nav-timeline-btn">Dòng Thời Gian</a></li>
-            <li><a href="#" class="nav-filter-link" data-category="Góc Nhìn">Góc Nhìn</a></li>
+            <li><a href="#" class="active" id="nav-home-btn" data-bilingual="true">Trang Chủ | Home</a></li>
+            <li><a href="#archive" id="nav-timeline-btn" data-bilingual="true">Dòng Thời Gian | Timeline</a></li>
+            <li><a href="#" class="nav-filter-link" data-category="Góc Nhìn" data-bilingual="true">Góc Nhìn | Perspectives</a></li>
             <li class="has-dropdown">
-              <a href="#">Chuyên Mục</a>
+              <a href="#" data-bilingual="true">Chuyên Mục | Categories</a>
               <ul class="dropdown-menu">
-                <li><a href="#" class="nav-filter-link" data-category="Trải Nghiệm Sống">Trải Nghiệm Sống</a></li>
-                <li><a href="#" class="nav-filter-link" data-category="Sách &amp; Công Cụ">Sách &amp; Công Cụ</a></li>
-                <li><a href="#" class="nav-filter-link" data-category="Phát Triển Bản Thân">Phát Triển Bản Thân</a></li>
+                <li><a href="#" class="nav-filter-link" data-category="Trải Nghiệm Sống" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a></li>
+                <li><a href="#" class="nav-filter-link" data-category="Sách &amp; Công Cụ" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a></li>
+                <li><a href="#" class="nav-filter-link" data-category="Phát Triển Bản Thân" data-bilingual="true">Phát Triển Bản Thân | Self Development</a></li>
               </ul>
             </li>
-            <li><a href="#footer">Về Tôi</a></li>
+            <li><a href="#footer" data-bilingual="true">Về Tôi | About Me</a></li>
           </ul>
         </nav>
         <div class="header-actions">
           <button class="btn-icon" id="search-open-btn" aria-label="Tìm kiếm">🔍</button>
           <button class="btn-icon" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Đổi giao diện">🌙</button>
+          <div class="lang-dropdown-wrapper">
+            <button class="lang-dropdown-toggle" id="lang-toggle-btn" aria-haspopup="true" aria-expanded="false" onclick="document.getElementById('lang-dropdown-menu').classList.toggle('show')">
+              <span class="lang-flag" id="current-lang-flag">🇻🇳</span> <span class="lang-text" id="current-lang-text">VI</span> <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="lang-dropdown-menu" id="lang-dropdown-menu">
+              <li><button class="lang-option" onclick="setLanguage('vi')"><span class="lang-flag">🇻🇳</span> Tiếng Việt</button></li>
+              <li><button class="lang-option" onclick="setLanguage('en')"><span class="lang-flag">🇬🇧</span> English</button></li>
+            </ul>
+          </div>
           <button class="hamburger-btn" id="hamburger-btn" aria-label="Mở menu">
             <span></span>
             <span></span>
@@ -141,19 +150,19 @@
           <p class="profile-bio">Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
         </div>
         <div class="profile-cta-area">
-          <a class="btn-subscribe" href="#newsletter">💌 Nhận Bản Tin</a>
+          <a class="btn-subscribe" href="#newsletter" data-bilingual="true">💌 Nhận Bản Tin | Subscribe</a>
         </div>
       </div>
     </div>
 
     <!-- ── CATEGORY TABS (XYÊN SUỐT) ── -->
     <nav class="category-tabs-bar">
-      <a class="tab-pill active" href="#">✦ Tất cả</a>
-      <a class="tab-pill" href="#">Góc Nhìn &amp; Tư Duy</a>
-      <a class="tab-pill" href="#">Trải Nghiệm Sống</a>
-      <a class="tab-pill" href="#">Sách &amp; Công Cụ</a>
-      <a class="tab-pill" href="#">Phát Triển Bản Thân</a>
-      <a class="tab-pill" href="#">Công Nghệ</a>
+      <a class="tab-pill active" href="#" data-bilingual="true">✦ Tất cả | All</a>
+      <a class="tab-pill" href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
+      <a class="tab-pill" href="#" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>
+      <a class="tab-pill" href="#" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>
+      <a class="tab-pill" href="#" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>
+      <a class="tab-pill" href="#" data-bilingual="true">Công Nghệ | Technology</a>
     </nav>
 
     <!-- ── MAIN LAYOUT GRID (POSTS + SIDEBAR) ── -->
@@ -172,7 +181,7 @@
             <article class="post-card">
               <div class="post-card-body">
                 <div>
-                  <a class="post-badge" href="#">Góc Nhìn &amp; Tư Duy</a>
+                  <a class="post-badge" href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn</a>
                   </h2>
@@ -180,7 +189,7 @@
                 </div>
                 <div class="post-card-meta">
                   <span>📅 09 tháng 9, 2026</span>
-                  <span>⏱️ 8 phút đọc</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
                 </div>
               </div>
               <img class="post-card-thumb"
@@ -192,7 +201,7 @@
             <article class="post-card">
               <div class="post-card-body">
                 <div>
-                  <a class="post-badge" href="#">Trải Nghiệm Sống</a>
+                  <a class="post-badge" href="#" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân</a>
                   </h2>
@@ -200,7 +209,7 @@
                 </div>
                 <div class="post-card-meta">
                   <span>📅 05 tháng 9, 2026</span>
-                  <span>⏱️ 6 phút đọc</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
                 </div>
               </div>
               <img class="post-card-thumb"
@@ -212,7 +221,7 @@
             <article class="post-card">
               <div class="post-card-body">
                 <div>
-                  <a class="post-badge" href="#">Sách &amp; Công Cụ</a>
+                  <a class="post-badge" href="#" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định</a>
                   </h2>
@@ -220,7 +229,7 @@
                 </div>
                 <div class="post-card-meta">
                   <span>📅 01 tháng 9, 2026</span>
-                  <span>⏱️ 10 phút đọc</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
                 </div>
               </div>
               <img class="post-card-thumb"
@@ -235,7 +244,7 @@
             <span class="page-num active">1</span>
             <a class="page-num" href="#">2</a>
             <a class="page-num" href="#">3</a>
-            <a class="blog-pager-older-link" href="#">Cũ hơn »</a>
+            <a class="blog-pager-older-link" href="#" data-i18n="olderPosts">Cũ hơn »</a>
           </nav>
         </div><!-- /#posts-feed-wrapper -->
 
@@ -249,7 +258,7 @@
             <nav class="breadcrumbs">
               <a href="#" id="breadcrumb-home-link">🏠 Trang chủ</a>
               <span class="separator">›</span>
-              <a href="#">Góc Nhìn &amp; Tư Duy</a>
+              <a href="#">Góc Nhìn &amp; Tư Duy | Perspectives</a>
               <span class="separator">›</span>
               <span>Nghịch Lý Của Việc Chọn Lựa</span>
             </nav>
@@ -268,7 +277,7 @@
                   <div class="author-meta-details">
                     <span>📅 09 tháng 9, 2026</span>
                     <span>•</span>
-                    <span>⏱️ <span id="reading-time-val">8 phút đọc</span></span>
+                    <span>⏱️ <span id="reading-time-val"><span data-i18n="readingTime">phút đọc</span></span></span>
                   </div>
                 </div>
               </div>
@@ -399,7 +408,7 @@
                 <h3 class="author-bio-name">Nam Trương</h3>
                 <p class="author-bio-text">Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
                 <div class="author-bio-actions">
-                  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer">☕ Mời tôi ly cà phê</a>
+                  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer">☕ <span data-i18n="buyMeACoffee">Mời tôi ly cà phê</span></a>
                   <a class="btn-subscribe" href="#newsletter">💌 Đăng ký bản tin</a>
                 </div>
               </div>
@@ -451,7 +460,7 @@
               <span class="archive-search-icon" aria-hidden="true">🔍</span>
               <input class="archive-search-input" id="archive-search-input" type="search"
                      placeholder="Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)..."
-                     autocomplete="off" aria-label="Tìm kiếm bài viết"/>
+                     autocomplete="off" aria-label="Tìm kiếm bài viết" data-i18n="searchPlaceholder"/>
               <button type="button" class="archive-search-clear" id="archive-search-clear" aria-label="Xóa tìm kiếm" style="display:none;">✕</button>
             </div>
 
@@ -474,7 +483,7 @@
 
         <!-- Widget 1: About Me -->
         <div class="sidebar-widget">
-          <h3 class="sidebar-widget-title">👤 Về Tác Giả</h3>
+          <h3 class="sidebar-widget-title" data-bilingual="true">👤 Về Tác Giả | About The Author</h3>
           <img class="sidebar-about-avatar"
                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&auto=format&fit=crop&q=80"
                alt="Nam Trương" width="64" height="64"/>
@@ -488,7 +497,7 @@
 
         <!-- Widget 2: Popular Posts -->
         <div class="sidebar-widget">
-          <h3 class="sidebar-widget-title">🔥 Bài Viết Nổi Bật</h3>
+          <h3 class="sidebar-widget-title" data-bilingual="true">🔥 Bài Viết Nổi Bật | Popular Posts</h3>
           <ul class="popular-posts-list">
             <li>
               <a class="popular-post-item" href="#">
@@ -536,11 +545,11 @@
 
         <!-- Widget 4: Newsletter -->
         <div class="sidebar-widget" id="newsletter">
-          <h3 class="sidebar-widget-title">📨 Nhận Bài Viết Mới</h3>
+          <h3 class="sidebar-widget-title" data-i18n="newsletterTitle">📨 Nhận Bài Viết Mới</h3>
           <p class="sidebar-newsletter-text">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
           <div class="sidebar-newsletter-form">
             <input class="sidebar-email-input" type="email" placeholder="Email của bạn..." aria-label="Địa chỉ email"/>
-            <button class="sidebar-submit-btn" type="button">💌 Đăng Ký</button>
+            <button class="sidebar-submit-btn" type="button">💌 <span data-i18n="subscribeBtn">Đăng Ký</span></button>
           </div>
         </div>
 
@@ -570,7 +579,7 @@
             <div class="footer-coffee-wrapper">
               <a class="btn-coffee-compact" href="https://buymeacoffee.com/yourname" target="_blank" rel="noopener noreferrer">
                 <span class="coffee-icon">☕</span>
-                <span class="coffee-label">Mời tôi ly cà phê</span>
+                <span class="coffee-label" data-i18n="buyMeACoffee">Mời tôi ly cà phê</span>
               </a>
             </div>
           </div>
@@ -580,26 +589,26 @@
         <div class="footer-section-col">
           <div class="widget">
             <div class="footer-col-legal">
-              <h4 class="footer-col-title">⚖️ Chính Sách &amp; Minh Bạch</h4>
+              <h4 class="footer-col-title" data-bilingual="true">⚖️ Chính Sách &amp; Minh Bạch | Policies &amp; Transparency</h4>
               <ul class="footer-links">
-                <li><a href="/p/chinh-sach-bao-mat.html">Chính sách bảo mật (Privacy Policy)</a></li>
-                <li><a href="/p/dieu-khoan.html">Điều khoản dịch vụ (Terms of Service)</a></li>
-                <li><a href="/p/mien-tru-trach-nhiem.html">Tuyên bố miễn trừ Affiliate</a></li>
-                <li><a href="/p/lien-he.html">Liên hệ &amp; Hợp tác</a></li>
+                <li><a href="/p/chinh-sach-bao-mat.html"><span data-bilingual="true">Chính sách bảo mật | Privacy Policy</span></a></li>
+                <li><a href="/p/dieu-khoan.html"><span data-bilingual="true">Điều khoản dịch vụ | Terms of Service</span></a></li>
+                <li><a href="/p/mien-tru-trach-nhiem.html"><span data-bilingual="true">Tuyên bố miễn trừ Affiliate | Affiliate Disclaimer</span></a></li>
+                <li><a href="/p/lien-he.html"><span data-bilingual="true">Liên hệ &amp; Hợp tác | Contact &amp; Collab</span></a></li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- Cột 3: Nhận Bản Tin & Mạng Xã Hội -->
+        <!-- Cột 3: Nhận Bản Tin | Subscribe & Mạng Xã Hội -->
         <div class="footer-section-col">
           <div class="widget">
             <div class="footer-col-newsletter">
-              <h4 class="footer-col-title">📬 Nhận Bài Viết Mới</h4>
-              <p class="footer-newsletter-desc">Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
+              <h4 class="footer-col-title" data-i18n="newsletterTitle">📬 Nhận Bài Viết Mới</h4>
+              <p class="footer-newsletter-desc" data-i18n="newsletterSubDesc">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
               <form class="newsletter-form" onsubmit="return false;">
                 <input class="input-email" id="footer-email-input" type="email" placeholder="email@của-bạn.com" aria-label="Email đăng ký bản tin"/>
-                <button class="btn-submit" id="footer-subscribe-btn" type="submit">Đăng Ký</button>
+                <button class="btn-submit" id="footer-subscribe-btn" type="submit" data-i18n="subscribeBtn">Đăng Ký</button>
               </form>
             </div>
           </div>
@@ -625,14 +634,14 @@
       <div class="site-wrapper">
         <div class="footer-bottom">
           <!-- Bên trái: Bản quyền -->
-          <span class="footer-copyright">© 2026 Nam Trương. Tất cả quyền được bảo lưu.</span>
+          <span class="footer-copyright">© 2026 Nam Trương. <span data-i18n="copyrightSuffix">Tất cả quyền được bảo lưu.</span></span>
 
           <!-- Ở giữa: Bottom Navigation Menu -->
           <nav aria-label="Footer navigation">
             <ul class="footer-bottom-nav">
-              <li><a href="/">Trang chủ</a></li>
-              <li><a href="/p/gioi-thieu.html">Về tôi</a></li>
-              <li><a href="/p/lien-he.html">Liên hệ</a></li>
+              <li><a href="/" data-bilingual="true">Trang chủ | Home</a></li>
+              <li><a href="/p/gioi-thieu.html" data-bilingual="true">Về tôi | About Me</a></li>
+              <li><a href="/p/lien-he.html" data-bilingual="true">Liên hệ | Contact</a></li>
             </ul>
           </nav>
 
@@ -861,7 +870,7 @@
           postCards.forEach(function(card) {
             var badge = card.querySelector(".post-badge");
             var badgeText = badge ? badge.innerText.trim() : "";
-            if (cat === "Tất cả" || badgeText.toLowerCase().includes(cat.toLowerCase()) || cat.toLowerCase().includes(badgeText.toLowerCase())) {
+            if (cat === "Tất cả | All" || cat === "Tất cả" || badgeText.toLowerCase().includes(cat.toLowerCase().replace(" | all", "")) || cat.toLowerCase().includes(badgeText.toLowerCase())) {
               card.style.display = "";
             } else {
               card.style.display = "none";
