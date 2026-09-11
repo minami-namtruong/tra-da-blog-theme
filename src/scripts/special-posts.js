@@ -37,6 +37,27 @@
   });
 
   function initSpecialPostWidgets() {
+    // Tự động nhận diện nếu user bấm "+ Thêm tiện ích" HTML/JavaScript mới và gõ cú pháp ngắn gọn
+    document.querySelectorAll('.widget.HTML .widget-content, .widget.HTML').forEach(el => {
+      if (el.querySelector('.special-posts-widget')) return;
+      const targetHost = el.querySelector('.widget-content') || el;
+      const directContent = targetHost.textContent.trim();
+      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)/i);
+      if (match) {
+        const pattern = match[1].toLowerCase();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'special-posts-widget';
+        wrapper.dataset.pattern = pattern;
+        const configDiv = document.createElement('div');
+        configDiv.className = 'sp-raw-user-content';
+        configDiv.style.display = 'none';
+        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)\s*\|?/i, '').trim();
+        wrapper.appendChild(configDiv);
+        targetHost.innerHTML = '';
+        targetHost.appendChild(wrapper);
+      }
+    });
+
     const widgets = document.querySelectorAll('.special-posts-widget');
     widgets.forEach(renderWidgetInstance);
   }
