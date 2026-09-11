@@ -2,9 +2,9 @@
 
 > **Mã tính năng**: `FEAT-AI-TRANSPARENCY-V1`  
 > **Dự án**: Blogger Editorial Theme (Blogspot XML v3)  
-> **Phiên bản đặc tả**: `v1.0.0`  
-> **Trạng thái**: Bản thảo thiết kế hoàn chỉnh (Design Specification)  
-> **Tài liệu liên quan**: [THEME_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/THEME_SPECIFICATION.md), [MODULAR_FOOTER_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/MODULAR_FOOTER_SPECIFICATION.md)
+> **Phiên bản đặc tả**: `v1.1.0` (Cập nhật Chi tiết Hiển thị Đa Ngữ Cảnh: Bài Viết Chi Tiết, Trang Chủ, Dòng Thời Gian & Các Tiện Ích Widgets)  
+> **Trạng thái**: Bản thảo thiết kế kỹ thuật hoàn chỉnh (Design Specification)  
+> **Tài liệu liên quan**: [THEME_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/THEME_SPECIFICATION.md), [TIMELINE_ARCHIVE_PAGE_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/TIMELINE_ARCHIVE_PAGE_SPECIFICATION.md), [FLEXIBLE_SPECIAL_POSTS_WIDGET_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/FLEXIBLE_SPECIAL_POSTS_WIDGET_SPECIFICATION.md)
 
 ---
 
@@ -14,127 +14,170 @@
 Trong kỷ nguyên số, trí tuệ nhân tạo (AI) đã trở thành công cụ hỗ trợ đắc lực trong quá trình sáng tạo nội dung, nghiên cứu tư liệu và phát triển ý tưởng. Tuy nhiên, ranh giới giữa việc ứng dụng AI có trách nhiệm và việc tạo nội dung tự động thiếu kiểm chứng đang là mối bận tâm lớn của cả độc giả lẫn các công cụ tìm kiếm (Google E-E-A-T).
 
 **Tính năng AI Transparency (Hệ Thống Minh Bạch AI)** được xây dựng nhằm:
-1. **Minh bạch tuyệt đối với độc giả**: Tôn trọng quyền được biết của người đọc về nguồn gốc và cách thức bài viết được tạo ra.
-2. **Củng cố niềm tin & Uy tín (Authority & Trust)**: Khẳng định vai trò làm chủ tư duy và biên tập của tác giả con người (Nam Trương), không để độc giả có cảm giác "bị lừa" bởi nội dung tự động.
-3. **Chuẩn hóa SEO E-E-A-T**: Tuân thủ hướng dẫn mới nhất của Google Search Central về nội dung có sự tham gia của AI.
-
-### 1.2. NGUYÊN TẮC BẮT BUỘC: Nhãn Thuộc Tính (Metadata Flag), KHÔNG Phải Chuyên Mục Nội Dung (Taxonomy)
-> ⚠️ **Quy tắc quan trọng nhất**:
-> Nhãn AI là một **Cờ thuộc tính chức năng (System / Feature Flag)** để gắn cờ đặc tính của bài viết, **HOÀN TOÀN KHÔNG PHẢI là một chuyên mục (Category)** dùng để phân loại chủ đề bài viết.
-
-* **Không làm rác danh mục**: Nhãn AI sẽ **tự động bị lọc ẩn 100%** khỏi tiện ích Chuyên mục (Categories / Labels widget), menu Header, và chân trang.
-* **Bảo toàn chuyên mục chủ đề**: Một bài viết về *“Tư duy phản biện thời đại số”* vẫn thuộc chuyên mục chính là **`Góc Nhìn & Tư Duy`**. Nhãn AI chỉ đóng vai trò là một lớp huy hiệu minh bạch đi kèm.
+1. **Minh bạch tuyệt đối với độc giả**: Tôn trọng quyền được biết của người đọc về nguồn gốc và mức độ tham gia của AI trong từng bài viết.
+2. **Củng cố uy tín tác giả (Authority & Trust)**: Khẳng định vai trò làm chủ tư duy, trải nghiệm thực tế và trách nhiệm biên tập của tác giả (Nam Trương), tạo dựng sự tin cậy lâu dài.
+3. **Chuẩn hóa SEO E-E-A-T**: Tuân thủ hướng dẫn khắt khe của Google Search Central về tính minh bạch của nội dung số có sự tham gia của AI.
 
 ---
 
-## 2. QUY CHUẨN ĐẶT CỜ THUỘC TÍNH (METADATA LABEL CONVENTION)
+### 1.2. Phân Định Rõ Ràng 3 Nhóm Nhãn Trong Toàn Hệ Thống
 
-Tác giả chỉ cần sử dụng một trong các nhãn quy ước sau khi soạn thảo bài viết trong Blogger Admin:
+Để hệ thống vận hành tự động và mạch lạc, toàn bộ nhãn trên blog được phân định thành **3 nhóm có vai trò hoàn toàn riêng biệt**:
 
-| Nhãn quy ước (Labels) | Phân loại | Ý nghĩa thực tế | Huy hiệu hiển thị (Badge) |
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                     BẢNG PHÂN LOẠI 3 NHÓM NHÃN (LABEL ARCHITECTURE)                             │
+├──────────────────────────┬───────────────────────────────┬──────────────────────────────────────┤
+│ 1. NHÃN CHỦ ĐỀ           │ 2. NHÃN TÍNH NĂNG WIDGET      │ 3. CỜ MINH BẠCH AI                   │
+│    (Taxonomy / Category) │    (Special Widget Labels)    │    (System Metadata Flags)           │
+├──────────────────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│ • Quy cách: Chữ thường   │ • Quy cách: Tiền tố "@"       │ • Quy cách: Tiền tố "ai:" (Cố định)  │
+│ • Ví dụ: `Thể thao`,     │ • Ví dụ: `@Nổi bật`,          │ • Ví dụ: `ai:assisted`,              │
+│   `Công nghệ`, `Sách`    │   `@Điểm tin`, `@Quote`       │   `ai:product`, `ai:generated`       │
+├──────────────────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│ 🎯 Vai trò:              │ 🎯 Vai trò:                   │ 🎯 Vai trò:                          │
+│ Phân loại bài viết chính │ Điều khiển hiển thị trên các  │ Kích hoạt Huy hiệu Minh bạch AI và   │
+│ thức, làm Menu, Footer.  │ Flexible Widgets (Ranked,     │ Khung thông cáo tác quyền theo       │
+│ Luôn hiện ở Trang chủ.   │ Spotlight, Quote, Digest).    │ chuẩn Google E-E-A-T.                │
+├──────────────────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│ ⚙️ Hành vi lọc:          │ ⚙️ Hành vi lọc:               │ ⚙️ Hành vi lọc:                      │
+│ Hiển thị công khai ở     │ Chỉ ẩn bài nếu 100% nhãn của  │ TỰ ĐỘNG BỊ ẨN 100% khỏi Menu,       │
+│ danh mục và tag cloud.   │ bài đều là nhãn "@".          │ Footer, và Widget Danh mục thường.   │
+└──────────────────────────┴───────────────────────────────┴──────────────────────────────────────┘
+```
+
+> ⚠️ **Nguyên tắc bất biến**:
+> Nhãn AI là **Cờ thuộc tính hệ thống (System Metadata Flag)**, **HOÀN TOÀN KHÔNG PHẢI là chuyên mục nội dung**. Chúng được mã nguồn Theme xử lý độc lập để tạo huy hiệu và tuyệt đối không xuất hiện như một thẻ tag hay danh mục thông thường.
+
+---
+
+## 2. QUY CHUẨN CỜ THUỘC TÍNH AI CỐ ĐỊNH (METADATA CONVENTIONS)
+
+Tác giả sử dụng các nhãn cố định sau khi soạn thảo bài viết trong Blogger Admin:
+
+| Nhãn quy ước (Labels) | Phân loại | Ý nghĩa thực tế | Huy hiệu & Biểu tượng |
 | :--- | :--- | :--- | :--- |
-| **`ai:assisted`** (hoặc `AI-Assisted`) | Hỗ trợ bởi AI *(Phổ biến nhất)* | Tác giả tự viết, AI hỗ trợ nghiên cứu tài liệu, gợi ý dàn ý, tóm tắt dữ liệu hoặc sửa lỗi ngữ pháp. Tác giả kiểm chứng 100%. | `✨ Hỗ trợ bởi AI` |
-| **`ai:product`** (hoặc `AI-Product`) | Sản phẩm / Công cụ AI | Bài viết đánh giá, review, hướng dẫn sử dụng một công cụ/ứng dụng trí tuệ nhân tạo cụ thể (như Claude, Cursor, ChatGPT). | `🤖 Sản phẩm AI` |
-| **`ai:generated`** (hoặc `AI-Generated`) | Nội dung AI tổng hợp | Toàn bộ hoặc phần lớn nội dung do AI tổng hợp theo prompt của tác giả (ví dụ: bài thử nghiệm công nghệ). | `⚡ Tạo bởi AI` |
+| **`ai:assisted`** *(Phổ biến nhất)* | Hỗ trợ bởi AI | Tác giả tự viết, AI hỗ trợ nghiên cứu dữ liệu, gợi ý dàn ý, tóm tắt hoặc tinh chỉnh câu chữ. Tác giả thẩm định và chịu trách nhiệm 100%. | `✨ Hỗ trợ bởi AI` *(hoặc `✨ AI`)* |
+| **`ai:product`** | Sản phẩm AI | Bài viết đánh giá, trải nghiệm, hướng dẫn sử dụng một công cụ hoặc giải pháp AI cụ thể (Claude, Cursor, ChatGPT, Midjourney...). | `🤖 Sản phẩm AI` |
+| **`ai:generated`** | Tạo bởi AI | Toàn bộ hoặc phần lớn nội dung do AI tổng hợp theo prompt thử nghiệm của tác giả. | `⚡ Tạo bởi AI` |
+
+*Lưu ý về định dạng*: Hệ thống nhận diện linh hoạt không phân biệt hoa thường và hỗ trợ cả dấu gạch ngang: `ai:assisted`, `AI-Assisted`, `ai-assisted`.
 
 ---
 
-## 3. KIẾN TRÚC KỸ THUẬT & CƠ CHẾ CÁCH LY (TAXONOMY ISOLATION)
+## 3. CƠ CHẾ KỸ THUẬT & CÁCH LY HỆ THỐNG (TAXONOMY ISOLATION)
 
 ```text
                                ┌──────────────────────────────────────────────┐
                                │             BÀI VIẾT XUẤT BẢN                │
-                               │  Nhãn: ["Góc Nhìn & Tư Duy", "ai:assisted"]  │
+                               │ Nhãn: ["Góc Nhìn", "@Nổi bật", "ai:assisted"]│
                                └──────────────────────┬───────────────────────┘
                                                       │
                                                       ▼
-                      ┌──────────────────────────────────────────────────────────────┐
-                      │             BỘ LỌC TỰ ĐỘNG CỦA THEME (THEME PARSER)          │
-                      └──────────────┬───────────────────────────────┬───────────────┘
-                                     │                               │
-        (Lọc nhãn chuyên mục thật)   ▼                               ▼   (Bóc tách cờ thuộc tính AI)
- ┌────────────────────────────────────────────────┐  ┌────────────────────────────────────────────────┐
- │ 1. DANH MỤC THÔNG THƯỜNG                       │  │ 2. HỆ THỐNG MINH BẠCH AI                      │
- │ • Chuyên mục hiển thị: "Góc Nhìn & Tư Duy"     │  │ • Cờ: "ai:assisted"                            │
- │ • Tự động LOẠI BỎ nhãn "ai:assisted" khỏi:     │  │ • Render: Huy hiệu "✨ Hỗ trợ bởi AI"         │
- │   - Header Menu & Footer links                 │  │ • Render: Khung "AI Disclosure Box" ở đầu bài  │
- │   - Widget Danh mục ở Sidebar                  │  │ • Render: Tooltip giải thích khi hover          │
- │   - Thẻ Tag thông thường dưới chân bài         │  │                                                │
- └────────────────────────────────────────────────┘  └────────────────────────────────────────────────┘
+                       ┌──────────────────────────────────────────────────────────────┐
+                       │             BỘ LỌC TỰ ĐỘNG CỦA THEME (THEME PARSER)          │
+                       └──────────────┬───────────────────────────────┬───────────────┘
+                                      │                               │
+       (Lọc nhãn chuyên mục thật)     ▼                               ▼   (Bóc tách cờ thuộc tính AI)
+ ┌─────────────────────────────────────────────────┐ ┌────────────────────────────────────────────────┐
+ │ 1. DANH MỤC & MENU THÔNG THƯỜNG                 │ │ 2. HỆ THỐNG MINH BẠCH AI                       │
+ │ • Chuyên mục hiển thị: "Góc Nhìn"               │ │ • Bắt được cờ: "ai:assisted"                   │
+ │ • LOẠI BỎ 100% nhãn "ai:assisted" và "@Nổi bật" │ │ • Vẽ Huy hiệu AI đa ngữ cảnh (Single, Card,    │
+ │   khỏi: Header Menu, Footer links, Thẻ Tag bài  │ │   Timeline Archive, Flexible Widgets)          │
+ │   viết, và Widget Danh mục ở Sidebar            │ │ • Vẽ Khung Thông Cáo Minh Bạch ở đầu bài viết  │
+ └─────────────────────────────────────────────────┘ └────────────────────────────────────────────────┘
 ```
 
 ### 3.1. Cơ chế lọc ở tầng Blogger XML v3
-Trong các vòng lặp hiển thị danh sách nhãn (`<b:loop values='data:post.labels' var='label'>`):
+Trong mọi vòng lặp render danh mục của theme (`<b:loop values='data:post.labels' var='label'>`):
 ```xml
-<!-- Chỉ hiển thị nhãn nếu KHÔNG phải là nhãn thuộc tính AI -->
-<b:if cond='not (data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
+<!-- Loại trừ hoàn toàn nhãn AI (bắt đầu bằng ai: hoặc AI-) và nhãn widget (bắt đầu bằng @) -->
+<b:if cond='not (data:label.name startsWith "ai:" or data:label.name startsWith "AI-" or data:label.name startsWith "@")'>
   <a class='post-category-tag' expr:href='data:label.url'>
     <data:label.name/>
   </a>
 </b:if>
 ```
 
-### 3.2. Cơ chế nhận diện cờ AI trong JavaScript (theme.js)
+### 3.2. Cơ chế nhận diện cờ AI trong JavaScript Engine (`theme.js`)
 ```javascript
-const AI_FLAGS = {
-  ASSISTED: ['ai:assisted', 'ai-assisted', 'hỗ trợ bởi ai'],
-  PRODUCT: ['ai:product', 'ai-product', 'sản phẩm ai'],
-  GENERATED: ['ai:generated', 'ai-generated', 'tạo bởi ai']
+const AI_FLAG_DEFINITIONS = {
+  assisted: {
+    keys: ['ai:assisted', 'ai-assisted', 'hỗ trợ bởi ai'],
+    name: 'Hỗ trợ bởi AI',
+    shortName: 'AI',
+    icon: '✨',
+    className: 'ai-assisted',
+    tooltip: 'Bài viết được hỗ trợ bởi AI trong khâu nghiên cứu và dàn ý. Nam Trương trực tiếp biên tập và chịu trách nhiệm nội dung.'
+  },
+  product: {
+    keys: ['ai:product', 'ai-product', 'sản phẩm ai'],
+    name: 'Sản phẩm AI',
+    shortName: 'Product',
+    icon: '🤖',
+    className: 'ai-product',
+    tooltip: 'Bài viết đánh giá, phân tích hoặc trải nghiệm về một sản phẩm/công cụ Trí tuệ Nhân tạo.'
+  },
+  generated: {
+    keys: ['ai:generated', 'ai-generated', 'tạo bởi ai'],
+    name: 'Tạo bởi AI',
+    shortName: 'Generated',
+    icon: '⚡',
+    className: 'ai-generated',
+    tooltip: 'Nội dung được tổng hợp và tạo ra bởi mô hình AI theo thử nghiệm của tác giả.'
+  }
 };
 
-function detectAiFlag(labels) {
+function getAiFlagInfo(labels) {
   if (!labels || !labels.length) return null;
-  const lowerLabels = labels.map(l => l.toLowerCase().trim());
-  if (lowerLabels.some(l => AI_FLAGS.ASSISTED.includes(l))) return 'assisted';
-  if (lowerLabels.some(l => AI_FLAGS.PRODUCT.includes(l))) return 'product';
-  if (lowerLabels.some(l => AI_FLAGS.GENERATED.includes(l))) return 'generated';
+  const lowerLabels = labels.map(l => (typeof l === 'string' ? l : l.name || '').toLowerCase().trim());
+  
+  for (const [type, def] of Object.entries(AI_FLAG_DEFINITIONS)) {
+    if (lowerLabels.some(l => def.keys.includes(l))) {
+      return { type, ...def };
+    }
+  }
   return null;
 }
 ```
 
 ---
 
-## 4. ĐẶC TẢ GIAO DIỆN & TRẢI NGHIỆM NGƯỜI DÙNG (UI/UX SPECIFICATION)
+## 4. ĐẶC TẢ GIAO DIỆN HIỂN THỊ ĐA NGỮ CẢNH (MULTI-SURFACE UI SPECIFICATION)
 
-Tính năng kết hợp **Cách 1 (Huy hiệu Badge)** và **Cách 2 (Khung Thông Cáo Minh Bạch)** thành một trải nghiệm liền mạch:
+Để tránh hiện tượng giao diện bị quá tải hoặc chật chội, Huy hiệu AI được thiết kế phân cấp thành **4 biến thể thích ứng (Variants)** tùy theo vị trí xuất hiện:
 
-### 4.1. Thành Phần 1: Huy Hiệu Minh Bạch AI (AI Transparency Badge)
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ CÁC BIẾN THỂ CỦA HUY HIỆU MINH BẠCH AI                                                          │
+├──────────────────────────┬───────────────────────────────┬──────────────────────────────────────┤
+│ 1. FULL BADGE + BOX      │ 2. STANDARD BADGE             │ 3. MICRO BADGE / INLINE TAG          │
+│ Dành cho Bài Viết Đơn    │ Dành cho Post Card & Hero     │ Dành cho Dòng Thời Gian & Widgets    │
+│ (Single Post Detail)     │ (Trang Chủ & Widget Tiêu Điểm)│ (Timeline Archive & Ranked Widget)   │
+└──────────────────────────┴───────────────────────────────┴──────────────────────────────────────┘
+```
 
-#### Vị trí hiển thị:
-1. **Trên Thẻ Bài Viết (Post Card) ở Trang Chủ / Danh Mục**:
-   - Nằm cạnh dòng ngày tháng và thời gian đọc (Metadata row).
-2. **Ở Đầu Bài Viết Chi Tiết (Single Post Header)**:
-   - Nằm ngay dưới tiêu đề bài viết (Post Title), cạnh Avatar tác giả và ngày đăng.
+---
+
+### 4.1. Ngữ cảnh 1: Trang Bài Viết Chi Tiết (Single Post Detail)
+
+Đây là nơi độc giả đọc nội dung trọn vẹn, cần độ minh bạch cao nhất. Gồm **2 thành phần**:
+
+#### A. Huy Hiệu Đầy Đủ (Full AI Badge) ở Post Header:
+Nằm ngay dưới Tiêu đề bài viết, trong hàng thông tin tác giả và ngày đăng:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │ [Góc Nhìn & Tư Duy]                                                                    │
-│ Tiêu Đề Bài Viết Về Trí Tuệ Nhân Tạo Và Con Người                                      │
-│ 📅 10/09/2026   ⏱️ 6 phút đọc   [ ✨ Hỗ trợ bởi AI ▾ ]                                 │
+│ Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số                                    │
+│                                                                                        │
+│ 👤 Nam Trương   📅 10/09/2026   ⏱️ 6 phút đọc   [ ✨ Hỗ trợ bởi AI ▾ ]                 │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+* **Styling**: Chiều cao `24px`, bo tròn pill `rounded-full`, nền gradient tím nhạt công nghệ, viền mảnh `1px solid var(--border-ai)`. Hover hiện tooltip giải thích rõ ràng.
 
-#### Thiết kế giao diện (Visual Styling):
-- **Kích thước**: Cao `24px`, padding `2px 10px`, bo tròn hoàn toàn `border-radius: 9999px`.
-- **Hệ màu nhận diện (Futuristic Tech Palette)**:
-  - *Light Mode*: Nền gradient tím - xanh công nghệ nhạt `linear-gradient(135deg, #f3e8ff 0%, #e0f2fe 100%)`, viền `1px solid #c084fc`, chữ màu tím thẫm `#6b21a8`.
-  - *Dark Mode*: Nền `linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)`, viền `1px solid rgba(168, 85, 247, 0.4)`, chữ tím sáng `#d8b4fe`.
-- **Icon**:
-  - `✨` đối với bài `ai:assisted`.
-  - `🤖` đối với bài `ai:product`.
-  - `⚡` đối với bài `ai:generated`.
-- **Hiệu ứng Hover & Tooltip**:
-  - Khi rê chuột vào: Huy hiệu sáng nhẹ, con trỏ dạng `help`.
-  - Hiển thị Tooltip nổi:
-    > *"Bài viết được hỗ trợ bởi công cụ AI trong khâu nghiên cứu và dàn ý. Nội dung và quan điểm được Nam Trương trực tiếp biên tập & chịu trách nhiệm."*
-
----
-
-### 4.2. Thành Phần 2: Khung Thông Cáo Minh Bạch (AI Disclosure Callout Box)
-
-#### Vị trí hiển thị:
-- **Chỉ xuất hiện trên Trang Bài Viết Chi Tiết (Single Post)**.
-- Nằm ngay trước đoạn văn mở đầu của bài viết (phía trên nội dung chính), đóng vai trò như một lời mở đầu minh bạch, lịch thiệp gửi tới độc giả.
+#### B. Khung Thông Cáo Minh Bạch (AI Disclosure Callout Box):
+Nằm ở đầu bài viết, ngay trước đoạn văn mở đầu:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -149,42 +192,205 @@ Tính năng kết hợp **Cách 1 (Huy hiệu Badge)** và **Cách 2 (Khung Thô
 │ ℹ️ Tìm hiểu thêm về [Tiêu chuẩn biên tập & Ứng dụng AI của Blog »]                      │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
-
-#### Thiết kế giao diện (Visual Styling):
-- **Khung viền**: Bo góc `12px`, viền mỏng `1px solid var(--border-color)`, điểm nhấn viền trái đậm `3.5px solid #8b5cf6` (tím công nghệ).
-- **Màu nền**: `var(--bg-surface)` có độ tương phản nhẹ so với nền trang, tạo cảm giác một khối ghi chú trang trọng.
-- **Typography**:
-  - Tiêu đề thông cáo: Font `var(--font-sans)`, `font-size: 0.85rem`, `font-weight: 700`, chữ in hoa nhẹ, màu `var(--text-main)`.
-  - Đoạn văn mô tả: Font `var(--font-sans)`, `font-size: 0.88rem`, màu `var(--text-muted)`, chiều cao dòng `1.6`.
-- **Liên kết minh bạch**: Dẫn tới trang tĩnh chính sách (ví dụ `/p/chinh-sach-ai.html` nếu tác giả muốn xuất bản trang riêng).
+* **Styling**: Khung viền bo góc `12px`, nền `var(--bg-surface)`, điểm nhấn viền trái đậm `3.5px solid #8b5cf6` (tím công nghệ).
 
 ---
 
-## 5. TÙY BIẾN TRONG BLOGGER ADMIN (DÀNH CHO TÁC GIẢ)
+### 4.2. Ngữ cảnh 2: Thẻ Bài Viết ở Trang Chủ & Chuyên Mục (Post Card)
 
-Tác giả có toàn quyền kiểm soát tính năng này mà không cần động đến code:
+Hiển thị dưới dạng **Huy hiệu Chuẩn (Standard Badge)** nằm trong hàng Metadata cạnh thời gian đọc:
 
-### 5.1. Khi viết bài
-* Bạn chỉ cần gõ thêm nhãn **`ai:assisted`** (hoặc `ai:product`) vào ô Nhãn bài viết bên phải.
-* Hệ thống sẽ tự động kích hoạt cả **Huy hiệu Badge** và **Khung Disclosure Box**.
-
-### 5.2. Công tắc Tùy chỉnh trong Blogger Theme Designer
-Trong **Blogger Admin > Chủ đề (Theme) > Tùy chỉnh (Customize) > Nâng cao**:
-* **Công tắc bật/tắt Khung Thông Cáo (Show AI Disclosure Box)**:
-  - Cho phép tác giả chọn: *Chỉ hiện Huy hiệu Badge nhỏ* HOẶC *Hiện cả Huy hiệu Badge lẫn Khung Thông Cáo to ở đầu bài*.
-* **Tùy biến câu chữ**: Tác giả có thể sửa lại đoạn văn thông cáo minh bạch theo phong cách cá nhân nếu muốn.
+```text
+┌────────────────────────────────────────────────────────┐
+│ ┌────────────────────────────────────────────────────┐ │
+│ │                COVER IMAGE (16:9)                  │ │
+│ └────────────────────────────────────────────────────┘ │
+│ [Góc Nhìn & Tư Duy]                                    │
+│ Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số    │
+│ Tóm tắt bài viết 2 dòng ngắn gọn...                    │
+│                                                        │
+│ 📅 08/09/2026 • ⏱️ 6 phút • [ ✨ Hỗ trợ bởi AI ]        │
+└────────────────────────────────────────────────────────┘
+```
+* **Styling**: Kích thước vừa vặn, chiều cao `22px`, font `0.75rem`, không làm gián đoạn việc lướt xem tiêu đề bài viết.
 
 ---
 
-## 6. BẢNG TIÊU CHÍ NGHIỆM THU (ACCEPTANCE CRITERIA)
+### 4.3. Ngữ cảnh 3: Trang Dòng Thời Gian (Timeline Archive - `/p/muc-luc.html`)
 
-| Hạng mục | Tiêu chí kiểm thử nghiệm thu | Đánh giá |
+Trang Dòng thời gian là danh sách phẳng (Flat Horizontal Rows) ưu tiên tốc độ quét mắt. Do đó, huy hiệu xuất hiện dưới dạng **Huy hiệu Mini (Micro Badge)** đặt ngay sau Tiêu đề bài viết:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ CÂY DÒNG THỜI GIAN - NĂM 2026                                                          │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Góc Nhìn]   Nghịch Lý Của Việc Chọn Lựa  [ ✨ AI ]              10/09/2026  →        │
+│ [Sách Hay]   Review Tư Duy Nhanh Và Chậm                         05/09/2026  →        │
+│ [Công Nghệ]  Sự Trỗi Dậy Của Autonomous Agents  [ ⚡ AI ]          01/09/2026  →        │
+│ [Cuộc Sống]  30 Ngày Không Dùng Điện Thoại                       28/08/2026  →        │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **Styling của Micro Badge**:
+  - Font chữ: `0.72rem`, chữ đậm nhẹ `500`.
+  - Padding siêu gọn: `1px 6px`, bo tròn góc `4px` hoặc `6px`.
+  - Màu sắc: Nền tím nhạt trong suốt `rgba(168, 85, 247, 0.12)`, chữ tím `var(--ai-text)`.
+  - Tooltip: Hover vào hiện tooltip ngắn: *"Bài viết có sự hỗ trợ của AI"*.
+  - **Trên Mobile**: Tự động co gọn chỉ còn biểu tượng `✨` hoặc `⚡` để không chiếm diện tích dòng tiêu đề.
+
+---
+
+### 4.4. Ngữ cảnh 4: Trong các Tiện Ích Bài Viết Đặc Biệt (Flexible Special Posts Widgets)
+
+Tùy theo từng mẫu Pattern hiển thị của widget, Huy hiệu AI được lồng ghép tự nhiên:
+
+#### A. Trong Pattern `ranked` (Bảng xếp hạng số to `01, 02` - Chuẩn Mockup):
+Được bố trí dưới dạng **Nhãn Nano (Inline Meta Tag)** nằm ở dòng metadata cạnh ngày xuất bản:
+
+```text
+┌────────────────────────────────────────────────────────┐
+│ 🔥 BÀI VIẾT NỔI BẬT                     [Xem tất cả »] │
+├────────────────────────────────────────────────────────┤
+│ 01  ┌───────┐  Nghịch Lý Của Việc Chọn Lựa             │
+│     │ THUMB │                                          │
+│     └───────┘  09/09/2026 • ✨ AI • 5 phút đọc         │
+├────────────────────────────────────────────────────────┤
+│ 02  ┌───────┐  30 Ngày Không Dùng Điện Thoại           │
+│     │ THUMB │                                          │
+│     └───────┘  05/09/2026 • 8 phút đọc                 │
+└────────────────────────────────────────────────────────┘
+```
+* **Styling**: Text inline siêu gọn `✨ AI` đi kèm dấu chấm ngăn cách `•`, không làm tăng chiều cao của từng hàng.
+
+#### B. Trong Pattern `spotlight` (Bài viết Tiêu điểm Hero Card):
+Vì thẻ có không gian rộng rãi, sử dụng **Huy hiệu Chuẩn** ở thanh tag trên cùng:
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│ 🌟 BÀI VIẾT TIÊU ĐIỂM                                                  │
+├────────────────────────────────────────────────────────────────────────┤
+│ 🏷️ PHÂN TÍCH CHUYÊN SÂU • 📅 08/09/2026 • [ ✨ Hỗ trợ bởi AI ]        │
+│                                                                        │
+│ Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số                    │
+│ [ Đọc tiếp bài viết → ]                                                │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+#### C. Trong Pattern `digest` (Bản tin vắn / Dòng thời gian mini):
+Hiển thị dạng biểu tượng điểm xuyết trên dòng ngày giờ:
+```text
+📅 Hôm nay, 08:30 • ✨ AI
+✦ Ra mắt tính năng Dòng thời gian mới...
+```
+
+#### D. Trong Pattern `quote` (Trích dẫn / Chiêm nghiệm):
+Nếu câu thơ hoặc đúc kết được AI hỗ trợ tổng hợp, biểu tượng `✨ AI` được đặt tinh tế cạnh phần ghi công tác giả:
+```text
+“ Sự đơn giản là đỉnh cao của sự tinh tế... ”
+                               — Leonardo da Vinci  [✨ AI]
+```
+
+---
+
+## 5. HỆ THỐNG MÀU SẮC & DESIGN TOKENS (LIGHT / DARK MODE)
+
+Huy hiệu AI sử dụng tông màu **Futuristic Purple & Cyber Cyan** mang đậm hơi thở công nghệ hiện đại nhưng được tinh chỉnh để thanh lịch, không chói gắt:
+
+```css
+:root {
+  /* Chế độ Sáng (Light Mode) */
+  --ai-badge-bg: linear-gradient(135deg, rgba(243, 232, 255, 0.8) 0%, rgba(224, 242, 254, 0.8) 100%);
+  --ai-badge-border: rgba(192, 132, 252, 0.45);
+  --ai-badge-text: #6b21a8;
+  --ai-callout-border: #8b5cf6;
+  --ai-micro-bg: rgba(168, 85, 247, 0.1);
+  --ai-micro-text: #7c3aed;
+}
+
+[data-theme='dark'] {
+  /* Chế độ Tối (Dark Mode) */
+  --ai-badge-bg: linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(59, 130, 246, 0.15) 100%);
+  --ai-badge-border: rgba(168, 85, 247, 0.35);
+  --ai-badge-text: #d8b4fe;
+  --ai-callout-border: #a855f7;
+  --ai-micro-bg: rgba(168, 85, 247, 0.2);
+  --ai-micro-text: #c084fc;
+}
+
+/* Các lớp tiện ích (CSS Helper Classes) */
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--ai-badge-bg);
+  border: 1px solid var(--ai-badge-border);
+  color: var(--ai-badge-text);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+
+.ai-badge-full {
+  height: 24px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+}
+
+.ai-badge-standard {
+  height: 22px;
+  padding: 1px 8px;
+  font-size: 0.74rem;
+}
+
+.ai-badge-micro {
+  height: 18px;
+  padding: 1px 6px;
+  font-size: 0.70rem;
+  background: var(--ai-micro-bg);
+  border: 1px solid var(--ai-badge-border);
+  color: var(--ai-micro-text);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.ai-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ai-micro-text);
+}
+```
+
+---
+
+## 6. QUẢN TRỊ & TÙY BIẾN CHO TÁC GIẢ (BLOGGER ADMIN WORKFLOW)
+
+Tác giả vận hành tính năng này hoàn toàn đơn giản:
+
+1. **Khi viết bài**:
+   - Gõ nhãn **`ai:assisted`** vào ô nhãn của Blogger nếu bài có AI hỗ trợ nghiên cứu/dàn ý.
+   - Gõ nhãn **`ai:product`** nếu bài viết review công cụ AI.
+   - Hệ thống tự động phân phối Huy hiệu AI đến đúng tất cả các nơi: Bài chi tiết, Thẻ bài trang chủ, Dòng thời gian và Widget.
+2. **Trong Blogger Theme Designer**:
+   - Tác giả có thể bật/tắt hiển thị Khung Thông Cáo Minh Bạch (Disclosure Box) ở đầu bài viết chi tiết mà không ảnh hưởng tới các Huy hiệu nhỏ.
+
+---
+
+## 7. BẢNG TIÊU CHÍ NGHIỆM THU (ACCEPTANCE CRITERIA MATRIX)
+
+| Hạng mục kiểm thử | Tiêu chuẩn kỹ thuật cần đạt | Đánh giá |
 | :--- | :--- | :---: |
-| **Cách ly nhãn tuyệt đối** | Nhãn `ai:assisted` KHÔNG xuất hiện trong widget Chuyên mục, Footer links, hay Header menu. | [ ] |
-| **Bảo toàn chuyên mục chính**| Bài viết gắn `[Công Nghệ, ai:assisted]` thì thẻ chuyên mục hiển thị chỉ là `Công Nghệ`. | [ ] |
-| **Hiển thị Badge thẻ bài** | Trên Post Card ở trang chủ: Hiển thị huy hiệu `✨ Hỗ trợ bởi AI` nhỏ gọn, tinh tế. | [ ] |
-| **Hiển thị Disclosure Box** | Vào đọc chi tiết bài viết: Khung Thông Cáo Minh Bạch hiển thị trang trọng ở đầu bài viết. | [ ] |
-| **Bài viết thông thường** | Bài viết KHÔNG có nhãn `ai:*`: Tuyệt đối không xuất hiện huy hiệu hay khung thông cáo nào. | [ ] |
-| **Chế độ Sáng / Tối** | Cả Huy hiệu và Khung thông cáo tự động thích ứng hoàn hảo với Dark Mode và Light Mode. | [ ] |
-| **Tooltip giải thích** | Rê chuột vào Huy hiệu: Tooltip giải thích bật lên mượt mà, không bị che khuất. | [ ] |
-| **Tính di động (Mobile)** | Trên điện thoại: Huy hiệu và Khung thông cáo co giãn cân đối, không tràn lề màn hình. | [ ] |
+| **Cách ly nhãn AI** | Nhãn `ai:*` tuyệt đối KHÔNG xuất hiện trong menu Header, Footer links, hay Widget chuyên mục. | [ ] |
+| **Huy hiệu Bài chi tiết** | Xuất hiện Huy hiệu đầy đủ `[ ✨ Hỗ trợ bởi AI ▾ ]` ở header bài viết và Khung thông cáo ở đầu bài. | [ ] |
+| **Huy hiệu Post Card** | Thẻ bài viết ở Trang chủ và Chuyên mục hiển thị Huy hiệu chuẩn trong hàng metadata. | [ ] |
+| **Dòng thời gian (Timeline)** | Trên `/p/muc-luc.html`: Bài viết có nhãn AI hiển thị Micro Badge `[ ✨ AI ]` ngay sau tiêu đề. | [ ] |
+| **Widget Ranked (Mockup)** | Trong widget xếp hạng bài nổi bật: Hiển thị nhãn nano `09/09/2026 • ✨ AI • 5 phút đọc`. | [ ] |
+| **Widget Spotlight** | Thẻ tiêu điểm hiển thị huy hiệu chuẩn trang trọng trên hàng tag cover. | [ ] |
+| **Bài viết thường** | Bài viết KHÔNG có cờ `ai:*`: Tuyệt đối không xuất hiện bất kỳ huy hiệu hay ký hiệu AI nào. | [ ] |
+| **Đồng bộ Sáng / Tối** | Cả 4 biến thể huy hiệu tự động đổi màu tương thích hoàn hảo giữa Light Mode và Dark Mode. | [ ] |
+| **Tooltip giải thích** | Rê chuột vào huy hiệu: Tooltip giải thích bật lên tức thì, rõ ràng, không bị tràn màn hình. | [ ] |
+| **Đáp ứng di động (Mobile)** | Trên màn hình hẹp: Micro Badge trên dòng thời gian tự thu gọn chỉ còn icon `✨`, không vỡ dòng. | [ ] |
