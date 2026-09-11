@@ -334,7 +334,16 @@ ${combinedCss}
   <div class='site-wrapper'>
 
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
-    <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='2' showaddelement='yes'>
+    <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='3' showaddelement='yes'>
+      <!-- Widget Tải Ảnh Trực Tiếp Từ Máy Tính (Có nút Chọn Tệp / Upload file từ máy) -->
+      <b:widget id='Image1' type='Image' version='2' title='🖼️ Tải Lên Ảnh Bìa (Từ Máy Tính)'>
+        <b:includable id='main'>
+          <b:if cond='data:sourceUrl'>
+            <div id='profile-uploaded-banner' style='display:none;'><data:sourceUrl/></div>
+          </b:if>
+        </b:includable>
+      </b:widget>
+
       <b:widget id='HTML1' type='HTML' version='2' title='Ảnh Bìa &amp; Tác Giả'>
         <b:includable id='main'>
           <!-- Profile Cover Header Section -->
