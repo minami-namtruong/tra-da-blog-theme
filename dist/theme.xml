@@ -6657,6 +6657,18 @@ body.view-not-homepage #main-above-feed {
             container.dataset.limit = part.match(/^limit\s*:\s*(\d+)/i)[1];
           } else if (/^sort\s*:\s*(\w+)/i.test(part)) {
             container.dataset.sort = part.match(/^sort\s*:\s*(\w+)/i)[1];
+          } else if (/^(?:thumb|thumbnail)\s*:\s*(true|false)/i.test(part)) {
+            container.dataset.showThumbnail = part.match(/^(?:thumb|thumbnail)\s*:\s*(true|false)/i)[1].toLowerCase();
+          } else if (/^snippet\s*:\s*(true|false)/i.test(part)) {
+            container.dataset.showSnippet = part.match(/^snippet\s*:\s*(true|false)/i)[1].toLowerCase();
+          } else if (/^(?:viewall|viewAllText)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.viewAllText = part.match(/^(?:viewall|viewAllText)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^(?:timerange|timeRange)\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.timeRange = part.match(/^(?:timerange|timeRange)\s*:\s*(\w+)/i)[1].trim();
+          } else if (/^(?:posts|links)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.posts = part.match(/^(?:posts|links)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^title\s*:\s*(.+)/i.test(part)) {
+            container.dataset.title = part.match(/^title\s*:\s*(.+)/i)[1].trim();
           } else {
             const cleanedLabel = part.replace(/^(labels?|nhãn)\s*:\s*/i, '').trim();
             if (cleanedLabel) container.dataset.labels = cleanedLabel;

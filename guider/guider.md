@@ -82,36 +82,187 @@ Theme hỗ trợ 4 kiểu dáng widget (patterns) được thiết kế theo pho
 
 ---
 
-## CHƯƠNG 3: HƯỚNG DẪN CẤU HÌNH WIDGET CÓ SẴN
+## CHƯƠNG 3: HƯỚNG DẪN CHI TIẾT CẤU HÌNH WIDGET QUA TRƯỜNG "CONTENT"
 
 Trong trang **Bố cục (Layout)** của Blogger, theme đã bố trí sẵn các widget tại các vị trí đẹp nhất:
-1. `main-above-feed`: Đầu luồng bài viết (🌟 Bài Viết Tiêu Điểm Tuần)
-2. `main-in-feed-section`: Xen kẽ giữa các bài viết (☕ Trích Dẫn Chiêm Nghiệm)
-3. `main-special-posts-section`: Dưới luồng bài viết chính (📊 Top Bài Đọc Nhiều)
+1. `main-above-feed`: Đầu luồng bài viết (🌟 Bài Viết Tiêu Điểm Tuần - Spotlight)
+2. `main-in-feed-section`: Xen kẽ giữa các bài viết sau bài số 3 (☕ Trích Dẫn Chiêm Nghiệm - Quote)
+3. `main-special-posts-section`: Dưới luồng bài viết chính (📊 Top Bài Đọc Nhiều - Ranked)
 4. `sidebar-section`: Cột bên phải (Bài nổi bật, Chiêm nghiệm, Điểm tin, Tiêu điểm)
 
-### Cách Tùy Chỉnh Widget:
-Bấm nút hình **Cây bút (Chỉnh sửa / Edit)** tại widget cần sửa:
+Khi bạn bấm nút hình **Cây bút (Chỉnh sửa / Edit)** tại bất kỳ widget nào:
+* **Ô Title:** Đổi tiêu đề hiển thị trên blog.
+* **Ô Content:** Là nơi bạn có toàn quyền cấu hình **toàn bộ các tùy chọn như trên trang Preview**!
 
-```
-┌──────────────────────────────────────────────┐
-│ Configure HTML/JavaScript                    │
-│                                              │
-│ Title:    [ ☕ Trích Dẫn Chiêm Nghiệm      ] │
-│ Content:  [                                ] │
-│                                              │
-│          [REMOVE]    [CANCEL]    [SAVE]      │
-└──────────────────────────────────────────────┘
-```
+---
 
-* **Ô Title:** Đổi tên hiển thị trên blog tùy ý.
-* **Ô Content:** 
-  * **Nếu để TRỐNG:** Widget tự động chạy theo cấu hình mặc định (lấy nhãn `@` tương ứng).
-  * **Nếu muốn đổi sang nhãn khác:** Click vào ô `Content` và gõ thẳng tên nhãn:
-    * Gõ: `Triết lý` (lọc bài có nhãn Triết lý)
-    * Gõ: `Sách, Đời sống` (lọc nhiều nhãn)
-    * Gõ: `Triết lý | limit: 3` (lấy đúng 3 bài)
-  * Bấm **SAVE** là xong!
+### 3.1. Bảng Tổng Hợp Tất Cả Các Tham Số Cấu Hình (Như Demo Tại `preview.html`)
+
+Mọi tùy chọn trên bộ điều khiển Interactive Playground của trang Preview đều có thể thiết lập trực tiếp thông qua ô **Content**:
+
+| Tham Số | Thuộc Tính HTML Tương Ứng | Giá Trị Mặc Định | Giá Trị Hợp Lệ | Mô Tả Tác Dụng |
+| :--- | :--- | :---: | :--- | :--- |
+| **`pattern`** | `data-pattern` | `digest` | `spotlight`, `ranked`, `quote`, `digest` | Kiểu dáng giao diện hiển thị của widget. |
+| **`label`** | `data-labels` | Theo widget | Tên nhãn (VD: `Triết lý`, `Sách, AI`) | Lọc bài viết theo một hoặc nhiều nhãn chủ đề. |
+| **`limit`** | `data-limit` | `1` đến `6` | Số nguyên từ `1` đến `10` | Số lượng bài viết hiển thị tối đa trong widget. |
+| **`sort`** | `data-sort` | `latest` | `latest`, `random`, `views` (hoặc `popular`) | Tiêu chí sắp xếp (Mới nhất, Ngẫu nhiên, Đọc nhiều nhất). |
+| **`timeRange`** | `data-time-range` | `all_time` | `all_time`, `last_year`, `last_30_days`, `last_7_days` | Khoảng thời gian tính lượt xem (khi sort là `views`). |
+| **`thumb`** | `data-show-thumbnail` | `true` | `true`, `false` | Bật hoặc tắt hiển thị ảnh đại diện (thumbnail). |
+| **`snippet`** | `data-show-snippet` | `true` | `true`, `false` | Bật hoặc tắt đoạn trích dẫn tóm tắt bài viết. |
+| **`viewall`** | `data-view-all-text` | `Xem tất cả »` | Chuỗi văn bản tùy ý (VD: `Đọc thêm →`) | Chữ hiển thị trên nút liên kết ở cuối widget. |
+| **`posts`** | `data-posts` | Trống | Danh sách link bài viết cách nhau dấu phẩy | **Chế độ chọn đích danh bài viết** (Handpicked URLs). |
+| **`title`** | `data-title` | Lấy từ Title | Chuỗi văn bản tùy ý | Tiêu đề tùy biến ghi đè cho widget. |
+| **`insertAfter`** | `data-insert-after` | `3` | Số nguyên | Vị trí bài viết để chèn xen kẽ (chỉ dùng cho In-Feed). |
+
+---
+
+### 3.2. Chi Tiết 4 Loại Widget & Mẫu Cấu Hình Cho Từng Loại
+
+#### 🌟 1. Kiểu Tiêu Điểm (`pattern: spotlight`)
+* **Mục đích:** Tạo điểm nhấn thị giác lớn cho bài viết then chốt của tuần/tháng (Editor's Choice), thường đặt ở đầu trang chủ (`main-above-feed`) hoặc đầu thanh Sidebar.
+* **Giao diện:** Ảnh bìa lớn tỉ lệ 16:9 sắc nét, huy hiệu chủ đề nổi bật, tiêu đề lớn, đoạn trích dẫn súc tích và nút CTA đọc bài viết.
+* **Vị trí sẵn có:** Widget `HTML10` (Đầu luồng bài viết) & `HTML17` (Cột bên Sidebar).
+* **Cấu hình mặc định:** Nhãn `@Tiêu điểm`, lấy 1 bài (`limit: 1`), sắp xếp `latest`.
+* **Các mẫu cấu hình trong ô Content:**
+  * *Chỉ đổi nhãn hiển thị:* `label: Góc nhìn` *(hoặc chỉ cần gõ thẳng chữ `Góc nhìn`)*
+  * *Tắt ảnh thu nhỏ:* `thumb: false`
+  * *Tắt đoạn tóm tắt:* `snippet: false`
+  * *Đổi chữ nút đọc:* `viewall: Khám phá ngay »`
+  * *Mẫu đầy đủ (Cú pháp ngắn gọn):*
+    ```text
+    label: Góc nhìn | thumb: true | snippet: true | viewall: Khám phá ngay »
+    ```
+  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
+    ```html
+    <div class="special-posts-widget"
+         data-pattern="spotlight"
+         data-labels="Góc nhìn"
+         data-limit="1"
+         data-show-thumbnail="true"
+         data-show-snippet="true"
+         data-view-all-text="Khám phá ngay »">
+    </div>
+    ```
+
+---
+
+#### 🏆 2. Kiểu Bảng Xếp Hạng (`pattern: ranked`)
+* **Mục đích:** Vinh danh các bài viết được đọc nhiều nhất hoặc các bài viết hay nhất được tuyển chọn theo thứ bậc.
+* **Giao diện:** Đánh số thứ tự lớn nghệ thuật (`01`, `02`, `03`...), font chữ thanh lịch, layout tự động chuyển sang 2-3 cột khi đặt ở vùng Main content rộng và 1 cột khi đặt ở Sidebar.
+* **Vị trí sẵn có:** Widget `HTML13` (Cuối luồng bài viết chính) & `HTML14` (Cột bên Sidebar).
+* **Cấu hình mặc định:** Sắp xếp theo lượt đọc `sort: views`, lấy 5-6 bài (`limit: 5` hoặc `6`).
+* **Các mẫu cấu hình trong ô Content:**
+  * *Lấy Top 5 bài đọc nhiều nhất mọi thời đại (Toàn blog):*
+    ```text
+    sort: views | timeRange: all_time | limit: 5
+    ```
+  * *Lấy Top 4 bài đọc nhiều trong 30 ngày qua của chuyên mục Sách:*
+    ```text
+    label: Sách | sort: views | timeRange: last_30_days | limit: 4
+    ```
+  * *Lấy 5 bài mới nhất mang nhãn `@Nổi bật` (Do tác giả tự chọn):*
+    ```text
+    label: @Nổi bật | sort: latest | limit: 5
+    ```
+  * *Tắt ảnh thumbnail để danh sách xếp hạng tinh gọn:*
+    ```text
+    sort: views | limit: 5 | thumb: false
+    ```
+  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
+    ```html
+    <div class="special-posts-widget"
+         data-pattern="ranked"
+         data-labels="Sách"
+         data-sort="views"
+         data-time-range="last_30_days"
+         data-limit="5"
+         data-show-thumbnail="true"
+         data-view-all-text="Xem bảng xếp hạng đầy đủ »">
+    </div>
+    ```
+
+---
+
+#### ☕ 3. Kiểu Trích Dẫn Chiêm Nghiệm (`pattern: quote`)
+* **Mục đích:** Hiển thị một đoạn trích dẫn tâm đắc, lời hay ý đẹp hoặc một mẩu suy ngẫm triết lý sâu sắc được trích ra từ các bài viết.
+* **Giao diện:** Thiết kế hộp danh ngôn cao cấp, font chữ Serif trang trọng, dấu ngoặc kép mở đầu nghệ thuật, hiển thị ngẫu nhiên (random) mỗi lần người đọc tải lại trang.
+* **Vị trí sẵn có:** Widget `HTML11` (Xen kẽ giữa các bài sau bài thứ 3) & `HTML15` (Cột bên Sidebar).
+* **Cấu hình mặc định:** Nhãn `@Quote`, sắp xếp ngẫu nhiên `sort: random`, lấy 1 bài (`limit: 1`).
+* **Các mẫu cấu hình trong ô Content:**
+  * *Lấy ngẫu nhiên từ nhãn Triết Lý:*
+    ```text
+    label: Triết lý | sort: random
+    ```
+  * *Lấy câu trích dẫn từ bài viết mới nhất (không ngẫu nhiên):*
+    ```text
+    label: Chiêm nghiệm | sort: latest
+    ```
+  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
+    ```html
+    <div class="special-posts-widget"
+         data-pattern="quote"
+         data-labels="Triết lý"
+         data-sort="random"
+         data-limit="1"
+         data-insert-after="3">
+    </div>
+    ```
+  * *Hoặc chèn một trích dẫn tĩnh cố định bằng HTML thuần (Không cần tạo bài viết Blogger):*
+    ```html
+    <div class="special-quote-box">
+      <blockquote class="special-quote-text">"Sự đơn giản là đỉnh cao của tinh tế."</blockquote>
+      <cite class="special-quote-author">— Leonardo da Vinci</cite>
+    </div>
+    ```
+
+---
+
+#### ⚡ 4. Kiểu Điểm Tin & Xu Hướng (`pattern: digest`)
+* **Mục đích:** Hiển thị danh sách các bài viết vắn tắt, cập nhật tin tức nhanh, ghi chú ngắn theo dạng thẻ card hiện đại.
+* **Giao diện:** Thẻ card nhỏ gọn, có thumbnail bo góc mềm mại, ngày tháng xuất bản định dạng rõ ràng, tiêu đề tinh tế và đoạn tóm tắt 2 dòng.
+* **Vị trí sẵn có:** Widget `HTML16` (Cột bên Sidebar).
+* **Cấu hình mặc định:** Nhãn `@Điểm tin`, lấy 4 bài (`limit: 4`), sắp xếp `latest`.
+* **Các mẫu cấu hình trong ô Content:**
+  * *Lấy 4 tin mới nhất nhãn Công Nghệ:*
+    ```text
+    label: Công nghệ | limit: 4
+    ```
+  * *Lọc từ nhiều nhãn cùng lúc:*
+    ```text
+    labels: AI, Công nghệ | limit: 5
+    ```
+  * *Tắt hiển thị tóm tắt, chỉ giữ ảnh và tiêu đề:*
+    ```text
+    label: Tin tức | limit: 4 | snippet: false
+    ```
+  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
+    ```html
+    <div class="special-posts-widget"
+         data-pattern="digest"
+         data-labels="Công nghệ"
+         data-limit="4"
+         data-sort="latest"
+         data-show-thumbnail="true"
+         data-show-snippet="true"
+         data-view-all-text="Xem tất cả tin »">
+    </div>
+    ```
+
+---
+
+### 3.3. Tính Năng Cao Cấp: Chọn Đích Danh Bài Viết Bằng URL (Handpicked Posts)
+Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xác tuyệt đối các bài viết** muốn đưa lên widget:
+* Nhập danh sách link bài viết (phân tách bởi dấu phẩy) vào ô `Content`:
+  ```text
+  posts: https://myblog.blogspot.com/2026/09/bai-viet-1.html, https://myblog.blogspot.com/2026/09/bai-viet-2.html
+  ```
+* Hoặc dạng thẻ HTML:
+  ```html
+  <div class="special-posts-widget"
+       data-pattern="spotlight"
+       data-posts="https://myblog.blogspot.com/2026/09/bai-viet-1.html">
+  </div>
+  ```
 
 ---
 
@@ -122,22 +273,18 @@ Bạn có thể thêm **bao nhiêu widget tùy thích** vào bất kỳ vị tr�
 ### Cách 1: Gõ Cú Pháp Ngắn (Khuyên Dùng)
 1. Bấm **"+ Thêm tiện ích"** ➔ Chọn **"HTML/JavaScript"**.
 2. Nhập **Title** (Tên widget của bạn).
-3. Trong ô **Content**, chỉ cần gõ đúng 1 dòng theo bảng dưới đây:
-
-| Bạn Muốn Tạo Kiểu Gì? | Gõ Cú Pháp Này Vào Ô Content |
-| :--- | :--- |
-| **Trích dẫn ngẫu nhiên** | `pattern: quote \| label: Triết lý` |
-| **Lưới điểm tin (4 bài)** | `pattern: digest \| label: Công nghệ \| limit: 4` |
-| **Top bài đọc nhiều (Ranked)**| `pattern: ranked` *(hoặc `pattern: ranked \| label: Sách`)* |
-| **1 bài tiêu điểm nổi bật** | `pattern: spotlight \| label: Tiêu điểm` |
-
+3. Trong ô **Content**, chỉ cần gõ đúng 1 dòng:
+   * **Tạo widget Trích dẫn:** `pattern: quote | label: Triết lý`
+   * **Tạo widget Điểm tin:** `pattern: digest | label: Công nghệ | limit: 4`
+   * **Tạo widget Top đọc nhiều:** `pattern: ranked | sort: views | limit: 5`
+   * **Tạo widget Tiêu điểm:** `pattern: spotlight | label: Tiêu điểm`
 4. Bấm **SAVE**. Theme sẽ tự động chuyển đổi thành widget bài viết tương ứng!
 
 ### Cách 2: Sao Chép Mã Trực Quan Từ Trang Preview (`preview.html`)
 1. Mở file `src/preview.html` trên máy tính bằng trình duyệt.
-2. Cuộn xuống phần **Bộ Tạo Mã Tiện Ích (Interactive Playground)**:
+2. Mở bảng **Bộ Tạo Mã Tiện Ích (Interactive Playground)**:
    * Chọn kiểu giao diện (Spotlight, Ranked, Quote, Digest).
-   * Nhập tên nhãn, số lượng bài, bật/tắt ảnh thu nhỏ.
+   * Nhập tên nhãn, số lượng bài, tích chọn bật/tắt ảnh thu nhỏ hoặc đoạn tóm tắt.
 3. Bấm nút **"Sao chép mã widget"**.
 4. Mở widget trên Blogger, dán mã HTML đó vào ô **Content** ➔ Bấm **SAVE**.
 
