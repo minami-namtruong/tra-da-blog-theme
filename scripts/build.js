@@ -70,7 +70,7 @@ const bSkinVariables = `
 // ──────────────────────────────────────────
 const xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:responsive='true' b:version='2'
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
       xmlns:b='http://www.google.com/2005/gml/b'
       xmlns:data='http://www.google.com/2005/gml/data'
@@ -210,10 +210,13 @@ ${combinedCss}
   </script>
   </b:loop>
   </b:if>
+</head>
 <body>
-  <b:class expr:name='data:view.isHomepage ? "view-homepage" : "view-not-homepage"'/>
-  <b:class expr:name='data:view.isMultipleItems ? "view-multiple" : "view-single"'/>
-  <b:class expr:name='data:view.isMultipleItems and not data:view.isHomepage ? "view-paged is-paged" : ""'/>
+  <b:class cond='data:view.isHomepage' name='view-homepage'/>
+  <b:class cond='not data:view.isHomepage' name='view-not-homepage'/>
+  <b:class cond='data:view.isMultipleItems' name='view-multiple'/>
+  <b:class cond='data:view.isSingleItem' name='view-single'/>
+  <b:class cond='data:view.isMultipleItems and not data:view.isHomepage' name='view-paged is-paged'/>
 
   <!-- Reading Progress Bar -->
   <div class='reading-progress-bar' id='reading-progress-bar'/>
@@ -292,9 +295,9 @@ ${combinedCss}
                   <b:loop values='data:links' var='link'>
                     <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
                       <li class='has-dropdown'>
-                        <a href='#'><data:link.name.substring(1)/></a>
+                        <a href='#'><b:eval expr='data:link.name.substring(1)'/></a>
                         <ul class='dropdown-menu'>
-                          <li><a expr:href='data:link.target'><data:link.name.substring(1)/></a></li>
+                          <li><a expr:href='data:link.target'><b:eval expr='data:link.name.substring(1)'/></a></li>
                         </ul>
                       </li>
                     <b:else/>
@@ -332,57 +335,32 @@ ${combinedCss}
 
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
     <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='2' showaddelement='yes'>
-      <b:widget id='HTML1' type='HTML' version='2'>
+      <b:widget id='HTML1' type='HTML' version='2' title='Ảnh Bìa &amp; Tác Giả'>
         <b:includable id='main'>
-          <b:if cond='data:content != &quot;&quot;'>
-            <data:content/>
-          <b:else/>
-            <b:if cond='data:view.isHomepage or data:view.isMultipleItems or (data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html")))'>
-              <!-- Full Profile Cover on Homepage / Archive -->
-              <div class='profile-cover-section' id='profile-cover-section'>
-                <div class='cover-image-wrapper' id='cover-image-wrapper'
-                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
-                </div>
-                <div class='cover-info-card'>
-                  <div class='avatar-wrapper'>
-                    <img class='profile-avatar'
-                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
-                         alt='Avatar tác giả'
-                         width='120' height='120'/>
-                  </div>
-                  <div class='profile-meta'>
-                    <h1 class='profile-name'><data:blog.title/></h1>
-                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                  </div>
-                  <div class='profile-cta-area'>
-                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
-                  </div>
-                </div>
+          <!-- Profile Cover Header Section -->
+          <div class='profile-cover-section' id='profile-cover-section'>
+            <div class='cover-image-wrapper' id='cover-image-wrapper'
+                 style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
+            </div>
+            <div class='cover-info-card'>
+              <div class='avatar-wrapper'>
+                <img class='profile-avatar' id='profile-avatar-img'
+                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
+                     alt='Avatar tác giả'
+                     width='120' height='120'/>
               </div>
-            <b:else/>
-              <!-- Full Profile Cover on Single Post / Subpages (identical size to homepage) -->
-              <div class='profile-cover-section' id='profile-cover-section'>
-                <div class='cover-image-wrapper' id='cover-image-wrapper'
-                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
-                </div>
-                <div class='cover-info-card'>
-                  <div class='avatar-wrapper'>
-                    <img class='profile-avatar'
-                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
-                         alt='Avatar tác giả'
-                         width='120' height='120'/>
-                  </div>
-                  <div class='profile-meta'>
-                    <div class='profile-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
-                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                  </div>
-                  <div class='profile-cta-area'>
-                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
-                  </div>
-                </div>
+              <div class='profile-meta'>
+                <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
+                <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
+              <div class='profile-cta-area'>
+                <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+              </div>
+            </div>
+            <b:if cond='data:content'>
+              <div id='profile-custom-config' style='display:none;'><data:content/></div>
             </b:if>
-          </b:if>
+          </div>
         </b:includable>
       </b:widget>
     </b:section>
@@ -415,7 +393,7 @@ ${combinedCss}
         <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
              Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
         <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' showaddelement='yes'>
-          <b:widget id='HTML_SP_Spotlight_Hero' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
+          <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
                 <div class='special-posts-widget'
@@ -424,8 +402,15 @@ ${combinedCss}
                      data-labels='@Tiêu điểm'
                      data-sort='latest'
                      data-limit='1'
-                     data-title='🌟 Bài Viết Tiêu Điểm'
                      data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </b:if>
             </b:includable>
@@ -683,7 +668,7 @@ ${combinedCss}
              Tác giả kéo thả widget trực tiếp trong Blogger Layout.
              JavaScript sẽ tự động chèn vào sau bài viết số 3 (hoặc số N) -->
         <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
-          <b:widget id='HTML_SP_InFeedQuote' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
+          <b:widget id='HTML11' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
             <b:includable id='main'>
               <div class='special-posts-widget'
                    id='widget-infeed-quote'
@@ -691,8 +676,15 @@ ${combinedCss}
                    data-labels='@Quote'
                    data-sort='random'
                    data-limit='1'
-                   data-insert-after='3'
-                   data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                   data-insert-after='3'>
+                <b:if cond='data:title'>
+                  <b:attr name='data-title' expr:value='data:title'/>
+                <b:else/>
+                  <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                </b:if>
+                <b:if cond='data:content'>
+                  <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
@@ -702,29 +694,33 @@ ${combinedCss}
              Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
              Thích hợp đặt Khung Newsletter hoặc Banner Quảng Cáo AdSense -->
         <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo / Newsletter)' showaddelement='yes'>
-          <b:widget id='HTML_PrePagination_Action' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
+          <b:widget id='HTML12' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
             <b:includable id='main'>
-              <div class='pre-pagination-newsletter'>
-                <div class='pre-pagination-newsletter-content'>
-                  <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
-                  <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='pre-pagination-newsletter'>
+                  <div class='pre-pagination-newsletter-content'>
+                    <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
+                    <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+                  </div>
+                  <div class='pre-pagination-newsletter-form'>
+                    <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
+                    <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
+                  </div>
                 </div>
-                <div class='pre-pagination-newsletter-form'>
-                  <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
-                  <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
-                </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
 
         <!-- 3rd Party Widgets Under Post -->
-        <b:section id='under-post-widgets' name='Tiện Ích Dưới Bài Viết (Bên Thứ 3)' showaddelement='yes'/>
+        <b:section id='under-post-widgets' name='Tiện Ích Dưới Bài Viết (Bên Thứ 3)' showaddelement='yes'></b:section>
 
         <!-- Special Posts Widget — Bên dưới danh sách bài (Main Content) -->
         <!-- Hiển thị trong Main Content, tự động chuyển sang grid 2-3 cột nhờ Container Queries -->
         <b:section id='main-special-posts-section' name='Tiện Ích Bài Đặc Biệt (Main Content)' showaddelement='yes'>
-          <b:widget id='HTML_SP_MainRanked' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
+          <b:widget id='HTML13' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
                 <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
@@ -733,8 +729,15 @@ ${combinedCss}
                      data-pattern='ranked'
                      data-sort='views'
                      data-limit='6'
-                     data-title='📊 Bài Viết Được Đọc Nhiều'
                      data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='📊 Bài Viết Được Đọc Nhiều'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </b:if>
             </b:includable>
@@ -750,23 +753,24 @@ ${combinedCss}
 
           <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
-          <b:widget id='HTML_SP_Ranked' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
+          <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <!-- HƯỚNG DẪN TÙNG CHỈNH:
-                     data-labels: nhãn cần lấy bài (phân tách bằng dấu phẩy)
-                     data-sort:   latest | views | random
-                     data-limit:  số bài hiển thị (1-10)
-                     data-title:  tiêu đề widget (để trống sẽ không hiển thị header)
-                -->
                 <div class='special-posts-widget'
                      id='widget-bai-viet-noi-bat'
                      data-pattern='ranked'
                      data-labels='@Nổi bật'
                      data-sort='latest'
                      data-limit='5'
-                     data-title='🔥 Bài Viết Nổi Bật'
                      data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🔥 Bài Viết Nổi Bật'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </div>
             </b:includable>
@@ -774,7 +778,7 @@ ${combinedCss}
 
           <!-- Widget: Chiêm Nghiệm Hôm Nay (Pattern: quote) -->
           <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
-          <b:widget id='HTML_SP_Quote' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
+          <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
                 <div class='special-posts-widget'
@@ -782,8 +786,15 @@ ${combinedCss}
                      data-pattern='quote'
                      data-labels='@Quote'
                      data-sort='random'
-                     data-limit='1'
-                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </div>
             </b:includable>
@@ -791,7 +802,7 @@ ${combinedCss}
 
           <!-- Widget: Điểm Tin Mỗi Ngày (Pattern: digest) -->
           <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
-          <b:widget id='HTML_SP_Digest' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
+          <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
                 <div class='special-posts-widget'
@@ -800,8 +811,15 @@ ${combinedCss}
                      data-labels='@Điểm tin'
                      data-sort='latest'
                      data-limit='4'
-                     data-title='⚡ Điểm Tin Mỗi Ngày'
                      data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='⚡ Điểm Tin Mỗi Ngày'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </div>
             </b:includable>
@@ -809,7 +827,7 @@ ${combinedCss}
 
           <!-- Widget: Bài Viết Tiêu Điểm — Sidebar (Pattern: spotlight, nhỏ gọn) -->
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
-          <b:widget id='HTML_SP_Spotlight' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
+          <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
                 <div class='special-posts-widget'
@@ -817,8 +835,15 @@ ${combinedCss}
                      data-pattern='spotlight'
                      data-labels='@Tiêu điểm'
                      data-sort='latest'
-                     data-limit='1'
-                     data-title='🌟 Bài Viết Tiêu Điểm'>
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
               </div>
             </b:includable>
@@ -851,7 +876,7 @@ ${combinedCss}
                   <b:loop values='data:posts' var='ppPost' index='ppIdx'>
                     <li>
                       <a class='popular-post-item' expr:href='data:ppPost.url'>
-                        <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><data:ppIdx + 1/></span>
+                        <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
                         <b:if cond='data:ppPost.featuredImage'>
                           <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
                                expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
@@ -910,7 +935,7 @@ ${combinedCss}
 
         <!-- ── CỘT 1: THƯƠNG HIỆU, CẢM ƠN & MỜI CÀ PHÊ ── -->
         <b:section id='footer-brand-section' class='footer-section-col' name='Footer: Cột 1 (Thương Hiệu &amp; Cà Phê)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML3' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
+          <b:widget id='HTML8' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
             <b:includable id='main'>
               <div class='footer-col-brand'>
                 <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
@@ -948,7 +973,7 @@ ${combinedCss}
 
         <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI ── -->
         <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Kết Nối)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML4' type='HTML' version='2' title='📬 Nhận Bài Viết Mới'>
+          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
                 <h4 class='footer-col-title'>📬 Nhận Bài Viết Mới</h4>

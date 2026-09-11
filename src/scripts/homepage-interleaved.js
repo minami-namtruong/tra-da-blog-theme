@@ -122,7 +122,61 @@
     aboveFeed.style.display = 'block';
   }
 
+  function initProfileCoverSection() {
+    const configEl = document.getElementById('profile-custom-config');
+    if (!configEl) return;
+
+    const rawContent = configEl.innerHTML.trim();
+    if (!rawContent) return;
+
+    // Case 1: Người dùng dán nguyên khối HTML tùy chỉnh hoàn toàn
+    if (configEl.querySelector('.profile-cover-section') || (rawContent.startsWith('<') && !rawContent.includes('banner:') && !rawContent.includes('avatar:'))) {
+      const coverSection = document.getElementById('profile-cover-section');
+      if (coverSection) {
+        coverSection.outerHTML = rawContent;
+      }
+      return;
+    }
+
+    // Case 2: Người dùng dán link ảnh hoặc cú pháp ngắn
+    const textOnly = configEl.textContent.trim();
+    if (textOnly) {
+      const coverWrapper = document.getElementById('cover-image-wrapper');
+      const avatarImg = document.getElementById('profile-avatar-img');
+      const bioEl = document.getElementById('profile-author-bio');
+      const nameEl = document.getElementById('profile-author-name');
+
+      // Nếu chỉ dán mỗi link ảnh (http...)
+      if (/^https?:\/\/[^\s]+$/i.test(textOnly)) {
+        if (coverWrapper) {
+          coverWrapper.style.backgroundImage = `url("${textOnly}")`;
+        }
+      } else {
+        // Cú pháp: banner: https://... | avatar: https://... | bio: ... | name: ...
+        const parts = textOnly.split('|').map(s => s.trim());
+        parts.forEach(part => {
+          if (/^banner\s*:\s*(https?:\/\/[^\s]+)/i.test(part)) {
+            const url = part.match(/^banner\s*:\s*(https?:\/\/[^\s]+)/i)[1];
+            if (coverWrapper) coverWrapper.style.backgroundImage = `url("${url}")`;
+          } else if (/^avatar\s*:\s*(https?:\/\/[^\s]+)/i.test(part)) {
+            const url = part.match(/^avatar\s*:\s*(https?:\/\/[^\s]+)/i)[1];
+            if (avatarImg) avatarImg.src = url;
+          } else if (/^bio\s*:\s*(.+)/i.test(part)) {
+            const bio = part.match(/^bio\s*:\s*(.+)/i)[1].trim();
+            if (bioEl) bioEl.textContent = bio;
+          } else if (/^name\s*:\s*(.+)/i.test(part)) {
+            const name = part.match(/^name\s*:\s*(.+)/i)[1].trim();
+            if (nameEl) nameEl.textContent = name;
+          } else if (/^https?:\/\/[^\s]+/i.test(part)) {
+            if (coverWrapper) coverWrapper.style.backgroundImage = `url("${part.trim()}")`;
+          }
+        });
+      }
+    }
+  }
+
   function initHomepageInterleavedWidgets() {
+    initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();

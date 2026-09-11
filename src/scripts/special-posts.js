@@ -37,6 +37,27 @@
   });
 
   function initSpecialPostWidgets() {
+    // Tự động nhận diện nếu user bấm "+ Thêm tiện ích" HTML/JavaScript mới và gõ cú pháp ngắn gọn
+    document.querySelectorAll('.widget.HTML .widget-content, .widget.HTML').forEach(el => {
+      if (el.querySelector('.special-posts-widget')) return;
+      const targetHost = el.querySelector('.widget-content') || el;
+      const directContent = targetHost.textContent.trim();
+      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)/i);
+      if (match) {
+        const pattern = match[1].toLowerCase();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'special-posts-widget';
+        wrapper.dataset.pattern = pattern;
+        const configDiv = document.createElement('div');
+        configDiv.className = 'sp-raw-user-content';
+        configDiv.style.display = 'none';
+        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)\s*\|?/i, '').trim();
+        wrapper.appendChild(configDiv);
+        targetHost.innerHTML = '';
+        targetHost.appendChild(wrapper);
+      }
+    });
+
     const widgets = document.querySelectorAll('.special-posts-widget');
     widgets.forEach(renderWidgetInstance);
   }
@@ -45,6 +66,52 @@
      RENDER WIDGET INSTANCE
      ═══════════════════════════════════════════════════════════════ */
   async function renderWidgetInstance(container) {
+    // ── Hỗ trợ cấu hình nhanh từ ô Content của Blogger Layout ──
+    const userConfigEl = container.querySelector('.sp-raw-user-content');
+    if (userConfigEl) {
+      const rawUserContent = userConfigEl.innerHTML.trim();
+      // Case A: Người dùng dán nguyên thẻ .special-posts-widget
+      if (userConfigEl.querySelector('.special-posts-widget')) {
+        const replacement = userConfigEl.querySelector('.special-posts-widget');
+        container.replaceWith(replacement);
+        return renderWidgetInstance(replacement);
+      }
+      // Case B: Người dùng dán mã HTML nhúng bên thứ 3 (AdSense, Banner, iframe, custom HTML...)
+      if (/<(script|iframe|img|picture|a|form|object|embed)/i.test(rawUserContent) || (rawUserContent.startsWith('<') && !rawUserContent.includes('data-pattern') && !rawUserContent.includes('data-labels'))) {
+        container.innerHTML = rawUserContent;
+        container.classList.remove('special-posts-widget');
+        return;
+      }
+      // Case C: Người dùng chỉ gõ tên nhãn dạng văn bản (VD: "Triết lý", "label: Sách", "labels: A, B | limit: 3")
+      const textOnly = userConfigEl.textContent.trim();
+      if (textOnly) {
+        const parts = textOnly.split('|').map(s => s.trim());
+        parts.forEach(part => {
+          if (/^limit\s*:\s*(\d+)/i.test(part)) {
+            container.dataset.limit = part.match(/^limit\s*:\s*(\d+)/i)[1];
+          } else if (/^sort\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.sort = part.match(/^sort\s*:\s*(\w+)/i)[1];
+          } else if (/^(?:thumb|thumbnail)\s*:\s*(true|false)/i.test(part)) {
+            container.dataset.showThumbnail = part.match(/^(?:thumb|thumbnail)\s*:\s*(true|false)/i)[1].toLowerCase();
+          } else if (/^snippet\s*:\s*(true|false)/i.test(part)) {
+            container.dataset.showSnippet = part.match(/^snippet\s*:\s*(true|false)/i)[1].toLowerCase();
+          } else if (/^(?:viewall|viewAllText)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.viewAllText = part.match(/^(?:viewall|viewAllText)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^(?:timerange|timeRange)\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.timeRange = part.match(/^(?:timerange|timeRange)\s*:\s*(\w+)/i)[1].trim();
+          } else if (/^(?:posts|links)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.posts = part.match(/^(?:posts|links)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^title\s*:\s*(.+)/i.test(part)) {
+            container.dataset.title = part.match(/^title\s*:\s*(.+)/i)[1].trim();
+          } else {
+            const cleanedLabel = part.replace(/^(labels?|nhãn)\s*:\s*/i, '').trim();
+            if (cleanedLabel) container.dataset.labels = cleanedLabel;
+          }
+        });
+      }
+      userConfigEl.remove();
+    }
+
     // Nếu widget đã có markup tĩnh (static preview demo) và không có cấu hình fetch
     if (!container.dataset.labels && !container.dataset.posts && !container.dataset.sort && container.querySelector('.sp-widget-card')) {
       return;
@@ -534,7 +601,9 @@
 
   /** Tách chuỗi nhãn "A, B, C" thành mảng */
   function splitLabels(raw) {
-    return raw.split(',').map(l => l.trim()).filter(Boolean);
+    if (!raw) return [];
+    const cleaned = raw.replace(/^(labels?|nhãn)\s*:\s*/i, '');
+    return cleaned.split(',').map(l => l.trim()).filter(Boolean);
   }
 
   /** Tối ưu kích thước ảnh Blogger (Retina-safe) */
