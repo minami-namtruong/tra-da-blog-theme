@@ -96,7 +96,17 @@
         })
         .then(function (data) {
           var entries = (data.feed && data.feed.entry) || [];
-          var posts = entries.map(function (entry) {
+          var posts = [];
+          entries.forEach(function (entry) {
+            var allLabels = [];
+            if (entry.category && entry.category.length > 0) {
+              allLabels = entry.category.map(function(c) { return c.term || ''; });
+            }
+            
+            // QUY TẮC VÀNG: Bỏ qua bài viết nếu TẤT CẢ nhãn đều bắt đầu bằng "@"
+            var isExclusiveFeature = allLabels.length > 0 && allLabels.every(function(l) { return l.indexOf('@') === 0; });
+            if (isExclusiveFeature) return;
+
             var title = (entry.title && entry.title.$t) || 'Bài viết không tiêu đề';
             var postUrl = '#';
             if (entry.link) {
@@ -107,18 +117,23 @@
             var year = getYearFromDate(published);
             var dateStr = formatDateStr(published);
             var timestamp = published ? new Date(published).getTime() : 0;
+            
             var category = 'Chưa phân loại';
-            if (entry.category && entry.category.length > 0) {
-              category = entry.category[0].term || 'Chưa phân loại';
+            if (allLabels.length > 0) {
+              var normalLabels = allLabels.filter(function(l) { return l.indexOf('@') !== 0; });
+              category = normalLabels.length > 0 ? normalLabels[0] : allLabels[0];
             }
-            return {
+            // Lọc sạch các tiền tố đặc biệt nếu còn sót lại
+            category = category.replace(/^[@#_~]+/, '').trim();
+
+            posts.push({
               title: title,
               url: postUrl,
               year: year,
               dateStr: dateStr,
               category: category,
               timestamp: timestamp
-            };
+            });
           });
 
           // Sắp xếp giảm dần theo thời gian

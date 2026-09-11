@@ -531,8 +531,7 @@
    SIDEBAR
    ========================================== */
 .sidebar {
-  position: sticky;
-  top: calc(var(--header-height) + 1rem);
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
