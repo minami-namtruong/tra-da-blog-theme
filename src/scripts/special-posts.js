@@ -45,6 +45,11 @@
      RENDER WIDGET INSTANCE
      ═══════════════════════════════════════════════════════════════ */
   async function renderWidgetInstance(container) {
+    // Nếu widget đã có markup tĩnh (static preview demo) và không có cấu hình fetch
+    if (!container.dataset.labels && !container.dataset.posts && !container.dataset.sort && container.querySelector('.sp-widget-card')) {
+      return;
+    }
+
     const pattern        = container.dataset.pattern  || 'digest';
     const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
     const limit          = Math.min(parseInt(container.dataset.limit, 10) || 4, 10);
@@ -86,6 +91,21 @@
         posts = await fetchMultiLabelPosts(labelList, limit, sort);
       }
 
+      if ((!posts || posts.length === 0) && typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
+        var mockAll = window.__SPECIAL_POSTS_MOCK__;
+        if (rawLabels) {
+          var lList = splitLabels(rawLabels).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
+          posts = mockAll.filter(function(p) {
+            var pLabels = (p.labels || []).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
+            return lList.some(function(req) { return pLabels.indexOf(req) !== -1; });
+          });
+        }
+        if (!posts || posts.length === 0) {
+          posts = mockAll;
+        }
+        posts = posts.slice(0, limit);
+      }
+
       if (!posts || posts.length === 0) {
         renderEmptyState(container, widgetTitle, viewAllText, rawLabels);
         return;
@@ -102,6 +122,19 @@
       );
 
     } catch (err) {
+      if (typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
+        var mockAll = window.__SPECIAL_POSTS_MOCK__;
+        var posts = mockAll.slice(0, limit);
+        var renderer = PATTERN_RENDERERS[pattern] || PATTERN_RENDERERS.digest;
+        container.innerHTML = buildWidgetShell(
+          widgetTitle,
+          viewAllText,
+          rawLabels,
+          pattern,
+          renderer(posts, { showThumb, showSnippet, limit })
+        );
+        return;
+      }
       console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu:', err);
       container.innerHTML = buildWidgetShell(
         widgetTitle,
@@ -197,19 +230,22 @@
 
   /* ── 1. RANKED ──────────────────────────────────────────────── */
   function renderRankedPattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map((post, index) => {
       const rankNum = String(index + 1).padStart(2, '0');
       const thumb   = (opts.showThumb && post.thumbnail)
         ? optimizeThumbnail(post.thumbnail, 's160-c')
         : '';
+      const aiType  = extractAIType(post.labels || []);
+      const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       return `
-        <a href="${escapeHtml(post.url)}" class="sp-ranked-item">
+        <a href="${escapeHtml(post.url)}" class="sp-ranked-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <span class="sp-rank-number">${rankNum}</span>
           ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
           <div class="sp-ranked-content">
             <h4 class="sp-ranked-title">${escapeHtml(post.title)}</h4>
-            <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}</span>
+            <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}${aiHtml}</span>
           </div>
         </a>`;
     }).join('');
@@ -221,20 +257,24 @@
   function renderSpotlightPattern(posts, opts) {
     // Chỉ lấy bài đầu tiên làm hero
     const post   = posts[0];
+    const lang   = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const thumb  = (opts.showThumb && post.thumbnail)
       ? optimizeThumbnail(post.thumbnail, 's600-c')
       : '';
     const badge  = post.labels && post.labels[0]
       ? formatLabelName(post.labels[0])
       : '';
+    const aiType = extractAIType(post.labels || []);
+    const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
     return `
-      <a href="${escapeHtml(post.url)}" class="sp-spotlight-card">
+      <a href="${escapeHtml(post.url)}" class="sp-spotlight-card"${aiType ? ` data-ai-type="${aiType}"` : ''}>
         ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
         <div class="sp-spotlight-info">
           <div class="sp-spotlight-meta">
             ${badge ? `<span class="sp-spotlight-badge">${escapeHtml(badge)}</span>` : ''}
             <span class="sp-spotlight-date">📅 ${escapeHtml(post.dateFormatted)}</span>
+            ${aiHtml}
           </div>
           <h3 class="sp-spotlight-title">${escapeHtml(post.title)}</h3>
           ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet">${escapeHtml(post.snippet)}</p>` : ''}
@@ -266,14 +306,17 @@
 
   /* ── 4. DIGEST ──────────────────────────────────────────────── */
   function renderDigestPattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       const snippet = (opts.showSnippet && post.snippet) ? post.snippet : '';
+      const aiType  = extractAIType(post.labels || []);
+      const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       return `
-        <a href="${escapeHtml(post.url)}" class="sp-digest-item">
+        <a href="${escapeHtml(post.url)}" class="sp-digest-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <div class="sp-digest-timestamp">
             <span class="sp-digest-bullet">✦</span>
-            ${escapeHtml(post.dateFormatted)}
+            ${escapeHtml(post.dateFormatted)}${aiHtml}
           </div>
           <div class="sp-digest-title">${escapeHtml(post.title)}</div>
           ${snippet ? `<div class="sp-digest-snippet">${escapeHtml(snippet)}</div>` : ''}
@@ -450,6 +493,43 @@
   function formatLabelName(raw) {
     if (!raw) return '';
     return decodeURIComponent(String(raw)).replace(/^[@#_~]+/, '').trim();
+  }
+
+  /** Trích xuất loại AI từ mảng labels; trả về key hoặc null */
+  function extractAIType(labels) {
+    if (!labels || !labels.length) return null;
+    for (var i = 0; i < labels.length; i++) {
+      var raw = labels[i] || '';
+      var lower = raw.toLowerCase().replace(/-/g, ':');
+      if (lower.startsWith('ai:')) return lower;
+    }
+    return null;
+  }
+
+  /** Render AI badge inline HTML (không phụ thuộc external module để tránh race condition) */
+  function renderAIInlineBadge(aiType) {
+    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
+    var icon = icons[aiType] || '✨';
+    return '<span class="ai-badge ai-badge-inline" data-ai-type="' + aiType + '" data-ai-variant="inline">' +
+      '<span class="ai-badge-icon">' + icon + '</span>' +
+      '<span class="ai-badge-label">AI</span>' +
+    '</span>';
+  }
+
+  function renderAIStandardBadge(aiType, lang) {
+    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
+    var labels = {
+      'ai:assisted':  { vi: 'Hỗ trợ bởi AI', en: 'AI-Assisted'  },
+      'ai:product':   { vi: 'Sản phẩm AI',   en: 'AI Product'   },
+      'ai:generated': { vi: 'Tạo bởi AI',    en: 'AI-Generated' },
+    };
+    var icon = icons[aiType] || '✨';
+    var labelCfg = labels[aiType] || labels['ai:assisted'];
+    var label = (lang === 'en') ? labelCfg.en : labelCfg.vi;
+    return '<span class="ai-badge ai-badge-standard" data-ai-type="' + aiType + '" data-ai-variant="standard">' +
+      '<span class="ai-badge-icon">' + icon + '</span>' +
+      '<span class="ai-badge-label">' + label + '</span>' +
+    '</span>';
   }
 
   /** Tách chuỗi nhãn "A, B, C" thành mảng */

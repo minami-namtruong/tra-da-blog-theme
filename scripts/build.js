@@ -24,6 +24,7 @@ const cssFiles = [
   "footer.css",
   "archive-page.css",
   "special-posts.css",
+  "ai-transparency.css",
 ];
 const combinedCss = cssFiles
   .map(f => fs.readFileSync(path.join(stylesDir, f), "utf8"))
@@ -41,6 +42,7 @@ const jsFiles = [
   "reading-time.js",
   "footer.js",
   "special-posts.js",
+  "ai-transparency.js",
 ];
 const combinedJs = jsFiles
   .map(f => fs.readFileSync(path.join(scriptsDir, f), "utf8"))
@@ -387,9 +389,12 @@ ${combinedCss}
       <b:widget id='Label1' type='Label' version='2'>
         <b:includable id='main'>
           <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <a class='tab-pill active' expr:href='data:blog.homepageUrl'>✦ Tất cả</a>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả</a>
             <b:loop values='data:labels' var='label'>
-              <a class='tab-pill' expr:href='data:label.url'><data:label.name/></a>
+              <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
+              <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
+                <a class='tab-pill' expr:href='data:label.url' data-bilingual='true'><data:label.name/></a>
+              </b:if>
             </b:loop>
           </nav>
         </b:includable>
@@ -415,13 +420,19 @@ ${combinedCss}
                          isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
                          Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
                     <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
+                    <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                     <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                      <b:if cond='data:aiLabels.notEmpty'>
+                        <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                      </b:if>
                       <div class='post-card-body'>
                         <div>
-                          <b:if cond='data:post.labels'>
-                            <a class='post-badge' expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
-                          </b:if>
+                          <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
+                            <b:if cond='data:normalLabels.notEmpty'>
+                              <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
+                            </b:if>
+                          </b:with>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
@@ -443,6 +454,7 @@ ${combinedCss}
                       </b:if>
                     </article>
                     </b:if><!-- /isExclusiveFeaturePost -->
+                    </b:with><!-- /aiLabels -->
                     </b:with>
                   </b:loop>
                 </div>
@@ -481,16 +493,22 @@ ${combinedCss}
                   </div>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
+                  <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                    <b:if cond='data:aiLabels.notEmpty'>
+                      <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                    </b:if>
 
                     <!-- Breadcrumbs -->
                     <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
-                      <a expr:href='data:blog.homepageUrl'>🏠 Trang chủ</a>
+                      <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
-                      <b:if cond='data:post.labels'>
-                        <a expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
-                        <span class='separator'>›</span>
-                      </b:if>
+                      <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
+                        <b:if cond='data:normalLabels.notEmpty'>
+                          <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
+                          <span class='separator'>›</span>
+                        </b:if>
+                      </b:with>
                       <span><data:post.title/></span>
                     </nav>
 
@@ -627,6 +645,7 @@ ${combinedCss}
                     </div>
 
                   </article>
+                  </b:with><!-- /aiLabels -->
                 </b:loop>
               </b:if>
             </b:if>

@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="styles/footer.css?v=2.0"/>
   <link rel="stylesheet" href="styles/archive-page.css?v=2.0"/>
   <link rel="stylesheet" href="styles/special-posts.css?v=2.0"/>
+  <link rel="stylesheet" href="styles/ai-transparency.css?v=1.0"/>
 </head>
 <body>
 
@@ -177,17 +178,18 @@
              1. HOMEPAGE FEED VIEW WRAPPER
              ═══════════════════════════════════ -->
         <div id="posts-feed-wrapper">
+
           <div class="posts-feed">
 
-            <!-- Post Card 1 (featured) -->
-            <article class="post-card">
+            <!-- Post Card 1 (Perspectives, ai:assisted) -->
+            <article class="post-card" data-ai-type="ai:assisted">
               <div class="post-card-body">
                 <div>
                   <a class="post-badge" href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn</a>
                   </h2>
-                  <div class="post-card-snippet">Trong thế giới hiện đại với vô vàn lựa chọn, chúng ta thường nghĩ rằng nhiều hơn là tốt hơn. Nhưng nghiên cứu tâm lý học cho thấy điều ngược lại...</div>
+                  <div class="post-card-snippet">Trong thế giới hiện đại với vô vàn lựa chọn, chúng ta thường nghĩ rằng nhiều hơn là tốt hơn. Nhưng nghiên cứu tâm lý học cho thấy điều ngược lại: quá nhiều lựa chọn dẫn đến tê liệt quyết định và cảm giác hối tiếc triền miên...</div>
                 </div>
                 <div class="post-card-meta">
                   <span>📅 09 tháng 9, 2026</span>
@@ -199,7 +201,7 @@
                    alt="Nghịch lý lựa chọn" width="220" height="150" fetchpriority="high"/>
             </article>
 
-            <!-- Post Card 2 -->
+            <!-- Post Card 2 (Life Stories, Human) -->
             <article class="post-card">
               <div class="post-card-body">
                 <div>
@@ -207,7 +209,7 @@
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân</a>
                   </h2>
-                  <div class="post-card-snippet">Cuộc thử nghiệm tưởng chừng đơn giản nhưng lại dạy tôi rất nhiều điều về thói quen, ý thức và cách não bộ hoạt động...</div>
+                  <div class="post-card-snippet">Cuộc thử nghiệm tưởng chừng đơn giản nhưng lại dạy tôi rất nhiều điều về thói quen, ý thức và cách não bộ hoạt động vào những khoảnh khắc đầu tiên của ngày mới khi vừa thức giấc...</div>
                 </div>
                 <div class="post-card-meta">
                   <span>📅 05 tháng 9, 2026</span>
@@ -219,15 +221,15 @@
                    alt="30 ngày không điện thoại" width="220" height="150" loading="lazy"/>
             </article>
 
-            <!-- Post Card 3 -->
-            <article class="post-card">
+            <!-- Post Card 3 (Books & Tools, ai:generated) -->
+            <article class="post-card" data-ai-type="ai:generated">
               <div class="post-card-body">
                 <div>
                   <a class="post-badge" href="#" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>
                   <h2 class="post-card-title">
                     <a href="#" class="view-post-link">Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định</a>
                   </h2>
-                  <div class="post-card-snippet">Daniel Kahneman giải thích hai hệ thống tư duy trong não bộ. Sau khi đọc, tôi nhận ra hầu hết quyết định của mình được đưa ra ở trạng thái nào...</div>
+                  <div class="post-card-snippet">Daniel Kahneman giải thích hai hệ thống tư duy trong não bộ: Hệ thống 1 trực giác và Hệ thống 2 lý trí phản biện. Sau khi đọc, tôi nhận ra hầu hết quyết định quan trọng của mình bị chi phối như thế nào...</div>
                 </div>
                 <div class="post-card-meta">
                   <span>📅 01 tháng 9, 2026</span>
@@ -237,6 +239,66 @@
               <img class="post-card-thumb"
                    src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=440&auto=format&fit=crop&q=80"
                    alt="Review sách Tư duy nhanh và chậm" width="220" height="150" loading="lazy"/>
+            </article>
+
+            <!-- Post Card 4 (Self Development, ai:product) -->
+            <article class="post-card" data-ai-type="ai:product">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Thiết Lập Hệ Thống Quản Lý Năng Lượng Thay Vì Quản Lý Thời Gian</a>
+                  </h2>
+                  <div class="post-card-snippet">Thời gian mỗi ngày đều là 24 giờ bất biến, nhưng năng lượng của chúng ta dao động không ngừng. Đây là cách tôi tái cấu trúc lịch làm việc theo nhịp sinh học để duy trì sự tập trung bền bỉ mà không kiệt sức...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 28 tháng 8, 2026</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=440&auto=format&fit=crop&q=80"
+                   alt="Quản lý năng lượng" width="220" height="150" loading="lazy"/>
+            </article>
+
+            <!-- Post Card 5 (Technology, ai:assisted) -->
+            <article class="post-card" data-ai-type="ai:assisted">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#" data-bilingual="true">Công Nghệ | Technology</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Công Nghệ Có Thực Sự Giúp Ta Tự Do Hơn Hay Chỉ Khiến Ta Bận Rộn Theo Kiểu Khác?</a>
+                  </h2>
+                  <div class="post-card-snippet">Chúng ta sở hữu những cỗ máy thông minh nhất lịch sử nhân loại trong túi quần, nhưng lại cảm thấy ít thời gian thảnh thơi hơn bao giờ hết. Một góc nhìn phản biện về cái giá thực sự của sự tiện nghi số...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 22 tháng 8, 2026</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=440&auto=format&fit=crop&q=80"
+                   alt="Công nghệ và tự do" width="220" height="150" loading="lazy"/>
+            </article>
+
+            <!-- Post Card 6 (Life Stories, Human) -->
+            <article class="post-card">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Hạnh Phúc Là Biết Đủ Giữa Một Thế Giới Không Ngừng Đòi Hỏi Nhiều Hơn</a>
+                  </h2>
+                  <div class="post-card-snippet">Sau những năm tháng mải miết theo đuổi những cột mốc do xã hội định sẵn, tôi nhận ra sự bình yên sâu lắng nhất chỉ xuất hiện khi chúng ta học cách dừng lại, mỉm cười và biết ơn những điều bình dị đang có...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 15 tháng 8, 2026</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?w=440&auto=format&fit=crop&q=80"
+                   alt="Hạnh phúc biết đủ" width="220" height="150" loading="lazy"/>
             </article>
 
           </div>
@@ -253,14 +315,14 @@
         <!-- ═══════════════════════════════════
              2. SINGLE POST VIEW WRAPPER
              ═══════════════════════════════════ -->
-        <div id="single-post-wrapper" style="display: none;">
+        <div id="single-post-wrapper" style="display: none;" data-ai-type="ai:assisted">
           <article class="single-post-container">
 
             <!-- Breadcrumbs -->
             <nav class="breadcrumbs">
               <a href="#" id="breadcrumb-home-link">🏠 Trang chủ</a>
               <span class="separator">›</span>
-              <a href="#">Góc Nhìn &amp; Tư Duy | Perspectives</a>
+              <a href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
               <span class="separator">›</span>
               <span>Nghịch Lý Của Việc Chọn Lựa</span>
             </nav>
@@ -572,17 +634,17 @@
               </div>
               <div class="sp-widget-body">
                 <div class="special-posts-ranked-list">
-                  <a href="#" class="sp-ranked-item">
+                  <a href="#" class="sp-ranked-item view-post-link" data-ai-type="ai:assisted">
                     <span class="sp-rank-number">01</span>
                     <div class="sp-ranked-thumb">
                       <img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=160&auto=format&fit=crop&q=80" alt="Nghịch lý lựa chọn" loading="lazy" width="52" height="52"/>
                     </div>
                     <div class="sp-ranked-content">
                       <h4 class="sp-ranked-title">Nghịch Lý Của Việc Chọn Lựa</h4>
-                      <span class="sp-ranked-date">09/09/2026</span>
+                      <span class="sp-ranked-date">09/09/2026 • <span class="ai-badge ai-badge-inline" data-ai-type="ai:assisted" data-ai-variant="inline"><span class="ai-badge-icon">✨</span><span class="ai-badge-label">AI</span></span></span>
                     </div>
                   </a>
-                  <a href="#" class="sp-ranked-item">
+                  <a href="#" class="sp-ranked-item view-post-link">
                     <span class="sp-rank-number">02</span>
                     <div class="sp-ranked-thumb">
                       <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=160&auto=format&fit=crop&q=80" alt="30 ngày" loading="lazy" width="52" height="52"/>
@@ -592,17 +654,17 @@
                       <span class="sp-ranked-date">05/09/2026</span>
                     </div>
                   </a>
-                  <a href="#" class="sp-ranked-item">
+                  <a href="#" class="sp-ranked-item view-post-link" data-ai-type="ai:generated">
                     <span class="sp-rank-number">03</span>
                     <div class="sp-ranked-thumb">
                       <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=160&auto=format&fit=crop&q=80" alt="Tư duy" loading="lazy" width="52" height="52"/>
                     </div>
                     <div class="sp-ranked-content">
                       <h4 class="sp-ranked-title">Review Sách: Tư Duy Nhanh và Chậm</h4>
-                      <span class="sp-ranked-date">01/09/2026</span>
+                      <span class="sp-ranked-date">01/09/2026 • <span class="ai-badge ai-badge-inline" data-ai-type="ai:generated" data-ai-variant="inline"><span class="ai-badge-icon">⚡</span><span class="ai-badge-label">AI</span></span></span>
                     </div>
                   </a>
-                  <a href="#" class="sp-ranked-item">
+                  <a href="#" class="sp-ranked-item view-post-link">
                     <span class="sp-rank-number">04</span>
                     <div class="sp-ranked-thumb">
                       <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=160&auto=format&fit=crop&q=80" alt="Công nghệ" loading="lazy" width="52" height="52"/>
@@ -612,7 +674,7 @@
                       <span class="sp-ranked-date">28/08/2026</span>
                     </div>
                   </a>
-                  <a href="#" class="sp-ranked-item">
+                  <a href="#" class="sp-ranked-item view-post-link">
                     <span class="sp-rank-number">05</span>
                     <div class="sp-ranked-thumb">
                       <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=160&auto=format&fit=crop&q=80" alt="Sáng tác" loading="lazy" width="52" height="52"/>
@@ -637,7 +699,7 @@
               </div>
               <div class="sp-widget-body">
                 <div class="sp-quote-list">
-                  <a href="#" class="sp-quote-card">
+                  <a href="#" class="sp-quote-card view-post-link">
                     <span class="sp-quote-mark-open">“</span>
                     <p class="sp-quote-text">Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của sự tinh tế sau khi đã thấu suốt mọi điều phức tạp.</p>
                     <span class="sp-quote-mark-close">”</span>
@@ -662,15 +724,15 @@
               </div>
               <div class="sp-widget-body">
                 <div class="sp-digest-list">
-                  <a href="#" class="sp-digest-item">
+                  <a href="#" class="sp-digest-item view-post-link" data-ai-type="ai:assisted">
                     <div class="sp-digest-timestamp">
                       <span class="sp-digest-bullet">✦</span>
-                      11/09/2026
+                      11/09/2026 • <span class="ai-badge ai-badge-inline" data-ai-type="ai:assisted" data-ai-variant="inline"><span class="ai-badge-icon">✨</span><span class="ai-badge-label">AI</span></span>
                     </div>
                     <div class="sp-digest-title">Ra mắt tính năng Dòng Thời Gian mới — Dễ tra cứu hơn bao giờ hết</div>
                     <div class="sp-digest-snippet">Một cập nhật nhỏ giúp bạn tra cứu bài viết dễ dàng theo tháng và chủ đề...</div>
                   </a>
-                  <a href="#" class="sp-digest-item">
+                  <a href="#" class="sp-digest-item view-post-link">
                     <div class="sp-digest-timestamp">
                       <span class="sp-digest-bullet">✦</span>
                       08/09/2026
@@ -678,15 +740,15 @@
                     <div class="sp-digest-title">3 công cụ ghi chú tối giản tôi dùng mỗi ngày</div>
                     <div class="sp-digest-snippet">Ghi chép không cần phức tạp, quan trọng là sự đều đặn và nhất quán mỗi sáng...</div>
                   </a>
-                  <a href="#" class="sp-digest-item">
+                  <a href="#" class="sp-digest-item view-post-link" data-ai-type="ai:generated">
                     <div class="sp-digest-timestamp">
                       <span class="sp-digest-bullet">✦</span>
-                      05/09/2026
+                      05/09/2026 • <span class="ai-badge ai-badge-inline" data-ai-type="ai:generated" data-ai-variant="inline"><span class="ai-badge-icon">⚡</span><span class="ai-badge-label">AI</span></span>
                     </div>
                     <div class="sp-digest-title">Đọc xong cuốn này, tôi thay đổi cách nhìn về thời gian rảnh</div>
                     <div class="sp-digest-snippet">"Digital Minimalism" của Cal Newport — cuốn sách đúng thời điểm nhất với tôi...</div>
                   </a>
-                  <a href="#" class="sp-digest-item">
+                  <a href="#" class="sp-digest-item view-post-link">
                     <div class="sp-digest-timestamp">
                       <span class="sp-digest-bullet">✦</span>
                       01/09/2026
@@ -708,15 +770,19 @@
                 <h3 class="sp-widget-title">🌟 Bài Viết Tiêu Điểm</h3>
               </div>
               <div class="sp-widget-body">
-                <a href="#" class="sp-spotlight-card">
+                <a href="#" class="sp-spotlight-card view-post-link" data-ai-type="ai:assisted">
                   <div class="sp-spotlight-cover">
                     <img src="https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600&auto=format&fit=crop&q=80"
                          alt="Bài viết tiêu điểm" loading="lazy" width="600" height="338"/>
                   </div>
                   <div class="sp-spotlight-info">
                     <div class="sp-spotlight-meta">
-                      <span class="sp-spotlight-badge">Phân Tích Chuyên Sâu</span>
+                      <span class="sp-spotlight-badge" data-bilingual="true">Phân Tích Chuyên Sâu | Deep Dive</span>
                       <span class="sp-spotlight-date">📅 08/09/2026</span>
+                      <span class="ai-badge ai-badge-standard" data-ai-type="ai:assisted" data-ai-variant="standard">
+                        <span class="ai-badge-icon">✨</span>
+                        <span class="ai-badge-label">Hỗ trợ bởi AI</span>
+                      </span>
                     </div>
                     <h3 class="sp-spotlight-title">Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số</h3>
                     <p class="sp-spotlight-snippet">Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamin của mạng xã hội...</p>
@@ -860,26 +926,84 @@
   <script>
     window.__TIMELINE_MOCK_POSTS__ = [
       // 2026
-      { title: 'Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn', url: '#', year: 2026, dateStr: '09/09', category: 'Góc Nhìn & Tư Duy', timestamp: 1757088000000 },
-      { title: '30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân', url: '#', year: 2026, dateStr: '05/09', category: 'Trải Nghiệm Sống', timestamp: 1756742400000 },
-      { title: 'Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định', url: '#', year: 2026, dateStr: '01/09', category: 'Sách & Công Cụ', timestamp: 1756396800000 },
-      { title: 'Nghệ Thuật Nói Không: Cách Bảo Vệ Thời Gian và Năng Lượng Của Bạn', url: '#', year: 2026, dateStr: '28/08', category: 'Góc Nhìn & Tư Duy', timestamp: 1756051200000 },
-      { title: 'Tôi Đã Thử Thức Dậy Lúc 5 Giờ Sáng Trong 21 Ngày — Đây Là Kết Quả Thật Sự', url: '#', year: 2026, dateStr: '20/08', category: 'Trải Nghiệm Sống', timestamp: 1755360000000 },
-      { title: 'Kinh Tế Học Hành Vi và Những Bẫy Tư Duy Khiến Chúng Ta Mua Sắm Không Hợp Lý', url: '#', year: 2026, dateStr: '15/08', category: 'Góc Nhìn & Tư Duy', timestamp: 1754928000000 },
-      { title: 'Obsidian vs Notion: Tôi Đã Dùng Cả Hai Và Đây Là Đánh Giá Thật Của Tôi', url: '#', year: 2026, dateStr: '10/08', category: 'Sách & Công Cụ', timestamp: 1754496000000 },
-      { title: 'Ký Sự Đường Trường: 7 Ngày Một Mình Phượt Bắc Việt Nam', url: '#', year: 2026, dateStr: '01/08', category: 'Trải Nghiệm Sống', timestamp: 1753804800000 },
+      { title: 'Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn', url: '#', year: 2026, dateStr: '09/09', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:assisted', timestamp: 1757088000000 },
+      { title: '30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân', url: '#', year: 2026, dateStr: '05/09', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1756742400000 },
+      { title: 'Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định', url: '#', year: 2026, dateStr: '01/09', category: 'Sách & Công Cụ', aiType: 'ai:generated', timestamp: 1756396800000 },
+      { title: 'Nghệ Thuật Nói Không: Cách Bảo Vệ Thời Gian và Năng Lượng Của Bạn', url: '#', year: 2026, dateStr: '28/08', category: 'Góc Nhìn & Tư Duy', aiType: null, timestamp: 1756051200000 },
+      { title: 'Tôi Đã Thử Thức Dậy Lúc 5 Giờ Sáng Trong 21 Ngày — Đây Là Kết Quả Thật Sự', url: '#', year: 2026, dateStr: '20/08', category: 'Trải Nghiệm Sống', aiType: 'ai:assisted', timestamp: 1755360000000 },
+      { title: 'Kinh Tế Học Hành Vi và Những Bẫy Tư Duy Khiến Chúng Ta Mua Sắm Không Hợp Lý', url: '#', year: 2026, dateStr: '15/08', category: 'Góc Nhìn & Tư Duy', aiType: null, timestamp: 1754928000000 },
+      { title: 'Obsidian vs Notion: Tôi Đã Dùng Cả Hai Và Đây Là Đánh Giá Thật Của Tôi', url: '#', year: 2026, dateStr: '10/08', category: 'Sách & Công Cụ', aiType: 'ai:product', timestamp: 1754496000000 },
+      { title: 'Ký Sự Đường Trường: 7 Ngày Một Mình Phượt Bắc Việt Nam', url: '#', year: 2026, dateStr: '01/08', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1753804800000 },
       // 2025
-      { title: 'Mindfulness Không Phải Ngồi Thiền — Cách Tôi Luyện Sự Chú Tâm Trong Cuộc Sống Hàng Ngày', url: '#', year: 2025, dateStr: '15/12', category: 'Góc Nhìn & Tư Duy', timestamp: 1734220800000 },
-      { title: 'Review Sách: "Sapiens" — Lịch Sử Loài Người Qua Lăng Kính Khác Biệt', url: '#', year: 2025, dateStr: '01/12', category: 'Sách & Công Cụ', timestamp: 1733011200000 },
-      { title: 'Tại Sao Tôi Bỏ Mạng Xã Hội 3 Tháng Và Không Hối Tiếc', url: '#', year: 2025, dateStr: '10/11', category: 'Trải Nghiệm Sống', timestamp: 1731196800000 },
-      { title: 'Hệ Thống Ghi Chú Thứ Hai (Second Brain): Xây Dựng Như Thế Nào Cho Hiệu Quả?', url: '#', year: 2025, dateStr: '20/10', category: 'Sách & Công Cụ', timestamp: 1729382400000 },
-      { title: 'Cuộc Trò Chuyện Với Bố Lúc 80 Tuổi Dạy Tôi Điều Quan Trọng Nhất Về Cuộc Đời', url: '#', year: 2025, dateStr: '05/09', category: 'Trải Nghiệm Sống', timestamp: 1725494400000 },
-      { title: 'Stoicism Thực Hành: Triết Học Khắc Kỷ Ứng Dụng Vào Cuộc Sống Hiện Đại', url: '#', year: 2025, dateStr: '12/07', category: 'Góc Nhìn & Tư Duy', timestamp: 1720742400000 },
+      { title: 'Mindfulness Không Phải Ngồi Thiền — Cách Tôi Luyện Sự Chú Tâm Trong Cuộc Sống Hàng Ngày', url: '#', year: 2025, dateStr: '15/12', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:assisted', timestamp: 1734220800000 },
+      { title: 'Review Sách: "Sapiens" — Lịch Sử Loài Người Qua Lăng Kính Khác Biệt', url: '#', year: 2025, dateStr: '01/12', category: 'Sách & Công Cụ', aiType: null, timestamp: 1733011200000 },
+      { title: 'Tại Sao Tôi Bỏ Mạng Xã Hội 3 Tháng Và Không Hối Tiếc', url: '#', year: 2025, dateStr: '10/11', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1731196800000 },
+      { title: 'Hệ Thống Ghi Chú Thứ Hai (Second Brain): Xây Dựng Như Thế Nào Cho Hiệu Quả?', url: '#', year: 2025, dateStr: '20/10', category: 'Sách & Công Cụ', aiType: 'ai:assisted', timestamp: 1729382400000 },
+      { title: 'Cuộc Trò Chuyện Với Bố Lúc 80 Tuổi Dạy Tôi Điều Quan Trọng Nhất Về Cuộc Đời', url: '#', year: 2025, dateStr: '05/09', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1725494400000 },
+      { title: 'Stoicism Thực Hành: Triết Học Khắc Kỷ Ứng Dụng Vào Cuộc Sống Hiện Đại', url: '#', year: 2025, dateStr: '12/07', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:generated', timestamp: 1720742400000 },
       // 2024
-      { title: 'Bắt Đầu Blog Cá Nhân Tuổi 28: Tại Sao, Như Thế Nào và Học Được Gì?', url: '#', year: 2024, dateStr: '20/12', category: 'Trải Nghiệm Sống', timestamp: 1734652800000 - 31536000000 },
-      { title: 'Review Sách: "Atomic Habits" — 5 Điều Tôi Đã Áp Dụng Được Và 3 Điều Tôi Không Làm Được', url: '#', year: 2024, dateStr: '15/09', category: 'Sách & Công Cụ', timestamp: 1726358400000 - 31536000000 },
-      { title: 'Đi Làm Freelance 1 Năm: Tự Do Thật Sự Hay Chỉ Là Ảo Tưởng?', url: '#', year: 2024, dateStr: '03/06', category: 'Trải Nghiệm Sống', timestamp: 1717372800000 - 31536000000 },
-      { title: 'Thiên Kiến Xác Nhận: Tại Sao Chúng Ta Chỉ Tin Vào Thứ Mình Muốn Tin', url: '#', year: 2024, dateStr: '10/03', category: 'Góc Nhìn & Tư Duy', timestamp: 1710028800000 - 31536000000 }
+      { title: 'Bắt Đầu Blog Cá Nhân Tuổi 28: Tại Sao, Như Thế Nào và Học Được Gì?', url: '#', year: 2024, dateStr: '20/12', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1734652800000 - 31536000000 },
+      { title: 'Review Sách: "Atomic Habits" — 5 Điều Tôi Đã Áp Dụng Được Và 3 Điều Tôi Không Làm Được', url: '#', year: 2024, dateStr: '15/09', category: 'Sách & Công Cụ', aiType: null, timestamp: 1726358400000 - 31536000000 },
+      { title: 'Đi Làm Freelance 1 Năm: Tự Do Thật Sự Hay Chỉ Là Ảo Tưởng?', url: '#', year: 2024, dateStr: '03/06', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1717372800000 - 31536000000 },
+    ];
+
+    window.__SPECIAL_POSTS_MOCK__ = [
+      {
+        title: "Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số",
+        url: "#",
+        dateFormatted: "08/09/2026",
+        thumbnail: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&auto=format&fit=crop&q=80",
+        snippet: "Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamine của mạng xã hội và giải pháp tái tạo sự chú tâm sâu sắc.",
+        labels: ["Phân Tích Chuyên Sâu", "@Tiêu điểm", "ai:assisted"]
+      },
+      {
+        title: "Nghịch Lý Của Việc Chọn Lựa Trong Thế Giới Số",
+        url: "#",
+        dateFormatted: "09/09/2026",
+        thumbnail: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=600&auto=format&fit=crop&q=80",
+        snippet: "Càng có nhiều sự lựa chọn, chúng ta càng khó đưa ra quyết định thỏa đáng và dễ rơi vào cảm giác hối tiếc sau khi chọn...",
+        labels: ["Góc Nhìn", "@Nổi bật", "ai:assisted"]
+      },
+      {
+        title: "30 Ngày Thử Thách Không Sử Dụng Điện Thoại Buổi Sáng",
+        url: "#",
+        dateFormatted: "05/09/2026",
+        thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80",
+        snippet: "Thức dậy mà không lướt mạng xã hội đã hoàn toàn tái thiết lập mức năng lượng và sự tập trung suốt cả ngày dài...",
+        labels: ["Trải Nghiệm", "@Nổi bật", "@Điểm tin"]
+      },
+      {
+        title: "Review Sách: 'Tư Duy Nhanh và Chậm' của Daniel Kahneman",
+        url: "#",
+        dateFormatted: "01/09/2026",
+        thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&auto=format&fit=crop&q=80",
+        snippet: "Hệ thống 1 và Hệ thống 2: Cách não bộ chúng ta đưa ra quyết định mà chính ta đôi khi cũng không hề hay biết...",
+        labels: ["Sách Hay", "@Nổi bật", "ai:generated"]
+      },
+      {
+        title: "Công Nghệ Có Thực Sự Khiến Cuộc Sống Của Ta Tự Do Hơn?",
+        url: "#",
+        dateFormatted: "28/08/2026",
+        thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80",
+        snippet: "Công nghệ hứa hẹn tiết kiệm thời gian, nhưng dường như chúng ta lại ngày càng bận rộn và kiệt sức hơn bao giờ hết...",
+        labels: ["Công Nghệ", "@Điểm tin"]
+      },
+      {
+        title: "Sự Đơn Giản Không Phải Là Cái Kết Của Sự Nông Cạn, Mà Là Đỉnh Cao Của Tinh Tế",
+        url: "#",
+        dateFormatted: "22/08/2026",
+        thumbnail: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=80",
+        snippet: "Vài suy ngẫm về sự tinh giản trong lối sống hiện đại và cách chúng ta tìm lại sự thuần khiết trong nội tâm...",
+        labels: ["Triết Lý", "@Quote"]
+      },
+      {
+        title: "3 Công Cụ Ghi Chú Tối Giản Tôi Sử Dụng Mỗi Ngày",
+        url: "#",
+        dateFormatted: "18/08/2026",
+        thumbnail: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600&auto=format&fit=crop&q=80",
+        snippet: "Ghi chép không cần phức tạp, quan trọng là sự đều đặn, tối giản và khả năng truy xuất nhanh khi cần thiết...",
+        labels: ["Công Cụ", "@Điểm tin"]
+      }
     ];
   </script>
 
@@ -923,18 +1047,27 @@
         if (navArchive) navArchive.classList.toggle("active", mode === "archive");
       }
 
-      window.setHomeView = function() {
+      window.setHomeView = function(resetFilter) {
         if (feedWrapper) feedWrapper.style.display = "";
         if (postWrapper) postWrapper.style.display = "none";
         if (archiveWrapper) archiveWrapper.style.display = "none";
         if (heroBanner) heroBanner.style.display = "";
         if (categoryTabs) categoryTabs.style.display = "";
 
+        if (resetFilter !== false) {
+          var allPostCards = document.querySelectorAll(".posts-feed .post-card");
+          allPostCards.forEach(function(c) { c.style.display = ""; });
+          var allPills = document.querySelectorAll(".category-tabs-bar .tab-pill");
+          allPills.forEach(function(p, idx) {
+            p.classList.toggle("active", idx === 0);
+          });
+        }
+
         updateActiveButtons("home");
         window.scrollTo({ top: 0, behavior: "smooth" });
       };
 
-      window.setPostView = function(title) {
+      window.setPostView = function(title, aiType) {
         if (feedWrapper) feedWrapper.style.display = "none";
         if (postWrapper) postWrapper.style.display = "";
         if (archiveWrapper) archiveWrapper.style.display = "none";
@@ -946,11 +1079,24 @@
           if (postTitleEl) postTitleEl.textContent = title;
         }
 
+        if (aiType !== undefined) {
+          if (aiType) {
+            postWrapper.setAttribute("data-ai-type", aiType);
+          } else {
+            postWrapper.removeAttribute("data-ai-type");
+          }
+        }
+
         updateActiveButtons("post");
         window.scrollTo({ top: 0, behavior: "smooth" });
 
         // Trigger Auto-TOC re-init for single post
-        window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang: "vi" } }));
+        window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang: localStorage.getItem("user_lang") || "vi" } }));
+
+        // Re-inject AI badges for the newly visible single post
+        setTimeout(function() {
+          if (window.AITransparency) window.AITransparency.reinject();
+        }, 50);
       };
 
       window.setArchiveView = function() {
@@ -1038,13 +1184,16 @@
       postLinks.forEach(function(link) {
         link.addEventListener("click", function(e) {
           e.preventDefault();
-          window.setPostView();
+          var card = link.closest(".post-card") || link.closest("[data-ai-type]");
+          var titleEl = card ? card.querySelector(".post-card-title, .sp-spotlight-title, .sp-ranked-title") : link;
+          var title = titleEl ? titleEl.textContent.trim() : link.textContent.trim();
+          var aiType = card ? card.getAttribute("data-ai-type") : null;
+          window.setPostView(title, aiType);
         });
       });
 
       // Category filter tabs on homepage / archive
       var pills = document.querySelectorAll(".category-tabs-bar .tab-pill");
-      var postCards = document.querySelectorAll(".posts-feed .post-card");
       pills.forEach(function(pill) {
         pill.addEventListener("click", function(e) {
           e.preventDefault();
@@ -1057,7 +1206,8 @@
             return;
           }
 
-          postCards.forEach(function(card) {
+          var currentCards = document.querySelectorAll(".posts-feed .post-card");
+          currentCards.forEach(function(card) {
             var badge = card.querySelector(".post-badge");
             var badgeText = badge ? badge.innerText.trim() : "";
             if (cat === "Tất cả | All" || cat === "Tất cả" || badgeText.toLowerCase().includes(cat.toLowerCase().replace(" | all", "")) || cat.toLowerCase().includes(badgeText.toLowerCase())) {
@@ -1066,7 +1216,7 @@
               card.style.display = "none";
             }
           });
-          window.setHomeView();
+          window.setHomeView(false);
         });
       });
 
@@ -1224,6 +1374,7 @@
   <script src="scripts/reading-time.js"></script>
   <script src="scripts/footer.js"></script>
   <script src="scripts/special-posts.js"></script>
+  <script src="scripts/ai-transparency.js"></script>
 
   <!-- ═══════════════════════════════════════════════════════════════
        INTERACTIVE WIDGET PLAYGROUND CONTROLLER SCRIPT
@@ -1240,7 +1391,7 @@
           dateFormatted: "09/09/2026",
           thumbnail: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=600&auto=format&fit=crop&q=80",
           snippet: "Càng có nhiều sự lựa chọn, chúng ta càng khó đưa ra quyết định thỏa đáng và dễ rơi vào cảm giác hối tiếc sau khi chọn...",
-          labels: ["Tư Duy", "@Nổi bật"]
+          labels: ["Tư Duy", "@Nổi bật", "ai:assisted"]
         },
         {
           title: "30 Ngày Thử Thách Không Sử Dụng Điện Thoại Buổi Sáng",
@@ -1256,7 +1407,7 @@
           dateFormatted: "01/09/2026",
           thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&auto=format&fit=crop&q=80",
           snippet: "Hệ thống 1 và Hệ thống 2: Cách não bộ chúng ta đưa ra quyết định mà chính ta đôi khi cũng không hề hay biết...",
-          labels: ["Sách Hay", "@Nổi bật"]
+          labels: ["Sách Hay", "@Nổi bật", "ai:generated"]
         },
         {
           title: "Công Nghệ Có Thực Sự Khiến Cuộc Sống Của Ta Tự Do Hơn?",
@@ -1288,7 +1439,7 @@
           dateFormatted: "12/08/2026",
           thumbnail: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&auto=format&fit=crop&q=80",
           snippet: "Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamin...",
-          labels: ["Chuyên Sâu", "@Tiêu điểm"]
+          labels: ["Chuyên Sâu", "@Tiêu điểm", "ai:assisted"]
         },
         {
           title: "Hạnh Phúc Là Biết Đủ Giữa Một Thế Giới Không Ngừng Đòi Hỏi Nhiều Hơn",
@@ -1299,6 +1450,15 @@
           labels: ["Triết Lý", "@Quote"]
         }
       ];
+
+      function getAIType(labels) {
+        if (!labels) return null;
+        for (var i = 0; i < labels.length; i++) {
+          var l = (labels[i] || '').toLowerCase().replace(/-/g, ':');
+          if (l.indexOf('ai:') === 0) return l;
+        }
+        return null;
+      }
 
       // ── DOM ELEMENTS ──
       var modal            = document.getElementById('widget-tester-modal');
@@ -1338,12 +1498,14 @@
           var thumbHtml = (showThumb && p.thumbnail)
             ? '<div class="sp-ranked-thumb"><img src="' + escapeHtml(p.thumbnail) + '" alt="' + escapeHtml(p.title) + '" loading="lazy" width="52" height="52"/></div>'
             : '';
-          return '<a href="#" class="sp-ranked-item">' +
+          var aiType = getAIType(p.labels);
+          var aiHtml = aiType ? ' • <span class="ai-badge ai-badge-inline" data-ai-type="' + aiType + '" data-ai-variant="inline"><span class="ai-badge-icon">' + (aiType === 'ai:generated' ? '⚡' : '✨') + '</span><span class="ai-badge-label">AI</span></span>' : '';
+          return '<a href="#" class="sp-ranked-item view-post-link"' + (aiType ? ' data-ai-type="' + aiType + '"' : '') + '>' +
                  '  <span class="sp-rank-number">' + num + '</span>' +
                  thumbHtml +
                  '  <div class="sp-ranked-content">' +
                  '    <h4 class="sp-ranked-title">' + escapeHtml(p.title) + '</h4>' +
-                 '    <span class="sp-ranked-date">' + escapeHtml(p.dateFormatted) + '</span>' +
+                 '    <span class="sp-ranked-date">' + escapeHtml(p.dateFormatted) + aiHtml + '</span>' +
                  '  </div>' +
                  '</a>';
         }).join('');
@@ -1355,7 +1517,7 @@
           var snipHtml = (showSnippet && p.snippet)
             ? '<div class="sp-quote-divider"></div><p class="sp-quote-snippet">' + escapeHtml(p.snippet) + '</p>'
             : '';
-          return '<a href="#" class="sp-quote-card">' +
+          return '<a href="#" class="sp-quote-card view-post-link">' +
                  '  <span class="sp-quote-mark-open">“</span>' +
                  '  <p class="sp-quote-text">' + escapeHtml(p.title) + '</p>' +
                  '  <span class="sp-quote-mark-close">”</span>' +
@@ -1372,9 +1534,11 @@
           var snipHtml = (showSnippet && p.snippet)
             ? '<div class="sp-digest-snippet">' + escapeHtml(p.snippet) + '</div>'
             : '';
-          return '<a href="#" class="sp-digest-item">' +
+          var aiType = getAIType(p.labels);
+          var aiHtml = aiType ? ' • <span class="ai-badge ai-badge-inline" data-ai-type="' + aiType + '" data-ai-variant="inline"><span class="ai-badge-icon">' + (aiType === 'ai:generated' ? '⚡' : '✨') + '</span><span class="ai-badge-label">AI</span></span>' : '';
+          return '<a href="#" class="sp-digest-item view-post-link"' + (aiType ? ' data-ai-type="' + aiType + '"' : '') + '>' +
                  '  <div class="sp-digest-timestamp">' +
-                 '    <span class="sp-digest-bullet">✦</span> ' + escapeHtml(p.dateFormatted) +
+                 '    <span class="sp-digest-bullet">✦</span> ' + escapeHtml(p.dateFormatted) + aiHtml +
                  '  </div>' +
                  '  <div class="sp-digest-title">' + escapeHtml(p.title) + '</div>' +
                  snipHtml +
@@ -1392,13 +1556,16 @@
           ? '<p class="sp-spotlight-snippet">' + escapeHtml(p.snippet) + '</p>'
           : '';
         var badge = p.labels && p.labels[0] ? p.labels[0].replace(/^[@#_~]/, '') : 'Tiêu Điểm';
+        var aiType = getAIType(p.labels);
+        var aiHtml = aiType ? '<span class="ai-badge ai-badge-standard" data-ai-type="' + aiType + '" data-ai-variant="standard"><span class="ai-badge-icon">✨</span><span class="ai-badge-label">Hỗ trợ bởi AI</span></span>' : '';
 
-        return '<a href="#" class="sp-spotlight-card">' +
+        return '<a href="#" class="sp-spotlight-card view-post-link"' + (aiType ? ' data-ai-type="' + aiType + '"' : '') + '>' +
                thumbHtml +
                '<div class="sp-spotlight-info">' +
                '  <div class="sp-spotlight-meta">' +
                '    <span class="sp-spotlight-badge">' + escapeHtml(badge) + '</span>' +
                '    <span class="sp-spotlight-date">📅 ' + escapeHtml(p.dateFormatted) + '</span>' +
+               (aiHtml ? '    ' + aiHtml : '') +
                '  </div>' +
                '  <h3 class="sp-spotlight-title">' + escapeHtml(p.title) + '</h3>' +
                snipHtml +

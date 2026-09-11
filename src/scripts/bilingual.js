@@ -28,7 +28,8 @@
       olderPosts: 'Cũ hơn »',
       newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
       backToTop: '↑ Lên đầu trang',
-      copyrightSuffix: 'Tất cả quyền được bảo lưu.'
+      copyrightSuffix: 'Tất cả quyền được bảo lưu.',
+      aiDisclosureDetails: 'Xem chi tiết',
     },
     en: {
       searchPlaceholder: 'Search articles...',
@@ -46,7 +47,8 @@
       olderPosts: 'Older Posts »',
       newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
       backToTop: '↑ Back to top',
-      copyrightSuffix: 'All rights reserved.'
+      copyrightSuffix: 'All rights reserved.',
+      aiDisclosureDetails: 'Details',
     }
   };
 
@@ -58,8 +60,9 @@
 
   function applyBilingualElements(lang) {
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
+    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs (spec §4.2.A)
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"]'
+      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a'
     );
   
     targets.forEach(el => {

@@ -132,6 +132,16 @@
 
   /* Transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* AI Transparency Badge (Light Mode) */
+  --ai-badge-bg: linear-gradient(135deg, rgba(243, 232, 255, 0.85) 0%, rgba(224, 242, 254, 0.85) 100%);
+  --ai-badge-border: rgba(192, 132, 252, 0.45);
+  --ai-badge-text: #6b21a8;
+  --ai-callout-bg: rgba(243, 232, 255, 0.4);
+  --ai-callout-border: #8b5cf6;
+  --ai-callout-text: #4c1d95;
+  --ai-micro-bg: rgba(168, 85, 247, 0.12);
+  --ai-micro-text: #7c3aed;
 }
 
 /* Dark Theme Overrides */
@@ -153,6 +163,16 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.5);
+
+  /* AI Transparency Badge (Dark Mode) */
+  --ai-badge-bg: linear-gradient(135deg, rgba(147, 51, 234, 0.22) 0%, rgba(59, 130, 246, 0.18) 100%);
+  --ai-badge-border: rgba(168, 85, 247, 0.4);
+  --ai-badge-text: #d8b4fe;
+  --ai-callout-bg: rgba(147, 51, 234, 0.12);
+  --ai-callout-border: #a855f7;
+  --ai-callout-text: #e9d5ff;
+  --ai-micro-bg: rgba(168, 85, 247, 0.22);
+  --ai-micro-text: #c084fc;
 }
 
 
@@ -3816,6 +3836,250 @@ a:hover {
 }
 
 
+/* ==========================================
+   AI TRANSPARENCY SYSTEM — FEAT-AI-TRANSPARENCY-V1
+   Spec: specs/AI_TRANSPARENCY_SPECIFICATION.md
+   Các biến thể huy hiệu:
+     .ai-badge-full     → Trang Bài Viết Chi Tiết (Single Post)
+     .ai-badge-standard → Post Card (Trang Chủ & Chuyên Mục)
+     .ai-badge-micro    → Timeline Archive & Widgets
+     .ai-badge-inline   → Nano inline trong ranked/digest
+   ========================================== */
+
+/* ──────────────────────────────────────────
+   BASE: Lớp nền dùng chung cho mọi badge
+   ────────────────────────────────────────── */
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--ai-badge-bg);
+  border: 1px solid var(--ai-badge-border);
+  color: var(--ai-badge-text);
+  font-family: var(--font-main);
+  font-weight: 600;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  text-decoration: none;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* ──────────────────────────────────────────
+   VARIANT 1: FULL BADGE — Single Post Header
+   Hiển thị: [ ✨ Hỗ trợ bởi AI ▾ ] với dropdown
+   ────────────────────────────────────────── */
+.ai-badge-full {
+  height: 26px;
+  padding: 2px 12px 2px 10px;
+  font-size: 0.78rem;
+  gap: 0.3rem;
+}
+
+.ai-badge-full:hover {
+  box-shadow: 0 2px 12px rgba(139, 92, 246, 0.25);
+  transform: translateY(-1px);
+}
+
+.ai-badge-full .ai-badge-chevron {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  margin-left: 1px;
+  transition: transform 0.2s ease;
+}
+
+.ai-badge-full.is-open .ai-badge-chevron {
+  transform: rotate(180deg);
+}
+
+/* ──────────────────────────────────────────
+   VARIANT 2: STANDARD BADGE — Post Card Meta
+   Hiển thị: [ ✨ Hỗ trợ bởi AI ]
+   ────────────────────────────────────────── */
+.ai-badge-standard {
+  height: 22px;
+  padding: 1px 9px;
+  font-size: 0.74rem;
+}
+
+.ai-badge-standard:hover {
+  box-shadow: 0 1px 8px rgba(139, 92, 246, 0.2);
+}
+
+/* ──────────────────────────────────────────
+   VARIANT 3: MICRO BADGE — Timeline Archive
+   Hiển thị: [ ✨ AI ]
+   ────────────────────────────────────────── */
+.ai-badge-micro {
+  height: 18px;
+  padding: 1px 7px;
+  font-size: 0.70rem;
+  border-radius: 4px;
+  background: var(--ai-micro-bg);
+  border-color: var(--ai-badge-border);
+  color: var(--ai-micro-text);
+  gap: 0.2rem;
+  font-weight: 700;
+}
+
+/* ──────────────────────────────────────────
+   VARIANT 4: INLINE — Ranked/Digest Widgets
+   Hiển thị: ✨ AI (không border, không background)
+   ────────────────────────────────────────── */
+.ai-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ai-micro-text);
+  background: none;
+  border: none;
+  padding: 0;
+  height: auto;
+  border-radius: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* ──────────────────────────────────────────
+   KHUNG THÔNG CÁO MINH BẠCH (AI DISCLOSURE BOX)
+   Ngữ cảnh: Đầu bài viết Single Post
+   ────────────────────────────────────────── */
+.ai-disclosure-box {
+  background: var(--ai-callout-bg);
+  border: 1px solid var(--ai-callout-border);
+  border-left: 3px solid var(--ai-callout-border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.25rem;
+  margin: 0 0 2rem;
+  transition: all 0.25s ease;
+}
+
+.ai-disclosure-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.ai-disclosure-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ai-callout-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ai-disclosure-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ai-callout-text);
+  opacity: 0.65;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.ai-disclosure-toggle:hover { opacity: 1; }
+
+.ai-disclosure-toggle-icon {
+  font-size: 0.6rem;
+  transition: transform 0.25s ease;
+}
+
+.ai-disclosure-box.is-open .ai-disclosure-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Nội dung text (ẩn/hiện với animation) */
+.ai-disclosure-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+.ai-disclosure-box.is-open .ai-disclosure-body {
+  max-height: 400px;
+  opacity: 1;
+  margin-top: 0.75rem;
+}
+
+.ai-disclosure-text {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--ai-callout-text);
+  margin: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--ai-callout-border);
+}
+
+.ai-disclosure-text p {
+  margin: 0 0 0.55rem;
+}
+.ai-disclosure-text p:last-child { margin-bottom: 0; }
+
+.ai-disclosure-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ai-callout-border);
+  text-decoration: none;
+  margin-top: 0.65rem;
+  transition: opacity 0.2s;
+}
+.ai-disclosure-learn-more:hover { opacity: 0.75; text-decoration: underline; }
+
+/* ──────────────────────────────────────────
+   TÍCH HỢP VÀO ARCHIVE TIMELINE
+   ────────────────────────────────────────── */
+.archive-post-card {
+  /* Cho phép badge căn chỉnh trong layout */
+  align-items: center;
+}
+
+/* ──────────────────────────────────────────
+   RESPONSIVE: MOBILE
+   Co gọn Micro Badge chỉ còn icon trên mobile
+   ────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Archive timeline: ẩn text "AI", chỉ giữ icon */
+  .archive-post-card .ai-badge-micro .ai-badge-label {
+    display: none;
+  }
+
+  .archive-post-card .ai-badge-micro {
+    padding: 1px 4px;
+  }
+
+  /* Full badge ở single post: thu nhỏ */
+  .ai-badge-full {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+  }
+}
+
+
 /* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
 :root {
   --bg-body: $(body.background);
@@ -4079,9 +4343,12 @@ a:hover {
       <b:widget id='Label1' type='Label' version='2'>
         <b:includable id='main'>
           <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <a class='tab-pill active' expr:href='data:blog.homepageUrl'>✦ Tất cả</a>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả</a>
             <b:loop values='data:labels' var='label'>
-              <a class='tab-pill' expr:href='data:label.url'><data:label.name/></a>
+              <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
+              <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
+                <a class='tab-pill' expr:href='data:label.url' data-bilingual='true'><data:label.name/></a>
+              </b:if>
             </b:loop>
           </nav>
         </b:includable>
@@ -4107,13 +4374,19 @@ a:hover {
                          isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
                          Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
                     <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
+                    <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                     <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                      <b:if cond='data:aiLabels.notEmpty'>
+                        <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                      </b:if>
                       <div class='post-card-body'>
                         <div>
-                          <b:if cond='data:post.labels'>
-                            <a class='post-badge' expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
-                          </b:if>
+                          <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
+                            <b:if cond='data:normalLabels.notEmpty'>
+                              <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
+                            </b:if>
+                          </b:with>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
@@ -4135,6 +4408,7 @@ a:hover {
                       </b:if>
                     </article>
                     </b:if><!-- /isExclusiveFeaturePost -->
+                    </b:with><!-- /aiLabels -->
                     </b:with>
                   </b:loop>
                 </div>
@@ -4173,16 +4447,22 @@ a:hover {
                   </div>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
+                  <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                    <b:if cond='data:aiLabels.notEmpty'>
+                      <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                    </b:if>
 
                     <!-- Breadcrumbs -->
                     <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
-                      <a expr:href='data:blog.homepageUrl'>🏠 Trang chủ</a>
+                      <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
-                      <b:if cond='data:post.labels'>
-                        <a expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
-                        <span class='separator'>›</span>
-                      </b:if>
+                      <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
+                        <b:if cond='data:normalLabels.notEmpty'>
+                          <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
+                          <span class='separator'>›</span>
+                        </b:if>
+                      </b:with>
                       <span><data:post.title/></span>
                     </nav>
 
@@ -4319,6 +4599,7 @@ a:hover {
                     </div>
 
                   </article>
+                  </b:with><!-- /aiLabels -->
                 </b:loop>
               </b:if>
             </b:if>
@@ -4915,9 +5196,21 @@ a:hover {
             var timestamp = published ? new Date(published).getTime() : 0;
             
             var category = 'Chưa phân loại';
+            var aiType = null; // Nhãn AI (ai:assisted, ai:product, ai:generated)
             if (allLabels.length > 0) {
-              var normalLabels = allLabels.filter(function(l) { return l.indexOf('@') !== 0; });
+              var normalLabels = allLabels.filter(function(l) {
+                var lower = l.toLowerCase();
+                return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-');
+              });
               category = normalLabels.length > 0 ? normalLabels[0] : allLabels[0];
+
+              // Trích xuất nhãn AI nếu có
+              allLabels.forEach(function(l) {
+                if (!aiType) {
+                  var lower = l.toLowerCase().replace(/-/g, ':');
+                  if (lower.startsWith('ai:')) aiType = lower;
+                }
+              });
             }
             // Lọc sạch các tiền tố đặc biệt nếu còn sót lại
             category = category.replace(/^[@#_~]+/, '').trim();
@@ -4928,6 +5221,7 @@ a:hover {
               year: year,
               dateStr: dateStr,
               category: category,
+              aiType: aiType,
               timestamp: timestamp
             });
           });
@@ -4976,6 +5270,7 @@ a:hover {
             year: year,
             dateStr: dateStr,
             category: category,
+            aiType: card.getAttribute('data-ai-type') || null,
             timestamp: timestamp
           };
         });
@@ -5208,11 +5503,17 @@ a:hover {
       // Danh sách thẻ bài viết phẳng
       html += '<div class="archive-year-posts" id="year-posts-' + yr + '">';
       group.posts.forEach(function (post) {
-        html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '">';
+        var aiAttr = post.aiType ? ' data-ai-type="' + post.aiType + '"' : '';
+        html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '"' + aiAttr + '>';
         // Cột 1: Chuyên mục
         html += '  <span class="archive-post-cat-pill">' + escapeHtml(post.category || 'Góc Nhìn') + '</span>';
         // Cột 2: Tiêu đề
         html += '  <span class="archive-post-card-title">' + escapeHtml(post.title) + '</span>';
+        // Cột 2b: AI Micro Badge (nếu có nhãn AI)
+        if (post.aiType && window.AITransparency) {
+          var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+          html += window.AITransparency.renderAIBadge(post.aiType, 'micro', lang);
+        }
         // Cột 3: Ngày đăng + Mũi tên
         html += '  <div class="archive-post-meta">';
         html += '    <span class="archive-post-date">📅 ' + escapeHtml(post.dateStr) + '</span>';
@@ -5622,7 +5923,8 @@ a:hover {
       olderPosts: 'Cũ hơn »',
       newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
       backToTop: '↑ Lên đầu trang',
-      copyrightSuffix: 'Tất cả quyền được bảo lưu.'
+      copyrightSuffix: 'Tất cả quyền được bảo lưu.',
+      aiDisclosureDetails: 'Xem chi tiết',
     },
     en: {
       searchPlaceholder: 'Search articles...',
@@ -5640,7 +5942,8 @@ a:hover {
       olderPosts: 'Older Posts »',
       newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
       backToTop: '↑ Back to top',
-      copyrightSuffix: 'All rights reserved.'
+      copyrightSuffix: 'All rights reserved.',
+      aiDisclosureDetails: 'Details',
     }
   };
 
@@ -5652,8 +5955,9 @@ a:hover {
 
   function applyBilingualElements(lang) {
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
+    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs (spec §4.2.A)
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"]'
+      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a'
     );
   
     targets.forEach(el => {
@@ -5948,6 +6252,11 @@ a:hover {
      RENDER WIDGET INSTANCE
      ═══════════════════════════════════════════════════════════════ */
   async function renderWidgetInstance(container) {
+    // Nếu widget đã có markup tĩnh (static preview demo) và không có cấu hình fetch
+    if (!container.dataset.labels && !container.dataset.posts && !container.dataset.sort && container.querySelector('.sp-widget-card')) {
+      return;
+    }
+
     const pattern        = container.dataset.pattern  || 'digest';
     const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
     const limit          = Math.min(parseInt(container.dataset.limit, 10) || 4, 10);
@@ -5989,6 +6298,21 @@ a:hover {
         posts = await fetchMultiLabelPosts(labelList, limit, sort);
       }
 
+      if ((!posts || posts.length === 0) && typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
+        var mockAll = window.__SPECIAL_POSTS_MOCK__;
+        if (rawLabels) {
+          var lList = splitLabels(rawLabels).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
+          posts = mockAll.filter(function(p) {
+            var pLabels = (p.labels || []).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
+            return lList.some(function(req) { return pLabels.indexOf(req) !== -1; });
+          });
+        }
+        if (!posts || posts.length === 0) {
+          posts = mockAll;
+        }
+        posts = posts.slice(0, limit);
+      }
+
       if (!posts || posts.length === 0) {
         renderEmptyState(container, widgetTitle, viewAllText, rawLabels);
         return;
@@ -6005,6 +6329,19 @@ a:hover {
       );
 
     } catch (err) {
+      if (typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
+        var mockAll = window.__SPECIAL_POSTS_MOCK__;
+        var posts = mockAll.slice(0, limit);
+        var renderer = PATTERN_RENDERERS[pattern] || PATTERN_RENDERERS.digest;
+        container.innerHTML = buildWidgetShell(
+          widgetTitle,
+          viewAllText,
+          rawLabels,
+          pattern,
+          renderer(posts, { showThumb, showSnippet, limit })
+        );
+        return;
+      }
       console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu:', err);
       container.innerHTML = buildWidgetShell(
         widgetTitle,
@@ -6100,19 +6437,22 @@ a:hover {
 
   /* ── 1. RANKED ──────────────────────────────────────────────── */
   function renderRankedPattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map((post, index) => {
       const rankNum = String(index + 1).padStart(2, '0');
       const thumb   = (opts.showThumb && post.thumbnail)
         ? optimizeThumbnail(post.thumbnail, 's160-c')
         : '';
+      const aiType  = extractAIType(post.labels || []);
+      const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       return `
-        <a href="${escapeHtml(post.url)}" class="sp-ranked-item">
+        <a href="${escapeHtml(post.url)}" class="sp-ranked-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <span class="sp-rank-number">${rankNum}</span>
           ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
           <div class="sp-ranked-content">
             <h4 class="sp-ranked-title">${escapeHtml(post.title)}</h4>
-            <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}</span>
+            <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}${aiHtml}</span>
           </div>
         </a>`;
     }).join('');
@@ -6124,20 +6464,24 @@ a:hover {
   function renderSpotlightPattern(posts, opts) {
     // Chỉ lấy bài đầu tiên làm hero
     const post   = posts[0];
+    const lang   = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const thumb  = (opts.showThumb && post.thumbnail)
       ? optimizeThumbnail(post.thumbnail, 's600-c')
       : '';
     const badge  = post.labels && post.labels[0]
       ? formatLabelName(post.labels[0])
       : '';
+    const aiType = extractAIType(post.labels || []);
+    const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
     return `
-      <a href="${escapeHtml(post.url)}" class="sp-spotlight-card">
+      <a href="${escapeHtml(post.url)}" class="sp-spotlight-card"${aiType ? ` data-ai-type="${aiType}"` : ''}>
         ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
         <div class="sp-spotlight-info">
           <div class="sp-spotlight-meta">
             ${badge ? `<span class="sp-spotlight-badge">${escapeHtml(badge)}</span>` : ''}
             <span class="sp-spotlight-date">📅 ${escapeHtml(post.dateFormatted)}</span>
+            ${aiHtml}
           </div>
           <h3 class="sp-spotlight-title">${escapeHtml(post.title)}</h3>
           ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet">${escapeHtml(post.snippet)}</p>` : ''}
@@ -6169,14 +6513,17 @@ a:hover {
 
   /* ── 4. DIGEST ──────────────────────────────────────────────── */
   function renderDigestPattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       const snippet = (opts.showSnippet && post.snippet) ? post.snippet : '';
+      const aiType  = extractAIType(post.labels || []);
+      const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       return `
-        <a href="${escapeHtml(post.url)}" class="sp-digest-item">
+        <a href="${escapeHtml(post.url)}" class="sp-digest-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <div class="sp-digest-timestamp">
             <span class="sp-digest-bullet">✦</span>
-            ${escapeHtml(post.dateFormatted)}
+            ${escapeHtml(post.dateFormatted)}${aiHtml}
           </div>
           <div class="sp-digest-title">${escapeHtml(post.title)}</div>
           ${snippet ? `<div class="sp-digest-snippet">${escapeHtml(snippet)}</div>` : ''}
@@ -6355,6 +6702,43 @@ a:hover {
     return decodeURIComponent(String(raw)).replace(/^[@#_~]+/, '').trim();
   }
 
+  /** Trích xuất loại AI từ mảng labels; trả về key hoặc null */
+  function extractAIType(labels) {
+    if (!labels || !labels.length) return null;
+    for (var i = 0; i < labels.length; i++) {
+      var raw = labels[i] || '';
+      var lower = raw.toLowerCase().replace(/-/g, ':');
+      if (lower.startsWith('ai:')) return lower;
+    }
+    return null;
+  }
+
+  /** Render AI badge inline HTML (không phụ thuộc external module để tránh race condition) */
+  function renderAIInlineBadge(aiType) {
+    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
+    var icon = icons[aiType] || '✨';
+    return '<span class="ai-badge ai-badge-inline" data-ai-type="' + aiType + '" data-ai-variant="inline">' +
+      '<span class="ai-badge-icon">' + icon + '</span>' +
+      '<span class="ai-badge-label">AI</span>' +
+    '</span>';
+  }
+
+  function renderAIStandardBadge(aiType, lang) {
+    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
+    var labels = {
+      'ai:assisted':  { vi: 'Hỗ trợ bởi AI', en: 'AI-Assisted'  },
+      'ai:product':   { vi: 'Sản phẩm AI',   en: 'AI Product'   },
+      'ai:generated': { vi: 'Tạo bởi AI',    en: 'AI-Generated' },
+    };
+    var icon = icons[aiType] || '✨';
+    var labelCfg = labels[aiType] || labels['ai:assisted'];
+    var label = (lang === 'en') ? labelCfg.en : labelCfg.vi;
+    return '<span class="ai-badge ai-badge-standard" data-ai-type="' + aiType + '" data-ai-variant="standard">' +
+      '<span class="ai-badge-icon">' + icon + '</span>' +
+      '<span class="ai-badge-label">' + label + '</span>' +
+    '</span>';
+  }
+
   /** Tách chuỗi nhãn "A, B, C" thành mảng */
   function splitLabels(raw) {
     return raw.split(',').map(l => l.trim()).filter(Boolean);
@@ -6459,6 +6843,488 @@ a:hover {
 
     // Xử lý khi hash thay đổi (bấm link trong trang)
     window.addEventListener('hashchange', () => handleHash(window.location.hash));
+  }
+
+})();
+
+
+/* ==========================================
+   AI TRANSPARENCY SYSTEM — FEAT-AI-TRANSPARENCY-V1
+   Spec: specs/AI_TRANSPARENCY_SPECIFICATION.md
+   
+   Chức năng:
+   - Nhận diện nhãn ai:assisted / ai:product / ai:generated
+   - Render 4 biến thể badge: full, standard, micro, inline
+   - Render Khung Thông Cáo Minh Bạch (Disclosure Box) ở đầu bài
+   - Hỗ trợ song ngữ VI/EN, tự động cập nhật khi languageChanged
+   - Hoàn toàn độc lập, không ảnh hưởng đến filter/category logic
+   ========================================== */
+(function () {
+  'use strict';
+
+  /* ─── Cấu hình nhãn AI ─────────────────────────────────────── */
+  var AI_TYPES = {
+    'ai:assisted':  { icon: '✨', vi: 'Hỗ trợ bởi AI', en: 'AI-Assisted'  },
+    'ai:product':   { icon: '🤖', vi: 'Sản phẩm AI',   en: 'AI Product'   },
+    'ai:generated': { icon: '⚡', vi: 'Tạo bởi AI',    en: 'AI-Generated' },
+  };
+
+  /* Nội dung Khung Thông Cáo Minh Bạch */
+  var DISCLOSURE_TEXT = {
+    'ai:assisted': {
+      vi: 'Bài viết này được thực hiện với sự hỗ trợ của công cụ Trí tuệ Nhân tạo (AI) trong khâu nghiên cứu tư liệu, tra cứu dữ liệu và gợi ý cấu trúc dàn ý. Toàn bộ góc nhìn, trải nghiệm thực tế, văn phong và việc kiểm chứng tính chính xác của thông tin đều do Nam Trương trực tiếp thực hiện và chịu trách nhiệm.',
+      en: 'This article was researched and outlined with the assistance of Artificial Intelligence (AI) tools. All viewpoints, personal insights, narrative voice, and rigorous fact-checking are conducted and owned entirely by Nam Truong.',
+    },
+    'ai:product': {
+      vi: 'Bài viết này là đánh giá, trải nghiệm thực tế của tác giả về một sản phẩm hoặc công cụ AI. Mọi nhận xét đều dựa trên trải nghiệm cá nhân, không bị ảnh hưởng bởi nhà sản xuất.',
+      en: 'This article is an honest review and personal experience of an AI product or tool. All opinions are based on personal use and are independent from the product makers.',
+    },
+    'ai:generated': {
+      vi: 'Toàn bộ hoặc phần lớn nội dung của bài viết này được tổng hợp bởi AI theo yêu cầu của tác giả, nhằm mục đích thử nghiệm công nghệ và nghiên cứu. Tác giả chịu trách nhiệm về việc lựa chọn và công bố nội dung.',
+      en: 'Most or all of this article\'s content was generated by AI as a technology experiment directed by the author. The author takes responsibility for selecting and publishing this content.',
+    },
+  };
+
+  /* ─── Nhận diện ngôn ngữ hiện tại ──────────────────────────── */
+  function getCurrentLang() {
+    try {
+      return localStorage.getItem('user_lang') || 'vi';
+    } catch (e) {
+      return 'vi';
+    }
+  }
+
+  /* ─── Chuẩn hóa nhãn AI (không phân biệt hoa thường, hỗ trợ dấu gạch ngang) */
+  function normalizeAILabel(str) {
+    if (!str) return '';
+    return str.toLowerCase().replace(/-/g, ':');
+  }
+
+  /* ─── Phát hiện loại AI từ chuỗi nhãn đơn ─────────────────── */
+  function detectAIType(labelStr) {
+    var normalized = normalizeAILabel(labelStr.trim());
+    // Khớp trực tiếp
+    if (AI_TYPES[normalized]) return normalized;
+    // Khớp từng key
+    var keys = Object.keys(AI_TYPES);
+    for (var i = 0; i < keys.length; i++) {
+      if (normalized.indexOf(keys[i].replace(':', ':')) === 0 ||
+          normalized.indexOf(keys[i].replace(':', '-')) === 0) {
+        return keys[i];
+      }
+    }
+    return null;
+  }
+
+  /* ─── Phát hiện loại AI từ mảng nhãn ───────────────────────── */
+  function detectAITypeFromLabels(labels) {
+    if (!labels || !labels.length) return null;
+    for (var i = 0; i < labels.length; i++) {
+      var raw = (typeof labels[i] === 'string') ? labels[i] : (labels[i].name || '');
+      var type = detectAIType(raw);
+      if (type) return type;
+    }
+    return null;
+  }
+
+  /* ─── Render Badge HTML ─────────────────────────────────────── */
+  /**
+   * @param {string} type     - 'ai:assisted' | 'ai:product' | 'ai:generated'
+   * @param {string} variant  - 'full' | 'standard' | 'micro' | 'inline'
+   * @param {string} lang     - 'vi' | 'en'
+   * @returns {string} HTML string
+   */
+  function renderAIBadge(type, variant, lang) {
+    type = detectAIType(type) || type;
+    var cfg = AI_TYPES[type];
+    if (!cfg) return '';
+
+    var label = (lang === 'en') ? cfg.en : cfg.vi;
+    var icon  = cfg.icon;
+
+    if (variant === 'inline') {
+      return (
+        '<span class="ai-badge ai-badge-inline" data-ai-type="' + type + '" data-ai-variant="inline">' +
+          '<span class="ai-badge-icon">' + icon + '</span>' +
+          '<span class="ai-badge-label">AI</span>' +
+        '</span>'
+      );
+    }
+
+    if (variant === 'micro') {
+      return (
+        '<span class="ai-badge ai-badge-micro" data-ai-type="' + type + '" data-ai-variant="micro">' +
+          '<span class="ai-badge-icon">' + icon + '</span>' +
+          '<span class="ai-badge-label">AI</span>' +
+        '</span>'
+      );
+    }
+
+    if (variant === 'full') {
+      return (
+        '<button type="button" class="ai-badge ai-badge-full" data-ai-type="' + type + '" data-ai-variant="full" aria-expanded="false">' +
+          '<span class="ai-badge-icon">' + icon + '</span>' +
+          '<span class="ai-badge-label">' + label + '</span>' +
+          '<span class="ai-badge-chevron">▾</span>' +
+        '</button>'
+      );
+    }
+
+    // standard (default)
+    return (
+      '<span class="ai-badge ai-badge-standard" data-ai-type="' + type + '" data-ai-variant="standard">' +
+        '<span class="ai-badge-icon">' + icon + '</span>' +
+        '<span class="ai-badge-label">' + label + '</span>' +
+      '</span>'
+    );
+  }
+
+  /* ─── Render Disclosure Box HTML ────────────────────────────── */
+  function renderDisclosureBox(type, lang) {
+    type = detectAIType(type) || type;
+    var cfg  = AI_TYPES[type];
+    var disc = DISCLOSURE_TEXT[type];
+    if (!cfg || !disc) return '';
+
+    var label    = (lang === 'en') ? cfg.en : cfg.vi;
+    var bodyText = (lang === 'en') ? disc.en : disc.vi;
+    var titleVI  = '✦ THÔNG CÁO MINH BẠCH VỀ NỘI DUNG';
+    var titleEN  = '✦ AI TRANSPARENCY DISCLOSURE';
+    var title    = (lang === 'en') ? titleEN : titleVI;
+    var learnVI  = 'ℹ️ Tìm hiểu thêm về Chính sách AI của chúng tôi »';
+    var learnEN  = 'ℹ️ Learn more about our AI Policy »';
+    var learnTxt = (lang === 'en') ? learnEN : learnVI;
+    var toggleVI = 'Xem chi tiết';
+    var toggleEN = 'Details';
+    var toggleTxt = (lang === 'en') ? toggleEN : toggleVI;
+
+    return (
+      '<div class="ai-disclosure-box" data-ai-type="' + type + '" id="ai-disclosure-box">' +
+        '<div class="ai-disclosure-header" id="ai-disclosure-header" role="button" tabindex="0" aria-expanded="false" aria-controls="ai-disclosure-body">' +
+          '<div class="ai-disclosure-title">' +
+            '<span class="ai-disclosure-icon">' + cfg.icon + '</span>' +
+            '<span class="ai-disclosure-title-text" data-vi="' + titleVI + '" data-en="' + titleEN + '">' + title + '</span>' +
+          '</div>' +
+          '<button type="button" class="ai-disclosure-toggle" aria-controls="ai-disclosure-body">' +
+            '<span class="ai-disclosure-toggle-text" data-vi="' + toggleVI + '" data-en="' + toggleEN + '">' + toggleTxt + '</span>' +
+            '<span class="ai-disclosure-toggle-icon">▾</span>' +
+          '</button>' +
+        '</div>' +
+        '<div class="ai-disclosure-body" id="ai-disclosure-body">' +
+          '<div class="ai-disclosure-text">' +
+            '<p data-vi="' + escapeAttr(disc.vi) + '" data-en="' + escapeAttr(disc.en) + '">' + escapeHtml(bodyText) + '</p>' +
+            '<a href="#" class="ai-disclosure-learn-more" data-vi="' + escapeAttr(learnVI) + '" data-en="' + escapeAttr(learnEN) + '">' + escapeHtml(learnTxt) + '</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  /* ─── Cập nhật ngôn ngữ tất cả badges đang hiển thị ────────── */
+  function updateAllBadgesLanguage(lang) {
+    // Cập nhật standard và full badge labels
+    var badges = document.querySelectorAll('.ai-badge[data-ai-type][data-ai-variant]');
+    badges.forEach(function (badge) {
+      var type    = badge.getAttribute('data-ai-type');
+      var variant = badge.getAttribute('data-ai-variant');
+      var cfg     = AI_TYPES[type];
+      if (!cfg) return;
+
+      var labelEl = badge.querySelector('.ai-badge-label');
+      if (!labelEl) return;
+
+      if (variant === 'full' || variant === 'standard') {
+        labelEl.textContent = (lang === 'en') ? cfg.en : cfg.vi;
+      }
+      // micro/inline: luôn hiển thị "AI" — không đổi
+    });
+
+    // Cập nhật Disclosure Box
+    var box = document.getElementById('ai-disclosure-box');
+    if (box) {
+      // Title
+      var titleEl = box.querySelector('.ai-disclosure-title-text');
+      if (titleEl) {
+        titleEl.textContent = (lang === 'en') ? titleEl.getAttribute('data-en') : titleEl.getAttribute('data-vi');
+      }
+      // Toggle text
+      var toggleEl = box.querySelector('.ai-disclosure-toggle-text');
+      if (toggleEl) {
+        toggleEl.textContent = (lang === 'en') ? toggleEl.getAttribute('data-en') : toggleEl.getAttribute('data-vi');
+      }
+      // Body paragraph
+      var bodyEl = box.querySelector('.ai-disclosure-text p');
+      if (bodyEl) {
+        bodyEl.textContent = (lang === 'en') ? bodyEl.getAttribute('data-en') : bodyEl.getAttribute('data-vi');
+      }
+      // Learn more link
+      var learnEl = box.querySelector('.ai-disclosure-learn-more');
+      if (learnEl) {
+        learnEl.textContent = (lang === 'en') ? learnEl.getAttribute('data-en') : learnEl.getAttribute('data-vi');
+      }
+    }
+  }
+
+  /* ─── ĐIỂM TÍCH HỢP 1: Single Post Header (Full Badge + Disclosure Box) */
+  function injectSinglePostBadge() {
+    var container = document.getElementById('single-post-wrapper');
+    if (container) {
+      if (container.style.display === 'none') return;
+    } else {
+      container = document.querySelector('.single-post-container');
+      if (!container) return;
+    }
+
+    // Đọc ai type từ data attribute trên container hoặc bài viết
+    var rawType = container.getAttribute('data-ai-type');
+    if (!rawType) {
+      var childWithAI = container.querySelector('[data-ai-type]');
+      if (childWithAI) rawType = childWithAI.getAttribute('data-ai-type');
+    }
+    if (!rawType) return;
+    var aiType = detectAIType(rawType);
+    if (!aiType || !AI_TYPES[aiType]) return;
+
+    var lang = getCurrentLang();
+
+    // (A) Inject Full Badge vào author-meta-details
+    var metaDetails = container.querySelector('.author-meta-details');
+    if (metaDetails && !metaDetails.querySelector('.ai-badge-full')) {
+      // Thêm dấu phân cách và badge
+      var sepEl = document.createElement('span');
+      sepEl.textContent = '•';
+      metaDetails.appendChild(sepEl);
+
+      var wrapper = document.createElement('span');
+      wrapper.innerHTML = renderAIBadge(aiType, 'full', lang);
+      metaDetails.appendChild(wrapper);
+
+      // Gắn sự kiện toggle cho Full Badge
+      initFullBadgeToggle(wrapper.querySelector('.ai-badge-full'));
+    }
+
+    // (B) Inject Disclosure Box trước .post-body (hoặc trước AdSense top)
+    var postBody = container.querySelector('.post-body');
+    var adsenseTop = container.querySelector('.adsense-slot.adsense-top, .adsense-top');
+    var insertBefore = adsenseTop || postBody;
+
+    if (insertBefore && !container.querySelector('#ai-disclosure-box')) {
+      var discEl = document.createElement('div');
+      discEl.innerHTML = renderDisclosureBox(aiType, lang);
+      insertBefore.parentNode.insertBefore(discEl.firstChild, insertBefore);
+
+      // Gắn sự kiện toggle cho Disclosure Box
+      initDisclosureBoxToggle();
+    }
+  }
+
+  /* Toggle Full Badge → mở/đóng Disclosure Box */
+  function initFullBadgeToggle(badgeEl) {
+    if (!badgeEl) return;
+    badgeEl.addEventListener('click', function () {
+      var box = document.getElementById('ai-disclosure-box');
+      if (!box) return;
+      var isOpen = box.classList.toggle('is-open');
+      badgeEl.setAttribute('aria-expanded', isOpen);
+      badgeEl.classList.toggle('is-open', isOpen);
+    });
+  }
+
+  /* Toggle Disclosure Box header */
+  function initDisclosureBoxToggle() {
+    var header = document.getElementById('ai-disclosure-header');
+    if (!header) return;
+
+    function toggle() {
+      var box = header.closest('.ai-disclosure-box');
+      if (!box) return;
+      var isOpen = box.classList.toggle('is-open');
+      header.setAttribute('aria-expanded', isOpen);
+    }
+
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  }
+
+  /* ─── ĐIỂM TÍCH HỢP 2: Post Cards Feed (Standard Badge) ────── */
+  function injectPostCardBadges() {
+    var lang = getCurrentLang();
+    var cards = document.querySelectorAll('.post-card[data-ai-type]');
+    cards.forEach(function (card) {
+      var rawType = card.getAttribute('data-ai-type');
+      var aiType = detectAIType(rawType);
+      if (!aiType || !AI_TYPES[aiType]) return;
+
+      var meta = card.querySelector('.post-card-meta');
+      if (!meta) return;
+
+      // Tránh inject trùng
+      if (meta.querySelector('.ai-badge-standard')) return;
+
+      // Thêm separator và badge
+      var sepEl = document.createElement('span');
+      sepEl.textContent = '•';
+
+      var wrapper = document.createElement('span');
+      wrapper.style.display = 'inline-flex';
+      wrapper.innerHTML = renderAIBadge(aiType, 'standard', lang);
+
+      meta.appendChild(sepEl);
+      meta.appendChild(wrapper);
+    });
+  }
+
+  /* ─── ĐIỂM TÍCH HỢP 3: Archive Timeline (Micro Badge) ──────── */
+  function injectTimelineBadges() {
+    var lang = getCurrentLang();
+    // archive-page.js đã render .archive-post-card với data-ai-type
+    var cards = document.querySelectorAll('.archive-post-card[data-ai-type]');
+    cards.forEach(function (card) {
+      var rawType = card.getAttribute('data-ai-type');
+      var aiType = detectAIType(rawType);
+      if (!aiType || !AI_TYPES[aiType]) return;
+
+      // Tránh inject trùng
+      if (card.querySelector('.ai-badge-micro')) return;
+
+      // Tìm title span và inject badge ngay sau
+      var titleEl = card.querySelector('.archive-post-card-title');
+      if (!titleEl) return;
+
+      var wrapper = document.createElement('span');
+      wrapper.innerHTML = renderAIBadge(aiType, 'micro', lang);
+      titleEl.after(wrapper.firstChild);
+    });
+  }
+
+  /* ─── ĐIỂM TÍCH HỢP 4: Special Post Widgets (Inline Badge) ─── */
+  function injectWidgetBadges() {
+    var lang = getCurrentLang();
+
+    // Ranked widget: inject vào .sp-ranked-date
+    var rankedDates = document.querySelectorAll('.sp-ranked-item[data-ai-type] .sp-ranked-date');
+    rankedDates.forEach(function (dateEl) {
+      var item = dateEl.closest('[data-ai-type]');
+      if (!item) return;
+      var rawType = item.getAttribute('data-ai-type');
+      var aiType = detectAIType(rawType);
+      if (!aiType || !AI_TYPES[aiType]) return;
+      if (dateEl.querySelector('.ai-badge-inline')) return;
+
+      var sepEl = document.createElement('span');
+      sepEl.textContent = ' • ';
+      var wrapper = document.createElement('span');
+      wrapper.innerHTML = renderAIBadge(aiType, 'inline', lang);
+      dateEl.appendChild(sepEl);
+      dateEl.appendChild(wrapper.firstChild);
+    });
+
+    // Spotlight widget: inject vào .sp-spotlight-meta
+    var spotlightMetas = document.querySelectorAll('.sp-spotlight-card[data-ai-type] .sp-spotlight-meta');
+    spotlightMetas.forEach(function (metaEl) {
+      var card = metaEl.closest('[data-ai-type]');
+      if (!card) return;
+      var rawType = card.getAttribute('data-ai-type');
+      var aiType = detectAIType(rawType);
+      if (!aiType || !AI_TYPES[aiType]) return;
+      if (metaEl.querySelector('.ai-badge-standard')) return;
+
+      var wrapper = document.createElement('span');
+      wrapper.innerHTML = renderAIBadge(aiType, 'standard', lang);
+      metaEl.appendChild(wrapper.firstChild);
+    });
+
+    // Digest widget: inject vào .sp-digest-timestamp
+    var digestTimestamps = document.querySelectorAll('.sp-digest-item[data-ai-type] .sp-digest-timestamp');
+    digestTimestamps.forEach(function (tsEl) {
+      var item = tsEl.closest('[data-ai-type]');
+      if (!item) return;
+      var rawType = item.getAttribute('data-ai-type');
+      var aiType = detectAIType(rawType);
+      if (!aiType || !AI_TYPES[aiType]) return;
+      if (tsEl.querySelector('.ai-badge-inline')) return;
+
+      var sepEl = document.createElement('span');
+      sepEl.textContent = ' • ';
+      var wrapper = document.createElement('span');
+      wrapper.innerHTML = renderAIBadge(aiType, 'inline', lang);
+      tsEl.appendChild(sepEl);
+      tsEl.appendChild(wrapper.firstChild);
+    });
+  }
+
+  /* ─── Khởi chạy toàn bộ injection ─────────────────────────── */
+  function initAITransparency() {
+    injectSinglePostBadge();
+    injectPostCardBadges();
+    injectTimelineBadges();
+    injectWidgetBadges();
+  }
+
+  /* ─── Lắng nghe sự kiện languageChanged từ bilingual.js ─────── */
+  window.addEventListener('languageChanged', function (e) {
+    var lang = (e.detail && e.detail.lang) ? e.detail.lang : getCurrentLang();
+    updateAllBadgesLanguage(lang);
+  });
+
+  /* ─── MutationObserver: tự động inject khi DOM thay đổi ─────── */
+  // (dùng cho archive-page.js và special-posts.js render bất đồng bộ)
+  var _observer = null;
+  function startObserver() {
+    if (_observer) return;
+    _observer = new MutationObserver(function (mutations) {
+      var needsInject = mutations.some(function (m) {
+        return m.addedNodes.length > 0;
+      });
+      if (needsInject) {
+        injectTimelineBadges();
+        injectWidgetBadges();
+        injectPostCardBadges();
+      }
+    });
+    _observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  /* ─── Utility: escape ────────────────────────────────────────── */
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function escapeAttr(str) {
+    if (!str) return '';
+    return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+
+  /* ─── Export API cho các module khác ───────────────────────── */
+  window.AITransparency = {
+    detectAIType: detectAIType,
+    detectAITypeFromLabels: detectAITypeFromLabels,
+    renderAIBadge: renderAIBadge,
+    renderDisclosureBox: renderDisclosureBox,
+    injectTimelineBadges: injectTimelineBadges,
+    injectWidgetBadges: injectWidgetBadges,
+    injectPostCardBadges: injectPostCardBadges,
+    reinject: initAITransparency,
+  };
+
+  /* ─── Khởi động ─────────────────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      initAITransparency();
+      startObserver();
+    });
+  } else {
+    initAITransparency();
+    startObserver();
   }
 
 })();

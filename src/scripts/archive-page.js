@@ -119,9 +119,21 @@
             var timestamp = published ? new Date(published).getTime() : 0;
             
             var category = 'Chưa phân loại';
+            var aiType = null; // Nhãn AI (ai:assisted, ai:product, ai:generated)
             if (allLabels.length > 0) {
-              var normalLabels = allLabels.filter(function(l) { return l.indexOf('@') !== 0; });
+              var normalLabels = allLabels.filter(function(l) {
+                var lower = l.toLowerCase();
+                return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-');
+              });
               category = normalLabels.length > 0 ? normalLabels[0] : allLabels[0];
+
+              // Trích xuất nhãn AI nếu có
+              allLabels.forEach(function(l) {
+                if (!aiType) {
+                  var lower = l.toLowerCase().replace(/-/g, ':');
+                  if (lower.startsWith('ai:')) aiType = lower;
+                }
+              });
             }
             // Lọc sạch các tiền tố đặc biệt nếu còn sót lại
             category = category.replace(/^[@#_~]+/, '').trim();
@@ -132,6 +144,7 @@
               year: year,
               dateStr: dateStr,
               category: category,
+              aiType: aiType,
               timestamp: timestamp
             });
           });
@@ -180,6 +193,7 @@
             year: year,
             dateStr: dateStr,
             category: category,
+            aiType: card.getAttribute('data-ai-type') || null,
             timestamp: timestamp
           };
         });
@@ -412,11 +426,17 @@
       // Danh sách thẻ bài viết phẳng
       html += '<div class="archive-year-posts" id="year-posts-' + yr + '">';
       group.posts.forEach(function (post) {
-        html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '">';
+        var aiAttr = post.aiType ? ' data-ai-type="' + post.aiType + '"' : '';
+        html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '"' + aiAttr + '>';
         // Cột 1: Chuyên mục
         html += '  <span class="archive-post-cat-pill">' + escapeHtml(post.category || 'Góc Nhìn') + '</span>';
         // Cột 2: Tiêu đề
         html += '  <span class="archive-post-card-title">' + escapeHtml(post.title) + '</span>';
+        // Cột 2b: AI Micro Badge (nếu có nhãn AI)
+        if (post.aiType && window.AITransparency) {
+          var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+          html += window.AITransparency.renderAIBadge(post.aiType, 'micro', lang);
+        }
         // Cột 3: Ngày đăng + Mũi tên
         html += '  <div class="archive-post-meta">';
         html += '    <span class="archive-post-date">📅 ' + escapeHtml(post.dateStr) + '</span>';
