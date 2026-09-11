@@ -23,6 +23,7 @@ const cssFiles = [
   "affiliate-ui.css",
   "footer.css",
   "archive-page.css",
+  "special-posts.css",
 ];
 const combinedCss = cssFiles
   .map(f => fs.readFileSync(path.join(stylesDir, f), "utf8"))
@@ -39,6 +40,7 @@ const jsFiles = [
   "bilingual.js",
   "reading-time.js",
   "footer.js",
+  "special-posts.js",
 ];
 const combinedJs = jsFiles
   .map(f => fs.readFileSync(path.join(scriptsDir, f), "utf8"))
@@ -409,6 +411,11 @@ ${combinedCss}
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed'>
                   <b:loop values='data:posts' var='post' index='idx'>
+                    <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
+                         isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
+                         Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
+                    <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
+                    <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
                       <div class='post-card-body'>
                         <div>
@@ -435,6 +442,8 @@ ${combinedCss}
                         </b:if>
                       </b:if>
                     </article>
+                    </b:if><!-- /isExclusiveFeaturePost -->
+                    </b:with>
                   </b:loop>
                 </div>
 
@@ -628,6 +637,26 @@ ${combinedCss}
 
         <!-- 3rd Party Widgets Under Post -->
         <b:section id='under-post-widgets' name='Tiện Ích Dưới Bài Viết (Bên Thứ 3)' showaddelement='yes'/>
+
+        <!-- Special Posts Widget — Bên dưới danh sách bài (Main Content) -->
+        <!-- Hiển thị trong Main Content, tự động chuyển sang grid 2-3 cột nhờ Container Queries -->
+        <b:section id='main-special-posts-section' name='Tiện Ích Bài Đặc Biệt (Main Content)' showaddelement='yes'>
+          <b:widget id='HTML_SP_MainRanked' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
+            <b:includable id='main'>
+              <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
+                <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
+                <div class='special-posts-widget'
+                     id='widget-top-bai-doc'
+                     data-pattern='ranked'
+                     data-sort='views'
+                     data-limit='6'
+                     data-title='📊 Bài Viết Được Đọc Nhiều'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
       </main>
 
       <!-- ==========================================
@@ -635,6 +664,82 @@ ${combinedCss}
            ========================================== -->
       <aside class='sidebar' id='sidebar' aria-label='Cột bên'>
         <b:section id='sidebar-section' name='Cột Bên (Sidebar)' showaddelement='yes'>
+
+          <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
+          <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
+          <b:widget id='HTML_SP_Ranked' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <!-- HƯỚNG DẪN TÙNG CHỈNH:
+                     data-labels: nhãn cần lấy bài (phân tách bằng dấu phẩy)
+                     data-sort:   latest | views | random
+                     data-limit:  số bài hiển thị (1-10)
+                     data-title:  tiêu đề widget (để trống sẽ không hiển thị header)
+                -->
+                <div class='special-posts-widget'
+                     id='widget-bai-viet-noi-bat'
+                     data-pattern='ranked'
+                     data-labels='@Nổi bật'
+                     data-sort='latest'
+                     data-limit='5'
+                     data-title='🔥 Bài Viết Nổi Bật'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Chiêm Nghiệm Hôm Nay (Pattern: quote) -->
+          <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
+          <b:widget id='HTML_SP_Quote' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-chiem-nghiem'
+                     data-pattern='quote'
+                     data-labels='@Quote'
+                     data-sort='random'
+                     data-limit='1'
+                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Điểm Tin Mỗi Ngày (Pattern: digest) -->
+          <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
+          <b:widget id='HTML_SP_Digest' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-diem-tin'
+                     data-pattern='digest'
+                     data-labels='@Điểm tin'
+                     data-sort='latest'
+                     data-limit='4'
+                     data-title='⚡ Điểm Tin Mỗi Ngày'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Bài Viết Tiêu Điểm — Sidebar (Pattern: spotlight, nhỏ gọn) -->
+          <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
+          <b:widget id='HTML_SP_Spotlight' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-tieu-diem'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'
+                     data-title='🌟 Bài Viết Tiêu Điểm'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
 
           <!-- Widget: About Me -->
           <b:widget id='HTML2' type='HTML' version='2'>

@@ -577,6 +577,75 @@ a:hover {
   transform: scale(1.05);
 }
 
+/* Language Dropdown */
+.lang-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.lang-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+.lang-dropdown-toggle:hover {
+  background: var(--bg-hover);
+}
+.dropdown-arrow {
+  font-size: 0.7rem;
+  margin-left: 2px;
+  color: var(--text-muted);
+}
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+  min-width: 140px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+.lang-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.lang-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  text-align: left;
+  transition: var(--transition);
+}
+.lang-option:hover {
+  background: var(--bg-hover);
+  color: var(--primary);
+}
+
 /* Hamburger Button (Mobile only) */
 .hamburger-btn {
   display: none;
@@ -3115,6 +3184,639 @@ a:hover {
 }
 
 
+/* ==========================================================================
+   FLEXIBLE SPECIAL POSTS WIDGET (FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2)
+   Patterns: ranked | spotlight | quote | digest
+   ========================================================================== */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTAINER SHELL — Container Queries base (tự thích ứng Sidebar / Main)
+   ────────────────────────────────────────────────────────────────────────── */
+.special-posts-widget {
+  container-type: inline-size;
+  container-name: special-widget;
+  width: 100%;
+}
+
+/* Widget wrapper có tiêu đề */
+.sp-widget-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+/* Header bar của widget */
+.sp-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem 0.7rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sp-widget-title {
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.sp-view-all-link {
+  font-size: 0.72rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.sp-view-all-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.sp-widget-body {
+  padding: 0.5rem 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   SKELETON SHIMMER — CLS = 0
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes sp-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.sp-skeleton {
+  padding: 0.5rem 1rem;
+}
+
+.sp-skeleton-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.sp-skeleton-item:last-child {
+  border-bottom: none;
+}
+
+.sp-skeleton-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sp-skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-line-full  { width: 100%; }
+.sp-skeleton-line-80    { width: 80%; }
+.sp-skeleton-line-55    { width: 55%; }
+.sp-skeleton-line-40    { width: 40%; }
+
+/* Skeleton cho Spotlight */
+.sp-skeleton-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+/* Skeleton cho Quote */
+.sp-skeleton-quote-line {
+  height: 14px;
+  border-radius: 4px;
+  margin-bottom: 0.55rem;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: RANKED — Bảng xếp hạng (chuẩn mockup 01, 02, 03)
+   ────────────────────────────────────────────────────────────────────────── */
+.special-posts-ranked-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-ranked-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+  position: relative;
+}
+.sp-ranked-item:last-child {
+  border-bottom: none;
+}
+.sp-ranked-item:hover {
+  background: var(--bg-surface);
+}
+
+/* Số thứ tự to */
+.sp-rank-number {
+  font-family: var(--font-main);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  opacity: 0.35;
+  min-width: 40px;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.sp-ranked-thumb {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+.sp-ranked-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.sp-ranked-item:hover .sp-ranked-thumb img {
+  transform: scale(1.06);
+}
+
+.sp-ranked-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sp-ranked-title {
+  font-family: var(--font-main);
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-main);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+.sp-ranked-item:hover .sp-ranked-title {
+  color: var(--primary);
+}
+
+.sp-ranked-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: SPOTLIGHT — Hero Card (Tiêu điểm bài viết)
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-spotlight-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 0.75rem 1rem 1rem;
+  transition: var(--transition);
+}
+.sp-spotlight-card:hover {
+  background: var(--bg-surface);
+}
+
+.sp-spotlight-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-surface);
+  margin-bottom: 0.85rem;
+}
+.sp-spotlight-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.sp-spotlight-card:hover .sp-spotlight-cover img {
+  transform: scale(1.04);
+}
+
+.sp-spotlight-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.sp-spotlight-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-light);
+  border-radius: var(--radius-full);
+  padding: 0.2em 0.7em;
+}
+
+.sp-spotlight-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.sp-spotlight-title {
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-main);
+  margin: 0 0 0.55rem;
+  transition: color 0.2s ease;
+}
+.sp-spotlight-card:hover .sp-spotlight-title {
+  color: var(--primary);
+}
+
+.sp-spotlight-snippet {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0 0 0.85rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sp-spotlight-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: var(--transition);
+}
+.sp-spotlight-card:hover .sp-spotlight-cta {
+  gap: 0.55rem;
+  color: var(--primary-hover);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: QUOTE — Trích dẫn / Chiêm nghiệm / Đoản thi
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-quote-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 1.1rem 1.25rem;
+  transition: var(--transition);
+  position: relative;
+}
+.sp-quote-card:hover {
+  background: var(--bg-surface);
+}
+
+.sp-quote-mark-open,
+.sp-quote-mark-close {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  line-height: 0.7;
+  color: var(--primary);
+  opacity: 0.55;
+  display: block;
+  user-select: none;
+}
+.sp-quote-mark-open {
+  margin-bottom: 0.3rem;
+}
+.sp-quote-mark-close {
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.sp-quote-text {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-style: italic;
+  line-height: 1.75;
+  color: var(--text-main);
+  margin: 0;
+  padding: 0 0.4rem;
+}
+
+.sp-quote-author {
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+.sp-quote-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.85rem 0 0.7rem;
+}
+
+.sp-quote-snippet {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.65rem;
+}
+
+.sp-quote-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: var(--transition);
+}
+.sp-quote-card:hover .sp-quote-cta {
+  gap: 0.55rem;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: DIGEST — Bản tin vắn / Dòng thời gian mini
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-digest-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-digest-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+.sp-digest-item:last-child {
+  border-bottom: none;
+}
+.sp-digest-item:hover {
+  background: var(--bg-surface);
+}
+
+.sp-digest-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sp-digest-bullet {
+  color: var(--primary);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.sp-digest-title {
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-main);
+  margin: 0 0 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+.sp-digest-item:hover .sp-digest-title {
+  color: var(--primary);
+}
+
+.sp-digest-snippet {
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   EMPTY STATE & ERROR
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-empty-state,
+.sp-error {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.sp-empty-state::before {
+  content: '📭';
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ANCHOR HIGHLIGHT PULSE — khi bấm từ Header → #widget-{slug}
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes sp-anchor-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.0); border-color: var(--primary); }
+  25%  { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.18); }
+  65%  { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.06); border-color: var(--primary); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); border-color: var(--border-color); }
+}
+
+.special-posts-widget.sp-anchor-highlight .sp-widget-card {
+  animation: sp-anchor-pulse 1.5s ease-out forwards;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTAINER QUERIES — Tự thích ứng Sidebar (< 480px) / Main Content (≥ 480px)
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Sidebar Layout: xếp dọc, width đầy đủ ── */
+@container special-widget (max-width: 479px) {
+  .sp-spotlight-cover {
+    aspect-ratio: 16 / 7;
+  }
+  .sp-ranked-thumb {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ── Main Content Layout: mở rộng sang dạng lưới ── */
+@container special-widget (min-width: 480px) {
+
+  /* Ranked & Digest → 2 cột grid khi có đủ chỗ */
+  .pattern-ranked .special-posts-ranked-list,
+  .pattern-digest .sp-digest-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0;
+  }
+
+  .pattern-ranked .sp-ranked-item,
+  .pattern-digest .sp-digest-item {
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+  }
+  .pattern-ranked .sp-ranked-item:last-child,
+  .pattern-digest .sp-digest-item:last-child {
+    border-right: none;
+  }
+
+  /* Ranked → số thứ tự to hơn */
+  .pattern-ranked .sp-rank-number {
+    font-size: 2rem;
+    min-width: 48px;
+  }
+
+  /* Ranked thumb lớn hơn */
+  .pattern-ranked .sp-ranked-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Spotlight → layout ngang 60/40 */
+  .pattern-spotlight .sp-spotlight-card {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.1rem;
+    align-items: center;
+  }
+  .pattern-spotlight .sp-spotlight-cover {
+    margin-bottom: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-md);
+  }
+  .pattern-spotlight .sp-spotlight-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Spotlight title lớn hơn ở main */
+  .pattern-spotlight .sp-spotlight-title {
+    font-size: 1.2rem;
+  }
+
+  /* Quote → chia đôi khi có nhiều bài */
+  .pattern-quote .sp-quote-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+  }
+  .pattern-quote .sp-quote-card {
+    border-right: 1px solid var(--border-color);
+  }
+  .pattern-quote .sp-quote-card:last-child {
+    border-right: none;
+  }
+}
+
+/* ── Rất rộng (≥ 700px) → chia 3 cột digest/ranked ── */
+@container special-widget (min-width: 700px) {
+  .pattern-ranked .special-posts-ranked-list,
+  .pattern-digest .sp-digest-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   DARK MODE — hoàn toàn qua CSS variables, không cần override thêm
+   ────────────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] .sp-quote-mark-open,
+[data-theme="dark"] .sp-quote-mark-close {
+  opacity: 0.4;
+}
+
+[data-theme="dark"] .sp-rank-number {
+  opacity: 0.25;
+}
+
+
 /* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
 :root {
   --bg-body: $(body.background);
@@ -3402,6 +4104,11 @@ a:hover {
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed'>
                   <b:loop values='data:posts' var='post' index='idx'>
+                    <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
+                         isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
+                         Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
+                    <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
+                    <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
                       <div class='post-card-body'>
                         <div>
@@ -3428,6 +4135,8 @@ a:hover {
                         </b:if>
                       </b:if>
                     </article>
+                    </b:if><!-- /isExclusiveFeaturePost -->
+                    </b:with>
                   </b:loop>
                 </div>
 
@@ -3621,6 +4330,26 @@ a:hover {
 
         <!-- 3rd Party Widgets Under Post -->
         <b:section id='under-post-widgets' name='Tiện Ích Dưới Bài Viết (Bên Thứ 3)' showaddelement='yes'/>
+
+        <!-- Special Posts Widget — Bên dưới danh sách bài (Main Content) -->
+        <!-- Hiển thị trong Main Content, tự động chuyển sang grid 2-3 cột nhờ Container Queries -->
+        <b:section id='main-special-posts-section' name='Tiện Ích Bài Đặc Biệt (Main Content)' showaddelement='yes'>
+          <b:widget id='HTML_SP_MainRanked' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
+            <b:includable id='main'>
+              <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
+                <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
+                <div class='special-posts-widget'
+                     id='widget-top-bai-doc'
+                     data-pattern='ranked'
+                     data-sort='views'
+                     data-limit='6'
+                     data-title='📊 Bài Viết Được Đọc Nhiều'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
       </main>
 
       <!-- ==========================================
@@ -3628,6 +4357,82 @@ a:hover {
            ========================================== -->
       <aside class='sidebar' id='sidebar' aria-label='Cột bên'>
         <b:section id='sidebar-section' name='Cột Bên (Sidebar)' showaddelement='yes'>
+
+          <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
+          <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
+          <b:widget id='HTML_SP_Ranked' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <!-- HƯỚNG DẪN TÙNG CHỈNH:
+                     data-labels: nhãn cần lấy bài (phân tách bằng dấu phẩy)
+                     data-sort:   latest | views | random
+                     data-limit:  số bài hiển thị (1-10)
+                     data-title:  tiêu đề widget (để trống sẽ không hiển thị header)
+                -->
+                <div class='special-posts-widget'
+                     id='widget-bai-viet-noi-bat'
+                     data-pattern='ranked'
+                     data-labels='@Nổi bật'
+                     data-sort='latest'
+                     data-limit='5'
+                     data-title='🔥 Bài Viết Nổi Bật'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Chiêm Nghiệm Hôm Nay (Pattern: quote) -->
+          <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
+          <b:widget id='HTML_SP_Quote' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-chiem-nghiem'
+                     data-pattern='quote'
+                     data-labels='@Quote'
+                     data-sort='random'
+                     data-limit='1'
+                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Điểm Tin Mỗi Ngày (Pattern: digest) -->
+          <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
+          <b:widget id='HTML_SP_Digest' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-diem-tin'
+                     data-pattern='digest'
+                     data-labels='@Điểm tin'
+                     data-sort='latest'
+                     data-limit='4'
+                     data-title='⚡ Điểm Tin Mỗi Ngày'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Bài Viết Tiêu Điểm — Sidebar (Pattern: spotlight, nhỏ gọn) -->
+          <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
+          <b:widget id='HTML_SP_Spotlight' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-tieu-diem'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'
+                     data-title='🌟 Bài Viết Tiêu Điểm'>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
 
           <!-- Widget: About Me -->
           <b:widget id='HTML2' type='HTML' version='2'>
@@ -4774,65 +5579,163 @@ a:hover {
 
 
 /* ==========================================
-   IN-POST BILINGUAL SWITCHER
+   IN-POST & THEME BILINGUAL SWITCHER (UNIFIED ORCHESTRATOR)
    - Switches VI / EN content blocks
-   - Saves preference to sessionStorage
-   - Auto-hides switcher if no bilingual content
+   - Parses "VI | EN" syntax in menus, widgets
+   - Translates static dictionary terms
+   - Saves preference to localStorage
    - Emits languageChanged event for Auto-TOC re-render
    ========================================== */
 (function() {
   'use strict';
 
-  var SESSION_KEY = 'preferred_lang';
+  var STORAGE_KEY = 'user_lang';
+
+  const CORE_I18N = {
+    vi: {
+      searchPlaceholder: 'Tìm kiếm bài viết...',
+      readingTime: 'phút đọc',
+      tableOfContents: 'Mục Lục Bài Viết',
+      previousPost: '« Bài trước',
+      nextPost: 'Bài sau »',
+      shareTitle: 'Chia sẻ bài viết:',
+      copiedLink: 'Đã sao chép liên kết!',
+      aboutAuthor: 'Về Tác Giả',
+      buyMeACoffee: 'Mời tôi ly cà phê',
+      newsletterTitle: 'Nhận bài viết mới',
+      newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
+      subscribeBtn: 'Đăng Ký',
+      olderPosts: 'Cũ hơn »',
+      newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
+      backToTop: '↑ Lên đầu trang',
+      copyrightSuffix: 'Tất cả quyền được bảo lưu.'
+    },
+    en: {
+      searchPlaceholder: 'Search articles...',
+      readingTime: 'min read',
+      tableOfContents: 'Table of Contents',
+      previousPost: '« Previous Post',
+      nextPost: 'Next Post »',
+      shareTitle: 'Share this post:',
+      copiedLink: 'Link copied to clipboard!',
+      aboutAuthor: 'About The Author',
+      buyMeACoffee: 'Buy me a coffee',
+      newsletterTitle: 'Newsletter',
+      newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
+      subscribeBtn: 'Subscribe',
+      olderPosts: 'Older Posts »',
+      newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
+      backToTop: '↑ Back to top',
+      copyrightSuffix: 'All rights reserved.'
+    }
+  };
 
   function initBilingual() {
-    var enContents = document.querySelectorAll("[data-lang='en']");
-    var switcherWrapper = document.querySelector('.bilingual-switcher-wrapper');
-
-    // If no English content blocks found, hide the switcher entirely
-    if (!enContents.length) {
-      if (switcherWrapper) switcherWrapper.style.display = 'none';
-      return;
-    }
-
-    // Show the switcher
-    if (switcherWrapper) switcherWrapper.classList.add('is-visible');
-
-    // Restore preferred language from sessionStorage
-    var preferred = sessionStorage.getItem(SESSION_KEY) || 'vi';
+    // Restore preferred language from localStorage
+    var preferred = localStorage.getItem(STORAGE_KEY) || 'vi';
     applyLanguage(preferred, false);
   }
 
+  function applyBilingualElements(lang) {
+    // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
+    const targets = document.querySelectorAll(
+      '[data-bilingual="true"]'
+    );
+  
+    targets.forEach(el => {
+      // 1. Lưu lại nội dung gốc ban đầu
+      if (el.dataset.rawText === undefined) {
+        el.dataset.rawText = el.textContent.trim();
+      }
+  
+      const raw = el.dataset.rawText;
+  
+      // 2. Nếu có chứa dấu phân cách "|"
+      if (raw.includes('|')) {
+        const parts = raw.split('|').map(s => s.trim());
+        el.textContent = (lang === 'en' ? parts[1] : parts[0]) || parts[0];
+      } else {
+        // Cơ chế An toàn (Graceful Fallback)
+        el.textContent = raw;
+      }
+    });
+  }
+
   function applyLanguage(lang, save) {
+    // 1. Update dropdown toggle text
+    var flagEl = document.getElementById('current-lang-flag');
+    var textEl = document.getElementById('current-lang-text');
+    if (flagEl && textEl) {
+      if (lang === 'en') {
+        flagEl.textContent = '🇬🇧';
+        textEl.textContent = 'EN';
+      } else {
+        flagEl.textContent = '🇻🇳';
+        textEl.textContent = 'VI';
+      }
+    }
+    
+    // Close dropdown
+    var dropdown = document.getElementById('lang-dropdown-menu');
+    if (dropdown) {
+      dropdown.classList.remove('show');
+    }
+
+    // 2. Toggle in-post bilingual content blocks
     var viContents = document.querySelectorAll("[data-lang='vi']");
     var enContents = document.querySelectorAll("[data-lang='en']");
-    var viBtns = document.querySelectorAll('.lang-btn-vi');
-    var enBtns = document.querySelectorAll('.lang-btn-en');
 
     if (lang === 'en') {
-      viContents.forEach(function(el) { el.style.display = 'none'; });
-      enContents.forEach(function(el) { el.style.display = ''; });
-      viBtns.forEach(function(btn) { btn.classList.remove('active'); btn.setAttribute('aria-pressed', 'false'); });
-      enBtns.forEach(function(btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); });
+      viContents.forEach(el => { el.style.display = 'none'; });
+      enContents.forEach(el => { el.style.display = 'block'; });
     } else {
-      enContents.forEach(function(el) { el.style.display = 'none'; });
-      viContents.forEach(function(el) { el.style.display = ''; });
-      enBtns.forEach(function(btn) { btn.classList.remove('active'); btn.setAttribute('aria-pressed', 'false'); });
-      viBtns.forEach(function(btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); });
+      enContents.forEach(el => { el.style.display = 'none'; });
+      viContents.forEach(el => { el.style.display = 'block'; });
     }
 
+    // 3. Apply VI | EN syntax parsing
+    applyBilingualElements(lang);
+
+    // 4. Translate static dictionary terms (optional, depending on where data-i18n is used in template)
+    var i18nTargets = document.querySelectorAll('[data-i18n]');
+    i18nTargets.forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (CORE_I18N[lang] && CORE_I18N[lang][key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = CORE_I18N[lang][key];
+        } else {
+          el.textContent = CORE_I18N[lang][key];
+        }
+      }
+    });
+
+    // Save to localStorage
     if (save !== false) {
-      try { sessionStorage.setItem(SESSION_KEY, lang); } catch(e) {}
+      try { localStorage.setItem(STORAGE_KEY, lang); } catch(e) {}
     }
 
-    // Dispatch event to inform Auto TOC to update
+    // Dispatch event to inform Auto TOC and others to update
     window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
   }
 
   // Global function called from inline onclick
-  window.switchLanguage = function(lang) {
+  window.setLanguage = function(lang) {
     applyLanguage(lang, true);
   };
+  
+  // Legacy support for switchLanguage
+  window.switchLanguage = window.setLanguage;
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    var toggleBtn = document.getElementById('lang-toggle-btn');
+    var dropdown = document.getElementById('lang-dropdown-menu');
+    if (toggleBtn && dropdown) {
+      if (!toggleBtn.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    }
+  });
 
   document.addEventListener('DOMContentLoaded', initBilingual);
 })();
@@ -4981,6 +5884,569 @@ a:hover {
   }
 
   document.addEventListener('DOMContentLoaded', initScrollToTop);
+})();
+
+
+/**
+ * Blogger Special Posts Widget Engine v2.1
+ * Multi-label Support & Pluggable Pattern Strategy
+ * Spec: FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2
+ *
+ * Features:
+ *  - Multi-label fetch (parallel) với deduplication
+ *  - SessionStorage cache 5 phút
+ *  - 4 renderers: ranked, spotlight, quote, digest
+ *  - Skeleton shimmer (CLS = 0)
+ *  - Anchor scroll highlight pulse
+ *  - Label sanitization (lọc @ # _ ~)
+ *  - Fallback: views → latest nếu API lỗi
+ */
+(function () {
+  'use strict';
+
+  /* ─── Constants ─────────────────────────────────────────────── */
+  const CACHE_PREFIX = 'editorial_sp_';
+  const CACHE_TTL    = 5 * 60 * 1000; // 5 phút
+
+  /* ─── Pattern → Renderer map (Pluggable Strategy) ───────────── */
+  const PATTERN_RENDERERS = {
+    ranked:    renderRankedPattern,
+    spotlight: renderSpotlightPattern,
+    quote:     renderQuotePattern,
+    digest:    renderDigestPattern,
+    // Mở rộng tương lai: video, slideshow
+  };
+
+  /* ═══════════════════════════════════════════════════════════════
+     INIT
+     ═══════════════════════════════════════════════════════════════ */
+  document.addEventListener('DOMContentLoaded', function () {
+    initSpecialPostWidgets();
+    initAnchorHighlight();
+  });
+
+  function initSpecialPostWidgets() {
+    const widgets = document.querySelectorAll('.special-posts-widget');
+    widgets.forEach(renderWidgetInstance);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     RENDER WIDGET INSTANCE
+     ═══════════════════════════════════════════════════════════════ */
+  async function renderWidgetInstance(container) {
+    const pattern        = container.dataset.pattern  || 'digest';
+    const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
+    const limit          = Math.min(parseInt(container.dataset.limit, 10) || 4, 10);
+    const sort           = container.dataset.sort     || 'latest';
+    const handpickedRaw  = container.dataset.posts    || '';
+    const showThumb      = container.dataset.showThumbnail !== 'false';
+    const showSnippet    = container.dataset.showSnippet   !== 'false';
+    const viewAllText    = container.dataset.viewAllText   || 'Xem tất cả »';
+    const widgetTitle    = container.dataset.title         || '';
+
+    // Thêm class pattern cho container queries
+    container.classList.add('pattern-' + pattern);
+
+    // Skeleton loading trước — CLS = 0
+    renderSkeleton(container, pattern, limit, widgetTitle, viewAllText, rawLabels);
+
+    try {
+      let posts = [];
+
+      if (handpickedRaw.trim()) {
+        // Chế độ Handpicked URLs
+        posts = await fetchHandpickedPosts(handpickedRaw);
+      } else if (sort === 'views' || sort === 'popular') {
+        // Chế độ Popular Posts (số lượt xem)
+        const timeRange = container.dataset.timeRange || 'all_time';
+        try {
+          posts = await fetchPopularPosts(limit, timeRange, rawLabels);
+        } catch (e) {
+          // Fallback về latest nếu API Popular Posts không khả dụng
+          console.warn('[SpecialPostsWidget] Popular Posts API không khả dụng, fallback → latest', e);
+          if (rawLabels) {
+            const labelList = splitLabels(rawLabels);
+            posts = await fetchMultiLabelPosts(labelList, limit, 'latest');
+          }
+        }
+      } else if (rawLabels) {
+        // Chế độ Multi-label
+        const labelList = splitLabels(rawLabels);
+        posts = await fetchMultiLabelPosts(labelList, limit, sort);
+      }
+
+      if (!posts || posts.length === 0) {
+        renderEmptyState(container, widgetTitle, viewAllText, rawLabels);
+        return;
+      }
+
+      // Gọi Pattern Renderer
+      const renderer = PATTERN_RENDERERS[pattern] || PATTERN_RENDERERS.digest;
+      container.innerHTML = buildWidgetShell(
+        widgetTitle,
+        viewAllText,
+        rawLabels,
+        pattern,
+        renderer(posts, { showThumb, showSnippet, limit })
+      );
+
+    } catch (err) {
+      console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu:', err);
+      container.innerHTML = buildWidgetShell(
+        widgetTitle,
+        viewAllText,
+        rawLabels,
+        pattern,
+        '<div class="sp-error">Không thể tải nội dung mục này.</div>'
+      );
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SKELETON LOADING
+     ═══════════════════════════════════════════════════════════════ */
+  function renderSkeleton(container, pattern, limit, title, viewAllText, rawLabels) {
+    let skeletonBody = '';
+
+    if (pattern === 'spotlight') {
+      skeletonBody = `
+        <div class="sp-skeleton" style="padding:0.75rem 1rem 1rem;">
+          <div class="sp-skeleton-cover"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-55" style="margin-bottom:0.75rem;height:10px;"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-full" style="height:16px;margin-bottom:0.4rem;"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-80"  style="height:16px;margin-bottom:0.9rem;"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-40"  style="height:10px;"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-55"  style="height:10px;margin-top:0.35rem;"></div>
+          <div class="sp-skeleton-line sp-skeleton-line-40"  style="height:10px;margin-top:0.35rem;"></div>
+        </div>`;
+
+    } else if (pattern === 'quote') {
+      skeletonBody = `
+        <div class="sp-skeleton" style="padding:1.1rem 1.25rem;">
+          <div class="sp-skeleton-quote-line" style="width:20px;height:22px;margin-bottom:0.5rem;"></div>
+          <div class="sp-skeleton-quote-line sp-skeleton-line-full"></div>
+          <div class="sp-skeleton-quote-line sp-skeleton-line-80"></div>
+          <div class="sp-skeleton-quote-line sp-skeleton-line-55"></div>
+          <div class="sp-skeleton-quote-line" style="width:20px;height:22px;margin-left:auto;margin-top:0.25rem;"></div>
+          <div class="sp-skeleton-quote-line sp-skeleton-line-40" style="margin-left:auto;margin-top:0.75rem;"></div>
+        </div>`;
+
+    } else {
+      // ranked & digest — dạng danh sách
+      const items = Array.from({ length: limit }).map(() => `
+        <div class="sp-skeleton-item">
+          ${pattern === 'ranked' ? '<div class="sp-skeleton-num"></div>' : ''}
+          <div class="sp-skeleton-thumb"></div>
+          <div class="sp-skeleton-content">
+            <div class="sp-skeleton-line sp-skeleton-line-full"></div>
+            <div class="sp-skeleton-line sp-skeleton-line-80"></div>
+            <div class="sp-skeleton-line sp-skeleton-line-40"></div>
+          </div>
+        </div>`).join('');
+      skeletonBody = `<div class="sp-skeleton">${items}</div>`;
+    }
+
+    container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     WIDGET SHELL — Header + Body
+     ═══════════════════════════════════════════════════════════════ */
+  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml) {
+    const cleanTitle = title ? escapeHtml(title) : '';
+    const viewAllUrl = rawLabels
+      ? buildLabelUrl(splitLabels(rawLabels)[0])
+      : '/';
+
+    const headerHtml = cleanTitle ? `
+      <div class="sp-widget-header">
+        <h3 class="sp-widget-title">${cleanTitle}</h3>
+        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link">${escapeHtml(viewAllText)}</a>
+      </div>` : '';
+
+    return `
+      <div class="sp-widget-card pattern-${escapeHtml(pattern)}">
+        ${headerHtml}
+        <div class="sp-widget-body">
+          ${bodyHtml}
+        </div>
+      </div>`;
+  }
+
+  function renderEmptyState(container, title, viewAllText, rawLabels) {
+    container.innerHTML = buildWidgetShell(
+      title, viewAllText, rawLabels, 'empty',
+      '<div class="sp-empty-state">Chưa có nội dung trong mục này.</div>'
+    );
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PATTERN RENDERERS
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── 1. RANKED ──────────────────────────────────────────────── */
+  function renderRankedPattern(posts, opts) {
+    const itemsHtml = posts.map((post, index) => {
+      const rankNum = String(index + 1).padStart(2, '0');
+      const thumb   = (opts.showThumb && post.thumbnail)
+        ? optimizeThumbnail(post.thumbnail, 's160-c')
+        : '';
+
+      return `
+        <a href="${escapeHtml(post.url)}" class="sp-ranked-item">
+          <span class="sp-rank-number">${rankNum}</span>
+          ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
+          <div class="sp-ranked-content">
+            <h4 class="sp-ranked-title">${escapeHtml(post.title)}</h4>
+            <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}</span>
+          </div>
+        </a>`;
+    }).join('');
+
+    return `<div class="special-posts-ranked-list">${itemsHtml}</div>`;
+  }
+
+  /* ── 2. SPOTLIGHT ───────────────────────────────────────────── */
+  function renderSpotlightPattern(posts, opts) {
+    // Chỉ lấy bài đầu tiên làm hero
+    const post   = posts[0];
+    const thumb  = (opts.showThumb && post.thumbnail)
+      ? optimizeThumbnail(post.thumbnail, 's600-c')
+      : '';
+    const badge  = post.labels && post.labels[0]
+      ? formatLabelName(post.labels[0])
+      : '';
+
+    return `
+      <a href="${escapeHtml(post.url)}" class="sp-spotlight-card">
+        ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
+        <div class="sp-spotlight-info">
+          <div class="sp-spotlight-meta">
+            ${badge ? `<span class="sp-spotlight-badge">${escapeHtml(badge)}</span>` : ''}
+            <span class="sp-spotlight-date">📅 ${escapeHtml(post.dateFormatted)}</span>
+          </div>
+          <h3 class="sp-spotlight-title">${escapeHtml(post.title)}</h3>
+          ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet">${escapeHtml(post.snippet)}</p>` : ''}
+          <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
+        </div>
+      </a>`;
+  }
+
+  /* ── 3. QUOTE ───────────────────────────────────────────────── */
+  function renderQuotePattern(posts, opts) {
+    const itemsHtml = posts.map(post => {
+      // Lấy tiêu đề bài làm câu trích dẫn, snippet làm lời bình
+      const quoteText = post.title;
+      const snippet   = (opts.showSnippet && post.snippet) ? post.snippet : '';
+
+      return `
+        <a href="${escapeHtml(post.url)}" class="sp-quote-card">
+          <span class="sp-quote-mark-open">\u201C</span>
+          <p class="sp-quote-text">${escapeHtml(quoteText)}</p>
+          <span class="sp-quote-mark-close">\u201D</span>
+          <div class="sp-quote-author">\u2014 ${escapeHtml(post.dateFormatted)}</div>
+          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet">${escapeHtml(snippet)}</p>` : ''}
+          <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
+        </a>`;
+    }).join('');
+
+    return `<div class="sp-quote-list">${itemsHtml}</div>`;
+  }
+
+  /* ── 4. DIGEST ──────────────────────────────────────────────── */
+  function renderDigestPattern(posts, opts) {
+    const itemsHtml = posts.map(post => {
+      const snippet = (opts.showSnippet && post.snippet) ? post.snippet : '';
+
+      return `
+        <a href="${escapeHtml(post.url)}" class="sp-digest-item">
+          <div class="sp-digest-timestamp">
+            <span class="sp-digest-bullet">✦</span>
+            ${escapeHtml(post.dateFormatted)}
+          </div>
+          <div class="sp-digest-title">${escapeHtml(post.title)}</div>
+          ${snippet ? `<div class="sp-digest-snippet">${escapeHtml(snippet)}</div>` : ''}
+        </a>`;
+    }).join('');
+
+    return `<div class="sp-digest-list">${itemsHtml}</div>`;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     DATA FETCHERS
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── Fetch nhiều nhãn song song + deduplication ─────────────── */
+  async function fetchMultiLabelPosts(labels, limit, sort) {
+    // Nạp song song tất cả nhãn
+    const promises = labels.map(label => fetchSingleLabelFeed(label, limit + 5));
+    const results  = await Promise.all(promises);
+
+    // Gộp
+    const allPosts = results.flat();
+
+    // Khử trùng lặp theo URL
+    const uniqueMap = new Map();
+    allPosts.forEach(post => {
+      if (!uniqueMap.has(post.url)) uniqueMap.set(post.url, post);
+    });
+    let merged = Array.from(uniqueMap.values());
+
+    // Sắp xếp
+    if (sort === 'random') {
+      merged.sort(() => Math.random() - 0.5);
+    } else {
+      // latest (mặc định)
+      merged.sort((a, b) => new Date(b.published) - new Date(a.published));
+    }
+
+    return merged.slice(0, limit);
+  }
+
+  /* ── Fetch 1 nhãn qua Blogger JSON Feed API ─────────────────── */
+  async function fetchSingleLabelFeed(label, count) {
+    const cacheKey = CACHE_PREFIX + 'label_' + encodeURIComponent(label) + '_' + count;
+    const cached   = readCache(cacheKey);
+    if (cached) return cached;
+
+    const encodedLabel = encodeURIComponent(label);
+    const blogUrl      = getBlogBaseUrl();
+    const url          = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=${count}&orderby=published`;
+
+    const res  = await fetch(url);
+    const json = await res.json();
+
+    const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+    writeCache(cacheKey, posts);
+    return posts;
+  }
+
+  /* ── Fetch Popular Posts (lượt xem nhiều nhất) ──────────────── */
+  async function fetchPopularPosts(limit, timeRange, labelFilter) {
+    const cacheKey = CACHE_PREFIX + 'popular_' + timeRange + '_' + limit;
+    const cached   = readCache(cacheKey);
+    if (cached) {
+      return filterByLabels(cached, labelFilter, limit);
+    }
+
+    // Blogger Popular Posts JSON Feed
+    const blogUrl = getBlogBaseUrl();
+    // Blogger không có Public Popular Posts API trực tiếp;
+    // dùng feed với orderby=updated (phổ biến nhất) kết hợp max-results lớn
+    // và sắp xếp theo label nếu có
+    let url;
+    if (labelFilter) {
+      const labelList    = splitLabels(labelFilter);
+      const encodedLabel = encodeURIComponent(labelList[0]);
+      url = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=20&orderby=updated`;
+    } else {
+      url = `${blogUrl}/feeds/posts/summary?alt=json&max-results=20&orderby=updated`;
+    }
+
+    const res  = await fetch(url);
+    const json = await res.json();
+
+    const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+    writeCache(cacheKey, posts);
+    return posts.slice(0, limit);
+  }
+
+  /* ── Fetch các bài viết theo danh sách URL chỉ định ─────────── */
+  async function fetchHandpickedPosts(rawUrls) {
+    const urls = rawUrls.split(',')
+      .map(u => u.trim())
+      .filter(Boolean);
+
+    const blogBase = getBlogBaseUrl();
+
+    const promises = urls.map(async (relOrAbs) => {
+      const absUrl   = relOrAbs.startsWith('http') ? relOrAbs : blogBase + relOrAbs;
+      const feedUrl  = absUrl.includes('?')
+        ? absUrl + '&alt=json'
+        : absUrl + '?alt=json';
+      const cacheKey = CACHE_PREFIX + 'post_' + encodeURIComponent(absUrl);
+      const cached   = readCache(cacheKey);
+      if (cached) return cached;
+
+      try {
+        const res  = await fetch(feedUrl);
+        const json = await res.json();
+        const entry = json.entry;
+        if (!entry) return null;
+        const post = parseEntry(entry);
+        writeCache(cacheKey, post);
+        return post;
+      } catch {
+        return null;
+      }
+    });
+
+    const results = await Promise.all(promises);
+    return results.filter(Boolean);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PARSER HELPERS
+     ═══════════════════════════════════════════════════════════════ */
+
+  function parseFeedEntries(entries) {
+    if (!Array.isArray(entries)) return [];
+    return entries.map(parseEntry).filter(Boolean);
+  }
+
+  function parseEntry(entry) {
+    try {
+      // URL bài viết
+      const links  = entry.link || [];
+      const altLink = links.find(l => l.rel === 'alternate');
+      const url    = altLink ? altLink.href : '';
+
+      // Tiêu đề
+      const title = entry.title ? (entry.title.$t || '') : '';
+
+      // Ảnh thumbnail
+      let thumbnail = '';
+      if (entry.media$thumbnail) {
+        thumbnail = entry.media$thumbnail.url || '';
+      }
+
+      // Snippet
+      let snippet = '';
+      if (entry.summary) {
+        snippet = (entry.summary.$t || '').replace(/<[^>]+>/g, '').trim();
+      } else if (entry.content) {
+        snippet = (entry.content.$t || '').replace(/<[^>]+>/g, '').trim().substring(0, 200);
+      }
+
+      // Ngày đăng
+      const published = entry.published ? entry.published.$t : '';
+      const dateFormatted = formatDate(published);
+
+      // Labels
+      const labels = (entry.category || []).map(c => c.term || '');
+
+      return { url, title, thumbnail, snippet, published, dateFormatted, labels };
+    } catch {
+      return null;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     UTILS
+     ═══════════════════════════════════════════════════════════════ */
+
+  /** Lọc ký tự @ # _ ~ khỏi tên nhãn trước khi hiển thị */
+  function formatLabelName(raw) {
+    if (!raw) return '';
+    return decodeURIComponent(String(raw)).replace(/^[@#_~]+/, '').trim();
+  }
+
+  /** Tách chuỗi nhãn "A, B, C" thành mảng */
+  function splitLabels(raw) {
+    return raw.split(',').map(l => l.trim()).filter(Boolean);
+  }
+
+  /** Tối ưu kích thước ảnh Blogger (Retina-safe) */
+  function optimizeThumbnail(url, size) {
+    if (!url) return '';
+    return url
+      .replace(/\/s[0-9]+(-c)?\//, '/' + size + '/')
+      .replace(/\/w[0-9]+-h[0-9]+(-c)?\//, '/' + size + '/');
+  }
+
+  /** Format ngày ISO thành DD/MM/YYYY */
+  function formatDate(iso) {
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      const dd   = String(d.getDate()).padStart(2, '0');
+      const mm   = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    } catch { return ''; }
+  }
+
+  /** Lấy base URL của blog hiện tại */
+  function getBlogBaseUrl() {
+    return window.location.protocol + '//' + window.location.host;
+  }
+
+  /** Build URL trang nhãn (lọc @ cho URL) */
+  function buildLabelUrl(label) {
+    if (!label) return '/';
+    const blogBase = getBlogBaseUrl();
+    return `${blogBase}/search/label/${encodeURIComponent(label)}`;
+  }
+
+  /** Lọc bài viết theo danh sách nhãn (OR logic) */
+  function filterByLabels(posts, rawLabels, limit) {
+    if (!rawLabels) return posts.slice(0, limit);
+    const labels = splitLabels(rawLabels);
+    const filtered = posts.filter(p =>
+      p.labels && p.labels.some(l => labels.includes(l))
+    );
+    return (filtered.length > 0 ? filtered : posts).slice(0, limit);
+  }
+
+  /** Escape HTML để tránh XSS */
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SESSION STORAGE CACHE
+     ═══════════════════════════════════════════════════════════════ */
+
+  function readCache(key) {
+    try {
+      const raw = sessionStorage.getItem(key);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts > CACHE_TTL) {
+        sessionStorage.removeItem(key);
+        return null;
+      }
+      return data;
+    } catch { return null; }
+  }
+
+  function writeCache(key, data) {
+    try {
+      sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
+    } catch { /* Quota exceeded — bỏ qua */ }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     ANCHOR SCROLL HIGHLIGHT
+     Khi URL chứa #widget-{slug}, cuộn mượt + kích hoạt pulse
+     ═══════════════════════════════════════════════════════════════ */
+  function initAnchorHighlight() {
+    function handleHash(hash) {
+      if (!hash) return;
+      const el = document.querySelector(hash);
+      if (el && el.classList.contains('special-posts-widget')) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('sp-anchor-highlight');
+        setTimeout(() => el.classList.remove('sp-anchor-highlight'), 1800);
+      }
+    }
+
+    // Xử lý hash lúc trang load
+    if (window.location.hash) {
+      // Đợi widget render xong
+      setTimeout(() => handleHash(window.location.hash), 600);
+    }
+
+    // Xử lý khi hash thay đổi (bấm link trong trang)
+    window.addEventListener('hashchange', () => handleHash(window.location.hash));
+  }
+
 })();
 
   //]]>

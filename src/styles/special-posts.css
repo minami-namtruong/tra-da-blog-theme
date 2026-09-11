@@ -1,0 +1,631 @@
+/* ==========================================================================
+   FLEXIBLE SPECIAL POSTS WIDGET (FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2)
+   Patterns: ranked | spotlight | quote | digest
+   ========================================================================== */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTAINER SHELL — Container Queries base (tự thích ứng Sidebar / Main)
+   ────────────────────────────────────────────────────────────────────────── */
+.special-posts-widget {
+  container-type: inline-size;
+  container-name: special-widget;
+  width: 100%;
+}
+
+/* Widget wrapper có tiêu đề */
+.sp-widget-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+/* Header bar của widget */
+.sp-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem 0.7rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sp-widget-title {
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.sp-view-all-link {
+  font-size: 0.72rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.sp-view-all-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.sp-widget-body {
+  padding: 0.5rem 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   SKELETON SHIMMER — CLS = 0
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes sp-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.sp-skeleton {
+  padding: 0.5rem 1rem;
+}
+
+.sp-skeleton-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.sp-skeleton-item:last-child {
+  border-bottom: none;
+}
+
+.sp-skeleton-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sp-skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+.sp-skeleton-line-full  { width: 100%; }
+.sp-skeleton-line-80    { width: 80%; }
+.sp-skeleton-line-55    { width: 55%; }
+.sp-skeleton-line-40    { width: 40%; }
+
+/* Skeleton cho Spotlight */
+.sp-skeleton-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+/* Skeleton cho Quote */
+.sp-skeleton-quote-line {
+  height: 14px;
+  border-radius: 4px;
+  margin-bottom: 0.55rem;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: RANKED — Bảng xếp hạng (chuẩn mockup 01, 02, 03)
+   ────────────────────────────────────────────────────────────────────────── */
+.special-posts-ranked-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-ranked-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+  position: relative;
+}
+.sp-ranked-item:last-child {
+  border-bottom: none;
+}
+.sp-ranked-item:hover {
+  background: var(--bg-surface);
+}
+
+/* Số thứ tự to */
+.sp-rank-number {
+  font-family: var(--font-main);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  opacity: 0.35;
+  min-width: 40px;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.sp-ranked-thumb {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+.sp-ranked-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.sp-ranked-item:hover .sp-ranked-thumb img {
+  transform: scale(1.06);
+}
+
+.sp-ranked-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sp-ranked-title {
+  font-family: var(--font-main);
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-main);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+.sp-ranked-item:hover .sp-ranked-title {
+  color: var(--primary);
+}
+
+.sp-ranked-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: SPOTLIGHT — Hero Card (Tiêu điểm bài viết)
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-spotlight-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 0.75rem 1rem 1rem;
+  transition: var(--transition);
+}
+.sp-spotlight-card:hover {
+  background: var(--bg-surface);
+}
+
+.sp-spotlight-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-surface);
+  margin-bottom: 0.85rem;
+}
+.sp-spotlight-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.sp-spotlight-card:hover .sp-spotlight-cover img {
+  transform: scale(1.04);
+}
+
+.sp-spotlight-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.sp-spotlight-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-light);
+  border-radius: var(--radius-full);
+  padding: 0.2em 0.7em;
+}
+
+.sp-spotlight-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.sp-spotlight-title {
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-main);
+  margin: 0 0 0.55rem;
+  transition: color 0.2s ease;
+}
+.sp-spotlight-card:hover .sp-spotlight-title {
+  color: var(--primary);
+}
+
+.sp-spotlight-snippet {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0 0 0.85rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sp-spotlight-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: var(--transition);
+}
+.sp-spotlight-card:hover .sp-spotlight-cta {
+  gap: 0.55rem;
+  color: var(--primary-hover);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: QUOTE — Trích dẫn / Chiêm nghiệm / Đoản thi
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-quote-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 1.1rem 1.25rem;
+  transition: var(--transition);
+  position: relative;
+}
+.sp-quote-card:hover {
+  background: var(--bg-surface);
+}
+
+.sp-quote-mark-open,
+.sp-quote-mark-close {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  line-height: 0.7;
+  color: var(--primary);
+  opacity: 0.55;
+  display: block;
+  user-select: none;
+}
+.sp-quote-mark-open {
+  margin-bottom: 0.3rem;
+}
+.sp-quote-mark-close {
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.sp-quote-text {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-style: italic;
+  line-height: 1.75;
+  color: var(--text-main);
+  margin: 0;
+  padding: 0 0.4rem;
+}
+
+.sp-quote-author {
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+.sp-quote-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.85rem 0 0.7rem;
+}
+
+.sp-quote-snippet {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.65rem;
+}
+
+.sp-quote-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: var(--transition);
+}
+.sp-quote-card:hover .sp-quote-cta {
+  gap: 0.55rem;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PATTERN: DIGEST — Bản tin vắn / Dòng thời gian mini
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-digest-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-digest-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+.sp-digest-item:last-child {
+  border-bottom: none;
+}
+.sp-digest-item:hover {
+  background: var(--bg-surface);
+}
+
+.sp-digest-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sp-digest-bullet {
+  color: var(--primary);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.sp-digest-title {
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-main);
+  margin: 0 0 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+.sp-digest-item:hover .sp-digest-title {
+  color: var(--primary);
+}
+
+.sp-digest-snippet {
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   EMPTY STATE & ERROR
+   ────────────────────────────────────────────────────────────────────────── */
+.sp-empty-state,
+.sp-error {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.sp-empty-state::before {
+  content: '📭';
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ANCHOR HIGHLIGHT PULSE — khi bấm từ Header → #widget-{slug}
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes sp-anchor-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.0); border-color: var(--primary); }
+  25%  { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.18); }
+  65%  { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.06); border-color: var(--primary); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); border-color: var(--border-color); }
+}
+
+.special-posts-widget.sp-anchor-highlight .sp-widget-card {
+  animation: sp-anchor-pulse 1.5s ease-out forwards;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTAINER QUERIES — Tự thích ứng Sidebar (< 480px) / Main Content (≥ 480px)
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Sidebar Layout: xếp dọc, width đầy đủ ── */
+@container special-widget (max-width: 479px) {
+  .sp-spotlight-cover {
+    aspect-ratio: 16 / 7;
+  }
+  .sp-ranked-thumb {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ── Main Content Layout: mở rộng sang dạng lưới ── */
+@container special-widget (min-width: 480px) {
+
+  /* Ranked & Digest → 2 cột grid khi có đủ chỗ */
+  .pattern-ranked .special-posts-ranked-list,
+  .pattern-digest .sp-digest-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0;
+  }
+
+  .pattern-ranked .sp-ranked-item,
+  .pattern-digest .sp-digest-item {
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+  }
+  .pattern-ranked .sp-ranked-item:last-child,
+  .pattern-digest .sp-digest-item:last-child {
+    border-right: none;
+  }
+
+  /* Ranked → số thứ tự to hơn */
+  .pattern-ranked .sp-rank-number {
+    font-size: 2rem;
+    min-width: 48px;
+  }
+
+  /* Ranked thumb lớn hơn */
+  .pattern-ranked .sp-ranked-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Spotlight → layout ngang 60/40 */
+  .pattern-spotlight .sp-spotlight-card {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.1rem;
+    align-items: center;
+  }
+  .pattern-spotlight .sp-spotlight-cover {
+    margin-bottom: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-md);
+  }
+  .pattern-spotlight .sp-spotlight-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Spotlight title lớn hơn ở main */
+  .pattern-spotlight .sp-spotlight-title {
+    font-size: 1.2rem;
+  }
+
+  /* Quote → chia đôi khi có nhiều bài */
+  .pattern-quote .sp-quote-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+  }
+  .pattern-quote .sp-quote-card {
+    border-right: 1px solid var(--border-color);
+  }
+  .pattern-quote .sp-quote-card:last-child {
+    border-right: none;
+  }
+}
+
+/* ── Rất rộng (≥ 700px) → chia 3 cột digest/ranked ── */
+@container special-widget (min-width: 700px) {
+  .pattern-ranked .special-posts-ranked-list,
+  .pattern-digest .sp-digest-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   DARK MODE — hoàn toàn qua CSS variables, không cần override thêm
+   ────────────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] .sp-quote-mark-open,
+[data-theme="dark"] .sp-quote-mark-close {
+  opacity: 0.4;
+}
+
+[data-theme="dark"] .sp-rank-number {
+  opacity: 0.25;
+}
