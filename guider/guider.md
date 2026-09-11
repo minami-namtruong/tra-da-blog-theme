@@ -51,6 +51,22 @@ Khi viết bài trên Blogger, bạn nhập các nhãn ở cột bên phải (**
 * **Ví dụ:** `Triết Lý | Philosophy`, `Kỹ Năng | Skills`
 * **Hiển thị:** Khi người đọc bấm nút chuyển ngôn ngữ **EN**, nhãn sẽ tự động đổi sang tiếng Anh.
 
+### 1.4. Nhãn Minh Bạch AI (AI Transparency Labels - Bắt đầu bằng `ai:`)
+* **Mục đích:** Khai báo và minh bạch mức độ can thiệp/hỗ trợ của Trí tuệ nhân tạo (AI) trong quá trình sáng tạo nội dung bài viết.
+* **Cơ chế hoạt động:**
+  * **Ẩn khỏi Thanh Chủ Đề:** Theme tự động loại trừ các nhãn `ai:` khỏi thanh Category Tabs để không làm rối menu chủ đề chính.
+  * **Tự động gắn Huy hiệu (Badge):** Tự động render huy hiệu minh bạch ngay dưới tiêu đề bài viết (ở cả Feed trang chủ và trang đọc chi tiết).
+  * **Kích hoạt Modal giải trình:** Khi người đọc bấm vào huy hiệu, một cửa sổ popup sẽ hiển thị giải trình chi tiết về vai trò của con người và AI.
+* **Bảng các nhãn AI được hỗ trợ:**
+  | Tên Nhãn Nhập Vào | Huy Hiệu Hiển Thị | Tỷ Lệ AI | Ý Nghĩa Sử Dụng |
+  | :--- | :---: | :---: | :--- |
+  | `ai:generated` *(hoặc `AI-Generated`)* | 🤖 AI Tạo Lập | ~80-100% | Bài viết do AI tạo lập nội dung chính theo prompt/định hướng của tác giả. |
+  | `ai:assisted` *(hoặc `AI-Assisted`)* | ✨ AI Hỗ Trợ | ~20-50% | Tác giả tự viết, AI hỗ trợ chỉnh sửa ngữ pháp, dàn ý hoặc dịch thuật. |
+  | `ai:none` *(hoặc `AI-None`)* | ✍️ 100% Con Người | 0% | Bài viết sáng tác thủ công hoàn toàn, không sử dụng công cụ AI sinh nội dung. |
+* **Ví dụ gắn nhãn kết hợp thực tế:**
+  `Công nghệ, Sách hay, ai:assisted`
+  *(Bài viết vừa thuộc chủ đề Công nghệ, Sách hay, vừa có huy hiệu AI Hỗ Trợ).*
+
 ---
 
 ## CHƯƠNG 2: HỆ THỐNG 4 KIỂU WIDGET BÀI VIẾT ĐẶC BIỆT
