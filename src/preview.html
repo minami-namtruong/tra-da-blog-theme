@@ -48,6 +48,7 @@
       <button id="view-mode-post" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">📄 Trang Đọc Bài Viết (Single Post)</button>
       <button id="view-mode-archive" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">⏳ Dòng Thời Gian (Archive Page)</button>
       <button id="toggle-logo-mode" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px dashed var(--primary); background: var(--bg-card); color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.2s;">🖼️ Thử Logo: [Văn Bản] ⇄ [Hình Ảnh]</button>
+      <button id="btn-open-widget-tester" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid #8b5cf6; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(139,92,246,0.35);">🎛️ Thử Config Widget</button>
     </div>
     <span style="color: var(--text-muted); font-size: 0.82rem;">💡 Đặc tả: FEAT-TIMELINE-PAGE-V3 (/p/muc-luc.html)</span>
   </div>
@@ -481,6 +482,22 @@
            SIDEBAR (30% - ALWAYS IN RIGHT COLUMN)
            ═══════════════════════════════════ -->
       <aside class="sidebar" id="sidebar">
+
+        <!-- ═══════════════════════════════════════════════════
+             🧪 WIDGET THỬ NGHIỆM TRỰC TIẾP (LIVE CONFIG PLAYGROUND)
+             ═══════════════════════════════════════════════════ -->
+        <div class="sidebar-widget live-playground-widget-box" id="live-playground-container" style="border: 2px dashed #8b5cf6; position: relative; background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: 0 4px 18px rgba(139,92,246,0.15); margin-bottom: 0.5rem; transition: all 0.3s ease;">
+          <div style="position: absolute; top: -12px; left: 14px; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; letter-spacing: 0.05em; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 5px rgba(139,92,246,0.3);">
+            <span>🧪 WIDGET THỬ NGHIỆM CONFIG</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border-color); font-size: 0.78rem; color: var(--text-muted);">
+            <span>Đang thử: <strong id="live-pattern-label" style="color: #8b5cf6; text-transform: uppercase;">ranked</strong></span>
+            <button type="button" id="btn-reopen-tester" style="background: none; border: none; color: #8b5cf6; font-size: 0.78rem; font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0;">⚙️ Đổi tham số</button>
+          </div>
+          <div id="live-sandbox-widget-mount">
+            <!-- Rendered by live tester JS -->
+          </div>
+        </div>
 
         <!-- Widget 1: About Me -->
         <div class="sidebar-widget">
@@ -1060,6 +1077,143 @@
     });
   </script>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODAL: WIDGET CONFIG PLAYGROUND (BỘ THỬ NGHIỆM CẤU HÌNH TIỆN ÍCH)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="widget-tester-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); font-family: var(--font-main); color: var(--text-main); display: flex; flex-direction: column;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg-card); z-index: 10;">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🎛️ Bộ Thử Nghiệm Cấu Hình Tiện Ích</span>
+          </h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 3px 0 0;">Tùy chỉnh thông số và xem trực tiếp hiệu ứng trên widget ở Sidebar</p>
+        </div>
+        <button type="button" id="tester-close-btn" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 999px; width: 32px; height: 32px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.2s;" aria-label="Đóng">✕</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+        
+        <!-- Nút chọn Preset nhanh -->
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">⚡ Chọn mẫu cấu hình nhanh (Presets):</label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 0.5rem;">
+            <button type="button" class="tester-preset-btn" data-preset="ranked" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">🔥 Top Nổi Bật</button>
+            <button type="button" class="tester-preset-btn" data-preset="quote" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">☕ Chiêm Nghiệm</button>
+            <button type="button" class="tester-preset-btn" data-preset="digest" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">⚡ Điểm Tin Vắn</button>
+            <button type="button" class="tester-preset-btn" data-preset="spotlight" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">🌟 Bài Tiêu Điểm</button>
+          </div>
+        </div>
+
+        <!-- 1. Chọn Kiểu Pattern -->
+        <div>
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.5rem;">1. Kiểu hiển thị (<code>data-pattern</code>):</label>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem;" id="tester-pattern-group">
+            <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 2px solid var(--primary); border-radius: var(--radius-md); background: var(--primary-light); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card active">
+              <input type="radio" name="tester_pattern" value="ranked" checked style="margin-top: 3px; accent-color: var(--primary);"/>
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Ranked (01, 02...)</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Đánh số thứ hạng, ảnh thumbnail vuông nhỏ</span>
+              </div>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card">
+              <input type="radio" name="tester_pattern" value="quote" style="margin-top: 3px; accent-color: var(--primary);"/>
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Quote (Chiêm nghiệm)</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Dấu ngoặc kép thanh lịch, kèm lời bình</span>
+              </div>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card">
+              <input type="radio" name="tester_pattern" value="digest" style="margin-top: 3px; accent-color: var(--primary);"/>
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Digest (Điểm tin)</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Bản tin bullet point kèm ngày tháng</span>
+              </div>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card">
+              <input type="radio" name="tester_pattern" value="spotlight" style="margin-top: 3px; accent-color: var(--primary);"/>
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Spotlight (Tiêu điểm)</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">1 bài hero lớn kèm ảnh bìa 16:9</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. Tiêu đề & Nhãn -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">2. Tiêu đề Widget (<code>data-title</code>):</label>
+            <input type="text" id="tester-input-title" value="🔥 Bài Viết Nổi Bật" style="width: 100%; box-sizing: border-box; padding: 0.55rem 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-main); font-size: 0.85rem; outline: none;"/>
+          </div>
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">3. Nhãn lọc bài (<code>data-labels</code>):</label>
+            <input type="text" id="tester-input-labels" value="@Nổi bật" placeholder="VD: @Nổi bật hoặc Sách, Triết học" style="width: 100%; box-sizing: border-box; padding: 0.55rem 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-main); font-size: 0.85rem; outline: none;"/>
+          </div>
+        </div>
+
+        <!-- 3. Số lượng bài & Cách sắp xếp -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; align-items: center;">
+          <div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+              <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);">4. Số lượng bài (<code>data-limit</code>):</label>
+              <strong id="tester-limit-val" style="color: var(--primary); font-size: 0.88rem; background: var(--primary-light); padding: 1px 8px; border-radius: 999px;">5</strong>
+            </div>
+            <input type="range" id="tester-input-limit" min="1" max="8" value="5" style="width: 100%; cursor: pointer; accent-color: var(--primary);"/>
+          </div>
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">5. Cách sắp xếp (<code>data-sort</code>):</label>
+            <select id="tester-input-sort" style="width: 100%; box-sizing: border-box; padding: 0.55rem 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 0.85rem; outline: none; cursor: pointer;">
+              <option value="latest">Mới nhất (latest)</option>
+              <option value="views">Đọc nhiều nhất (views)</option>
+              <option value="random">Ngẫu nhiên (random)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 4. Tùy chọn hiển thị & Xem thêm -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <label style="font-size: 0.8rem; color: var(--text-main); display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="tester-toggle-thumb" checked style="accent-color: var(--primary);"/>
+              <span>Hiển thị ảnh thumbnail</span>
+            </label>
+            <label style="font-size: 0.8rem; color: var(--text-main); display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="tester-toggle-snippet" checked style="accent-color: var(--primary);"/>
+              <span>Hiển thị đoạn trích tóm tắt</span>
+            </label>
+          </div>
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">Chữ nút xem tất cả (<code>data-view-all-text</code>):</label>
+            <input type="text" id="tester-input-viewall" value="Xem tất cả »" style="width: 100%; box-sizing: border-box; padding: 0.55rem 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-main); font-size: 0.85rem; outline: none;"/>
+          </div>
+        </div>
+
+        <!-- 5. Khung sinh code để copy lên Blogger -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em;">📋 Mã HTML tương ứng để dán vào Blogger:</span>
+            <button type="button" id="tester-copy-btn" style="padding: 0.35rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--primary); background: var(--primary); color: #fff; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">📋 Sao chép mã</button>
+          </div>
+          <pre style="margin: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; overflow-x: auto; font-family: monospace; font-size: 0.78rem; color: var(--text-main); line-height: 1.4;"><code id="tester-code-display">&lt;div class="special-posts-widget" ...&gt;&lt;/div&gt;</code></pre>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);">
+        <span style="font-size: 0.78rem; color: var(--text-muted);">✨ Mọi thay đổi đều được render trực tiếp tại đầu Sidebar</span>
+        <button type="button" id="tester-scroll-to-btn" style="padding: 0.5rem 1.25rem; border-radius: 999px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.3);">
+          <span>👁️ Cuộn Đến Widget Xem Thử</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- External scripts loaded after DOM -->
   <script src="scripts/dark-mode.js"></script>
   <script src="scripts/mobile-nav.js"></script>
@@ -1069,5 +1223,422 @@
   <script src="scripts/bilingual.js"></script>
   <script src="scripts/reading-time.js"></script>
   <script src="scripts/footer.js"></script>
+  <script src="scripts/special-posts.js"></script>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       INTERACTIVE WIDGET PLAYGROUND CONTROLLER SCRIPT
+       ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ── MOCK DATASET ──
+      var MOCK_POSTS = [
+        {
+          title: "Nghịch Lý Của Việc Chọn Lựa Trong Thế Giới Số",
+          url: "#",
+          dateFormatted: "09/09/2026",
+          thumbnail: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=600&auto=format&fit=crop&q=80",
+          snippet: "Càng có nhiều sự lựa chọn, chúng ta càng khó đưa ra quyết định thỏa đáng và dễ rơi vào cảm giác hối tiếc sau khi chọn...",
+          labels: ["Tư Duy", "@Nổi bật"]
+        },
+        {
+          title: "30 Ngày Thử Thách Không Sử Dụng Điện Thoại Buổi Sáng",
+          url: "#",
+          dateFormatted: "05/09/2026",
+          thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80",
+          snippet: "Thức dậy mà không lướt mạng xã hội đã hoàn toàn tái thiết lập mức năng lượng và sự tập trung suốt cả ngày dài...",
+          labels: ["Lối Sống", "@Nổi bật", "@Điểm tin"]
+        },
+        {
+          title: "Review Sách: 'Tư Duy Nhanh và Chậm' của Daniel Kahneman",
+          url: "#",
+          dateFormatted: "01/09/2026",
+          thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&auto=format&fit=crop&q=80",
+          snippet: "Hệ thống 1 và Hệ thống 2: Cách não bộ chúng ta đưa ra quyết định mà chính ta đôi khi cũng không hề hay biết...",
+          labels: ["Sách Hay", "@Nổi bật"]
+        },
+        {
+          title: "Công Nghệ Có Thực Sự Khiến Cuộc Sống Của Ta Tự Do Hơn?",
+          url: "#",
+          dateFormatted: "28/08/2026",
+          thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80",
+          snippet: "Công nghệ hứa hẹn tiết kiệm thời gian, nhưng dường như chúng ta lại ngày càng bận rộn và kiệt sức hơn bao giờ hết...",
+          labels: ["Công Nghệ", "@Điểm tin"]
+        },
+        {
+          title: "Sự Đơn Giản Không Phải Là Cái Kết Của Sự Nông Cạn, Mà Là Đỉnh Cao Của Tinh Tế",
+          url: "#",
+          dateFormatted: "22/08/2026",
+          thumbnail: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=80",
+          snippet: "Vài suy ngẫm về sự tinh giản trong lối sống hiện đại và cách chúng ta tìm lại sự thuần khiết trong nội tâm...",
+          labels: ["Triết Lý", "@Quote"]
+        },
+        {
+          title: "3 Công Cụ Ghi Chú Tối Giản Tôi Sử Dụng Mỗi Ngày",
+          url: "#",
+          dateFormatted: "18/08/2026",
+          thumbnail: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600&auto=format&fit=crop&q=80",
+          snippet: "Ghi chép không cần phức tạp, quan trọng là sự đều đặn, tối giản và khả năng truy xuất nhanh khi cần thiết...",
+          labels: ["Công Cụ", "@Điểm tin"]
+        },
+        {
+          title: "Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số",
+          url: "#",
+          dateFormatted: "12/08/2026",
+          thumbnail: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&auto=format&fit=crop&q=80",
+          snippet: "Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamin...",
+          labels: ["Chuyên Sâu", "@Tiêu điểm"]
+        },
+        {
+          title: "Hạnh Phúc Là Biết Đủ Giữa Một Thế Giới Không Ngừng Đòi Hỏi Nhiều Hơn",
+          url: "#",
+          dateFormatted: "05/08/2026",
+          thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80",
+          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc không bị ràng buộc bởi những thứ mình không thực sự cần...",
+          labels: ["Triết Lý", "@Quote"]
+        }
+      ];
+
+      // ── DOM ELEMENTS ──
+      var modal            = document.getElementById('widget-tester-modal');
+      var openBtn          = document.getElementById('btn-open-widget-tester');
+      var reopenBtn        = document.getElementById('btn-reopen-tester');
+      var closeBtn         = document.getElementById('tester-close-btn');
+      var scrollToBtn      = document.getElementById('tester-scroll-to-btn');
+      var copyBtn          = document.getElementById('tester-copy-btn');
+      var codeDisplay      = document.getElementById('tester-code-display');
+      var sandboxMount     = document.getElementById('live-sandbox-widget-mount');
+      var livePatternLabel = document.getElementById('live-pattern-label');
+      var limitValDisplay  = document.getElementById('tester-limit-val');
+
+      var inputTitle       = document.getElementById('tester-input-title');
+      var inputLabels      = document.getElementById('tester-input-labels');
+      var inputLimit       = document.getElementById('tester-input-limit');
+      var inputSort        = document.getElementById('tester-input-sort');
+      var toggleThumb      = document.getElementById('tester-toggle-thumb');
+      var toggleSnippet    = document.getElementById('tester-toggle-snippet');
+      var inputViewAll     = document.getElementById('tester-input-viewall');
+
+      if (!sandboxMount) return;
+
+      // ── ESCAPE HELPER ──
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      // ── RENDERERS ──
+      function renderRanked(posts, limit, showThumb) {
+        var items = posts.slice(0, limit).map(function (p, idx) {
+          var num = String(idx + 1).padStart(2, '0');
+          var thumbHtml = (showThumb && p.thumbnail)
+            ? '<div class="sp-ranked-thumb"><img src="' + escapeHtml(p.thumbnail) + '" alt="' + escapeHtml(p.title) + '" loading="lazy" width="52" height="52"/></div>'
+            : '';
+          return '<a href="#" class="sp-ranked-item">' +
+                 '  <span class="sp-rank-number">' + num + '</span>' +
+                 thumbHtml +
+                 '  <div class="sp-ranked-content">' +
+                 '    <h4 class="sp-ranked-title">' + escapeHtml(p.title) + '</h4>' +
+                 '    <span class="sp-ranked-date">' + escapeHtml(p.dateFormatted) + '</span>' +
+                 '  </div>' +
+                 '</a>';
+        }).join('');
+        return '<div class="special-posts-ranked-list">' + items + '</div>';
+      }
+
+      function renderQuote(posts, limit, showSnippet) {
+        var items = posts.slice(0, limit).map(function (p) {
+          var snipHtml = (showSnippet && p.snippet)
+            ? '<div class="sp-quote-divider"></div><p class="sp-quote-snippet">' + escapeHtml(p.snippet) + '</p>'
+            : '';
+          return '<a href="#" class="sp-quote-card">' +
+                 '  <span class="sp-quote-mark-open">“</span>' +
+                 '  <p class="sp-quote-text">' + escapeHtml(p.title) + '</p>' +
+                 '  <span class="sp-quote-mark-close">”</span>' +
+                 '  <div class="sp-quote-author">— ' + escapeHtml(p.dateFormatted) + '</div>' +
+                 snipHtml +
+                 '  <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>' +
+                 '</a>';
+        }).join('');
+        return '<div class="sp-quote-list">' + items + '</div>';
+      }
+
+      function renderDigest(posts, limit, showSnippet) {
+        var items = posts.slice(0, limit).map(function (p) {
+          var snipHtml = (showSnippet && p.snippet)
+            ? '<div class="sp-digest-snippet">' + escapeHtml(p.snippet) + '</div>'
+            : '';
+          return '<a href="#" class="sp-digest-item">' +
+                 '  <div class="sp-digest-timestamp">' +
+                 '    <span class="sp-digest-bullet">✦</span> ' + escapeHtml(p.dateFormatted) +
+                 '  </div>' +
+                 '  <div class="sp-digest-title">' + escapeHtml(p.title) + '</div>' +
+                 snipHtml +
+                 '</a>';
+        }).join('');
+        return '<div class="sp-digest-list">' + items + '</div>';
+      }
+
+      function renderSpotlight(posts, limit, showThumb, showSnippet) {
+        var p = posts[0] || MOCK_POSTS[0];
+        var thumbHtml = (showThumb && p.thumbnail)
+          ? '<div class="sp-spotlight-cover"><img src="' + escapeHtml(p.thumbnail) + '" alt="' + escapeHtml(p.title) + '" loading="lazy" width="600" height="338"/></div>'
+          : '';
+        var snipHtml = (showSnippet && p.snippet)
+          ? '<p class="sp-spotlight-snippet">' + escapeHtml(p.snippet) + '</p>'
+          : '';
+        var badge = p.labels && p.labels[0] ? p.labels[0].replace(/^[@#_~]/, '') : 'Tiêu Điểm';
+
+        return '<a href="#" class="sp-spotlight-card">' +
+               thumbHtml +
+               '<div class="sp-spotlight-info">' +
+               '  <div class="sp-spotlight-meta">' +
+               '    <span class="sp-spotlight-badge">' + escapeHtml(badge) + '</span>' +
+               '    <span class="sp-spotlight-date">📅 ' + escapeHtml(p.dateFormatted) + '</span>' +
+               '  </div>' +
+               '  <h3 class="sp-spotlight-title">' + escapeHtml(p.title) + '</h3>' +
+               snipHtml +
+               '  <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>' +
+               '</div>' +
+               '</a>';
+      }
+
+      // ── MAIN UPDATE FUNCTION ──
+      function updateLiveWidget() {
+        var patternRadio = document.querySelector('input[name="tester_pattern"]:checked');
+        var pattern     = patternRadio ? patternRadio.value : 'ranked';
+        var title       = (inputTitle.value || '').trim();
+        var labels      = (inputLabels.value || '').trim();
+        var limit       = parseInt(inputLimit.value, 10) || 5;
+        var sort        = inputSort.value || 'latest';
+        var showThumb   = toggleThumb.checked;
+        var showSnippet = toggleSnippet.checked;
+        var viewAll     = (inputViewAll.value || '').trim();
+
+        // Cập nhật nhãn số limit
+        if (limitValDisplay) limitValDisplay.innerText = limit;
+        if (livePatternLabel) livePatternLabel.innerText = pattern;
+
+        // Cập nhật active style cho card pattern
+        var cards = document.querySelectorAll('.tester-pattern-card');
+        cards.forEach(function (c) {
+          var r = c.querySelector('input[type="radio"]');
+          if (r && r.checked) {
+            c.style.borderColor = 'var(--primary)';
+            c.style.background = 'var(--primary-light)';
+            c.style.borderWidth = '2px';
+          } else {
+            c.style.borderColor = 'var(--border-color)';
+            c.style.background = 'var(--bg-surface)';
+            c.style.borderWidth = '1px';
+          }
+        });
+
+        // Lọc bài theo sort mock
+        var posts = MOCK_POSTS.slice();
+        if (sort === 'random') {
+          posts.reverse();
+        }
+
+        // Render nội dung pattern
+        var bodyHtml = '';
+        if (pattern === 'ranked') {
+          bodyHtml = renderRanked(posts, limit, showThumb);
+        } else if (pattern === 'quote') {
+          bodyHtml = renderQuote(posts, limit, showSnippet);
+        } else if (pattern === 'digest') {
+          bodyHtml = renderDigest(posts, limit, showSnippet);
+        } else if (pattern === 'spotlight') {
+          bodyHtml = renderSpotlight(posts, limit, showThumb, showSnippet);
+        }
+
+        // Header widget
+        var headerHtml = '';
+        if (title || viewAll) {
+          headerHtml = '<div class="sp-widget-header">' +
+                       (title ? '<h3 class="sp-widget-title">' + escapeHtml(title) + '</h3>' : '') +
+                       (viewAll ? '<a href="#" class="sp-view-all-link">' + escapeHtml(viewAll) + '</a>' : '') +
+                       '</div>';
+        }
+
+        // Dựng Widget HTML vào sandbox
+        sandboxMount.innerHTML =
+          '<div class="special-posts-widget pattern-' + pattern + '">' +
+          '  <div class="sp-widget-card pattern-' + pattern + '">' +
+          headerHtml +
+          '    <div class="sp-widget-body">' + bodyHtml + '</div>' +
+          '  </div>' +
+          '</div>';
+
+        // Cập nhật code HTML hiển thị
+        var codeAttrs = [
+          'class="special-posts-widget"',
+          'data-pattern="' + pattern + '"'
+        ];
+        if (labels) codeAttrs.push('data-labels="' + labels + '"');
+        if (sort !== 'latest') codeAttrs.push('data-sort="' + sort + '"');
+        if (limit !== 4) codeAttrs.push('data-limit="' + limit + '"');
+        if (title) codeAttrs.push('data-title="' + title + '"');
+        if (!showThumb) codeAttrs.push('data-show-thumbnail="false"');
+        if (!showSnippet) codeAttrs.push('data-show-snippet="false"');
+        if (viewAll && viewAll !== 'Xem tất cả »') codeAttrs.push('data-view-all-text="' + viewAll + '"');
+
+        var snippetCode = '<div ' + codeAttrs.join('\n     ') + '>\n</div>';
+        if (codeDisplay) codeDisplay.textContent = snippetCode;
+      }
+
+      // ── PRESET HANDLERS ──
+      var PRESETS = {
+        ranked: {
+          pattern: 'ranked',
+          title: '🔥 Bài Viết Nổi Bật',
+          labels: '@Nổi bật',
+          limit: 5,
+          sort: 'latest',
+          showThumb: true,
+          showSnippet: false,
+          viewAll: 'Xem tất cả »'
+        },
+        quote: {
+          pattern: 'quote',
+          title: '☕ Chiêm Nghiệm Hôm Nay',
+          labels: '@Quote',
+          limit: 1,
+          sort: 'random',
+          showThumb: false,
+          showSnippet: true,
+          viewAll: ''
+        },
+        digest: {
+          pattern: 'digest',
+          title: '⚡ Điểm Tin Mỗi Ngày',
+          labels: '@Điểm tin',
+          limit: 4,
+          sort: 'latest',
+          showThumb: false,
+          showSnippet: true,
+          viewAll: 'Xem tất cả »'
+        },
+        spotlight: {
+          pattern: 'spotlight',
+          title: '🌟 Bài Viết Tiêu Điểm',
+          labels: '@Tiêu điểm',
+          limit: 1,
+          sort: 'latest',
+          showThumb: true,
+          showSnippet: true,
+          viewAll: ''
+        }
+      };
+
+      function applyPreset(presetKey) {
+        var cfg = PRESETS[presetKey];
+        if (!cfg) return;
+
+        var r = document.querySelector('input[name="tester_pattern"][value="' + cfg.pattern + '"]');
+        if (r) r.checked = true;
+
+        inputTitle.value      = cfg.title;
+        inputLabels.value     = cfg.labels;
+        inputLimit.value      = cfg.limit;
+        inputSort.value       = cfg.sort;
+        toggleThumb.checked   = cfg.showThumb;
+        toggleSnippet.checked = cfg.showSnippet;
+        inputViewAll.value    = cfg.viewAll;
+
+        updateLiveWidget();
+      }
+
+      // ── EVENT LISTENERS ──
+      var presetBtns = document.querySelectorAll('.tester-preset-btn');
+      presetBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          applyPreset(btn.getAttribute('data-preset'));
+        });
+      });
+
+      var inputsToListen = [
+        inputTitle, inputLabels, inputLimit, inputSort,
+        toggleThumb, toggleSnippet, inputViewAll
+      ];
+      inputsToListen.forEach(function (el) {
+        if (el) {
+          el.addEventListener('input', updateLiveWidget);
+          el.addEventListener('change', updateLiveWidget);
+        }
+      });
+
+      var radioPatterns = document.querySelectorAll('input[name="tester_pattern"]');
+      radioPatterns.forEach(function (r) {
+        r.addEventListener('change', updateLiveWidget);
+      });
+
+      // Mở modal
+      function openModal() {
+        if (modal) modal.style.display = 'flex';
+      }
+      function closeModal() {
+        if (modal) modal.style.display = 'none';
+      }
+
+      if (openBtn)   openBtn.addEventListener('click', openModal);
+      if (reopenBtn) reopenBtn.addEventListener('click', openModal);
+      if (closeBtn)  closeBtn.addEventListener('click', closeModal);
+
+      if (modal) {
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) closeModal();
+        });
+      }
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+          closeModal();
+        }
+      });
+
+      // Cuộn tới Live Sandbox widget
+      if (scrollToBtn) {
+        scrollToBtn.addEventListener('click', function () {
+          closeModal();
+          var container = document.getElementById('live-playground-container');
+          if (container) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            container.style.boxShadow = '0 0 0 6px rgba(139, 92, 246, 0.4)';
+            setTimeout(function () {
+              container.style.boxShadow = '0 4px 18px rgba(139,92,246,0.15)';
+            }, 1600);
+          }
+        });
+      }
+
+      // Copy mã
+      if (copyBtn && codeDisplay) {
+        copyBtn.addEventListener('click', function () {
+          var code = codeDisplay.textContent;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(function () {
+              copyBtn.textContent = '✓ Đã sao chép!';
+              copyBtn.style.background = '#10b981';
+              copyBtn.style.borderColor = '#10b981';
+              setTimeout(function () {
+                copyBtn.textContent = '📋 Sao chép mã';
+                copyBtn.style.background = 'var(--primary)';
+                copyBtn.style.borderColor = 'var(--primary)';
+              }, 2000);
+            });
+          } else {
+            prompt('Sao chép mã dưới đây:', code);
+          }
+        });
+      }
+
+      // Khởi chạy render lần đầu
+      updateLiveWidget();
+    })();
+  </script>
 </body>
 </html>
