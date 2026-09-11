@@ -311,8 +311,8 @@ ${combinedCss}
         <div class='header-actions'>
           <!-- Search -->
           <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
-          <!-- Dark Mode Toggle -->
-          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Multi-Theme Toggle -->
+          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện' title='Đổi giao diện'>🌙</button>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
             <span/>

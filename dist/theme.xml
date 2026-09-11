@@ -47,26 +47,63 @@
   <!-- Zero-FOUC Dark Mode (must be in <head>) -->
   <script>
   //<![CDATA[
-/* Zero-FOUC Dark Mode Switcher */
+/* Zero-FOUC Multi-Theme Switcher (Light / Dark / Airy Pastel) */
 (function() {
-  const currentTheme = localStorage.getItem("theme") || 
-    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  document.documentElement.setAttribute("data-theme", currentTheme);
+  const THEMES = ["light", "dark", "airy-pastel"];
+  const THEME_CONFIG = {
+    "light": {
+      icon: "☀️",
+      name: "Giao diện Sáng",
+      nextTheme: "dark",
+      nextName: "Tối"
+    },
+    "dark": {
+      icon: "🌙",
+      name: "Giao diện Tối",
+      nextTheme: "airy-pastel",
+      nextName: "Xanh Mint"
+    },
+    "airy-pastel": {
+      icon: "🍃",
+      name: "Giao diện Xanh Mint",
+      nextTheme: "light",
+      nextName: "Sáng"
+    }
+  };
+
+  const savedTheme = localStorage.getItem("theme");
+  const initialTheme = THEMES.includes(savedTheme)
+    ? savedTheme
+    : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+  document.documentElement.setAttribute("data-theme", initialTheme);
 
   window.toggleTheme = function() {
-    const active = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", active);
-    localStorage.setItem("theme", active);
+    const active = document.documentElement.getAttribute("data-theme") || "light";
+    const currentIndex = THEMES.indexOf(active);
+    const nextTheme = THEMES[(currentIndex + 1) % THEMES.length];
+
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    localStorage.setItem("theme", nextTheme);
     updateThemeIcon();
   };
 
   function updateThemeIcon() {
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const active = document.documentElement.getAttribute("data-theme") || "light";
+    const config = THEME_CONFIG[active] || THEME_CONFIG["light"];
     const btn = document.getElementById("theme-toggle-btn");
-    if (btn) btn.innerHTML = isDark ? "☀️" : "🌙";
+    if (btn) {
+      btn.innerHTML = config.icon;
+      btn.setAttribute("title", config.name + " (Click để chuyển sang " + config.nextName + ")");
+      btn.setAttribute("aria-label", "Đổi giao diện: hiện tại " + config.name + ", chuyển sang " + config.nextName);
+    }
   }
 
-  document.addEventListener("DOMContentLoaded", updateThemeIcon);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updateThemeIcon);
+  } else {
+    updateThemeIcon();
+  }
 })();
 
   //]]>
@@ -234,6 +271,240 @@
   --ai-micro-bg: rgba(168, 85, 247, 0.22);
   --ai-micro-text: #c084fc;
 }
+
+/* ============================================================
+   THEME PRESET: AIRY MINT PASTEL (LIGHT SOFT MINT)
+   Tông Xanh Mint Nhẹ Sáng Thanh Thoát & Hiện Đại
+   ============================================================ */
+[data-theme="airy-pastel"],
+:root[data-theme-preset="airy-pastel"],
+[data-theme="light"][data-theme-preset="airy-pastel"] {
+  /* 1. Nền trang & Bề mặt (Phảng phất sắc sương mai xanh mint dịu mắt) */
+  --surface-page: #f4faf7;                     /* Nền sáng ánh mint nhạt */
+  --surface-card: #ffffff;                     /* Thẻ card trắng tinh khiết */
+  --surface-surface: #edf7f2;                  /* Bề mặt widget, sidebar mint nhẹ */
+  --surface-overlay: rgba(255, 255, 255, 0.88);/* Kính mờ Header */
+  --bg-body: var(--surface-page);
+  --bg-card: var(--surface-card);
+  --bg-surface: var(--surface-surface);
+  --bg-input: #ffffff;
+  --header-bg: var(--surface-overlay);
+
+  /* 2. Màu chữ tương phản mềm dịu */
+  --text-primary: #0f241d;                     /* Xanh thông rừng đậm (dễ chịu hơn đen tuyền) */
+  --text-secondary: #2d4a3e;                   /* Xanh xám trung tính */
+  --text-muted: #628274;                       /* Xám lục mờ nhẹ */
+  --text-main: var(--text-primary);
+  --text-light: var(--text-muted);
+
+  /* 3. Chuẩn mực Hairline & Shadow ngọc bích */
+  --border-hairline: rgba(16, 185, 129, 0.10); /* Viền mỏng sợi tơ mint */
+  --border-subtle: rgba(16, 185, 129, 0.18);
+  --border-divider: rgba(16, 185, 129, 0.08);
+  --border-color: rgba(16, 185, 129, 0.12);
+  --border-hover: rgba(16, 185, 129, 0.40);
+
+  --shadow-hairline: 0 1px 2px 0 rgba(16, 185, 129, 0.04);
+  --shadow-ambient: 0 4px 24px -2px rgba(15, 36, 29, 0.04);
+  --shadow-float: 0 12px 36px -4px rgba(15, 36, 29, 0.08);
+  --shadow-sm: var(--shadow-hairline);
+  --shadow-md: var(--shadow-ambient);
+  --shadow-lg: var(--shadow-float);
+
+  /* 4. Màu thương hiệu & Nút bấm Gradient Xanh Mint - Cyan */
+  --action-primary: #059669;                   /* Mint đậm chuẩn WCAG AA */
+  --action-hover: #047857;
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-light: rgba(16, 185, 129, 0.12);
+  --primary-gradient: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+  --primary-glow: 0 4px 18px 0 rgba(16, 185, 129, 0.35);
+
+  --btn-primary-bg-gradient: var(--primary-gradient);
+  --btn-primary-text-color: #ffffff;
+  --btn-primary-radius: var(--radius-md);
+  --btn-primary-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.32);
+  --btn-primary-shadow-hover: 0 6px 22px 0 rgba(16, 185, 129, 0.45);
+
+  /* 5. Nhãn Danh mục (Category Badge - Mint & Soft Teal) */
+  --badge-bg-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+  --badge-border: 1px solid rgba(16, 185, 129, 0.28);
+  --badge-text-color: #047857;
+  --badge-radius: var(--radius-full);
+  --badge-padding-y: 4px;
+  --badge-padding-x: 11px;
+  --badge-font-size: 0.72rem;
+  --badge-font-weight: 700;
+
+  /* 6. Thẻ Bài Viết (Post Card) */
+  --post-card-bg: var(--surface-card);
+  --post-card-border: var(--stroke-hairline) solid var(--border-hairline);
+  --post-card-border-hover: var(--stroke-hairline) solid rgba(16, 185, 129, 0.38);
+  --post-card-radius: 16px;
+  --post-card-padding: 1.5rem;
+  --post-card-shadow: var(--shadow-hairline);
+  --post-card-shadow-hover: var(--shadow-ambient);
+  --post-card-hover-y: -3px;
+  --post-thumb-radius: 12px;
+
+  /* 7. Cover Gradient (Mint Dawn) */
+  --cover-default-gradient: linear-gradient(135deg, #059669 0%, #10b981 40%, #06b6d4 100%);
+
+  /* 8. Buy Me A Coffee (Mint Cream) */
+  --coffee-btn-bg: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  --coffee-btn-border: #6ee7b7;
+  --coffee-btn-text: #065f46;
+  --coffee-btn-bg-hover: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  --coffee-btn-border-hover: #34d399;
+  --coffee-btn-text-hover: #064e3b;
+
+  /* 9. AI Transparency Badge (Mint Ice) */
+  --ai-badge-bg: linear-gradient(135deg, rgba(236, 253, 245, 0.9) 0%, rgba(204, 251, 241, 0.9) 100%);
+  --ai-badge-border: rgba(52, 211, 153, 0.45);
+  --ai-badge-text: #047857;
+  --ai-callout-bg: rgba(236, 253, 245, 0.6);
+  --ai-callout-border: #10b981;
+  --ai-callout-text: #065f46;
+  --ai-micro-bg: rgba(16, 185, 129, 0.12);
+  --ai-micro-text: #059669;
+}
+
+/* ============================================================
+   THEME PRESET: AIRY MINT PASTEL (DARK OBSIDIAN PINE MODE)
+   ============================================================ */
+[data-theme="dark"][data-theme-preset="airy-pastel"] {
+  --surface-page: #091612;                     /* Rừng thông đen đêm sâu */
+  --surface-card: #0f241d;
+  --surface-surface: #163329;
+  --surface-overlay: rgba(15, 36, 29, 0.88);
+  --bg-body: var(--surface-page);
+  --bg-card: var(--surface-card);
+  --bg-surface: var(--surface-surface);
+  --header-bg: var(--surface-overlay);
+
+  --text-primary: #f0fdf4;
+  --text-secondary: #a7f3d0;
+  --text-muted: #6ee7b7;
+  --text-main: var(--text-primary);
+  --text-light: var(--text-muted);
+
+  --border-hairline: rgba(52, 211, 153, 0.15);
+  --border-subtle: rgba(52, 211, 153, 0.22);
+  --border-divider: rgba(52, 211, 153, 0.08);
+  --border-color: rgba(52, 211, 153, 0.15);
+  --border-hover: rgba(52, 211, 153, 0.45);
+
+  --action-primary: #34d399;
+  --primary: var(--action-primary);
+  --primary-hover: #6ee7b7;
+  --primary-gradient: linear-gradient(135deg, #34d399 0%, #22d3ee 100%);
+  --btn-primary-shadow: 0 4px 18px 0 rgba(52, 211, 153, 0.40);
+  --btn-primary-shadow-hover: 0 6px 26px 0 rgba(52, 211, 153, 0.55);
+
+  --badge-bg-gradient: linear-gradient(135deg, rgba(52, 211, 153, 0.2) 0%, rgba(34, 211, 238, 0.2) 100%);
+  --badge-border: 1px solid rgba(52, 211, 153, 0.40);
+  --badge-text-color: #a7f3d0;
+
+  --post-card-bg: var(--surface-card);
+  --post-card-border: var(--stroke-hairline) solid var(--border-hairline);
+  --post-card-border-hover: var(--stroke-hairline) solid rgba(52, 211, 153, 0.5);
+  --post-card-shadow-hover: 0 8px 30px -4px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   AIRY MINT COMPONENT REFINEMENTS
+   ============================================================ */
+[data-theme="airy-pastel"] .site-header,
+[data-theme-preset="airy-pastel"] .site-header {
+  border-bottom: 1px solid var(--border-hairline);
+  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.04);
+}
+
+[data-theme="airy-pastel"] .post-badge,
+[data-theme-preset="airy-pastel"] .post-badge {
+  background: var(--badge-bg-gradient);
+  border: var(--badge-border);
+  color: var(--badge-text-color);
+  border-radius: var(--badge-radius, 9999px);
+  padding: var(--badge-padding-y, 4px) var(--badge-padding-x, 11px);
+  display: inline-block;
+  font-size: var(--badge-font-size, 0.72rem);
+  font-weight: var(--badge-font-weight, 700);
+  letter-spacing: 0.04em;
+  transition: var(--transition);
+  text-decoration: none;
+}
+[data-theme="airy-pastel"] .post-badge:hover,
+[data-theme-preset="airy-pastel"] .post-badge:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.96);
+}
+
+/* Multi-Category Pastel Palettes */
+[data-theme="airy-pastel"] .post-badge[href*="G%C3%B3c"],
+[data-theme="airy-pastel"] .post-badge[href*="goc"] {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.12) 100%);
+  border-color: rgba(16, 185, 129, 0.30);
+  color: #047857;
+}
+[data-theme="airy-pastel"] .post-badge[href*="C%C3%B4ng"],
+[data-theme="airy-pastel"] .post-badge[href*="cong"],
+[data-theme="airy-pastel"] .post-badge[href*="AI"],
+[data-theme="airy-pastel"] .post-badge[href*="ai"] {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
+  border-color: rgba(6, 182, 212, 0.30);
+  color: #0e7490;
+}
+[data-theme="airy-pastel"] .post-badge[href*="%C4%90%E1%BB%9Di"],
+[data-theme="airy-pastel"] .post-badge[href*="doi"] {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.14) 0%, rgba(16, 185, 129, 0.14) 100%);
+  border-color: rgba(52, 211, 153, 0.32);
+  color: #065f46;
+}
+[data-theme="airy-pastel"] .post-badge[href*="S%C3%A1ch"],
+[data-theme="airy-pastel"] .post-badge[href*="sach"] {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.14) 0%, rgba(45, 212, 191, 0.14) 100%);
+  border-color: rgba(20, 184, 166, 0.30);
+  color: #0f766e;
+}
+
+/* Quote Widget in Airy Mint */
+[data-theme="airy-pastel"] .sp-quote-card,
+[data-theme-preset="airy-pastel"] .sp-quote-card {
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.7) 0%, rgba(240, 253, 250, 0.5) 100%);
+  border: 1px solid rgba(110, 231, 183, 0.35);
+}
+[data-theme="airy-pastel"] .sp-quote-mark-open,
+[data-theme="airy-pastel"] .sp-quote-mark-close,
+[data-theme-preset="airy-pastel"] .sp-quote-mark-open,
+[data-theme-preset="airy-pastel"] .sp-quote-mark-close {
+  color: rgba(16, 185, 129, 0.4);
+}
+
+/* Subscribe Button & Tab Pills in Airy Mint */
+[data-theme="airy-pastel"] .btn-subscribe,
+[data-theme-preset="airy-pastel"] .btn-subscribe {
+  background: var(--primary-gradient);
+  box-shadow: var(--btn-primary-shadow);
+}
+[data-theme="airy-pastel"] .btn-subscribe:hover,
+[data-theme-preset="airy-pastel"] .btn-subscribe:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--btn-primary-shadow-hover);
+  filter: brightness(1.04);
+}
+
+[data-theme="airy-pastel"] .tab-pill.active,
+[data-theme="airy-pastel"] .tab-pill:hover,
+[data-theme-preset="airy-pastel"] .tab-pill.active,
+[data-theme-preset="airy-pastel"] .tab-pill:hover {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+}
+
+
 
 
 /* ==========================================
@@ -4510,8 +4781,8 @@ body.view-not-homepage #main-above-feed {
         <div class='header-actions'>
           <!-- Search -->
           <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
-          <!-- Dark Mode Toggle -->
-          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Multi-Theme Toggle -->
+          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện' title='Đổi giao diện'>🌙</button>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
             <span/>

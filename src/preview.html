@@ -10,22 +10,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;1,400&display=swap" rel="stylesheet"/>
 
-  <!-- Zero-FOUC Dark Mode Script -->
+  <!-- Zero-FOUC Multi-Theme Switcher -->
   <script>
     (function() {
-      var t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.documentElement.setAttribute("data-theme", t);
-      window.toggleTheme = function() {
-        var a = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", a);
-        localStorage.setItem("theme", a);
-        var btn = document.getElementById("theme-toggle-btn");
-        if (btn) btn.innerHTML = a === "dark" ? "☀️" : "🌙";
+      var THEMES = ["light", "dark", "airy-pastel"];
+      var THEME_CONFIG = {
+        "light": { icon: "☀️", name: "Giao diện Sáng", nextTheme: "dark", nextName: "Tối" },
+        "dark": { icon: "🌙", name: "Giao diện Tối", nextTheme: "airy-pastel", nextName: "Xanh Mint" },
+        "airy-pastel": { icon: "🍃", name: "Giao diện Xanh Mint", nextTheme: "light", nextName: "Sáng" }
       };
-      document.addEventListener("DOMContentLoaded", function() {
+
+      var saved = localStorage.getItem("theme");
+      var t = THEMES.indexOf(saved) !== -1 ? saved : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", t);
+
+      window.toggleTheme = function() {
+        var active = document.documentElement.getAttribute("data-theme") || "light";
+        var idx = THEMES.indexOf(active);
+        var next = THEMES[(idx + 1) % THEMES.length];
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        updateThemeIcon();
+      };
+
+      function updateThemeIcon() {
+        var active = document.documentElement.getAttribute("data-theme") || "light";
+        var config = THEME_CONFIG[active] || THEME_CONFIG["light"];
         var btn = document.getElementById("theme-toggle-btn");
-        if (btn) btn.innerHTML = document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙";
-      });
+        if (btn) {
+          btn.innerHTML = config.icon;
+          btn.setAttribute("title", config.name + " (Click để chuyển sang " + config.nextName + ")");
+          btn.setAttribute("aria-label", "Đổi giao diện: hiện tại " + config.name + ", chuyển sang " + config.nextName);
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", updateThemeIcon);
+      } else {
+        updateThemeIcon();
+      }
     })();
   </script>
 
