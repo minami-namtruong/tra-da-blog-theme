@@ -4478,15 +4478,6 @@ a:hover {
             </b:includable>
           </b:widget>
 
-          <!-- Widget: AdSense Sidebar (Sticky) -->
-          <b:widget id='HTML3' type='HTML' version='2'>
-            <b:includable id='main'>
-              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
-                <!-- Google AdSense 300x250 / 300x600 code here -->
-              </div>
-            </b:includable>
-          </b:widget>
-
           <!-- Widget: Newsletter -->
           <b:widget id='HTML4' type='HTML' version='2'>
             <b:includable id='main'>
@@ -4497,6 +4488,15 @@ a:hover {
                   <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
                   <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
                 </div>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng) -->
+          <b:widget id='HTML3' type='HTML' version='2'>
+            <b:includable id='main'>
+              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
+                <!-- Google AdSense 300x250 / 300x600 code here -->
               </div>
             </b:includable>
           </b:widget>

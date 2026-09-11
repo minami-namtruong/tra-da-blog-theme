@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="styles/affiliate-ui.css?v=2.0"/>
   <link rel="stylesheet" href="styles/footer.css?v=2.0"/>
   <link rel="stylesheet" href="styles/archive-page.css?v=2.0"/>
+  <link rel="stylesheet" href="styles/special-posts.css?v=2.0"/>
 </head>
 <body>
 
@@ -538,9 +539,176 @@
           </ul>
         </div>
 
-        <!-- Widget 3: Sticky AdSense Banner -->
-        <div class="adsense-slot adsense-sidebar" style="display: flex; align-items: center; justify-content: center;">
-          <span style="color: var(--text-light); font-size: 0.8rem;">📣 Banner Sidebar Sticky (300x250/600)</span>
+
+        <!-- ═══════════════════════════════════════════════════
+             SPECIAL POSTS WIDGET DEMO — FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2
+             (Preview dùng static mock HTML; trên blog thật widget sẽ tự fetch từ Blogger API)
+             ═══════════════════════════════════════════════════ -->
+
+        <!-- DEMO 1: Pattern RANKED — Bài Viết Nổi Bật -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget pattern-ranked" id="widget-bai-viet-noi-bat">
+            <div class="sp-widget-card pattern-ranked">
+              <div class="sp-widget-header">
+                <h3 class="sp-widget-title">🔥 Bài Viết Nổi Bật</h3>
+                <a href="#" class="sp-view-all-link">Xem tất cả »</a>
+              </div>
+              <div class="sp-widget-body">
+                <div class="special-posts-ranked-list">
+                  <a href="#" class="sp-ranked-item">
+                    <span class="sp-rank-number">01</span>
+                    <div class="sp-ranked-thumb">
+                      <img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=160&auto=format&fit=crop&q=80" alt="Nghịch lý lựa chọn" loading="lazy" width="52" height="52"/>
+                    </div>
+                    <div class="sp-ranked-content">
+                      <h4 class="sp-ranked-title">Nghịch Lý Của Việc Chọn Lựa</h4>
+                      <span class="sp-ranked-date">09/09/2026</span>
+                    </div>
+                  </a>
+                  <a href="#" class="sp-ranked-item">
+                    <span class="sp-rank-number">02</span>
+                    <div class="sp-ranked-thumb">
+                      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=160&auto=format&fit=crop&q=80" alt="30 ngày" loading="lazy" width="52" height="52"/>
+                    </div>
+                    <div class="sp-ranked-content">
+                      <h4 class="sp-ranked-title">30 Ngày Không Dùng Điện Thoại</h4>
+                      <span class="sp-ranked-date">05/09/2026</span>
+                    </div>
+                  </a>
+                  <a href="#" class="sp-ranked-item">
+                    <span class="sp-rank-number">03</span>
+                    <div class="sp-ranked-thumb">
+                      <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=160&auto=format&fit=crop&q=80" alt="Tư duy" loading="lazy" width="52" height="52"/>
+                    </div>
+                    <div class="sp-ranked-content">
+                      <h4 class="sp-ranked-title">Review Sách: Tư Duy Nhanh và Chậm</h4>
+                      <span class="sp-ranked-date">01/09/2026</span>
+                    </div>
+                  </a>
+                  <a href="#" class="sp-ranked-item">
+                    <span class="sp-rank-number">04</span>
+                    <div class="sp-ranked-thumb">
+                      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=160&auto=format&fit=crop&q=80" alt="Công nghệ" loading="lazy" width="52" height="52"/>
+                    </div>
+                    <div class="sp-ranked-content">
+                      <h4 class="sp-ranked-title">Công Nghệ Có Thực Sự Giúp Ta Tự Do?</h4>
+                      <span class="sp-ranked-date">28/08/2026</span>
+                    </div>
+                  </a>
+                  <a href="#" class="sp-ranked-item">
+                    <span class="sp-rank-number">05</span>
+                    <div class="sp-ranked-thumb">
+                      <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=160&auto=format&fit=crop&q=80" alt="Sáng tác" loading="lazy" width="52" height="52"/>
+                    </div>
+                    <div class="sp-ranked-content">
+                      <h4 class="sp-ranked-title">Vì Sao Tôi Bắt Đầu Viết Nhật Ký Mỗi Sáng</h4>
+                      <span class="sp-ranked-date">22/08/2026</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 2: Pattern QUOTE — Chiêm Nghiệm Hôm Nay -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget pattern-quote" id="widget-chiem-nghiem">
+            <div class="sp-widget-card pattern-quote">
+              <div class="sp-widget-header">
+                <h3 class="sp-widget-title">☕ Chiêm Nghiệm Hôm Nay</h3>
+              </div>
+              <div class="sp-widget-body">
+                <div class="sp-quote-list">
+                  <a href="#" class="sp-quote-card">
+                    <span class="sp-quote-mark-open">“</span>
+                    <p class="sp-quote-text">Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của sự tinh tế sau khi đã thấu suốt mọi điều phức tạp.</p>
+                    <span class="sp-quote-mark-close">”</span>
+                    <div class="sp-quote-author">— Leonardo da Vinci</div>
+                    <div class="sp-quote-divider"></div>
+                    <p class="sp-quote-snippet">Vài suy nghĩ về sự tinh giản trong lối sống hiện đại và cách chúng ta tìm lại sự thuần khiết...</p>
+                    <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 3: Pattern DIGEST — Điểm Tin Mỗi Ngày -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget pattern-digest" id="widget-diem-tin">
+            <div class="sp-widget-card pattern-digest">
+              <div class="sp-widget-header">
+                <h3 class="sp-widget-title">⚡ Điểm Tin Mỗi Ngày</h3>
+                <a href="#" class="sp-view-all-link">Xem tất cả »</a>
+              </div>
+              <div class="sp-widget-body">
+                <div class="sp-digest-list">
+                  <a href="#" class="sp-digest-item">
+                    <div class="sp-digest-timestamp">
+                      <span class="sp-digest-bullet">✦</span>
+                      11/09/2026
+                    </div>
+                    <div class="sp-digest-title">Ra mắt tính năng Dòng Thời Gian mới — Dễ tra cứu hơn bao giờ hết</div>
+                    <div class="sp-digest-snippet">Một cập nhật nhỏ giúp bạn tra cứu bài viết dễ dàng theo tháng và chủ đề...</div>
+                  </a>
+                  <a href="#" class="sp-digest-item">
+                    <div class="sp-digest-timestamp">
+                      <span class="sp-digest-bullet">✦</span>
+                      08/09/2026
+                    </div>
+                    <div class="sp-digest-title">3 công cụ ghi chú tối giản tôi dùng mỗi ngày</div>
+                    <div class="sp-digest-snippet">Ghi chép không cần phức tạp, quan trọng là sự đều đặn và nhất quán mỗi sáng...</div>
+                  </a>
+                  <a href="#" class="sp-digest-item">
+                    <div class="sp-digest-timestamp">
+                      <span class="sp-digest-bullet">✦</span>
+                      05/09/2026
+                    </div>
+                    <div class="sp-digest-title">Đọc xong cuốn này, tôi thay đổi cách nhìn về thời gian rảnh</div>
+                    <div class="sp-digest-snippet">"Digital Minimalism" của Cal Newport — cuốn sách đúng thời điểm nhất với tôi...</div>
+                  </a>
+                  <a href="#" class="sp-digest-item">
+                    <div class="sp-digest-timestamp">
+                      <span class="sp-digest-bullet">✦</span>
+                      01/09/2026
+                    </div>
+                    <div class="sp-digest-title">Nhật ký tháng 9: Bắt đầu lại từ đầu</div>
+                    <div class="sp-digest-snippet">Tháng mới, mục tiêu mới — và lý do tôi quyết định viết thường xuyên hơn...</div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 4: Pattern SPOTLIGHT — Bài Viết Tiêu Điểm -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget pattern-spotlight" id="widget-tieu-diem">
+            <div class="sp-widget-card pattern-spotlight">
+              <div class="sp-widget-header">
+                <h3 class="sp-widget-title">🌟 Bài Viết Tiêu Điểm</h3>
+              </div>
+              <div class="sp-widget-body">
+                <a href="#" class="sp-spotlight-card">
+                  <div class="sp-spotlight-cover">
+                    <img src="https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600&auto=format&fit=crop&q=80"
+                         alt="Bài viết tiêu điểm" loading="lazy" width="600" height="338"/>
+                  </div>
+                  <div class="sp-spotlight-info">
+                    <div class="sp-spotlight-meta">
+                      <span class="sp-spotlight-badge">Phân Tích Chuyên Sâu</span>
+                      <span class="sp-spotlight-date">📅 08/09/2026</span>
+                    </div>
+                    <h3 class="sp-spotlight-title">Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số</h3>
+                    <p class="sp-spotlight-snippet">Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamin của mạng xã hội...</p>
+                    <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Widget 4: Newsletter -->
@@ -551,6 +719,11 @@
             <input class="sidebar-email-input" type="email" placeholder="Email của bạn..." aria-label="Địa chỉ email"/>
             <button class="sidebar-submit-btn" type="button">💌 <span data-i18n="subscribeBtn">Đăng Ký</span></button>
           </div>
+        </div>
+
+        <!-- Widget: Sticky AdSense Banner (vị trí cuối cùng để bám theo khi đọc bài dài) -->
+        <div class="adsense-slot adsense-sidebar" style="display: flex; align-items: center; justify-content: center;">
+          <span style="color: var(--text-light); font-size: 0.8rem;">📣 Banner Sidebar Sticky (300x250/600)</span>
         </div>
 
       </aside>
