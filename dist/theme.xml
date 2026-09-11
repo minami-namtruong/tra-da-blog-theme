@@ -4620,15 +4620,19 @@ body.view-not-homepage #main-above-feed {
           <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
-                <div class='special-posts-widget'
-                     id='widget-spotlight-hero'
-                     data-pattern='spotlight'
-                     data-labels='@Tiêu điểm'
-                     data-sort='latest'
-                     data-limit='1'
-                     data-title='🌟 Bài Viết Tiêu Điểm'
-                     data-view-all-text='Xem tất cả »'>
-                </div>
+                <b:if cond='data:content'>
+                  <data:content/>
+                <b:else/>
+                  <div class='special-posts-widget'
+                       id='widget-spotlight-hero'
+                       data-pattern='spotlight'
+                       data-labels='@Tiêu điểm'
+                       data-sort='latest'
+                       data-limit='1'
+                       data-title='🌟 Bài Viết Tiêu Điểm'
+                       data-view-all-text='Xem tất cả »'>
+                  </div>
+                </b:if>
               </b:if>
             </b:includable>
           </b:widget>
@@ -4887,15 +4891,19 @@ body.view-not-homepage #main-above-feed {
         <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
           <b:widget id='HTML11' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
             <b:includable id='main'>
-              <div class='special-posts-widget'
-                   id='widget-infeed-quote'
-                   data-pattern='quote'
-                   data-labels='@Quote'
-                   data-sort='random'
-                   data-limit='1'
-                   data-insert-after='3'
-                   data-title='☕ Chiêm Nghiệm Hôm Nay'>
-              </div>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='special-posts-widget'
+                     id='widget-infeed-quote'
+                     data-pattern='quote'
+                     data-labels='@Quote'
+                     data-sort='random'
+                     data-limit='1'
+                     data-insert-after='3'
+                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
@@ -4906,16 +4914,20 @@ body.view-not-homepage #main-above-feed {
         <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo / Newsletter)' showaddelement='yes'>
           <b:widget id='HTML12' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
             <b:includable id='main'>
-              <div class='pre-pagination-newsletter'>
-                <div class='pre-pagination-newsletter-content'>
-                  <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
-                  <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='pre-pagination-newsletter'>
+                  <div class='pre-pagination-newsletter-content'>
+                    <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
+                    <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+                  </div>
+                  <div class='pre-pagination-newsletter-form'>
+                    <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
+                    <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
+                  </div>
                 </div>
-                <div class='pre-pagination-newsletter-form'>
-                  <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
-                  <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
-                </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
@@ -4929,15 +4941,19 @@ body.view-not-homepage #main-above-feed {
           <b:widget id='HTML13' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
-                <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
-                <div class='special-posts-widget'
-                     id='widget-top-bai-doc'
-                     data-pattern='ranked'
-                     data-sort='views'
-                     data-limit='6'
-                     data-title='📊 Bài Viết Được Đọc Nhiều'
-                     data-view-all-text='Xem tất cả »'>
-                </div>
+                <b:if cond='data:content'>
+                  <data:content/>
+                <b:else/>
+                  <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
+                  <div class='special-posts-widget'
+                       id='widget-top-bai-doc'
+                       data-pattern='ranked'
+                       data-sort='views'
+                       data-limit='6'
+                       data-title='📊 Bài Viết Được Đọc Nhiều'
+                       data-view-all-text='Xem tất cả »'>
+                  </div>
+                </b:if>
               </b:if>
             </b:includable>
           </b:widget>
@@ -4954,23 +4970,21 @@ body.view-not-homepage #main-above-feed {
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
           <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <!-- HƯỚNG DẪN TÙNG CHỈNH:
-                     data-labels: nhãn cần lấy bài (phân tách bằng dấu phẩy)
-                     data-sort:   latest | views | random
-                     data-limit:  số bài hiển thị (1-10)
-                     data-title:  tiêu đề widget (để trống sẽ không hiển thị header)
-                -->
-                <div class='special-posts-widget'
-                     id='widget-bai-viet-noi-bat'
-                     data-pattern='ranked'
-                     data-labels='@Nổi bật'
-                     data-sort='latest'
-                     data-limit='5'
-                     data-title='🔥 Bài Viết Nổi Bật'
-                     data-view-all-text='Xem tất cả »'>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='sidebar-widget'>
+                  <div class='special-posts-widget'
+                       id='widget-bai-viet-noi-bat'
+                       data-pattern='ranked'
+                       data-labels='@Nổi bật'
+                       data-sort='latest'
+                       data-limit='5'
+                       data-title='🔥 Bài Viết Nổi Bật'
+                       data-view-all-text='Xem tất cả »'>
+                  </div>
                 </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
 
@@ -4978,16 +4992,20 @@ body.view-not-homepage #main-above-feed {
           <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
           <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <div class='special-posts-widget'
-                     id='widget-chiem-nghiem'
-                     data-pattern='quote'
-                     data-labels='@Quote'
-                     data-sort='random'
-                     data-limit='1'
-                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='sidebar-widget'>
+                  <div class='special-posts-widget'
+                       id='widget-chiem-nghiem'
+                       data-pattern='quote'
+                       data-labels='@Quote'
+                       data-sort='random'
+                       data-limit='1'
+                       data-title='☕ Chiêm Nghiệm Hôm Nay'>
+                  </div>
                 </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
 
@@ -4995,17 +5013,21 @@ body.view-not-homepage #main-above-feed {
           <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
           <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <div class='special-posts-widget'
-                     id='widget-diem-tin'
-                     data-pattern='digest'
-                     data-labels='@Điểm tin'
-                     data-sort='latest'
-                     data-limit='4'
-                     data-title='⚡ Điểm Tin Mỗi Ngày'
-                     data-view-all-text='Xem tất cả »'>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='sidebar-widget'>
+                  <div class='special-posts-widget'
+                       id='widget-diem-tin'
+                       data-pattern='digest'
+                       data-labels='@Điểm tin'
+                       data-sort='latest'
+                       data-limit='4'
+                       data-title='⚡ Điểm Tin Mỗi Ngày'
+                       data-view-all-text='Xem tất cả »'>
+                  </div>
                 </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
 
@@ -5013,16 +5035,20 @@ body.view-not-homepage #main-above-feed {
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
           <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <div class='special-posts-widget'
-                     id='widget-tieu-diem'
-                     data-pattern='spotlight'
-                     data-labels='@Tiêu điểm'
-                     data-sort='latest'
-                     data-limit='1'
-                     data-title='🌟 Bài Viết Tiêu Điểm'>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='sidebar-widget'>
+                  <div class='special-posts-widget'
+                       id='widget-tieu-diem'
+                       data-pattern='spotlight'
+                       data-labels='@Tiêu điểm'
+                       data-sort='latest'
+                       data-limit='1'
+                       data-title='🌟 Bài Viết Tiêu Điểm'>
+                  </div>
                 </div>
-              </div>
+              </b:if>
             </b:includable>
           </b:widget>
 
