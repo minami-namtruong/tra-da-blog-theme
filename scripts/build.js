@@ -43,6 +43,7 @@ const jsFiles = [
   "footer.js",
   "special-posts.js",
   "ai-transparency.js",
+  "homepage-interleaved.js",
 ];
 const combinedJs = jsFiles
   .map(f => fs.readFileSync(path.join(scriptsDir, f), "utf8"))
@@ -209,8 +210,10 @@ ${combinedCss}
   </script>
   </b:loop>
   </b:if>
-</head>
 <body>
+  <b:class expr:name='data:view.isHomepage ? "view-homepage" : "view-not-homepage"'/>
+  <b:class expr:name='data:view.isMultipleItems ? "view-multiple" : "view-single"'/>
+  <b:class expr:name='data:view.isMultipleItems and not data:view.isHomepage ? "view-paged is-paged" : ""'/>
 
   <!-- Reading Progress Bar -->
   <div class='reading-progress-bar' id='reading-progress-bar'/>
@@ -408,13 +411,35 @@ ${combinedCss}
 
       <!-- Main Content Column -->
       <main class='main-content' id='main-content'>
+
+        <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
+             Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
+        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' showaddelement='yes'>
+          <b:widget id='HTML_SP_Spotlight_Hero' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
+            <b:includable id='main'>
+              <b:if cond='data:view.isHomepage'>
+                <div class='special-posts-widget'
+                     id='widget-spotlight-hero'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'
+                     data-title='🌟 Bài Viết Tiêu Điểm'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── DANH SÁCH BÀI VIẾT CHÍNH (Blogger Core Blog Widget) ── -->
         <b:section id='main' name='Nội Dung Bài Viết' maxwidgets='1' showaddelement='yes'>
           <b:widget id='Blog1' type='Blog' version='2'>
             <b:includable id='main'>
 
               <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
               <b:if cond='data:view.isMultipleItems'>
-                <div class='posts-feed' role='feed'>
+                <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
                     <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
                          isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
@@ -650,6 +675,45 @@ ${combinedCss}
               </b:if>
             </b:if>
 
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── VỊ TRÍ 2: SECTION CHỨA TIỆN ÍCH XEN KẼ (In-Feed Interleaved) ──
+             Tác giả kéo thả widget trực tiếp trong Blogger Layout.
+             JavaScript sẽ tự động chèn vào sau bài viết số 3 (hoặc số N) -->
+        <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
+          <b:widget id='HTML_SP_InFeedQuote' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
+            <b:includable id='main'>
+              <div class='special-posts-widget'
+                   id='widget-infeed-quote'
+                   data-pattern='quote'
+                   data-labels='@Quote'
+                   data-sort='random'
+                   data-limit='1'
+                   data-insert-after='3'
+                   data-title='☕ Chiêm Nghiệm Hôm Nay'>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── VỊ TRÍ 3: KẾT LUỒNG BÀI VIẾT (Trên Nút Phân Trang) ──
+             Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
+             Thích hợp đặt Khung Newsletter hoặc Banner Quảng Cáo AdSense -->
+        <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo / Newsletter)' showaddelement='yes'>
+          <b:widget id='HTML_PrePagination_Action' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
+            <b:includable id='main'>
+              <div class='pre-pagination-newsletter'>
+                <div class='pre-pagination-newsletter-content'>
+                  <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
+                  <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+                </div>
+                <div class='pre-pagination-newsletter-form'>
+                  <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
+                  <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
+                </div>
+              </div>
             </b:includable>
           </b:widget>
         </b:section>

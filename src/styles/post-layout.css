@@ -716,3 +716,189 @@
   }
   .author-bio-avatar { width: 64px; height: 64px; }
 }
+
+/* ===================================================
+   FEAT-HOMEPAGE-INTERLEAVED-WIDGETS-V1
+   3-TIER MAIN FEED & INTERLEAVED WIDGETS
+   =================================================== */
+
+/* Tầng 1: Khoảng cách của vùng Đầu Luồng (Hero / Spotlight) */
+#main-above-feed {
+  margin-bottom: 2.25rem;
+  width: 100%;
+}
+
+/* Tầng 2: Khoảng cách của vùng Xen Kẽ Giữa Các Bài (In-Feed) */
+#main-in-feed-section {
+  width: 100%;
+  margin: 1rem 0;
+  display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
+}
+#main-in-feed-section.in-feed-active {
+  display: block;
+}
+
+/* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
+#main-pre-pagination-section {
+  width: 100%;
+  margin-top: 2.25rem;
+  margin-bottom: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+/* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
+#main-above-feed:empty,
+#main-in-feed-section:empty,
+#main-pre-pagination-section:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* Khi vào trang đọc bài chi tiết (Single Post) hoặc Lưu Trữ: Ẩn các vùng widget trang chủ */
+.single-post-container ~ #main-above-feed,
+.single-post-container ~ #main-in-feed-section,
+.single-post-container ~ #main-pre-pagination-section,
+body.view-single #main-above-feed,
+body.view-single #main-in-feed-section,
+body.view-single #main-pre-pagination-section,
+body.view-archive #main-above-feed,
+body.view-archive #main-in-feed-section,
+body.view-archive #main-pre-pagination-section {
+  display: none !important;
+}
+
+/* Tự động ẩn Tầng 1 (Hero Spotlight) khi sang Trang 2+ (Page 2+) */
+body.view-paged #main-above-feed,
+body.is-paged #main-above-feed,
+body.view-not-homepage #main-above-feed {
+  display: none !important;
+}
+
+/* ── PRE-PAGINATION COMPONENT CARDS ── */
+/* 1. Newsletter Box (Action Zone) */
+.pre-pagination-newsletter {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.pre-pagination-newsletter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+}
+.pre-pagination-newsletter-content {
+  flex: 1;
+}
+.pre-pagination-newsletter-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pre-pagination-newsletter-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+.pre-pagination-newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 320px;
+}
+.pre-pagination-newsletter-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+.pre-pagination-newsletter-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.pre-pagination-newsletter-btn {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.pre-pagination-newsletter-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* 2. Banner Ad Slot (Action Zone) */
+.pre-pagination-ad-banner {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 120px;
+}
+.pre-pagination-ad-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.pre-pagination-ad-content {
+  width: 100%;
+  max-width: 728px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .pre-pagination-newsletter {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+  .pre-pagination-newsletter-form {
+    min-width: 100%;
+    flex-direction: column;
+  }
+  .pre-pagination-newsletter-btn {
+    width: 100%;
+  }
+}
+

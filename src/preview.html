@@ -49,9 +49,11 @@
       <button id="view-mode-post" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">📄 Trang Đọc Bài Viết (Single Post)</button>
       <button id="view-mode-archive" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;">⏳ Dòng Thời Gian (Archive Page)</button>
       <button id="toggle-logo-mode" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px dashed var(--primary); background: var(--bg-card); color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.2s;">🖼️ Thử Logo: [Văn Bản] ⇄ [Hình Ảnh]</button>
+      <button id="toggle-page-paged" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px dashed #10b981; background: var(--bg-card); color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.2s;">📄 Thử: [Trang 1] ⇄ [Trang 2 (Ẩn Hero)]</button>
+      <button id="toggle-empty-state" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px dashed #f59e0b; background: var(--bg-card); color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.2s;">👁️ Thử: [Bật Widget] ⇄ [Để Trống Ô]</button>
       <button id="btn-open-widget-tester" style="padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid #8b5cf6; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(139,92,246,0.35);">🎛️ Thử Config Widget</button>
     </div>
-    <span style="color: var(--text-muted); font-size: 0.82rem;">💡 Đặc tả: FEAT-TIMELINE-PAGE-V3 (/p/muc-luc.html)</span>
+    <span style="color: var(--text-muted); font-size: 0.82rem;">💡 Đặc tả: FEAT-HOMEPAGE-INTERLEAVED-WIDGETS-V1</span>
   </div>
 
   <!-- Reading Progress Bar -->
@@ -174,12 +176,24 @@
       <!-- MAIN COLUMN -->
       <main class="main-content">
 
+        <!-- ── TẦNG 1: ĐẦU LUỒNG BÀI VIẾT (HERO / SPOTLIGHT) ── -->
+        <div id="main-above-feed">
+          <div class="special-posts-widget"
+               id="widget-spotlight-hero-preview"
+               data-pattern="spotlight"
+               data-labels="@Tiêu điểm"
+               data-sort="latest"
+               data-limit="1"
+               data-title="🌟 Bài Viết Tiêu Điểm Tuần">
+          </div>
+        </div>
+
         <!-- ═══════════════════════════════════
              1. HOMEPAGE FEED VIEW WRAPPER
              ═══════════════════════════════════ -->
         <div id="posts-feed-wrapper">
 
-          <div class="posts-feed">
+          <div class="posts-feed" id="posts-feed-container">
 
             <!-- Post Card 1 (Perspectives, ai:assisted) -->
             <article class="post-card" data-ai-type="ai:assisted">
@@ -301,16 +315,64 @@
                    alt="Hạnh phúc biết đủ" width="220" height="150" loading="lazy"/>
             </article>
 
+            <!-- Post Card 7 (Minimalism, Human) -->
+            <article class="post-card">
+              <div class="post-card-body">
+                <div>
+                  <a class="post-badge" href="#" data-bilingual="true">Lối Sống Tinh Giản | Minimalism</a>
+                  <h2 class="post-card-title">
+                    <a href="#" class="view-post-link">Nghệ Thuật Của Sự Tinh Giản: Sống Nhiều Hơn Với Ít Đồ Đạc Hơn</a>
+                  </h2>
+                  <div class="post-card-snippet">Khi loại bỏ 70% những món đồ không cần thiết trong nhà, tôi bất ngờ nhận thấy tâm trí mình trở nên minh mẫn và tự do hơn bao giờ hết. Sự tinh giản không phải là thiếu thốn, mà là sự lựa chọn có ý thức...</div>
+                </div>
+                <div class="post-card-meta">
+                  <span>📅 10 tháng 8, 2026</span>
+                  <span>⏱️ <span data-i18n="readingTime">phút đọc</span></span>
+                </div>
+              </div>
+              <img class="post-card-thumb"
+                   src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=440&auto=format&fit=crop&q=80"
+                   alt="Lối sống tinh giản" width="220" height="150" loading="lazy"/>
+            </article>
+
+          </div>
+
+          <!-- ── TẦNG 3: KẾT LUỒNG BÀI VIẾT (TRÊN NÚT PHÂN TRANG) ── -->
+          <div id="main-pre-pagination-section">
+            <div class="pre-pagination-newsletter">
+              <div class="pre-pagination-newsletter-content">
+                <div class="pre-pagination-newsletter-title">💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
+                <p class="pre-pagination-newsletter-desc">Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+              </div>
+              <div class="pre-pagination-newsletter-form">
+                <input class="pre-pagination-newsletter-input" type="email" placeholder="Nhập email của bạn..." aria-label="Email đăng ký"/>
+                <button class="pre-pagination-newsletter-btn" type="button">Đăng Ký Miễn Phí</button>
+              </div>
+            </div>
           </div>
 
           <!-- Pagination -->
           <nav class="blog-pager">
-            <span class="page-num active">1</span>
-            <a class="page-num" href="#">2</a>
-            <a class="page-num" href="#">3</a>
+            <span class="page-num active" data-page="1">1</span>
+            <a class="page-num" href="#" data-page="2">2</a>
+            <a class="page-num" href="#" data-page="3">3</a>
             <a class="blog-pager-older-link" href="#" data-i18n="olderPosts">Cũ hơn »</a>
           </nav>
         </div><!-- /#posts-feed-wrapper -->
+
+        <!-- ── TẦNG 2: XEN KẼ GIỮA CÁC BÀI (IN-FEED) ── -->
+        <!-- Khởi tạo nằm ở đây, sau đó JavaScript sẽ tự động chèn vào sau bài viết số 3 -->
+        <div id="main-in-feed-section">
+          <div class="special-posts-widget"
+               id="widget-infeed-quote-preview"
+               data-pattern="quote"
+               data-labels="@Quote"
+               data-sort="random"
+               data-limit="1"
+               data-insert-after="3"
+               data-title="☕ Chiêm Nghiệm Hôm Nay">
+          </div>
+        </div>
 
         <!-- ═══════════════════════════════════
              2. SINGLE POST VIEW WRAPPER
@@ -1064,6 +1126,7 @@
         }
 
         updateActiveButtons("home");
+        if (window.initHomepageInterleavedWidgets) window.initHomepageInterleavedWidgets();
         window.scrollTo({ top: 0, behavior: "smooth" });
       };
 
@@ -1088,6 +1151,7 @@
         }
 
         updateActiveButtons("post");
+        if (window.initHomepageInterleavedWidgets) window.initHomepageInterleavedWidgets();
         window.scrollTo({ top: 0, behavior: "smooth" });
 
         // Trigger Auto-TOC re-init for single post
@@ -1107,6 +1171,7 @@
         if (categoryTabs) categoryTabs.style.display = ""; // Giữ nguyên thanh nhãn chuyên mục dưới banner
 
         updateActiveButtons("archive");
+        if (window.initHomepageInterleavedWidgets) window.initHomepageInterleavedWidgets();
 
         // Init/Mount Archive Page
         var appEl = document.getElementById("editorial-archive-app");
@@ -1176,6 +1241,91 @@
 
           toggleLogoBtn.innerText = isImageLogo ? "🖼️ Đang dùng: [HÌNH ẢNH] (Bấm đổi Text)" : "✍️ Đang dùng: [VĂN BẢN] (Bấm đổi Ảnh)";
           toggleLogoBtn.style.borderColor = isImageLogo ? "var(--primary)" : "var(--border-color)";
+        });
+      }
+
+      // ── HỖ TRỢ TEST ĐẶC TẢ FEAT-HOMEPAGE-INTERLEAVED-WIDGETS-V1 ──
+      var togglePageBtn = document.getElementById("toggle-page-paged");
+      var isPage2 = false;
+
+      function setPreviewPage(paged) {
+        isPage2 = paged;
+        document.body.classList.toggle("view-paged", isPage2);
+        document.body.classList.toggle("is-paged", isPage2);
+
+        var p1 = document.querySelector('.blog-pager [data-page="1"]');
+        var p2 = document.querySelector('.blog-pager [data-page="2"]');
+        if (p1 && p2) {
+          if (isPage2) {
+            p1.classList.remove("active");
+            p2.classList.add("active");
+          } else {
+            p1.classList.add("active");
+            p2.classList.remove("active");
+          }
+        }
+
+        if (togglePageBtn) {
+          togglePageBtn.innerText = isPage2 ? "📄 Đang xem: [Trang 2 (Đã Ẩn Hero)] (Bấm đổi Trang 1)" : "📄 Đang xem: [Trang 1 (Hiện Hero)] (Bấm đổi Trang 2)";
+          togglePageBtn.style.borderColor = isPage2 ? "#10b981" : "var(--border-color)";
+        }
+
+        if (window.initHomepageInterleavedWidgets) {
+          window.initHomepageInterleavedWidgets();
+        }
+      }
+
+      if (togglePageBtn) {
+        togglePageBtn.addEventListener("click", function() {
+          setPreviewPage(!isPage2);
+        });
+      }
+
+      document.querySelectorAll(".blog-pager .page-num, .blog-pager-older-link").forEach(function(el) {
+        el.addEventListener("click", function(e) {
+          e.preventDefault();
+          var targetPage = el.getAttribute("data-page");
+          if (targetPage === "2" || el.classList.contains("blog-pager-older-link")) {
+            setPreviewPage(true);
+          } else if (targetPage === "1") {
+            setPreviewPage(false);
+          }
+        });
+      });
+
+      // Toggle Empty State để test Graceful Empty State (không thừa khoảng trắng)
+      var toggleEmptyBtn = document.getElementById("toggle-empty-state");
+      var isEmptyState = false;
+      var aboveFeedZone = document.getElementById("main-above-feed");
+      var inFeedZone = document.getElementById("main-in-feed-section");
+      var prePaginationZone = document.getElementById("main-pre-pagination-section");
+
+      var originalAboveFeed = aboveFeedZone ? aboveFeedZone.innerHTML : "";
+      var originalInFeed = inFeedZone ? inFeedZone.innerHTML : "";
+      var originalPrePagination = prePaginationZone ? prePaginationZone.innerHTML : "";
+
+      if (toggleEmptyBtn) {
+        toggleEmptyBtn.addEventListener("click", function() {
+          isEmptyState = !isEmptyState;
+          if (isEmptyState) {
+            if (aboveFeedZone) aboveFeedZone.innerHTML = "";
+            if (inFeedZone) inFeedZone.innerHTML = "";
+            if (prePaginationZone) prePaginationZone.innerHTML = "";
+            toggleEmptyBtn.innerText = "👁️ Đang test: [Ô ĐỂ TRỐNG] (Bấm bật lại Widget)";
+            toggleEmptyBtn.style.borderColor = "#ef4444";
+          } else {
+            if (aboveFeedZone) aboveFeedZone.innerHTML = originalAboveFeed;
+            if (inFeedZone) inFeedZone.innerHTML = originalInFeed;
+            if (prePaginationZone) prePaginationZone.innerHTML = originalPrePagination;
+            toggleEmptyBtn.innerText = "👁️ Đang test: [BẬT WIDGET] (Bấm để trống ô)";
+            toggleEmptyBtn.style.borderColor = "var(--border-color)";
+          }
+          if (window.initHomepageInterleavedWidgets) {
+            window.initHomepageInterleavedWidgets();
+          }
+          if (window.initSpecialPostsWidgets) {
+            window.initSpecialPostsWidgets();
+          }
         });
       }
 
@@ -1375,6 +1525,7 @@
   <script src="scripts/footer.js"></script>
   <script src="scripts/special-posts.js"></script>
   <script src="scripts/ai-transparency.js"></script>
+  <script src="scripts/homepage-interleaved.js"></script>
 
   <!-- ═══════════════════════════════════════════════════════════════
        INTERACTIVE WIDGET PLAYGROUND CONTROLLER SCRIPT

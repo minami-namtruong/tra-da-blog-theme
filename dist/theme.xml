@@ -1864,6 +1864,192 @@ a:hover {
   .author-bio-avatar { width: 64px; height: 64px; }
 }
 
+/* ===================================================
+   FEAT-HOMEPAGE-INTERLEAVED-WIDGETS-V1
+   3-TIER MAIN FEED & INTERLEAVED WIDGETS
+   =================================================== */
+
+/* Tầng 1: Khoảng cách của vùng Đầu Luồng (Hero / Spotlight) */
+#main-above-feed {
+  margin-bottom: 2.25rem;
+  width: 100%;
+}
+
+/* Tầng 2: Khoảng cách của vùng Xen Kẽ Giữa Các Bài (In-Feed) */
+#main-in-feed-section {
+  width: 100%;
+  margin: 1rem 0;
+  display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
+}
+#main-in-feed-section.in-feed-active {
+  display: block;
+}
+
+/* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
+#main-pre-pagination-section {
+  width: 100%;
+  margin-top: 2.25rem;
+  margin-bottom: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+/* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
+#main-above-feed:empty,
+#main-in-feed-section:empty,
+#main-pre-pagination-section:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* Khi vào trang đọc bài chi tiết (Single Post) hoặc Lưu Trữ: Ẩn các vùng widget trang chủ */
+.single-post-container ~ #main-above-feed,
+.single-post-container ~ #main-in-feed-section,
+.single-post-container ~ #main-pre-pagination-section,
+body.view-single #main-above-feed,
+body.view-single #main-in-feed-section,
+body.view-single #main-pre-pagination-section,
+body.view-archive #main-above-feed,
+body.view-archive #main-in-feed-section,
+body.view-archive #main-pre-pagination-section {
+  display: none !important;
+}
+
+/* Tự động ẩn Tầng 1 (Hero Spotlight) khi sang Trang 2+ (Page 2+) */
+body.view-paged #main-above-feed,
+body.is-paged #main-above-feed,
+body.view-not-homepage #main-above-feed {
+  display: none !important;
+}
+
+/* ── PRE-PAGINATION COMPONENT CARDS ── */
+/* 1. Newsletter Box (Action Zone) */
+.pre-pagination-newsletter {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.pre-pagination-newsletter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+}
+.pre-pagination-newsletter-content {
+  flex: 1;
+}
+.pre-pagination-newsletter-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pre-pagination-newsletter-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+.pre-pagination-newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 320px;
+}
+.pre-pagination-newsletter-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+.pre-pagination-newsletter-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.pre-pagination-newsletter-btn {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.pre-pagination-newsletter-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* 2. Banner Ad Slot (Action Zone) */
+.pre-pagination-ad-banner {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 120px;
+}
+.pre-pagination-ad-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.pre-pagination-ad-content {
+  width: 100%;
+  max-width: 728px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .pre-pagination-newsletter {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+  .pre-pagination-newsletter-form {
+    min-width: 100%;
+    flex-direction: column;
+  }
+  .pre-pagination-newsletter-btn {
+    width: 100%;
+  }
+}
+
+
 
 /* ==========================================
    AFFILIATE & EDITORIAL UI KIT
@@ -4163,8 +4349,10 @@ a:hover {
   </script>
   </b:loop>
   </b:if>
-</head>
 <body>
+  <b:class expr:name='data:view.isHomepage ? "view-homepage" : "view-not-homepage"'/>
+  <b:class expr:name='data:view.isMultipleItems ? "view-multiple" : "view-single"'/>
+  <b:class expr:name='data:view.isMultipleItems and not data:view.isHomepage ? "view-paged is-paged" : ""'/>
 
   <!-- Reading Progress Bar -->
   <div class='reading-progress-bar' id='reading-progress-bar'/>
@@ -4362,13 +4550,35 @@ a:hover {
 
       <!-- Main Content Column -->
       <main class='main-content' id='main-content'>
+
+        <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
+             Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
+        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' showaddelement='yes'>
+          <b:widget id='HTML_SP_Spotlight_Hero' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
+            <b:includable id='main'>
+              <b:if cond='data:view.isHomepage'>
+                <div class='special-posts-widget'
+                     id='widget-spotlight-hero'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'
+                     data-title='🌟 Bài Viết Tiêu Điểm'
+                     data-view-all-text='Xem tất cả »'>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── DANH SÁCH BÀI VIẾT CHÍNH (Blogger Core Blog Widget) ── -->
         <b:section id='main' name='Nội Dung Bài Viết' maxwidgets='1' showaddelement='yes'>
           <b:widget id='Blog1' type='Blog' version='2'>
             <b:includable id='main'>
 
               <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
               <b:if cond='data:view.isMultipleItems'>
-                <div class='posts-feed' role='feed'>
+                <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
                     <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
                          isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
@@ -4604,6 +4814,45 @@ a:hover {
               </b:if>
             </b:if>
 
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── VỊ TRÍ 2: SECTION CHỨA TIỆN ÍCH XEN KẼ (In-Feed Interleaved) ──
+             Tác giả kéo thả widget trực tiếp trong Blogger Layout.
+             JavaScript sẽ tự động chèn vào sau bài viết số 3 (hoặc số N) -->
+        <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
+          <b:widget id='HTML_SP_InFeedQuote' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
+            <b:includable id='main'>
+              <div class='special-posts-widget'
+                   id='widget-infeed-quote'
+                   data-pattern='quote'
+                   data-labels='@Quote'
+                   data-sort='random'
+                   data-limit='1'
+                   data-insert-after='3'
+                   data-title='☕ Chiêm Nghiệm Hôm Nay'>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── VỊ TRÍ 3: KẾT LUỒNG BÀI VIẾT (Trên Nút Phân Trang) ──
+             Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
+             Thích hợp đặt Khung Newsletter hoặc Banner Quảng Cáo AdSense -->
+        <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo / Newsletter)' showaddelement='yes'>
+          <b:widget id='HTML_PrePagination_Action' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
+            <b:includable id='main'>
+              <div class='pre-pagination-newsletter'>
+                <div class='pre-pagination-newsletter-content'>
+                  <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
+                  <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+                </div>
+                <div class='pre-pagination-newsletter-form'>
+                  <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký'/>
+                  <button class='pre-pagination-newsletter-btn' type='button'>Đăng Ký Miễn Phí</button>
+                </div>
+              </div>
             </b:includable>
           </b:widget>
         </b:section>
@@ -7327,6 +7576,148 @@ a:hover {
     startObserver();
   }
 
+})();
+
+
+/**
+ * HOMEPAGE INTERLEAVED WIDGETS & MAIN FEED CONTROLLER
+ * Feature: FEAT-HOMEPAGE-INTERLEAVED-WIDGETS-V1
+ * 
+ * Manages 3-tier main feed layout:
+ * 1. Above Feed Hero (#main-above-feed) - Auto hides on Page 2+
+ * 2. In-Feed Interleaved (#main-in-feed-section) - Auto-injects after post 3 (or data-insert-after)
+ * 3. Pre-Pagination Action Zone (#main-pre-pagination-section) - Positioned immediately above .blog-pager
+ */
+
+(function () {
+  'use strict';
+
+  function initInFeedInterleaving() {
+    const inFeedSection = document.getElementById('main-in-feed-section');
+    if (!inFeedSection) return;
+
+    // 1. Kiểm tra xem có widget hoặc nội dung không
+    const hasWidgets = inFeedSection.querySelectorAll('.widget, .special-posts-widget, .infeed-custom-content').length > 0 ||
+                       (inFeedSection.children.length > 0 && inFeedSection.textContent.trim().length > 0);
+
+    if (!hasWidgets) {
+      inFeedSection.style.display = 'none';
+      return;
+    }
+
+    // 2. Lấy danh sách các bài viết
+    const feedContainer = document.getElementById('posts-feed-container') || document.querySelector('.posts-feed');
+    if (!feedContainer) {
+      inFeedSection.style.display = 'none';
+      return;
+    }
+
+    const posts = feedContainer.querySelectorAll('.post-card');
+    if (!posts || posts.length === 0) {
+      inFeedSection.style.display = 'none';
+      return;
+    }
+
+    // 3. Xác định vị trí chèn (Mặc định: sau bài số 3 -> index 2)
+    let insertAfterIndex = 2;
+    const customConfigWidget = inFeedSection.querySelector('[data-insert-after]');
+    if (customConfigWidget) {
+      const customNum = parseInt(customConfigWidget.dataset.insertAfter, 10);
+      if (!isNaN(customNum) && customNum > 0) {
+        insertAfterIndex = customNum - 1;
+      }
+    }
+
+    // Đảm bảo không vượt quá tổng số bài hiện có
+    const targetIndex = Math.min(insertAfterIndex, posts.length - 1);
+
+    // 4. Di chuyển mượt mà vào giữa luồng
+    posts[targetIndex].after(inFeedSection);
+    inFeedSection.classList.add('in-feed-active');
+    inFeedSection.style.display = 'block';
+  }
+
+  function initPrePaginationSection() {
+    const prePagination = document.getElementById('main-pre-pagination-section');
+    if (!prePagination) return;
+
+    // Kiểm tra widget / nội dung
+    const hasWidgets = prePagination.querySelectorAll('.widget, .special-posts-widget, .newsletter-card, .adsense-slot, .ads-banner, .pre-pagination-card').length > 0 ||
+                       (prePagination.children.length > 0 && prePagination.textContent.trim().length > 0);
+
+    if (!hasWidgets) {
+      prePagination.style.display = 'none';
+      return;
+    }
+
+    // Tìm nút phân trang blog-pager
+    const blogPager = document.querySelector('.blog-pager');
+    if (blogPager && blogPager.parentElement) {
+      blogPager.before(prePagination);
+      prePagination.style.display = 'block';
+    } else {
+      prePagination.style.display = 'block';
+    }
+  }
+
+  function initAboveFeedSection() {
+    const aboveFeed = document.getElementById('main-above-feed');
+    if (!aboveFeed) return;
+
+    // Kiểm tra nếu là trang chi tiết bài viết (Single Post) hoặc trang lưu trữ (Archive)
+    const singlePostWrapper = document.getElementById('single-post-wrapper');
+    const isSinglePost = document.body.classList.contains('view-single') ||
+                         (singlePostWrapper && singlePostWrapper.style.display !== 'none');
+
+    const archiveWrapper = document.getElementById('archive-page-wrapper');
+    const isArchivePage = document.body.classList.contains('view-archive') ||
+                          (archiveWrapper && archiveWrapper.style.display !== 'none');
+
+    if (isSinglePost || isArchivePage) {
+      aboveFeed.style.display = 'none';
+      return;
+    }
+
+    // Kiểm tra nếu là Trang 2 trở đi (Page 2+)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPaged = urlParams.has('updated-max') ||
+                    urlParams.get('page') === '2' ||
+                    urlParams.get('paged') === '2' ||
+                    document.body.classList.contains('is-paged') ||
+                    document.body.classList.contains('view-paged');
+
+    if (isPaged) {
+      aboveFeed.style.display = 'none';
+      return;
+    }
+
+    // Kiểm tra rỗng
+    const hasWidgets = aboveFeed.querySelectorAll('.widget, .special-posts-widget, .hero-spotlight').length > 0 ||
+                       (aboveFeed.children.length > 0 && aboveFeed.textContent.trim().length > 0);
+
+    if (!hasWidgets) {
+      aboveFeed.style.display = 'none';
+      return;
+    }
+
+    aboveFeed.style.display = 'block';
+  }
+
+  function initHomepageInterleavedWidgets() {
+    initAboveFeedSection();
+    initInFeedInterleaving();
+    initPrePaginationSection();
+  }
+
+  // Khởi chạy khi DOM sẵn sàng
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomepageInterleavedWidgets);
+  } else {
+    initHomepageInterleavedWidgets();
+  }
+
+  // Expose ra window để các module khác hoặc preview sandbox có thể kích hoạt lại khi chuyển view
+  window.initHomepageInterleavedWidgets = initHomepageInterleavedWidgets;
 })();
 
   //]]>
