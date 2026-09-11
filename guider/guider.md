@@ -266,6 +266,25 @@ Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xá
 
 ---
 
+### 3.4. Cấu Hình Widget Ảnh Bìa & Tác Giả (Profile Cover Hero)
+Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (Widget `HTML1` trong vùng **Ảnh Bìa & Tác Giả**). Bạn có thể dễ dàng thay đổi ảnh bìa, avatar và lời giới thiệu:
+
+Bấm **Chỉnh sửa** widget **Ảnh Bìa & Tác Giả**:
+* **Để trống ô Content:** Theme sẽ sử dụng ảnh bìa và avatar mặc định của trang Preview.
+* **Chỉ đổi ảnh bìa Banner (Cách nhanh nhất):**
+  Click vào ô `Content` và dán thẳng đường link ảnh (bắt đầu bằng `https://...`):
+  ```text
+  https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80
+  ```
+  *(Theme sẽ tự động nhận diện đây là ảnh bìa và đặt làm hình nền banner).*
+* **Đổi cả Banner, Avatar, Lời Giới Thiệu & Tên:**
+  Sử dụng cú pháp phân tách bằng dấu gạch đứng `|`:
+  ```text
+  banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Chia sẻ về cuộc sống và tri thức | name: Nam Trương
+  ```
+
+---
+
 ## CHƯƠNG 4: CÁCH THÊM MỚI WIDGET TÙY Ý (+ ADD A GADGET)
 
 Bạn có thể thêm **bao nhiêu widget tùy thích** vào bất kỳ vị trí nào có nút **"+ Thêm tiện ích"** (+ Add a Gadget) theo 2 cách cực kỳ nhanh:

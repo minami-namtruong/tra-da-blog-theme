@@ -335,57 +335,32 @@ ${combinedCss}
 
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
     <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='2' showaddelement='yes'>
-      <b:widget id='HTML1' type='HTML' version='2'>
+      <b:widget id='HTML1' type='HTML' version='2' title='Ảnh Bìa &amp; Tác Giả'>
         <b:includable id='main'>
-          <b:if cond='data:content != &quot;&quot;'>
-            <data:content/>
-          <b:else/>
-            <b:if cond='data:view.isHomepage or data:view.isMultipleItems or (data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html")))'>
-              <!-- Full Profile Cover on Homepage / Archive -->
-              <div class='profile-cover-section' id='profile-cover-section'>
-                <div class='cover-image-wrapper' id='cover-image-wrapper'
-                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
-                </div>
-                <div class='cover-info-card'>
-                  <div class='avatar-wrapper'>
-                    <img class='profile-avatar'
-                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
-                         alt='Avatar tác giả'
-                         width='120' height='120'/>
-                  </div>
-                  <div class='profile-meta'>
-                    <h1 class='profile-name'><data:blog.title/></h1>
-                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                  </div>
-                  <div class='profile-cta-area'>
-                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
-                  </div>
-                </div>
+          <!-- Profile Cover Header Section -->
+          <div class='profile-cover-section' id='profile-cover-section'>
+            <div class='cover-image-wrapper' id='cover-image-wrapper'
+                 style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
+            </div>
+            <div class='cover-info-card'>
+              <div class='avatar-wrapper'>
+                <img class='profile-avatar' id='profile-avatar-img'
+                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
+                     alt='Avatar tác giả'
+                     width='120' height='120'/>
               </div>
-            <b:else/>
-              <!-- Full Profile Cover on Single Post / Subpages (identical size to homepage) -->
-              <div class='profile-cover-section' id='profile-cover-section'>
-                <div class='cover-image-wrapper' id='cover-image-wrapper'
-                     style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
-                </div>
-                <div class='cover-info-card'>
-                  <div class='avatar-wrapper'>
-                    <img class='profile-avatar'
-                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
-                         alt='Avatar tác giả'
-                         width='120' height='120'/>
-                  </div>
-                  <div class='profile-meta'>
-                    <div class='profile-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
-                    <p class='profile-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
-                  </div>
-                  <div class='profile-cta-area'>
-                    <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
-                  </div>
-                </div>
+              <div class='profile-meta'>
+                <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
+                <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
+              <div class='profile-cta-area'>
+                <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+              </div>
+            </div>
+            <b:if cond='data:content'>
+              <div id='profile-custom-config' style='display:none;'><data:content/></div>
             </b:if>
-          </b:if>
+          </div>
         </b:includable>
       </b:widget>
     </b:section>
