@@ -267,21 +267,27 @@ Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xá
 ---
 
 ### 3.4. Cấu Hình Widget Ảnh Bìa & Tác Giả (Profile Cover Hero)
-Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (Widget `HTML1` trong vùng **Ảnh Bìa & Tác Giả**). Bạn có thể dễ dàng thay đổi ảnh bìa, avatar và lời giới thiệu:
+Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (trong khu vực **Ảnh Bìa & Tác Giả**). Bạn có thể tải ảnh trực tiếp từ máy tính lên hoặc dùng link ảnh online theo 2 cách rất tiện:
 
-Bấm **Chỉnh sửa** widget **Ảnh Bìa & Tác Giả**:
-* **Để trống ô Content:** Theme sẽ sử dụng ảnh bìa và avatar mặc định của trang Preview.
-* **Chỉ đổi ảnh bìa Banner (Cách nhanh nhất):**
-  Click vào ô `Content` và dán thẳng đường link ảnh (bắt đầu bằng `https://...`):
-  ```text
-  https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80
-  ```
-  *(Theme sẽ tự động nhận diện đây là ảnh bìa và đặt làm hình nền banner).*
+#### Cách 1: Tải ảnh trực tiếp từ máy tính (Có sẵn nút "Chọn Tệp / Upload")
+Trong mục **Bố cục (Layout)** ➔ khu vực **Ảnh Bìa & Tác Giả**, bạn sẽ thấy tiện ích:  
+👉 **🖼️ Tải Lên Ảnh Bìa (Từ Máy Tính)**:
+1. Bấm **Chỉnh sửa** tiện ích này.
+2. Tại mục **Hình ảnh (Image)**, chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm nút **Chọn tệp (Choose File)** và chọn bức ảnh từ máy tính của bạn.
+3. Bấm **LƯU (SAVE)**.
+4. **Xong!** Theme sẽ tự động lấy bức ảnh bạn vừa tải lên làm hình nền Banner của blog!
+
+#### Cách 2: Nhập link ảnh hoặc cấu hình qua ô "Content" (Widget `HTML1`)
+Bấm **Chỉnh sửa** widget **Ảnh Bìa & Tác Giả** (`HTML1`):
+* **Để trống ô Content:** Theme sử dụng ảnh bìa và avatar mặc định của trang Preview.
+* **Chỉ đổi ảnh bìa bằng link:** Dán thẳng link ảnh `https://...` vào ô `Content` ➔ Bấm **LƯU**.
 * **Đổi cả Banner, Avatar, Lời Giới Thiệu & Tên:**
   Sử dụng cú pháp phân tách bằng dấu gạch đứng `|`:
   ```text
   banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Chia sẻ về cuộc sống và tri thức | name: Nam Trương
   ```
+
+> **Mẹo lấy link ảnh lưu vĩnh viễn trên Google CDN:** Khi viết bất kỳ bài đăng nào trên Blogger, bạn bấm biểu tượng **Chèn hình ảnh ➔ Tải lên từ máy tính**. Sau khi ảnh tải lên, bạn nhấp chuột phải vào ảnh chọn **"Sao chép địa chỉ hình ảnh"**. Link này được lưu trữ miễn phí, tốc độ cao trên máy chủ Google để bạn dán vào bất cứ widget nào!
 
 ---
 

@@ -123,6 +123,15 @@
   }
 
   function initProfileCoverSection() {
+    const coverWrapper = document.getElementById('cover-image-wrapper');
+    if (!coverWrapper) return;
+
+    // Ưu tiên 1: Ảnh tải lên trực tiếp từ máy tính qua widget Image1 (Tải Lên Ảnh Bìa)
+    const uploadedBannerEl = document.getElementById('profile-uploaded-banner');
+    if (uploadedBannerEl && uploadedBannerEl.textContent.trim()) {
+      coverWrapper.style.backgroundImage = `url("${uploadedBannerEl.textContent.trim()}")`;
+    }
+
     const configEl = document.getElementById('profile-custom-config');
     if (!configEl) return;
 
