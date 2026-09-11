@@ -22,7 +22,7 @@
 
 .post-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   display: grid;
@@ -122,7 +122,7 @@
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 600;
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   color: var(--text-muted);
   background: var(--bg-card);
   text-decoration: none;
@@ -136,7 +136,7 @@
 .page-num.active, .pagination .current, .blog-pager a.active {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 }
 
 .blog-pager .home-link,
@@ -149,7 +149,7 @@
   border-radius: var(--radius-md);
   font-size: 0.88rem;
   font-weight: 600;
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   color: var(--text-muted);
   background: var(--bg-card);
   text-decoration: none;
@@ -157,7 +157,7 @@
 }
 .blog-pager-older-link:hover, .blog-pager-newer-link:hover {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
 }
 
@@ -166,7 +166,7 @@
    ========================================== */
 .single-post-container {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
   box-shadow: var(--shadow-sm);
@@ -207,7 +207,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
   margin-bottom: 2rem;
 }
 
@@ -242,7 +242,7 @@
 .bilingual-switcher {
   display: inline-flex;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-full);
   padding: 3px;
   gap: 3px;
@@ -261,7 +261,7 @@
 }
 .lang-btn.active {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 }
 .bilingual-switcher-wrapper {
   display: none; /* hidden by default, shown by JS when bilingual content detected */
@@ -273,7 +273,7 @@
 /* Auto Table of Contents */
 .table-of-contents {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   margin: 2rem 0;
@@ -328,8 +328,8 @@
   gap: 0.75rem;
   margin: 2.5rem 0;
   padding: 1.25rem 0;
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  border-top: var(--stroke-hairline) solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
   flex-wrap: wrap;
 }
 .share-title {
@@ -348,17 +348,17 @@
   font-weight: 600;
   text-decoration: none;
   transition: var(--transition);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   color: var(--text-muted);
   background: var(--bg-card);
 }
 .btn-share:hover {
-  color: #fff;
+  color: var(--text-inverse);
 }
-.btn-share.btn-share-fb:hover { background: #1877F2; border-color: #1877F2; }
-.btn-share.btn-share-tw:hover { background: #000; border-color: #000; }
-.btn-share.btn-share-li:hover { background: #0A66C2; border-color: #0A66C2; }
-.btn-share.btn-share-copy:hover { background: var(--success); border-color: var(--success); color: #fff; }
+.btn-share.btn-share-fb:hover { background: var(--brand-facebook); border-color: var(--brand-facebook); }
+.btn-share.btn-share-tw:hover { background: var(--brand-twitter); border-color: var(--brand-twitter); }
+.btn-share.btn-share-li:hover { background: var(--brand-linkedin); border-color: var(--brand-linkedin); }
+.btn-share.btn-share-copy:hover { background: var(--success); border-color: var(--success); color: var(--text-inverse); }
 
 /* ==========================================
    AUTHOR BIO BOX
@@ -368,7 +368,7 @@
   gap: 1.5rem;
   padding: 2rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   margin: 2.5rem 0;
   align-items: flex-start;
@@ -379,7 +379,7 @@
   border-radius: var(--radius-full);
   object-fit: cover;
   flex-shrink: 0;
-  border: 3px solid var(--border-color);
+  border: var(--stroke-bold) solid var(--border-color);
 }
 .author-bio-content { flex: 1; min-width: 0; }
 .author-bio-label {
@@ -422,7 +422,7 @@
   gap: 0.25rem;
   padding: 1.25rem 1.5rem;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   text-decoration: none;
   transition: var(--transition);
@@ -465,7 +465,7 @@
   font-weight: 700;
   margin: 0 0 1.25rem;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: var(--stroke-thick) solid var(--border-color);
 }
 .related-posts-grid {
   display: grid;
@@ -480,7 +480,7 @@
   transition: var(--transition);
   padding: 0.75rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   background: var(--bg-card);
 }
 .related-post-card:hover {
@@ -519,7 +519,7 @@
 .comments-section {
   margin: 2.5rem 0 0;
   padding-top: 2rem;
-  border-top: 2px solid var(--border-color);
+  border-top: var(--stroke-thick) solid var(--border-color);
 }
 .comments-section .comment-header h3 {
   font-size: 1.15rem;
@@ -540,7 +540,7 @@
 
 .sidebar-widget {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -550,7 +550,7 @@
   font-weight: 700;
   margin: 0 0 1.1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: var(--stroke-thick) solid var(--border-color);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -563,7 +563,7 @@
   border-radius: var(--radius-full);
   object-fit: cover;
   margin-bottom: 0.75rem;
-  border: 3px solid var(--border-color);
+  border: var(--stroke-bold) solid var(--border-color);
 }
 .sidebar-about-text {
   font-size: 0.9rem;
@@ -646,7 +646,7 @@
   width: 100%;
   padding: 0.65rem 1rem;
   background: var(--bg-input);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-full);
   color: var(--text-main);
   font-size: 0.88rem;
@@ -661,7 +661,7 @@
 .sidebar-submit-btn {
   padding: 0.65rem 1rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
   border-radius: var(--radius-full);
   font-weight: 700;
@@ -744,7 +744,7 @@
   margin-top: 2.25rem;
   margin-bottom: 1.75rem;
   padding-top: 1.5rem;
-  border-top: 1px dashed var(--border-color);
+  border-top: var(--stroke-hairline) dashed var(--border-color);
 }
 
 /* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
@@ -781,7 +781,7 @@ body.view-not-homepage #main-above-feed {
 /* 1. Newsletter Box (Action Zone) */
 .pre-pagination-newsletter {
   background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 2rem;
   display: flex;
@@ -797,7 +797,7 @@ body.view-not-homepage #main-above-feed {
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width: var(--stroke-avatar);
   height: 100%;
   background: var(--primary);
 }
@@ -828,7 +828,7 @@ body.view-not-homepage #main-above-feed {
 .pre-pagination-newsletter-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--bg-card);
   color: var(--text-main);
@@ -838,12 +838,12 @@ body.view-not-homepage #main-above-feed {
 }
 .pre-pagination-newsletter-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
 .pre-pagination-newsletter-btn {
   padding: 0.75rem 1.25rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
@@ -859,7 +859,7 @@ body.view-not-homepage #main-above-feed {
 /* 2. Banner Ad Slot (Action Zone) */
 .pre-pagination-ad-banner {
   background: var(--bg-surface);
-  border: 1px dashed var(--border-color);
+  border: var(--stroke-hairline) dashed var(--border-color);
   border-radius: var(--radius-md);
   padding: 1.5rem;
   text-align: center;

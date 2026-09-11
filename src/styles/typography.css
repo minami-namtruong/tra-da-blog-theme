@@ -65,7 +65,7 @@ a:hover {
   margin-top: 2em;
   margin-bottom: 0.75em;
   padding-bottom: 0.5em;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: var(--stroke-thick) solid var(--border-color);
 }
 
 .post-body h3 {
@@ -82,7 +82,7 @@ a:hover {
 .post-body blockquote {
   margin: 2em 0;
   padding: 1.25em 1.75em;
-  border-left: 4px solid var(--primary);
+  border-left: var(--stroke-avatar) solid var(--primary);
   background: var(--primary-light);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   font-style: italic;
@@ -119,7 +119,7 @@ a:hover {
   padding: 0.2em 0.45em;
   font-size: 0.88em;
   color: var(--primary);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
 }
 .post-body pre code {
   padding: 0;
@@ -130,7 +130,7 @@ a:hover {
 .post-body pre {
   padding: 1.5em;
   overflow-x: auto;
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   margin: 1.75em 0;
   font-size: 0.9rem;
   line-height: 1.65;
@@ -144,7 +144,7 @@ a:hover {
 }
 .post-body th, .post-body td {
   padding: 0.75em 1em;
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   text-align: left;
 }
 .post-body th {

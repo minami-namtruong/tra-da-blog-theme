@@ -16,11 +16,11 @@
   align-items: center;
   gap: 0.35rem;
   background: var(--ai-badge-bg);
-  border: 1px solid var(--ai-badge-border);
+  border: var(--stroke-hairline) solid var(--ai-badge-border);
   color: var(--ai-badge-text);
   font-family: var(--font-main);
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   transition: all 0.2s ease;
@@ -81,7 +81,7 @@
   height: 18px;
   padding: 1px 7px;
   font-size: 0.70rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: var(--ai-micro-bg);
   border-color: var(--ai-badge-border);
   color: var(--ai-micro-text);
@@ -117,8 +117,8 @@
    ────────────────────────────────────────── */
 .ai-disclosure-box {
   background: var(--ai-callout-bg);
-  border: 1px solid var(--ai-callout-border);
-  border-left: 3px solid var(--ai-callout-border);
+  border: var(--stroke-hairline) solid var(--ai-callout-border);
+  border-left: var(--stroke-bold) solid var(--ai-callout-border);
   border-radius: var(--radius-md);
   padding: 0.9rem 1.25rem;
   margin: 0 0 2rem;
@@ -191,7 +191,7 @@
   color: var(--ai-callout-text);
   margin: 0;
   padding-top: 0.65rem;
-  border-top: 1px solid var(--ai-callout-border);
+  border-top: var(--stroke-hairline) solid var(--ai-callout-border);
 }
 
 .ai-disclosure-text p {

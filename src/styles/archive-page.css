@@ -56,7 +56,7 @@
 .archive-hero-header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
 }
 
 .archive-hero-title {
@@ -94,8 +94,8 @@
   align-items: center;
   gap: 0.35rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-full);
   padding: 0.35rem 0.85rem;
   font-size: 0.84rem;
   color: var(--text-muted);
@@ -134,8 +134,8 @@
   width: 100%;
   padding: 0.85rem 2.8rem 0.85rem 2.85rem;
   background: var(--bg-card);
-  border: 1.5px solid var(--border-color);
-  border-radius: 12px;
+  border: var(--stroke-medium) solid var(--border-color);
+  border-radius: var(--radius-md);
   font-family: var(--font-main);
   font-size: 0.95rem;
   color: var(--text-main);
@@ -160,7 +160,7 @@
   top: 50%;
   transform: translateY(-50%);
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   color: var(--text-muted);
   width: 26px;
   height: 26px;
@@ -175,7 +175,7 @@
 
 .archive-search-clear:hover {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
 }
 
@@ -198,7 +198,7 @@
 
 .archive-category-pills::-webkit-scrollbar-thumb {
   background: var(--border-color);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .archive-cat-pill {
@@ -206,8 +206,8 @@
   align-items: center;
   gap: 0.3rem;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-full);
   padding: 0.38rem 0.9rem;
   font-size: 0.84rem;
   font-weight: 600;
@@ -228,7 +228,7 @@
 .archive-cat-pill.is-active {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
@@ -245,7 +245,7 @@
   padding: 0.4rem 0 0.85rem;
   font-size: 0.84rem;
   color: var(--text-muted);
-  border-bottom: 1px dashed var(--border-color);
+  border-bottom: var(--stroke-hairline) dashed var(--border-color);
   margin-bottom: 1.25rem;
 }
 
@@ -264,7 +264,7 @@
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -332,15 +332,15 @@
   font-weight: 600;
   color: var(--text-muted);
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   padding: 0.2rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
 .archive-year-line {
   flex: 1;
-  height: 1px;
+  height: var(--stroke-hairline);
   background: var(--border-color);
   min-width: 20px;
 }
@@ -350,7 +350,7 @@
   height: 28px;
   border-radius: 50%;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,7 +376,7 @@
 
 .archive-year-header:hover .archive-year-chevron {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
 }
 
@@ -404,8 +404,8 @@
   gap: 1rem;
   padding: 0.95rem 1.25rem;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-md);
   text-decoration: none;
   box-shadow: var(--shadow-sm);
   transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
@@ -426,9 +426,9 @@
   font-weight: 600;
   color: var(--primary);
   background: var(--primary-light);
-  border: 1px solid transparent;
+  border: var(--stroke-hairline) solid transparent;
   padding: 0.24rem 0.7rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   white-space: nowrap;
   transition: all 0.18s ease;
   line-height: 1.3;
@@ -436,7 +436,7 @@
 
 .archive-post-card:hover .archive-post-cat-pill {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 }
 
 /* Cột 2: Tiêu đề bài viết */
@@ -487,7 +487,7 @@
 
 .archive-post-card:hover .archive-post-arrow {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   transform: translateX(3px);
 }
 
@@ -496,8 +496,8 @@
   text-align: center;
   padding: 3.5rem 1.5rem;
   background: var(--bg-card);
-  border: 1px dashed var(--border-color);
-  border-radius: 12px;
+  border: var(--stroke-hairline) dashed var(--border-color);
+  border-radius: var(--radius-md);
   margin: 1rem 0;
 }
 
@@ -525,9 +525,9 @@
   align-items: center;
   gap: 0.4rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 0.5rem 1.25rem;
   font-size: 0.88rem;
   font-weight: 600;
@@ -553,7 +553,7 @@
 .archive-spinner {
   width: 20px;
   height: 20px;
-  border: 2.5px solid var(--border-color);
+  border: var(--stroke-thick) solid var(--border-color);
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: archiveSpin 0.75s linear infinite;
@@ -615,7 +615,7 @@
     width: 100%;
     justify-content: space-between;
     padding-top: 0.35rem;
-    border-top: 1px dashed var(--border-color);
+    border-top: var(--stroke-hairline) dashed var(--border-color);
     margin-top: 0.15rem;
   }
 

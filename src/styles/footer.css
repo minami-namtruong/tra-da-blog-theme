@@ -5,7 +5,7 @@
 /* ─── SITE FOOTER CONTAINER ─── */
 .site-footer {
   background: var(--bg-card);
-  border-top: 1px solid var(--border-color);
+  border-top: var(--stroke-hairline) solid var(--border-color);
   margin-top: 4rem;
 }
 
@@ -58,7 +58,7 @@
   margin: 0 0 1.35rem;
   padding: 1rem 1.1rem 1rem 1.25rem;
   background: linear-gradient(135deg, var(--primary-light) 0%, rgba(245, 158, 11, 0.06) 100%);
-  border-left: 3px solid var(--primary);
+  border-left: var(--stroke-bold) solid var(--primary);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   position: relative;
 }
@@ -99,10 +99,10 @@
   height: 42px;
   gap: 0.5rem;
   padding: 0 1.25rem;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 1.5px solid #fbbf24;
+  background: var(--coffee-btn-bg);
+  border: var(--stroke-medium) solid var(--coffee-btn-border);
   border-radius: var(--radius-full);
-  color: #92400e;
+  color: var(--coffee-btn-text);
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
@@ -113,25 +113,25 @@
 }
 .btn-coffee-compact:hover {
   transform: translateY(-3px) scale(1.02);
-  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
-  border-color: #f59e0b;
+  background: var(--coffee-btn-bg-hover);
+  border-color: var(--coffee-btn-border-hover);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.45), inset 0 1px 0 rgba(255,255,255,0.5);
-  color: #78350f;
+  color: var(--coffee-btn-text-hover);
 }
 .btn-coffee-compact:active {
   transform: translateY(-1px) scale(1.01);
 }
 [data-theme="dark"] .btn-coffee-compact {
-  background: linear-gradient(135deg, rgba(254, 243, 199, 0.12) 0%, rgba(253, 230, 138, 0.08) 100%);
-  border-color: rgba(251, 191, 36, 0.5);
-  color: #fde68a;
+  background: var(--coffee-btn-bg);
+  border-color: var(--coffee-btn-border);
+  color: var(--coffee-btn-text);
   box-shadow: 0 2px 8px rgba(251, 191, 36, 0.1);
 }
 [data-theme="dark"] .btn-coffee-compact:hover {
-  background: linear-gradient(135deg, rgba(254, 243, 199, 0.2) 0%, rgba(253, 230, 138, 0.15) 100%);
-  border-color: #fbbf24;
+  background: var(--coffee-btn-bg-hover);
+  border-color: var(--coffee-btn-border-hover);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.25);
-  color: #fef3c7;
+  color: var(--coffee-btn-text-hover);
 }
 .coffee-icon {
   font-size: 1.05rem;
@@ -199,7 +199,7 @@
   min-width: 0;
   padding: 0.65rem 1rem;
   background: var(--bg-input);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-full);
   color: var(--text-main);
   font-size: 0.88rem;
@@ -214,7 +214,7 @@
 .btn-submit {
   padding: 0.65rem 1.1rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
   border-radius: var(--radius-full);
   font-weight: 700;
@@ -254,27 +254,27 @@
 .footer-social-icon:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  color: #fff;
+  color: var(--text-inverse);
 }
 
 /* Specific Social Brand Colors */
 .footer-social-icon[title*="Facebook"], .footer-social-icon[aria-label*="Facebook"] {
-  background: #1877F2; color: #fff;
+  background: var(--brand-facebook); color: var(--text-inverse);
 }
 .footer-social-icon[title*="X"], .footer-social-icon[aria-label*="X"] {
-  background: #14171A; color: #fff;
+  background: var(--brand-twitter); color: var(--text-inverse);
 }
 .footer-social-icon[title*="LinkedIn"], .footer-social-icon[aria-label*="LinkedIn"] {
-  background: #0A66C2; color: #fff;
+  background: var(--brand-linkedin); color: var(--text-inverse);
 }
 .footer-social-icon[title*="YouTube"], .footer-social-icon[aria-label*="YouTube"] {
-  background: #FF0000; color: #fff;
+  background: var(--brand-youtube); color: var(--text-inverse);
 }
 .footer-social-icon[title*="Instagram"], .footer-social-icon[aria-label*="Instagram"] {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff;
+  background: var(--brand-instagram); color: var(--text-inverse);
 }
 .footer-social-icon[title*="RSS"], .footer-social-icon[aria-label*="RSS"] {
-  background: #F26522; color: #fff;
+  background: var(--brand-rss); color: var(--text-inverse);
 }
 
 /* ══════════════════════════════════════════
@@ -284,8 +284,8 @@
 
 /* Full-width divider strip */
 .footer-bottom-wrapper {
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  border-top: var(--stroke-hairline) solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
   background: var(--bg-card);
   position: relative;
 }
@@ -358,7 +358,7 @@
   height: 42px;
   padding: 0;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-muted);
   cursor: pointer;
@@ -372,7 +372,7 @@
 }
 .scroll-top-btn:hover {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
   transform: translateY(-50%) scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -400,7 +400,7 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-surface);
-  border: 1px dashed var(--border-color);
+  border: var(--stroke-hairline) dashed var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-light);
   font-size: 0.83rem;

@@ -15,7 +15,7 @@
 /* Widget wrapper có tiêu đề */
 .sp-widget-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 1.1rem 0.7rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
 }
 
 .sp-widget-title {
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.7rem 0;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
 }
 .sp-skeleton-item:last-child {
   border-bottom: none;
@@ -84,7 +84,7 @@
 .sp-skeleton-num {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   flex-shrink: 0;
   background: linear-gradient(90deg,
     var(--bg-surface) 25%,
@@ -97,7 +97,7 @@
 .sp-skeleton-thumb {
   width: 52px;
   height: 52px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   flex-shrink: 0;
   background: linear-gradient(90deg,
     var(--bg-surface) 25%,
@@ -116,7 +116,7 @@
 
 .sp-skeleton-line {
   height: 12px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: linear-gradient(90deg,
     var(--bg-surface) 25%,
     var(--border-hover) 50%,
@@ -147,7 +147,7 @@
 /* Skeleton cho Quote */
 .sp-skeleton-quote-line {
   height: 14px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   margin-bottom: 0.55rem;
   background: linear-gradient(90deg,
     var(--bg-surface) 25%,
@@ -170,7 +170,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.75rem 1.1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
   text-decoration: none;
   color: inherit;
   transition: var(--transition);
@@ -201,7 +201,7 @@
   width: 52px;
   height: 52px;
   flex-shrink: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--bg-surface);
 }
@@ -396,7 +396,7 @@
 }
 
 .sp-quote-divider {
-  height: 1px;
+  height: var(--stroke-hairline);
   background: var(--border-color);
   margin: 0.85rem 0 0.7rem;
 }
@@ -438,7 +438,7 @@
   text-decoration: none;
   color: inherit;
   padding: 0.8rem 1.1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
   transition: var(--transition);
 }
 .sp-digest-item:last-child {
@@ -517,7 +517,7 @@
    ────────────────────────────────────────────────────────────────────────── */
 @keyframes sp-anchor-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.0); border-color: var(--primary); }
-  25%  { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.18); }
+  25%  { box-shadow: 0 0 0 6px var(--primary-light); }
   65%  { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.06); border-color: var(--primary); }
   100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); border-color: var(--border-color); }
 }
@@ -555,7 +555,7 @@
   .pattern-ranked .sp-ranked-item,
   .pattern-digest .sp-digest-item {
     border-bottom: none;
-    border-right: 1px solid var(--border-color);
+    border-right: var(--stroke-hairline) solid var(--border-color);
   }
   .pattern-ranked .sp-ranked-item:last-child,
   .pattern-digest .sp-digest-item:last-child {
@@ -603,7 +603,7 @@
     gap: 0;
   }
   .pattern-quote .sp-quote-card {
-    border-right: 1px solid var(--border-color);
+    border-right: var(--stroke-hairline) solid var(--border-color);
   }
   .pattern-quote .sp-quote-card:last-child {
     border-right: none;
