@@ -4620,19 +4620,22 @@ body.view-not-homepage #main-above-feed {
           <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
-                <b:if cond='data:content'>
-                  <data:content/>
-                <b:else/>
-                  <div class='special-posts-widget'
-                       id='widget-spotlight-hero'
-                       data-pattern='spotlight'
-                       data-labels='@Tiêu điểm'
-                       data-sort='latest'
-                       data-limit='1'
-                       data-title='🌟 Bài Viết Tiêu Điểm'
-                       data-view-all-text='Xem tất cả »'>
-                  </div>
-                </b:if>
+                <div class='special-posts-widget'
+                     id='widget-spotlight-hero'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
               </b:if>
             </b:includable>
           </b:widget>
@@ -4891,19 +4894,22 @@ body.view-not-homepage #main-above-feed {
         <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
           <b:widget id='HTML11' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='special-posts-widget'
-                     id='widget-infeed-quote'
-                     data-pattern='quote'
-                     data-labels='@Quote'
-                     data-sort='random'
-                     data-limit='1'
-                     data-insert-after='3'
-                     data-title='☕ Chiêm Nghiệm Hôm Nay'>
-                </div>
-              </b:if>
+              <div class='special-posts-widget'
+                   id='widget-infeed-quote'
+                   data-pattern='quote'
+                   data-labels='@Quote'
+                   data-sort='random'
+                   data-limit='1'
+                   data-insert-after='3'>
+                <b:if cond='data:title'>
+                  <b:attr name='data-title' expr:value='data:title'/>
+                <b:else/>
+                  <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                </b:if>
+                <b:if cond='data:content'>
+                  <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                </b:if>
+              </div>
             </b:includable>
           </b:widget>
         </b:section>
@@ -4941,19 +4947,22 @@ body.view-not-homepage #main-above-feed {
           <b:widget id='HTML13' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
-                <b:if cond='data:content'>
-                  <data:content/>
-                <b:else/>
-                  <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
-                  <div class='special-posts-widget'
-                       id='widget-top-bai-doc'
-                       data-pattern='ranked'
-                       data-sort='views'
-                       data-limit='6'
-                       data-title='📊 Bài Viết Được Đọc Nhiều'
-                       data-view-all-text='Xem tất cả »'>
-                  </div>
-                </b:if>
+                <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
+                <div class='special-posts-widget'
+                     id='widget-top-bai-doc'
+                     data-pattern='ranked'
+                     data-sort='views'
+                     data-limit='6'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='📊 Bài Viết Được Đọc Nhiều'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
               </b:if>
             </b:includable>
           </b:widget>
@@ -4970,21 +4979,24 @@ body.view-not-homepage #main-above-feed {
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
           <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='sidebar-widget'>
-                  <div class='special-posts-widget'
-                       id='widget-bai-viet-noi-bat'
-                       data-pattern='ranked'
-                       data-labels='@Nổi bật'
-                       data-sort='latest'
-                       data-limit='5'
-                       data-title='🔥 Bài Viết Nổi Bật'
-                       data-view-all-text='Xem tất cả »'>
-                  </div>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-bai-viet-noi-bat'
+                     data-pattern='ranked'
+                     data-labels='@Nổi bật'
+                     data-sort='latest'
+                     data-limit='5'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🔥 Bài Viết Nổi Bật'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
-              </b:if>
+              </div>
             </b:includable>
           </b:widget>
 
@@ -4992,20 +5004,23 @@ body.view-not-homepage #main-above-feed {
           <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
           <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='sidebar-widget'>
-                  <div class='special-posts-widget'
-                       id='widget-chiem-nghiem'
-                       data-pattern='quote'
-                       data-labels='@Quote'
-                       data-sort='random'
-                       data-limit='1'
-                       data-title='☕ Chiêm Nghiệm Hôm Nay'>
-                  </div>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-chiem-nghiem'
+                     data-pattern='quote'
+                     data-labels='@Quote'
+                     data-sort='random'
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
-              </b:if>
+              </div>
             </b:includable>
           </b:widget>
 
@@ -5013,21 +5028,24 @@ body.view-not-homepage #main-above-feed {
           <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
           <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='sidebar-widget'>
-                  <div class='special-posts-widget'
-                       id='widget-diem-tin'
-                       data-pattern='digest'
-                       data-labels='@Điểm tin'
-                       data-sort='latest'
-                       data-limit='4'
-                       data-title='⚡ Điểm Tin Mỗi Ngày'
-                       data-view-all-text='Xem tất cả »'>
-                  </div>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-diem-tin'
+                     data-pattern='digest'
+                     data-labels='@Điểm tin'
+                     data-sort='latest'
+                     data-limit='4'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='⚡ Điểm Tin Mỗi Ngày'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
-              </b:if>
+              </div>
             </b:includable>
           </b:widget>
 
@@ -5035,20 +5053,23 @@ body.view-not-homepage #main-above-feed {
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
           <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='sidebar-widget'>
-                  <div class='special-posts-widget'
-                       id='widget-tieu-diem'
-                       data-pattern='spotlight'
-                       data-labels='@Tiêu điểm'
-                       data-sort='latest'
-                       data-limit='1'
-                       data-title='🌟 Bài Viết Tiêu Điểm'>
-                  </div>
+              <div class='sidebar-widget'>
+                <div class='special-posts-widget'
+                     id='widget-tieu-diem'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
                 </div>
-              </b:if>
+              </div>
             </b:includable>
           </b:widget>
 
@@ -6590,6 +6611,40 @@ body.view-not-homepage #main-above-feed {
      RENDER WIDGET INSTANCE
      ═══════════════════════════════════════════════════════════════ */
   async function renderWidgetInstance(container) {
+    // ── Hỗ trợ cấu hình nhanh từ ô Content của Blogger Layout ──
+    const userConfigEl = container.querySelector('.sp-raw-user-content');
+    if (userConfigEl) {
+      const rawUserContent = userConfigEl.innerHTML.trim();
+      // Case A: Người dùng dán nguyên thẻ .special-posts-widget
+      if (userConfigEl.querySelector('.special-posts-widget')) {
+        const replacement = userConfigEl.querySelector('.special-posts-widget');
+        container.replaceWith(replacement);
+        return renderWidgetInstance(replacement);
+      }
+      // Case B: Người dùng dán mã HTML nhúng bên thứ 3 (AdSense, Banner, iframe, custom HTML...)
+      if (/<(script|iframe|img|picture|a|form|object|embed)/i.test(rawUserContent) || (rawUserContent.startsWith('<') && !rawUserContent.includes('data-pattern') && !rawUserContent.includes('data-labels'))) {
+        container.innerHTML = rawUserContent;
+        container.classList.remove('special-posts-widget');
+        return;
+      }
+      // Case C: Người dùng chỉ gõ tên nhãn dạng văn bản (VD: "Triết lý", "label: Sách", "labels: A, B | limit: 3")
+      const textOnly = userConfigEl.textContent.trim();
+      if (textOnly) {
+        const parts = textOnly.split('|').map(s => s.trim());
+        parts.forEach(part => {
+          if (/^limit\s*:\s*(\d+)/i.test(part)) {
+            container.dataset.limit = part.match(/^limit\s*:\s*(\d+)/i)[1];
+          } else if (/^sort\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.sort = part.match(/^sort\s*:\s*(\w+)/i)[1];
+          } else {
+            const cleanedLabel = part.replace(/^(labels?|nhãn)\s*:\s*/i, '').trim();
+            if (cleanedLabel) container.dataset.labels = cleanedLabel;
+          }
+        });
+      }
+      userConfigEl.remove();
+    }
+
     // Nếu widget đã có markup tĩnh (static preview demo) và không có cấu hình fetch
     if (!container.dataset.labels && !container.dataset.posts && !container.dataset.sort && container.querySelector('.sp-widget-card')) {
       return;
@@ -7079,7 +7134,9 @@ body.view-not-homepage #main-above-feed {
 
   /** Tách chuỗi nhãn "A, B, C" thành mảng */
   function splitLabels(raw) {
-    return raw.split(',').map(l => l.trim()).filter(Boolean);
+    if (!raw) return [];
+    const cleaned = raw.replace(/^(labels?|nhãn)\s*:\s*/i, '');
+    return cleaned.split(',').map(l => l.trim()).filter(Boolean);
   }
 
   /** Tối ưu kích thước ảnh Blogger (Retina-safe) */

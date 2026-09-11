@@ -45,6 +45,40 @@
      RENDER WIDGET INSTANCE
      ═══════════════════════════════════════════════════════════════ */
   async function renderWidgetInstance(container) {
+    // ── Hỗ trợ cấu hình nhanh từ ô Content của Blogger Layout ──
+    const userConfigEl = container.querySelector('.sp-raw-user-content');
+    if (userConfigEl) {
+      const rawUserContent = userConfigEl.innerHTML.trim();
+      // Case A: Người dùng dán nguyên thẻ .special-posts-widget
+      if (userConfigEl.querySelector('.special-posts-widget')) {
+        const replacement = userConfigEl.querySelector('.special-posts-widget');
+        container.replaceWith(replacement);
+        return renderWidgetInstance(replacement);
+      }
+      // Case B: Người dùng dán mã HTML nhúng bên thứ 3 (AdSense, Banner, iframe, custom HTML...)
+      if (/<(script|iframe|img|picture|a|form|object|embed)/i.test(rawUserContent) || (rawUserContent.startsWith('<') && !rawUserContent.includes('data-pattern') && !rawUserContent.includes('data-labels'))) {
+        container.innerHTML = rawUserContent;
+        container.classList.remove('special-posts-widget');
+        return;
+      }
+      // Case C: Người dùng chỉ gõ tên nhãn dạng văn bản (VD: "Triết lý", "label: Sách", "labels: A, B | limit: 3")
+      const textOnly = userConfigEl.textContent.trim();
+      if (textOnly) {
+        const parts = textOnly.split('|').map(s => s.trim());
+        parts.forEach(part => {
+          if (/^limit\s*:\s*(\d+)/i.test(part)) {
+            container.dataset.limit = part.match(/^limit\s*:\s*(\d+)/i)[1];
+          } else if (/^sort\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.sort = part.match(/^sort\s*:\s*(\w+)/i)[1];
+          } else {
+            const cleanedLabel = part.replace(/^(labels?|nhãn)\s*:\s*/i, '').trim();
+            if (cleanedLabel) container.dataset.labels = cleanedLabel;
+          }
+        });
+      }
+      userConfigEl.remove();
+    }
+
     // Nếu widget đã có markup tĩnh (static preview demo) và không có cấu hình fetch
     if (!container.dataset.labels && !container.dataset.posts && !container.dataset.sort && container.querySelector('.sp-widget-card')) {
       return;
@@ -534,7 +568,9 @@
 
   /** Tách chuỗi nhãn "A, B, C" thành mảng */
   function splitLabels(raw) {
-    return raw.split(',').map(l => l.trim()).filter(Boolean);
+    if (!raw) return [];
+    const cleaned = raw.replace(/^(labels?|nhãn)\s*:\s*/i, '');
+    return cleaned.split(',').map(l => l.trim()).filter(Boolean);
   }
 
   /** Tối ưu kích thước ảnh Blogger (Retina-safe) */
