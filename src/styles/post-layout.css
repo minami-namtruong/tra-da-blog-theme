@@ -530,12 +530,22 @@
 /* ==========================================
    SIDEBAR
    ========================================== */
-.sidebar {
+.sidebar,
+#sidebar-section {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   min-width: 0;
+  width: 100%;
+}
+
+#sidebar-section .widget,
+#sidebar-section .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 .sidebar-widget {
@@ -724,8 +734,15 @@
 
 /* Tầng 1: Khoảng cách của vùng Đầu Luồng (Hero / Spotlight) */
 #main-above-feed {
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.75rem;
   width: 100%;
+}
+#main-above-feed .widget,
+#main-above-feed .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 /* Tầng 2: Khoảng cách của vùng Xen Kẽ Giữa Các Bài (In-Feed) */

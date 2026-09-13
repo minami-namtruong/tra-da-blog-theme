@@ -545,8 +545,26 @@
 /* ==========================================
    PROFILE COVER HERO SECTION
    ========================================== */
+#profile-hero-section,
+#profile-hero-section .widget,
+#profile-hero-section .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#Image1,
+#Image2 {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 .profile-cover-section {
-  margin: 1.5rem auto 2.25rem;
+  margin: 1.25rem auto 1rem !important;
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   border: var(--stroke-hairline) solid var(--border-color);
@@ -732,10 +750,10 @@
 #category-tabs-section,
 #category-tabs-section .widget,
 #category-tabs-section .widget-content {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 .category-tabs-bar {
@@ -743,8 +761,8 @@
   align-items: center;
   gap: 0.55rem;
   overflow-x: auto;
-  padding: 0.25rem 0 0.75rem;
-  margin: 0 0 2.25rem;
+  padding: 0.25rem 0 0.5rem;
+  margin: 0 0 1.25rem !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }

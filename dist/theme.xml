@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T01:49:45.535Z -->
+<!-- Compiled at: 2026-09-13T02:02:21.106Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -985,8 +985,26 @@ a:hover {
 /* ==========================================
    PROFILE COVER HERO SECTION
    ========================================== */
+#profile-hero-section,
+#profile-hero-section .widget,
+#profile-hero-section .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#Image1,
+#Image2 {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 .profile-cover-section {
-  margin: 1.5rem auto 2.25rem;
+  margin: 1.25rem auto 1rem !important;
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   border: var(--stroke-hairline) solid var(--border-color);
@@ -1172,10 +1190,10 @@ a:hover {
 #category-tabs-section,
 #category-tabs-section .widget,
 #category-tabs-section .widget-content {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 .category-tabs-bar {
@@ -1183,8 +1201,8 @@ a:hover {
   align-items: center;
   gap: 0.55rem;
   overflow-x: auto;
-  padding: 0.25rem 0 0.75rem;
-  margin: 0 0 2.25rem;
+  padding: 0.25rem 0 0.5rem;
+  margin: 0 0 1.25rem !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -1777,12 +1795,22 @@ a:hover {
 /* ==========================================
    SIDEBAR
    ========================================== */
-.sidebar {
+.sidebar,
+#sidebar-section {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   min-width: 0;
+  width: 100%;
+}
+
+#sidebar-section .widget,
+#sidebar-section .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 .sidebar-widget {
@@ -1971,8 +1999,15 @@ a:hover {
 
 /* Tầng 1: Khoảng cách của vùng Đầu Luồng (Hero / Spotlight) */
 #main-above-feed {
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.75rem;
   width: 100%;
+}
+#main-above-feed .widget,
+#main-above-feed .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 /* Tầng 2: Khoảng cách của vùng Xen Kẽ Giữa Các Bài (In-Feed) */
@@ -4680,7 +4715,7 @@ body.view-not-homepage #main-above-feed {
 
         <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
              Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
-        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' showaddelement='yes'>
+        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' maxwidgets='1' showaddelement='yes'>
           <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
@@ -5301,7 +5336,7 @@ body.view-not-homepage #main-above-feed {
         </b:section>
 
         <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI (Cấu hình qua Bố cục) ── -->
-        <b:section id='footer-col3-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng XÃ Hội)' maxwidgets='2' showaddelement='yes'>
+        <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng Xã Hội)' maxwidgets='2' showaddelement='yes'>
           <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer)'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
