@@ -348,18 +348,18 @@ ${combinedCss}
       <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
         <b:includable id='main'>
-          <b:if cond='data:sourceUrl'>
-            <div id='profile-uploaded-banner' style='display:none;'><data:sourceUrl/></div>
-          </b:if>
+          <div id='profile-uploaded-banner' style='display:none;'>
+            <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
+          </div>
         </b:includable>
       </b:widget>
 
       <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
         <b:includable id='main'>
-          <b:if cond='data:sourceUrl'>
-            <div id='profile-uploaded-avatar' style='display:none;'><data:sourceUrl/></div>
-          </b:if>
+          <div id='profile-uploaded-avatar' style='display:none;'>
+            <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
+          </div>
         </b:includable>
       </b:widget>
 
@@ -369,7 +369,7 @@ ${combinedCss}
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
             <div class='cover-image-wrapper' id='cover-image-wrapper'
-                 style='background-image: url(&quot;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&quot;);'>
+                 style='background-image: url(&apos;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&apos;);'>
             </div>
             <div class='cover-info-card'>
               <div class='avatar-wrapper'>
@@ -386,9 +386,6 @@ ${combinedCss}
                 <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
               </div>
             </div>
-            <b:if cond='data:title and data:title != "✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả"'>
-              <div id='profile-widget-title' style='display:none;'><data:title/></div>
-            </b:if>
             <b:if cond='data:content'>
               <div id='profile-custom-config' style='display:none;'><data:content/></div>
             </b:if>
