@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T01:35:07.682Z -->
+<!-- Compiled at: 2026-09-13T01:49:45.535Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -1169,6 +1169,15 @@ a:hover {
 /* ==========================================
    DYNAMIC CATEGORY TABS
    ========================================== */
+#category-tabs-section,
+#category-tabs-section .widget,
+#category-tabs-section .widget-content {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
 .category-tabs-bar {
   display: flex;
   align-items: center;
@@ -2408,6 +2417,16 @@ body.view-not-homepage #main-above-feed {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+.footer-section-col .widget,
+.footer-section-col .widget-content,
+#footer-bottom-menu-section,
+#footer-bottom-menu-section .widget,
+#footer-bottom-menu-section .widget-content {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 .footer-tier1 .widget:has(.footer-coffee-wrapper),
 .footer-tier1 .widget:has(.footer-col-social) {
@@ -4505,23 +4524,40 @@ body.view-not-homepage #main-above-feed {
           </b:widget>
         </b:section>
 
-        <!-- Desktop Navigation (Left-aligned next to Logo, Single Source of Truth) -->
-        <nav class='nav-menu-wrapper' id='nav-menu-wrapper' aria-label='Menu chính'>
-          <ul class='nav-menu' id='nav-desktop-menu'>
-            <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
-            <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
-            <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn"' data-category='Góc Nhìn' data-bilingual='true'>Góc Nhìn | Perspectives</a></li>
-            <li class='has-dropdown'>
-              <a href='#' data-bilingual='true'>Chuyên Mục | Categories</a>
-              <ul class='dropdown-menu'>
-                <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-category='Trải Nghiệm Sống' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a></li>
-                <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-category='Sách &amp; Công Cụ' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a></li>
-                <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-category='Phát Triển Bản Thân' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a></li>
-              </ul>
-            </li>
-            <li><a href='#footer' data-bilingual='true'>Về Tôi | About Me</a></li>
-          </ul>
-        </nav>
+        <!-- Desktop Navigation (Configurable via Layout > LinkList1) -->
+        <b:section class='nav-menu-section' id='nav-menu-section' maxwidgets='1' name='Menu Điều Hướng Chính (Header)' showaddelement='yes'>
+          <b:widget id='LinkList1' type='LinkList' version='2' title='🧭 Menu Điều Hướng Chính'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>NONE</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <nav class='nav-menu-wrapper' id='nav-menu-wrapper' aria-label='Menu chính'>
+                <ul class='nav-menu' id='nav-desktop-menu'>
+                  <b:if cond='data:links and not data:links.empty'>
+                    <b:loop values='data:links' var='link'>
+                      <li>
+                        <a expr:href='data:link.target' data-bilingual='true'><data:link.name/></a>
+                      </li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
+                    <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn"' data-category='Góc Nhìn' data-bilingual='true'>Góc Nhìn | Perspectives</a></li>
+                    <li class='has-dropdown'>
+                      <a href='#' data-bilingual='true'>Chuyên Mục | Categories</a>
+                      <ul class='dropdown-menu'>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-category='Trải Nghiệm Sống' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-category='Sách &amp; Công Cụ' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-category='Phát Triển Bản Thân' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a></li>
+                      </ul>
+                    </li>
+                    <li><a href='#footer' data-bilingual='true'>Về Tôi | About Me</a></li>
+                  </b:if>
+                </ul>
+              </nav>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
         <!-- Header Actions -->
         <div class='header-actions'>
@@ -4607,15 +4643,32 @@ body.view-not-homepage #main-above-feed {
       </b:widget>
     </b:section>
 
-    <!-- Dynamic Category Tabs (Visible Across Pages, Guaranteed Render) -->
-    <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-      <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
-      <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
-      <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
-      <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
-      <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
-      <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
-    </nav>
+    <!-- Dynamic Category Tabs (Configurable via Layout > LinkList2) -->
+    <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
+      <b:widget id='LinkList2' type='LinkList' version='2' title='🏷️ Thanh Chủ Đề (Category Tabs)'>
+        <b:widget-settings>
+          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'>
+          <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
+            <b:if cond='data:links and not data:links.empty'>
+              <b:loop values='data:links' var='link' index='tabIdx'>
+                <a expr:class='data:tabIdx == 0 ? "tab-pill active" : "tab-pill"' expr:href='data:link.target' data-bilingual='true'>
+                  <data:link.name/>
+                </a>
+              </b:loop>
+            <b:else/>
+              <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
+            </b:if>
+          </nav>
+        </b:includable>
+      </b:widget>
+    </b:section>
 
     <!-- ==========================================
          MAIN LAYOUT GRID (Posts + Sidebar)
@@ -5219,39 +5272,80 @@ body.view-not-homepage #main-above-feed {
           </b:widget>
         </b:section>
 
-        <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ (Luôn hiển thị mặc định) ── -->
-        <div class='footer-section-col'>
-          <div class='footer-col-legal'>
-            <h4 class='footer-col-title' data-bilingual='true'>⚖️ Chính Sách &amp; Minh Bạch | Policies &amp; Transparency</h4>
-            <ul class='footer-links'>
-              <li><a expr:href='data:blog.homepageUrl + "p/chinh-sach-bao-mat.html"'><span data-bilingual='true'>Chính sách bảo mật | Privacy Policy</span></a></li>
-              <li><a expr:href='data:blog.homepageUrl + "p/dieu-khoan.html"'><span data-bilingual='true'>Điều khoản dịch vụ | Terms of Service</span></a></li>
-              <li><a expr:href='data:blog.homepageUrl + "p/ai-transparency.html"'><span data-bilingual='true'>Minh bạch nội dung AI | AI Transparency</span></a></li>
-              <li><a expr:href='data:blog.homepageUrl + "p/lien-he.html"'><span data-bilingual='true'>Liên hệ &amp; Hợp tác | Contact &amp; Collab</span></a></li>
-            </ul>
-          </div>
-        </div>
+        <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ (Cấu hình qua Bố cục > LinkList3) ── -->
+        <b:section id='footer-legal-section' class='footer-section-col' name='Footer: Cột 2 (Chính Sách &amp; Minh Bạch)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>NONE</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <div class='footer-col-legal'>
+                <h4 class='footer-col-title' data-bilingual='true'>
+                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>⚖️ Chính Sách &amp; Minh Bạch | Policies &amp; Transparency</b:if>
+                </h4>
+                <ul class='footer-links'>
+                  <b:if cond='data:links and not data:links.empty'>
+                    <b:loop values='data:links' var='link'>
+                      <li><a expr:href='data:link.target'><span data-bilingual='true'><data:link.name/></span></a></li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a expr:href='data:blog.homepageUrl + "p/chinh-sach-bao-mat.html"'><span data-bilingual='true'>Chính sách bảo mật | Privacy Policy</span></a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/dieu-khoan.html"'><span data-bilingual='true'>Điều khoản dịch vụ | Terms of Service</span></a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/ai-transparency.html"'><span data-bilingual='true'>Minh bạch nội dung AI | AI Transparency</span></a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/lien-he.html"'><span data-bilingual='true'>Liên hệ &amp; Hợp tác | Contact &amp; Collab</span></a></li>
+                  </b:if>
+                </ul>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
-        <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI ── -->
-        <div class='footer-section-col'>
-          <div class='footer-col-newsletter'>
-            <h4 class='footer-col-title' data-i18n='newsletterTitle'>📬 Nhận Bài Viết Mới</h4>
-            <p class='footer-newsletter-desc' data-i18n='newsletterDesc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
-            <form class='newsletter-form' onsubmit='return false;'>
-              <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
-              <button class='btn-submit' id='footer-subscribe-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
-            </form>
-          </div>
-          <div class='footer-col-social'>
-            <div class='footer-social-grid'>
-              <a class='footer-social-icon' href='https://facebook.com' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>FB</a>
-              <a class='footer-social-icon' href='https://twitter.com' target='_blank' rel='noopener noreferrer' aria-label='X (Twitter)' title='X (Twitter)'>𝕏</a>
-              <a class='footer-social-icon' href='https://github.com' target='_blank' rel='noopener noreferrer' aria-label='GitHub' title='GitHub'>GH</a>
-              <a class='footer-social-icon' href='https://youtube.com' target='_blank' rel='noopener noreferrer' aria-label='YouTube' title='YouTube'>YT</a>
-              <a class='footer-social-icon' expr:href='data:blog.homepageUrl + "feeds/posts/default"' target='_blank' rel='noopener noreferrer' aria-label='RSS Feed' title='RSS Feed'>RSS</a>
-            </div>
-          </div>
-        </div>
+        <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI (Cấu hình qua Bố cục) ── -->
+        <b:section id='footer-col3-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng XÃ Hội)' maxwidgets='2' showaddelement='yes'>
+          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer)'>
+            <b:includable id='main'>
+              <div class='footer-col-newsletter'>
+                <h4 class='footer-col-title' data-i18n='newsletterTitle'>
+                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>📬 Nhận Bài Viết Mới</b:if>
+                </h4>
+                <b:if cond='data:content'>
+                  <div class='footer-newsletter-custom'><data:content/></div>
+                <b:else/>
+                  <p class='footer-newsletter-desc' data-i18n='newsletterDesc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
+                  <form class='newsletter-form' onsubmit='return false;'>
+                    <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
+                    <button class='btn-submit' id='footer-subscribe-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
+                  </form>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối Mạng Xã Hội'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>NONE</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <div class='footer-col-social'>
+                <div class='footer-social-grid'>
+                  <b:if cond='data:links and not data:links.empty'>
+                    <b:loop values='data:links' var='link'>
+                      <a class='footer-social-icon' expr:href='data:link.target' target='_blank' rel='noopener noreferrer' expr:aria-label='data:link.name' expr:title='data:link.name'>
+                        <data:link.name/>
+                      </a>
+                    </b:loop>
+                  <b:else/>
+                    <a class='footer-social-icon' href='https://facebook.com' target='_blank' rel='noopener noreferrer' aria-label='Facebook' title='Facebook'>FB</a>
+                    <a class='footer-social-icon' href='https://twitter.com' target='_blank' rel='noopener noreferrer' aria-label='X (Twitter)' title='X (Twitter)'>𝕏</a>
+                    <a class='footer-social-icon' href='https://github.com' target='_blank' rel='noopener noreferrer' aria-label='GitHub' title='GitHub'>GH</a>
+                    <a class='footer-social-icon' href='https://youtube.com' target='_blank' rel='noopener noreferrer' aria-label='YouTube' title='YouTube'>YT</a>
+                    <a class='footer-social-icon' expr:href='data:blog.homepageUrl + "feeds/posts/default"' target='_blank' rel='noopener noreferrer' aria-label='RSS Feed' title='RSS Feed'>RSS</a>
+                  </b:if>
+                </div>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
 
       </div><!-- /.footer-tier1 -->
     </div><!-- /.site-wrapper (Tầng 1) -->
@@ -5277,14 +5371,29 @@ body.view-not-homepage #main-above-feed {
             </b:widget>
           </b:section>
 
-          <!-- Ở giữa: Bottom Navigation Menu -->
-          <nav aria-label='Footer navigation'>
-            <ul class='footer-bottom-nav'>
-              <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
-              <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
-              <li><a expr:href='data:blog.homepageUrl + "feeds/posts/default"' target='_blank'>RSS Feed</a></li>
-            </ul>
-          </nav>
+          <!-- Ở giữa: Bottom Navigation Menu (Cấu hình qua Bố cục > LinkList5) -->
+          <b:section id='footer-bottom-menu-section' name='Footer Tầng 2: Menu Đáy Trang' maxwidgets='1' showaddelement='yes'>
+            <b:widget id='LinkList5' type='LinkList' version='2' title='🔗 Menu Đáy Trang'>
+              <b:widget-settings>
+                <b:widget-setting name='sorting'>NONE</b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+                <nav aria-label='Footer navigation'>
+                  <ul class='footer-bottom-nav'>
+                    <b:if cond='data:links and not data:links.empty'>
+                      <b:loop values='data:links' var='link'>
+                        <li><a expr:href='data:link.target' data-bilingual='true'><data:link.name/></a></li>
+                      </b:loop>
+                    <b:else/>
+                      <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + "feeds/posts/default"' target='_blank'>RSS Feed</a></li>
+                    </b:if>
+                  </ul>
+                </nav>
+              </b:includable>
+            </b:widget>
+          </b:section>
 
         </div><!-- /.footer-bottom -->
       </div><!-- /.site-wrapper (Tầng 2) -->
@@ -5378,8 +5487,36 @@ body.view-not-homepage #main-above-feed {
     }
   }
 
+  function formatDropdownMenus() {
+    var menu = document.getElementById('nav-desktop-menu');
+    if (!menu) return;
+    var items = Array.from(menu.children);
+    var currentParent = null;
+    var currentDropdown = null;
+
+    items.forEach(function(li) {
+      var a = li.querySelector('a');
+      if (!a) return;
+      var text = a.textContent.trim();
+      if ((text.startsWith('_') || text.startsWith('-')) && currentParent) {
+        a.textContent = text.substring(1).trim();
+        if (!currentDropdown) {
+          currentParent.classList.add('has-dropdown');
+          currentDropdown = document.createElement('ul');
+          currentDropdown.className = 'dropdown-menu';
+          currentParent.appendChild(currentDropdown);
+        }
+        currentDropdown.appendChild(li);
+      } else {
+        currentParent = li;
+        currentDropdown = null;
+      }
+    });
+  }
+
   function syncDrawerMenu() {
     ensureDesktopMenu();
+    formatDropdownMenus();
     var desktopMenu = document.querySelector('.nav-menu');
     var drawerMenu = document.querySelector('.nav-drawer-menu');
     if (desktopMenu && drawerMenu && !drawerMenu.children.length) {

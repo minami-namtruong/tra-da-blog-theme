@@ -729,6 +729,15 @@
 /* ==========================================
    DYNAMIC CATEGORY TABS
    ========================================== */
+#category-tabs-section,
+#category-tabs-section .widget,
+#category-tabs-section .widget-content {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
 .category-tabs-bar {
   display: flex;
   align-items: center;

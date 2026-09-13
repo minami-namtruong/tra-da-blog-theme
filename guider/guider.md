@@ -296,7 +296,56 @@ Từ phiên bản này, theme tích hợp cơ chế **Smart Fallback** toàn di�
 * **Tự động lấy bài mới nhất:** Nếu bạn cấu hình widget lọc theo nhãn (như `@Tiêu điểm`, `@Nổi bật`, `@Điểm tin`,...) nhưng blog của bạn chưa kịp gắn nhãn đó, widget sẽ **tự động lấy các bài viết mới nhất** để hiển thị lấp đầy, thay vì báo lỗi "Không thể tải nội dung mục này."
 * **Trích dẫn chiêm nghiệm dự phòng:** Nếu widget Trích dẫn (`quote`) chưa có bài gắn nhãn `@Quote`, theme sẽ tự động hiển thị câu danh ngôn triết lý nghệ thuật mặc định.
 * **Gõ câu nói trực tiếp vào widget Trích dẫn:** Bạn có thể mở bất kỳ widget trích dẫn nào và gõ thẳng câu nói tâm đắc của bạn vào ô **Nội dung (Content)** (Ví dụ: `"Cuộc sống là một hành trình. - Khuyết danh"`), widget sẽ hiển thị ngay câu nói đó!
-* **Dự phòng Menu & Danh mục khi blog mới:** Nếu bạn chưa kịp tạo menu (`LinkList1`), liên kết mạng xã hội (`LinkList4`) hay thanh danh mục (`Label1`), theme tự động hiển thị các đề mục mẫu hoàn chỉnh, đảm bảo blog luôn sống động và đầy đủ cấu trúc.
+* **Dự phòng Menu & Danh mục khi blog mới:** Nếu bạn chưa kịp tạo menu hoặc danh sách trống, theme tự động hiển thị các đề mục mẫu hoàn chỉnh, đảm bảo blog luôn sống động và đầy đủ cấu trúc.
+
+---
+
+### 3.6. Quản Lý Menu, Thanh Chủ Đề & Chân Trang 100% Bằng Chuột (Widget Danh Sách Liên Kết / LinkList)
+
+Bạn hoàn toàn có thể **Thêm, Sửa, Xoá hoặc Sắp xếp** bất kỳ liên kết nào trực tiếp trên giao diện **Bố cục (Layout)** của Blogger mà không cần can thiệp vào mã nguồn:
+
+```
+                            HỆ THỐNG 5 WIDGET LINKLIST
+                                       │
+          ┌──────────────────┬─────────┴─────────┬──────────────────┐
+          ▼                  ▼                   ▼                  ▼
+    1. Menu Chính      2. Thanh Chủ Đề     3. Chính Sách      4. Mạng Xã Hội
+     (LinkList1)         (LinkList2)         (LinkList3)        (LinkList4)
+      Tại Header       Dưới Banner Cover    Footer Cột 2        Footer Cột 3
+```
+
+#### 🧭 1. Menu Điều Hướng Chính (`LinkList1` - Khu vực `Menu Điều Hướng Chính (Header)`)
+* **Thao tác:** Bấm ✏️ **Chỉnh sửa** tại widget `🧭 Menu Điều Hướng Chính`.
+* **Thêm liên kết thường:** Bấm `+ Thêm mục mới`, nhập Tên hiển thị (Ví dụ: `Trang Chủ | Home`) và Đường dẫn URL.
+* **Tạo Menu Đổ Xuống (Dropdown Submenu):** Nếu muốn một mục nằm thụt vào làm menu con của mục phía trước, bạn chỉ cần gõ thêm dấu gạch dưới `_` ở đầu tên.
+  * *Ví dụ:* 
+    * `Chuyên Mục | Categories` (Mục cha)
+    * `_Trải Nghiệm Sống | Life Stories` (Mục con 1)
+    * `_Sách & Công Cụ | Books & Tools` (Mục con 2)
+  * Theme sẽ tự động biến chúng thành menu đổ xuống nhiều cấp tuyệt đẹp!
+
+#### 🏷️ 2. Thanh Chủ Đề (`LinkList2` - Khu vực `Thanh Chủ Đề (Category Tabs)`)
+* **Vị trí:** Nằm ngay dưới Ảnh bìa Profile Cover, hiển thị xuyên suốt các trang.
+* **Thao tác:** Bấm ✏️ để thêm hoặc xoá các viên thuốc chủ đề (Pill tabs).
+* **Cấu hình đường dẫn nhãn:**
+  * Tên: `Góc Nhìn & Tư Duy | Perspectives`
+  * URL: `/search/label/Góc Nhìn & Tư Duy` (hoặc URL đầy đủ của blog).
+* **Xoá hoặc đổi thứ tự:** Bấm biểu tượng 🗑️ để xoá bỏ tab không muốn dùng, bấm 🔼 / 🔽 để di chuyển vị trí.
+
+#### ⚖️ 3. Chính Sách & Minh Bạch (`LinkList3` - Footer Cột 2)
+* **Vị trí:** Cột thứ 2 tại Tầng 1 của Footer.
+* **Mục đích:** Quản lý các trang thông tin pháp lý, bản quyền, minh bạch AI và thông tin liên hệ.
+* **Thao tác:** Thoải mái thêm các trang riêng (`/p/chinh-sach.html`, `/p/lien-he.html`) hoặc xoá bớt tuỳ theo nhu cầu của blog.
+
+#### 🌐 4. Kết Nối Mạng Xã Hội (`LinkList4` - Footer Cột 3)
+* **Vị trí:** Cột thứ 3 tại Tầng 1 của Footer (dưới form nhận bản tin).
+* **Cách nhận diện biểu tượng tự động:** Khi bạn nhập tên mạng xã hội (như `Facebook`, `X`, `GitHub`, `YouTube`, `Instagram`, `RSS`), theme sẽ tự động áp dụng màu sắc thương hiệu và icon tròn tương ứng!
+
+#### 🔗 5. Menu Đáy Trang (`LinkList5` - Footer Tầng 2)
+* **Vị trí:** Nằm ở thanh đáy ngoài cùng của blog, bên cạnh dòng chữ bản quyền.
+* **Mục đích:** Điều hướng phụ tinh gọn (Trang chủ, Mục lục, RSS).
+
+> **Lưu ý an toàn tuyệt đối:** Nếu danh sách liên kết trong widget trống (hoặc bạn vô tình xoá hết), hệ thống sẽ **tự động kích hoạt bộ liên kết mặc định mẫu** để giao diện blog luôn đẹp mắt và không bao giờ bị vỡ!
 
 ---
 
