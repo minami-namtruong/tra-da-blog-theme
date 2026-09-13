@@ -68,40 +68,96 @@
       catBar.className = 'category-tabs-bar';
       catBar.id = 'category-tabs-bar';
       catBar.setAttribute('aria-label', 'Lọc theo chủ đề');
-      catBar.innerHTML = '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>';
+      catBar.innerHTML = '<a class="tab-pill active" href="/" data-bilingual="true" data-raw-label="✦ Tất cả | All">✦ Tất cả | All</a>';
       catSection.appendChild(catBar);
     }
     if (!catBar) return;
 
-    // 1. Dọn sạch các nhãn tính năng đặc biệt (@...) và nhãn minh bạch AI (ai:...)
+    var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+
+    // Helper: Thêm hoặc chuẩn hóa một tab pill
+    function addOrUpdateTab(rawTerm, url) {
+      var term = (rawTerm || '').trim();
+      if (!term) return;
+      // Bỏ qua nhãn tính năng (@...) và nhãn AI (ai:...)
+      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
+        return;
+      }
+
+      var targetHref = url || ('/search/label/' + encodeURIComponent(term));
+      
+      // Kiểm tra xem đã có tab với nhãn này chưa
+      var existingPill = null;
+      catBar.querySelectorAll('.tab-pill').forEach(function(p) {
+        var pRaw = p.getAttribute('data-raw-label') || p.getAttribute('data-label') || p.textContent.trim();
+        var pHref = p.getAttribute('href') || '';
+        if (pRaw.toLowerCase() === term.toLowerCase() || 
+            (pHref && targetHref && pHref.split('/search/label/')[1] === targetHref.split('/search/label/')[1])) {
+          existingPill = p;
+        }
+      });
+
+      var displayText = window.parseBilingualText ? window.parseBilingualText(term, currentLang) : term.split('|')[0].trim();
+
+      if (existingPill) {
+        existingPill.setAttribute('data-raw-label', term);
+        existingPill.setAttribute('data-bilingual', 'true');
+        existingPill.textContent = displayText;
+      } else {
+        var a = document.createElement('a');
+        a.className = 'tab-pill';
+        a.href = targetHref;
+        a.setAttribute('data-raw-label', term);
+        a.setAttribute('data-bilingual', 'true');
+        a.textContent = displayText;
+        catBar.appendChild(a);
+      }
+    }
+
+    // 1. Dọn sạch các nhãn tính năng đặc biệt (@...) và nhãn AI có sẵn từ server
     var existingPills = Array.from(catBar.querySelectorAll('.tab-pill'));
-    var realLabelsCount = 0;
     var allPill = null;
 
     existingPills.forEach(function(pill) {
       var href = pill.getAttribute('href') || '';
-      var label = (pill.getAttribute('data-label') || pill.textContent || '').trim();
+      var label = (pill.getAttribute('data-raw-label') || pill.getAttribute('data-label') || pill.textContent || '').trim();
+      
       if (href === '/' || href === window.location.origin + '/' || label.startsWith('✦')) {
         allPill = pill;
+        pill.setAttribute('data-raw-label', '✦ Tất cả | All');
+        pill.setAttribute('data-bilingual', 'true');
+        pill.textContent = window.parseBilingualText ? window.parseBilingualText('✦ Tất cả | All', currentLang) : '✦ Tất cả';
         return;
       }
+
       if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-')) {
         pill.remove();
         return;
       }
-      realLabelsCount++;
+
+      pill.setAttribute('data-raw-label', label);
+      pill.setAttribute('data-bilingual', 'true');
+      pill.textContent = window.parseBilingualText ? window.parseBilingualText(label, currentLang) : label.split('|')[0].trim();
     });
 
     if (!allPill) {
       allPill = document.createElement('a');
       allPill.className = 'tab-pill active';
       allPill.href = '/';
+      allPill.setAttribute('data-raw-label', '✦ Tất cả | All');
       allPill.setAttribute('data-bilingual', 'true');
-      allPill.textContent = '✦ Tất cả | All';
+      allPill.textContent = window.parseBilingualText ? window.parseBilingualText('✦ Tất cả | All', currentLang) : '✦ Tất cả';
       catBar.insertBefore(allPill, catBar.firstChild);
     }
 
-    // 2. Nhận diện và gán class active cho tab tương ứng với URL hiện tại
+    // 2. Thu thập nhãn tức thì từ các thẻ bài viết đang có trên trang (0ms lag, không phụ thuộc API)
+    document.querySelectorAll('.post-raw-label').forEach(function(lblEl) {
+      var name = lblEl.textContent.trim();
+      var url = lblEl.getAttribute('data-url');
+      addOrUpdateTab(name, url);
+    });
+
+    // 3. Nhận diện và gán class active cho tab tương ứng với URL hiện tại
     function updateActivePill() {
       var currentPath = window.location.pathname;
       var activeFound = false;
@@ -131,57 +187,52 @@
 
     updateActivePill();
 
-    // 3. Cơ chế đồng bộ tức thì: Nếu máy chủ Blogger chưa kịp kết xuất danh sách nhãn (0 nhãn)
-    // tự động truy vấn Blogger Feed API để cập nhật chính xác nhãn từ các bài viết vừa đăng
-    if (realLabelsCount === 0) {
-      fetch('/feeds/posts/summary?alt=json&max-results=150')
-        .then(function(res) {
-          if (!res.ok) throw new Error('Network error');
-          return res.json();
-        })
-        .then(function(data) {
-          if (!data || !data.feed || !data.feed.category) return;
-          var categories = data.feed.category;
-          var added = 0;
-          categories.forEach(function(cat) {
-            var term = (cat.term || '').trim();
-            if (!term) return;
-            // Bỏ qua nhãn đặc biệt @ và nhãn AI
-            if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
-              return;
-            }
-            // Tránh thêm trùng lặp
-            var exists = false;
-            catBar.querySelectorAll('.tab-pill').forEach(function(p) {
-              var pLabel = p.getAttribute('data-label') || p.textContent.trim();
-              if (pLabel.toLowerCase() === term.toLowerCase()) exists = true;
-            });
-            if (!exists) {
-              var a = document.createElement('a');
-              a.className = 'tab-pill';
-              a.href = '/search/label/' + encodeURIComponent(term);
-              a.setAttribute('data-label', term);
-              a.setAttribute('data-bilingual', 'true');
-              a.textContent = term;
-              catBar.appendChild(a);
-              added++;
+    // 4. Đồng bộ thêm toàn bộ nhãn từ Blogger Feed API (quét cả feed.category và feed.entry[i].category)
+    fetch('/feeds/posts/summary?alt=json&max-results=150')
+      .then(function(res) {
+        if (!res.ok) throw new Error('Network error');
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data || !data.feed) return;
+        var categories = [];
+        
+        // Quét feed-level categories
+        if (data.feed.category && Array.isArray(data.feed.category)) {
+          data.feed.category.forEach(function(c) {
+            if (c && c.term) categories.push(c.term);
+          });
+        }
+        // Quét entry-level categories (từng bài viết)
+        if (data.feed.entry && Array.isArray(data.feed.entry)) {
+          data.feed.entry.forEach(function(entry) {
+            if (entry.category && Array.isArray(entry.category)) {
+              entry.category.forEach(function(c) {
+                if (c && c.term) categories.push(c.term);
+              });
             }
           });
-          if (added > 0) {
-            updateActivePill();
-            if (window.applyBilingualElements) {
-              window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
-            }
-          }
-        })
-        .catch(function(err) {
-          // Fallback an toàn nếu chạy local sandbox preview
-          console.log('[CategoryTabs] Feed sync bypassed or offline:', err.message);
+        }
+
+        var addedCount = 0;
+        categories.forEach(function(term) {
+          addOrUpdateTab(term);
+          addedCount++;
         });
-    }
+
+        if (addedCount > 0) {
+          updateActivePill();
+          if (window.applyBilingualElements) {
+            window.applyBilingualElements(currentLang);
+          }
+        }
+      })
+      .catch(function(err) {
+        console.log('[CategoryTabs] Feed fetch bypassed:', err.message);
+      });
 
     if (window.applyBilingualElements) {
-      window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+      window.applyBilingualElements(currentLang);
     }
   }
 

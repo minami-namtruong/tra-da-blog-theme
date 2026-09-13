@@ -34,11 +34,11 @@ const combinedCss = cssFiles
 // 2. Combine JS (body-end scripts)
 // ──────────────────────────────────────────
 const jsFiles = [
+  "bilingual.js",
   "mobile-nav.js",
   "search-modal.js",
   "archive-page.js",
   "auto-toc.js",
-  "bilingual.js",
   "reading-time.js",
   "footer.js",
   "special-posts.js",
@@ -471,16 +471,16 @@ ${combinedCss}
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <span class='post-labels-raw' style='display:none;'>
-                          <b:loop values='data:post.labels' var='lbl'>
-                            <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
-                          </b:loop>
-                        </span>
-                        <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                      </b:if>
                       <div class='post-card-body'>
                         <div>
+                          <b:if cond='data:post.labels and not data:post.labels.empty'>
+                            <span class='post-labels-raw' style='display:none;'>
+                              <b:loop values='data:post.labels' var='lbl'>
+                                <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                              </b:loop>
+                            </span>
+                            <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
+                          </b:if>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>

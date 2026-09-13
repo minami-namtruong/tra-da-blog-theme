@@ -46,8 +46,11 @@
         // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
         var badge = card.querySelector('.post-badge');
         if (badge) {
+          var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
           if (firstNormalLabel) {
-            badge.textContent = firstNormalLabel.name;
+            badge.setAttribute('data-raw-label', firstNormalLabel.name);
+            badge.setAttribute('data-bilingual', 'true');
+            badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
           } else if (allFeatureAt) {
             badge.textContent = badge.textContent.replace(/^@/, '');
@@ -83,8 +86,11 @@
 
         var breadcrumbCat = singleContainer.querySelector('.breadcrumb-category-link');
         if (breadcrumbCat) {
+          var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
           if (normalLabelSingle) {
-            breadcrumbCat.textContent = normalLabelSingle.name;
+            breadcrumbCat.setAttribute('data-raw-label', normalLabelSingle.name);
+            breadcrumbCat.setAttribute('data-bilingual', 'true');
+            breadcrumbCat.textContent = window.parseBilingualText ? window.parseBilingualText(normalLabelSingle.name, currentLang) : normalLabelSingle.name.split('|')[0].trim();
             breadcrumbCat.href = normalLabelSingle.url;
           } else {
             breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');

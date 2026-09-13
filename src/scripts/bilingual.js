@@ -58,30 +58,45 @@
     applyLanguage(preferred, false);
   }
 
+  function parseBilingualText(rawText, lang) {
+    if (!rawText) return '';
+    lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
+    if (rawText.includes('|')) {
+      var parts = rawText.split('|').map(function(s) { return s.trim(); });
+      return (lang === 'en' ? parts[1] : parts[0]) || parts[0];
+    }
+    return rawText.trim();
+  }
+  window.parseBilingualText = parseBilingualText;
+
   function applyBilingualElements(lang) {
+    lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
     // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs, footer
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a, .footer-bottom-nav a, .footer-links a'
+      '[data-bilingual="true"], [data-raw-label], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .breadcrumb-category-link, .footer-copyright, .footer-copyright a, .footer-bottom-nav a, .footer-links a'
     );
   
-    targets.forEach(el => {
+    targets.forEach(function(el) {
       // Bỏ qua thẻ cha .footer-copyright nếu bên trong đã có thẻ link <a> để không xoá mất link
       if (el.classList.contains('footer-copyright') && el.querySelector('a')) {
         return;
       }
 
-      // 1. Lưu lại nội dung gốc ban đầu
-      if (el.dataset.rawText === undefined) {
-        el.dataset.rawText = el.textContent.trim();
+      // 1. Lấy nội dung gốc chứa cú pháp VI | EN
+      var raw = el.getAttribute('data-raw-label') || el.dataset.rawText;
+      if (!raw) {
+        var currentTxt = el.textContent.trim();
+        if (currentTxt.includes('|')) {
+          raw = currentTxt;
+          el.setAttribute('data-raw-label', raw);
+          el.dataset.rawText = raw;
+        }
       }
   
-      const raw = el.dataset.rawText;
-  
-      // 2. Nếu có chứa dấu phân cách "|"
-      if (raw.includes('|')) {
-        const parts = raw.split('|').map(s => s.trim());
-        el.textContent = (lang === 'en' ? parts[1] : parts[0]) || parts[0];
+      // 2. Nếu có nội dung gốc chứa dấu phân cách "|"
+      if (raw && raw.includes('|')) {
+        el.textContent = parseBilingualText(raw, lang);
       }
     });
   }

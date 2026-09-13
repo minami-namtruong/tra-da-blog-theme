@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T03:03:35.809Z -->
+<!-- Compiled at: 2026-09-13T03:11:05.926Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -1296,6 +1296,9 @@ a:hover {
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
   text-decoration: none;
+}
+.post-card:not(:has(.post-card-thumb)) {
+  grid-template-columns: 1fr;
 }
 .post-card:hover {
   transform: translateY(-3px);
@@ -4753,16 +4756,16 @@ body.view-not-homepage #main-above-feed {
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <span class='post-labels-raw' style='display:none;'>
-                          <b:loop values='data:post.labels' var='lbl'>
-                            <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
-                          </b:loop>
-                        </span>
-                        <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                      </b:if>
                       <div class='post-card-body'>
                         <div>
+                          <b:if cond='data:post.labels and not data:post.labels.empty'>
+                            <span class='post-labels-raw' style='display:none;'>
+                              <b:loop values='data:post.labels' var='lbl'>
+                                <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                              </b:loop>
+                            </span>
+                            <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
+                          </b:if>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
@@ -5462,6 +5465,190 @@ body.view-not-homepage #main-above-feed {
   <script>
   //<![CDATA[
 /* ==========================================
+   IN-POST & THEME BILINGUAL SWITCHER (UNIFIED ORCHESTRATOR)
+   - Switches VI / EN content blocks
+   - Parses "VI | EN" syntax in menus, widgets
+   - Translates static dictionary terms
+   - Saves preference to localStorage
+   - Emits languageChanged event for Auto-TOC re-render
+   ========================================== */
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'user_lang';
+
+  const CORE_I18N = {
+    vi: {
+      searchPlaceholder: 'Tìm kiếm bài viết...',
+      readingTime: 'phút đọc',
+      tableOfContents: 'Mục Lục Bài Viết',
+      previousPost: '« Bài trước',
+      nextPost: 'Bài sau »',
+      shareTitle: 'Chia sẻ bài viết:',
+      copiedLink: 'Đã sao chép liên kết!',
+      aboutAuthor: 'Về Tác Giả',
+      buyMeACoffee: 'Mời tôi ly cà phê',
+      newsletterTitle: 'Nhận bài viết mới',
+      newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
+      subscribeBtn: 'Đăng Ký',
+      olderPosts: 'Cũ hơn »',
+      newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
+      backToTop: '↑ Lên đầu trang',
+      copyrightSuffix: 'Tất cả quyền được bảo lưu.',
+      aiDisclosureDetails: 'Xem chi tiết',
+    },
+    en: {
+      searchPlaceholder: 'Search articles...',
+      readingTime: 'min read',
+      tableOfContents: 'Table of Contents',
+      previousPost: '« Previous Post',
+      nextPost: 'Next Post »',
+      shareTitle: 'Share this post:',
+      copiedLink: 'Link copied to clipboard!',
+      aboutAuthor: 'About The Author',
+      buyMeACoffee: 'Buy me a coffee',
+      newsletterTitle: 'Newsletter',
+      newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
+      subscribeBtn: 'Subscribe',
+      olderPosts: 'Older Posts »',
+      newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
+      backToTop: '↑ Back to top',
+      copyrightSuffix: 'All rights reserved.',
+      aiDisclosureDetails: 'Details',
+    }
+  };
+
+  function initBilingual() {
+    // Restore preferred language from localStorage
+    var preferred = localStorage.getItem(STORAGE_KEY) || 'vi';
+    applyLanguage(preferred, false);
+  }
+
+  function parseBilingualText(rawText, lang) {
+    if (!rawText) return '';
+    lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
+    if (rawText.includes('|')) {
+      var parts = rawText.split('|').map(function(s) { return s.trim(); });
+      return (lang === 'en' ? parts[1] : parts[0]) || parts[0];
+    }
+    return rawText.trim();
+  }
+  window.parseBilingualText = parseBilingualText;
+
+  function applyBilingualElements(lang) {
+    lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
+    // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
+    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs, footer
+    const targets = document.querySelectorAll(
+      '[data-bilingual="true"], [data-raw-label], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .breadcrumb-category-link, .footer-copyright, .footer-copyright a, .footer-bottom-nav a, .footer-links a'
+    );
+  
+    targets.forEach(function(el) {
+      // Bỏ qua thẻ cha .footer-copyright nếu bên trong đã có thẻ link <a> để không xoá mất link
+      if (el.classList.contains('footer-copyright') && el.querySelector('a')) {
+        return;
+      }
+
+      // 1. Lấy nội dung gốc chứa cú pháp VI | EN
+      var raw = el.getAttribute('data-raw-label') || el.dataset.rawText;
+      if (!raw) {
+        var currentTxt = el.textContent.trim();
+        if (currentTxt.includes('|')) {
+          raw = currentTxt;
+          el.setAttribute('data-raw-label', raw);
+          el.dataset.rawText = raw;
+        }
+      }
+  
+      // 2. Nếu có nội dung gốc chứa dấu phân cách "|"
+      if (raw && raw.includes('|')) {
+        el.textContent = parseBilingualText(raw, lang);
+      }
+    });
+  }
+
+  function applyLanguage(lang, save) {
+    // 1. Update dropdown toggle text
+    var flagEl = document.getElementById('current-lang-flag');
+    var textEl = document.getElementById('current-lang-text');
+    if (flagEl && textEl) {
+      if (lang === 'en') {
+        flagEl.textContent = '🇬🇧';
+        textEl.textContent = 'EN';
+      } else {
+        flagEl.textContent = '🇻🇳';
+        textEl.textContent = 'VI';
+      }
+    }
+    
+    // Close dropdown
+    var dropdown = document.getElementById('lang-dropdown-menu');
+    if (dropdown) {
+      dropdown.classList.remove('show');
+    }
+
+    // 2. Toggle in-post bilingual content blocks
+    var viContents = document.querySelectorAll("[data-lang='vi']");
+    var enContents = document.querySelectorAll("[data-lang='en']");
+
+    if (lang === 'en') {
+      viContents.forEach(el => { el.style.display = 'none'; });
+      enContents.forEach(el => { el.style.display = 'block'; });
+    } else {
+      enContents.forEach(el => { el.style.display = 'none'; });
+      viContents.forEach(el => { el.style.display = 'block'; });
+    }
+
+    // 3. Apply VI | EN syntax parsing
+    applyBilingualElements(lang);
+
+    // 4. Translate static dictionary terms (optional, depending on where data-i18n is used in template)
+    var i18nTargets = document.querySelectorAll('[data-i18n]');
+    i18nTargets.forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (CORE_I18N[lang] && CORE_I18N[lang][key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = CORE_I18N[lang][key];
+        } else {
+          el.textContent = CORE_I18N[lang][key];
+        }
+      }
+    });
+
+    // Save to localStorage
+    if (save !== false) {
+      try { localStorage.setItem(STORAGE_KEY, lang); } catch(e) {}
+    }
+
+    // Dispatch event to inform Auto TOC and others to update
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
+  }
+
+  // Global function called from inline onclick
+  window.setLanguage = function(lang) {
+    applyLanguage(lang, true);
+  };
+  
+  // Legacy support for switchLanguage
+  window.switchLanguage = window.setLanguage;
+  window.applyBilingualElements = applyBilingualElements;
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    var toggleBtn = document.getElementById('lang-toggle-btn');
+    var dropdown = document.getElementById('lang-dropdown-menu');
+    if (toggleBtn && dropdown) {
+      if (!toggleBtn.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', initBilingual);
+})();
+
+
+/* ==========================================
    MOBILE NAVIGATION - Hamburger + Drawer
    - Auto-syncs menu items from Desktop LinkList
    ========================================== */
@@ -5531,40 +5718,96 @@ body.view-not-homepage #main-above-feed {
       catBar.className = 'category-tabs-bar';
       catBar.id = 'category-tabs-bar';
       catBar.setAttribute('aria-label', 'Lọc theo chủ đề');
-      catBar.innerHTML = '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>';
+      catBar.innerHTML = '<a class="tab-pill active" href="/" data-bilingual="true" data-raw-label="✦ Tất cả | All">✦ Tất cả | All</a>';
       catSection.appendChild(catBar);
     }
     if (!catBar) return;
 
-    // 1. Dọn sạch các nhãn tính năng đặc biệt (@...) và nhãn minh bạch AI (ai:...)
+    var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+
+    // Helper: Thêm hoặc chuẩn hóa một tab pill
+    function addOrUpdateTab(rawTerm, url) {
+      var term = (rawTerm || '').trim();
+      if (!term) return;
+      // Bỏ qua nhãn tính năng (@...) và nhãn AI (ai:...)
+      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
+        return;
+      }
+
+      var targetHref = url || ('/search/label/' + encodeURIComponent(term));
+      
+      // Kiểm tra xem đã có tab với nhãn này chưa
+      var existingPill = null;
+      catBar.querySelectorAll('.tab-pill').forEach(function(p) {
+        var pRaw = p.getAttribute('data-raw-label') || p.getAttribute('data-label') || p.textContent.trim();
+        var pHref = p.getAttribute('href') || '';
+        if (pRaw.toLowerCase() === term.toLowerCase() || 
+            (pHref && targetHref && pHref.split('/search/label/')[1] === targetHref.split('/search/label/')[1])) {
+          existingPill = p;
+        }
+      });
+
+      var displayText = window.parseBilingualText ? window.parseBilingualText(term, currentLang) : term.split('|')[0].trim();
+
+      if (existingPill) {
+        existingPill.setAttribute('data-raw-label', term);
+        existingPill.setAttribute('data-bilingual', 'true');
+        existingPill.textContent = displayText;
+      } else {
+        var a = document.createElement('a');
+        a.className = 'tab-pill';
+        a.href = targetHref;
+        a.setAttribute('data-raw-label', term);
+        a.setAttribute('data-bilingual', 'true');
+        a.textContent = displayText;
+        catBar.appendChild(a);
+      }
+    }
+
+    // 1. Dọn sạch các nhãn tính năng đặc biệt (@...) và nhãn AI có sẵn từ server
     var existingPills = Array.from(catBar.querySelectorAll('.tab-pill'));
-    var realLabelsCount = 0;
     var allPill = null;
 
     existingPills.forEach(function(pill) {
       var href = pill.getAttribute('href') || '';
-      var label = (pill.getAttribute('data-label') || pill.textContent || '').trim();
+      var label = (pill.getAttribute('data-raw-label') || pill.getAttribute('data-label') || pill.textContent || '').trim();
+      
       if (href === '/' || href === window.location.origin + '/' || label.startsWith('✦')) {
         allPill = pill;
+        pill.setAttribute('data-raw-label', '✦ Tất cả | All');
+        pill.setAttribute('data-bilingual', 'true');
+        pill.textContent = window.parseBilingualText ? window.parseBilingualText('✦ Tất cả | All', currentLang) : '✦ Tất cả';
         return;
       }
+
       if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-')) {
         pill.remove();
         return;
       }
-      realLabelsCount++;
+
+      pill.setAttribute('data-raw-label', label);
+      pill.setAttribute('data-bilingual', 'true');
+      pill.textContent = window.parseBilingualText ? window.parseBilingualText(label, currentLang) : label.split('|')[0].trim();
     });
 
     if (!allPill) {
       allPill = document.createElement('a');
       allPill.className = 'tab-pill active';
       allPill.href = '/';
+      allPill.setAttribute('data-raw-label', '✦ Tất cả | All');
       allPill.setAttribute('data-bilingual', 'true');
-      allPill.textContent = '✦ Tất cả | All';
+      allPill.textContent = window.parseBilingualText ? window.parseBilingualText('✦ Tất cả | All', currentLang) : '✦ Tất cả';
       catBar.insertBefore(allPill, catBar.firstChild);
     }
 
-    // 2. Nhận diện và gán class active cho tab tương ứng với URL hiện tại
+    // 2. Thu thập nhãn tức thì từ các thẻ bài viết đang có trên trang (0ms lag, không phụ thuộc API)
+    document.querySelectorAll('.post-raw-label').forEach(function(lblEl) {
+      var name = lblEl.textContent.trim();
+      var url = lblEl.getAttribute('data-url');
+      addOrUpdateTab(name, url);
+    });
+
+    // 3. Nhận diện và gán class active cho tab tương ứng với URL hiện tại
     function updateActivePill() {
       var currentPath = window.location.pathname;
       var activeFound = false;
@@ -5594,57 +5837,52 @@ body.view-not-homepage #main-above-feed {
 
     updateActivePill();
 
-    // 3. Cơ chế đồng bộ tức thì: Nếu máy chủ Blogger chưa kịp kết xuất danh sách nhãn (0 nhãn)
-    // tự động truy vấn Blogger Feed API để cập nhật chính xác nhãn từ các bài viết vừa đăng
-    if (realLabelsCount === 0) {
-      fetch('/feeds/posts/summary?alt=json&max-results=150')
-        .then(function(res) {
-          if (!res.ok) throw new Error('Network error');
-          return res.json();
-        })
-        .then(function(data) {
-          if (!data || !data.feed || !data.feed.category) return;
-          var categories = data.feed.category;
-          var added = 0;
-          categories.forEach(function(cat) {
-            var term = (cat.term || '').trim();
-            if (!term) return;
-            // Bỏ qua nhãn đặc biệt @ và nhãn AI
-            if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
-              return;
-            }
-            // Tránh thêm trùng lặp
-            var exists = false;
-            catBar.querySelectorAll('.tab-pill').forEach(function(p) {
-              var pLabel = p.getAttribute('data-label') || p.textContent.trim();
-              if (pLabel.toLowerCase() === term.toLowerCase()) exists = true;
-            });
-            if (!exists) {
-              var a = document.createElement('a');
-              a.className = 'tab-pill';
-              a.href = '/search/label/' + encodeURIComponent(term);
-              a.setAttribute('data-label', term);
-              a.setAttribute('data-bilingual', 'true');
-              a.textContent = term;
-              catBar.appendChild(a);
-              added++;
+    // 4. Đồng bộ thêm toàn bộ nhãn từ Blogger Feed API (quét cả feed.category và feed.entry[i].category)
+    fetch('/feeds/posts/summary?alt=json&max-results=150')
+      .then(function(res) {
+        if (!res.ok) throw new Error('Network error');
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data || !data.feed) return;
+        var categories = [];
+        
+        // Quét feed-level categories
+        if (data.feed.category && Array.isArray(data.feed.category)) {
+          data.feed.category.forEach(function(c) {
+            if (c && c.term) categories.push(c.term);
+          });
+        }
+        // Quét entry-level categories (từng bài viết)
+        if (data.feed.entry && Array.isArray(data.feed.entry)) {
+          data.feed.entry.forEach(function(entry) {
+            if (entry.category && Array.isArray(entry.category)) {
+              entry.category.forEach(function(c) {
+                if (c && c.term) categories.push(c.term);
+              });
             }
           });
-          if (added > 0) {
-            updateActivePill();
-            if (window.applyBilingualElements) {
-              window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
-            }
-          }
-        })
-        .catch(function(err) {
-          // Fallback an toàn nếu chạy local sandbox preview
-          console.log('[CategoryTabs] Feed sync bypassed or offline:', err.message);
+        }
+
+        var addedCount = 0;
+        categories.forEach(function(term) {
+          addOrUpdateTab(term);
+          addedCount++;
         });
-    }
+
+        if (addedCount > 0) {
+          updateActivePill();
+          if (window.applyBilingualElements) {
+            window.applyBilingualElements(currentLang);
+          }
+        }
+      })
+      .catch(function(err) {
+        console.log('[CategoryTabs] Feed fetch bypassed:', err.message);
+      });
 
     if (window.applyBilingualElements) {
-      window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+      window.applyBilingualElements(currentLang);
     }
   }
 
@@ -6624,175 +6862,6 @@ body.view-not-homepage #main-above-feed {
   });
 
   document.addEventListener('DOMContentLoaded', initTOC);
-})();
-
-
-/* ==========================================
-   IN-POST & THEME BILINGUAL SWITCHER (UNIFIED ORCHESTRATOR)
-   - Switches VI / EN content blocks
-   - Parses "VI | EN" syntax in menus, widgets
-   - Translates static dictionary terms
-   - Saves preference to localStorage
-   - Emits languageChanged event for Auto-TOC re-render
-   ========================================== */
-(function() {
-  'use strict';
-
-  var STORAGE_KEY = 'user_lang';
-
-  const CORE_I18N = {
-    vi: {
-      searchPlaceholder: 'Tìm kiếm bài viết...',
-      readingTime: 'phút đọc',
-      tableOfContents: 'Mục Lục Bài Viết',
-      previousPost: '« Bài trước',
-      nextPost: 'Bài sau »',
-      shareTitle: 'Chia sẻ bài viết:',
-      copiedLink: 'Đã sao chép liên kết!',
-      aboutAuthor: 'Về Tác Giả',
-      buyMeACoffee: 'Mời tôi ly cà phê',
-      newsletterTitle: 'Nhận bài viết mới',
-      newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
-      subscribeBtn: 'Đăng Ký',
-      olderPosts: 'Cũ hơn »',
-      newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
-      backToTop: '↑ Lên đầu trang',
-      copyrightSuffix: 'Tất cả quyền được bảo lưu.',
-      aiDisclosureDetails: 'Xem chi tiết',
-    },
-    en: {
-      searchPlaceholder: 'Search articles...',
-      readingTime: 'min read',
-      tableOfContents: 'Table of Contents',
-      previousPost: '« Previous Post',
-      nextPost: 'Next Post »',
-      shareTitle: 'Share this post:',
-      copiedLink: 'Link copied to clipboard!',
-      aboutAuthor: 'About The Author',
-      buyMeACoffee: 'Buy me a coffee',
-      newsletterTitle: 'Newsletter',
-      newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
-      subscribeBtn: 'Subscribe',
-      olderPosts: 'Older Posts »',
-      newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
-      backToTop: '↑ Back to top',
-      copyrightSuffix: 'All rights reserved.',
-      aiDisclosureDetails: 'Details',
-    }
-  };
-
-  function initBilingual() {
-    // Restore preferred language from localStorage
-    var preferred = localStorage.getItem(STORAGE_KEY) || 'vi';
-    applyLanguage(preferred, false);
-  }
-
-  function applyBilingualElements(lang) {
-    // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
-    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs, footer
-    const targets = document.querySelectorAll(
-      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a, .footer-bottom-nav a, .footer-links a'
-    );
-  
-    targets.forEach(el => {
-      // Bỏ qua thẻ cha .footer-copyright nếu bên trong đã có thẻ link <a> để không xoá mất link
-      if (el.classList.contains('footer-copyright') && el.querySelector('a')) {
-        return;
-      }
-
-      // 1. Lưu lại nội dung gốc ban đầu
-      if (el.dataset.rawText === undefined) {
-        el.dataset.rawText = el.textContent.trim();
-      }
-  
-      const raw = el.dataset.rawText;
-  
-      // 2. Nếu có chứa dấu phân cách "|"
-      if (raw.includes('|')) {
-        const parts = raw.split('|').map(s => s.trim());
-        el.textContent = (lang === 'en' ? parts[1] : parts[0]) || parts[0];
-      }
-    });
-  }
-
-  function applyLanguage(lang, save) {
-    // 1. Update dropdown toggle text
-    var flagEl = document.getElementById('current-lang-flag');
-    var textEl = document.getElementById('current-lang-text');
-    if (flagEl && textEl) {
-      if (lang === 'en') {
-        flagEl.textContent = '🇬🇧';
-        textEl.textContent = 'EN';
-      } else {
-        flagEl.textContent = '🇻🇳';
-        textEl.textContent = 'VI';
-      }
-    }
-    
-    // Close dropdown
-    var dropdown = document.getElementById('lang-dropdown-menu');
-    if (dropdown) {
-      dropdown.classList.remove('show');
-    }
-
-    // 2. Toggle in-post bilingual content blocks
-    var viContents = document.querySelectorAll("[data-lang='vi']");
-    var enContents = document.querySelectorAll("[data-lang='en']");
-
-    if (lang === 'en') {
-      viContents.forEach(el => { el.style.display = 'none'; });
-      enContents.forEach(el => { el.style.display = 'block'; });
-    } else {
-      enContents.forEach(el => { el.style.display = 'none'; });
-      viContents.forEach(el => { el.style.display = 'block'; });
-    }
-
-    // 3. Apply VI | EN syntax parsing
-    applyBilingualElements(lang);
-
-    // 4. Translate static dictionary terms (optional, depending on where data-i18n is used in template)
-    var i18nTargets = document.querySelectorAll('[data-i18n]');
-    i18nTargets.forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (CORE_I18N[lang] && CORE_I18N[lang][key]) {
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          el.placeholder = CORE_I18N[lang][key];
-        } else {
-          el.textContent = CORE_I18N[lang][key];
-        }
-      }
-    });
-
-    // Save to localStorage
-    if (save !== false) {
-      try { localStorage.setItem(STORAGE_KEY, lang); } catch(e) {}
-    }
-
-    // Dispatch event to inform Auto TOC and others to update
-    window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
-  }
-
-  // Global function called from inline onclick
-  window.setLanguage = function(lang) {
-    applyLanguage(lang, true);
-  };
-  
-  // Legacy support for switchLanguage
-  window.switchLanguage = window.setLanguage;
-  window.applyBilingualElements = applyBilingualElements;
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function(event) {
-    var toggleBtn = document.getElementById('lang-toggle-btn');
-    var dropdown = document.getElementById('lang-dropdown-menu');
-    if (toggleBtn && dropdown) {
-      if (!toggleBtn.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
-      }
-    }
-  });
-
-  document.addEventListener('DOMContentLoaded', initBilingual);
 })();
 
 
@@ -8348,8 +8417,11 @@ body.view-not-homepage #main-above-feed {
         // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
         var badge = card.querySelector('.post-badge');
         if (badge) {
+          var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
           if (firstNormalLabel) {
-            badge.textContent = firstNormalLabel.name;
+            badge.setAttribute('data-raw-label', firstNormalLabel.name);
+            badge.setAttribute('data-bilingual', 'true');
+            badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
           } else if (allFeatureAt) {
             badge.textContent = badge.textContent.replace(/^@/, '');
@@ -8385,8 +8457,11 @@ body.view-not-homepage #main-above-feed {
 
         var breadcrumbCat = singleContainer.querySelector('.breadcrumb-category-link');
         if (breadcrumbCat) {
+          var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
           if (normalLabelSingle) {
-            breadcrumbCat.textContent = normalLabelSingle.name;
+            breadcrumbCat.setAttribute('data-raw-label', normalLabelSingle.name);
+            breadcrumbCat.setAttribute('data-bilingual', 'true');
+            breadcrumbCat.textContent = window.parseBilingualText ? window.parseBilingualText(normalLabelSingle.name, currentLang) : normalLabelSingle.name.split('|')[0].trim();
             breadcrumbCat.href = normalLabelSingle.url;
           } else {
             breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');
