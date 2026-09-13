@@ -311,16 +311,6 @@ ${combinedCss}
                   <b:else/>
                     <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
                     <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
-                    <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn"' data-category='Góc Nhìn' data-bilingual='true'>Góc Nhìn | Perspectives</a></li>
-                    <li class='has-dropdown'>
-                      <a href='#' data-bilingual='true'>Chuyên Mục | Categories</a>
-                      <ul class='dropdown-menu'>
-                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-category='Trải Nghiệm Sống' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a></li>
-                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-category='Sách &amp; Công Cụ' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a></li>
-                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-category='Phát Triển Bản Thân' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a></li>
-                      </ul>
-                    </li>
-                    <li><a href='#footer' data-bilingual='true'>Về Tôi | About Me</a></li>
                   </b:if>
                 </ul>
               </nav>
@@ -1157,8 +1147,8 @@ ${combinedCss}
                       </b:loop>
                     <b:else/>
                       <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
-                      <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
-                      <li><a expr:href='data:blog.homepageUrl + "feeds/posts/default"' target='_blank'>RSS Feed</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + "#profile-cover-section"' data-bilingual='true'>Về Tôi | About Me</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + "p/lien-he.html"' data-bilingual='true'>Liên Hệ | Contact</a></li>
                     </b:if>
                   </ul>
                 </nav>
