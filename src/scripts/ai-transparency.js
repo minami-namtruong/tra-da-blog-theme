@@ -231,6 +231,13 @@
       var childWithAI = container.querySelector('[data-ai-type]');
       if (childWithAI) rawType = childWithAI.getAttribute('data-ai-type');
     }
+    if (!rawType) {
+      var rawLabels = container.querySelectorAll('.post-raw-label');
+      for (var i = 0; i < rawLabels.length; i++) {
+        var t = detectAIType(rawLabels[i].textContent);
+        if (t) { rawType = t; container.setAttribute('data-ai-type', t); break; }
+      }
+    }
     if (!rawType) return;
     var aiType = detectAIType(rawType);
     if (!aiType || !AI_TYPES[aiType]) return;
@@ -304,9 +311,17 @@
   /* ─── ĐIỂM TÍCH HỢP 2: Post Cards Feed (Standard Badge) ────── */
   function injectPostCardBadges() {
     var lang = getCurrentLang();
-    var cards = document.querySelectorAll('.post-card[data-ai-type]');
+    var cards = document.querySelectorAll('.post-card');
     cards.forEach(function (card) {
       var rawType = card.getAttribute('data-ai-type');
+      if (!rawType) {
+        var rawLabels = card.querySelectorAll('.post-raw-label');
+        for (var i = 0; i < rawLabels.length; i++) {
+          var t = detectAIType(rawLabels[i].textContent);
+          if (t) { rawType = t; card.setAttribute('data-ai-type', t); break; }
+        }
+      }
+      if (!rawType) return;
       var aiType = detectAIType(rawType);
       if (!aiType || !AI_TYPES[aiType]) return;
 

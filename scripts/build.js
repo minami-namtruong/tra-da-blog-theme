@@ -402,27 +402,24 @@ ${combinedCss}
       </b:widget>
     </b:section>
 
-    <!-- Dynamic Category Tabs (Configurable via Layout > LinkList2) -->
+    <!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='LinkList2' type='LinkList' version='2' title='🏷️ Thanh Chủ Đề (Category Tabs)'>
+      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
         <b:widget-settings>
-          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+          <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
+          <b:widget-setting name='display'>LIST</b:widget-setting>
+          <b:widget-setting name='selectedLabelsList'/>
+          <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
         </b:widget-settings>
         <b:includable id='main'>
           <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <b:if cond='data:links and not data:links.empty'>
-              <b:loop values='data:links' var='link' index='tabIdx'>
-                <a expr:class='data:tabIdx == 0 ? "tab-pill active" : "tab-pill"' expr:href='data:link.target' data-bilingual='true'>
-                  <data:link.name/>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+            <b:if cond='data:labels and not data:labels.empty'>
+              <b:loop values='data:labels' var='label'>
+                <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                  <data:label.name/>
                 </a>
               </b:loop>
-            <b:else/>
-              <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
             </b:if>
           </nav>
         </b:includable>
@@ -473,23 +470,17 @@ ${combinedCss}
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
-                         isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
-                         Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
-                    <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
-                    <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
-                    <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:aiLabels and not data:aiLabels.empty'>
-                        <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                      <b:if cond='data:post.labels and not data:post.labels.empty'>
+                        <span class='post-labels-raw' style='display:none;'>
+                          <b:loop values='data:post.labels' var='lbl'>
+                            <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                          </b:loop>
+                        </span>
+                        <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
                       </b:if>
                       <div class='post-card-body'>
                         <div>
-                          <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                            <b:if cond='data:normalLabels and not data:normalLabels.empty'>
-                              <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
-                            </b:if>
-                          </b:with>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
@@ -510,9 +501,6 @@ ${combinedCss}
                         </b:if>
                       </b:if>
                     </article>
-                    </b:if><!-- /isExclusiveFeaturePost -->
-                    </b:with><!-- /aiLabels -->
-                    </b:with>
                   </b:loop>
                 </div>
 
@@ -529,7 +517,7 @@ ${combinedCss}
               <!-- ── STATIC PAGE OR SINGLE POST VIEW ── -->
               <b:else/>
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
-                <b:if cond='data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html"))'>
+                <b:if cond='data:view.isPage and (data:view.url.path == "/p/muc-luc.html" or data:view.url.path == "/p/archive.html")'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
                     <!-- Thanh Tìm Kiếm Tức Thì -->
                     <div class='archive-search-wrap'>
@@ -550,22 +538,23 @@ ${combinedCss}
                   </div>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                  <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                    <b:if cond='data:aiLabels and not data:aiLabels.empty'>
-                      <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                    <b:if cond='data:post.labels and not data:post.labels.empty'>
+                      <span class='post-labels-raw' style='display:none;'>
+                        <b:loop values='data:post.labels' var='lbl'>
+                          <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                        </b:loop>
+                      </span>
                     </b:if>
 
                     <!-- Breadcrumbs -->
                     <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
-                      <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                        <b:if cond='data:normalLabels and not data:normalLabels.empty'>
-                          <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
-                          <span class='separator'>›</span>
-                        </b:if>
-                      </b:with>
+                      <b:if cond='data:post.labels and not data:post.labels.empty'>
+                        <a class='breadcrumb-category-link' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
+                        <span class='separator'>›</span>
+                      </b:if>
                       <span><data:post.title/></span>
                     </nav>
 
@@ -702,7 +691,6 @@ ${combinedCss}
                     </div>
 
                   </article>
-                  </b:with><!-- /aiLabels -->
                 </b:loop>
               </b:if>
             </b:if>

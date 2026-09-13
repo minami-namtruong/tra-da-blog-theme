@@ -11,6 +11,93 @@
 (function () {
   'use strict';
 
+  function initPostCardsProcessing() {
+    var isHomepage = document.body.classList.contains('view-homepage');
+
+    // 1. Xử lý các thẻ bài viết trên feed (Trang chủ / Danh mục)
+    document.querySelectorAll('.post-card').forEach(function(card) {
+      var rawLabels = card.querySelectorAll('.post-raw-label');
+      if (rawLabels.length > 0) {
+        var allFeatureAt = true;
+        var firstNormalLabel = null;
+        var detectedAiType = null;
+
+        rawLabels.forEach(function(lblEl) {
+          var name = lblEl.textContent.trim();
+          var url = lblEl.getAttribute('data-url');
+          if (name.startsWith('@')) {
+            // Nhãn tính năng cho widget (@Quote, @Tiêu điểm, @Nổi bật, @Điểm tin)
+          } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
+            allFeatureAt = false;
+            if (!detectedAiType) detectedAiType = name.toLowerCase();
+          } else {
+            allFeatureAt = false;
+            if (!firstNormalLabel) firstNormalLabel = { name: name, url: url };
+          }
+        });
+
+        // ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
+        if (allFeatureAt && isHomepage) {
+          card.style.display = 'none';
+          card.classList.add('is-exclusive-feature-hidden');
+          return;
+        }
+
+        // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
+        var badge = card.querySelector('.post-badge');
+        if (badge) {
+          if (firstNormalLabel) {
+            badge.textContent = firstNormalLabel.name;
+            badge.href = firstNormalLabel.url;
+          } else if (allFeatureAt) {
+            badge.textContent = badge.textContent.replace(/^@/, '');
+          }
+        }
+
+        // Tự động gắn data-ai-type để ai-transparency.js kích hoạt badge
+        if (detectedAiType) {
+          card.setAttribute('data-ai-type', detectedAiType);
+        }
+      }
+    });
+
+    // 2. Xử lý trang chi tiết bài viết (Single Post View)
+    var singleContainer = document.querySelector('.single-post-container');
+    if (singleContainer) {
+      var rawLabelsSingle = singleContainer.querySelectorAll('.post-raw-label');
+      if (rawLabelsSingle.length > 0) {
+        var normalLabelSingle = null;
+        var aiTypeSingle = null;
+
+        rawLabelsSingle.forEach(function(lblEl) {
+          var name = lblEl.textContent.trim();
+          var url = lblEl.getAttribute('data-url');
+          if (name.startsWith('@')) {
+            // bỏ qua
+          } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
+            if (!aiTypeSingle) aiTypeSingle = name.toLowerCase();
+          } else {
+            if (!normalLabelSingle) normalLabelSingle = { name: name, url: url };
+          }
+        });
+
+        var breadcrumbCat = singleContainer.querySelector('.breadcrumb-category-link');
+        if (breadcrumbCat) {
+          if (normalLabelSingle) {
+            breadcrumbCat.textContent = normalLabelSingle.name;
+            breadcrumbCat.href = normalLabelSingle.url;
+          } else {
+            breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');
+          }
+        }
+
+        if (aiTypeSingle) {
+          singleContainer.setAttribute('data-ai-type', aiTypeSingle);
+        }
+      }
+    }
+  }
+
   function initInFeedInterleaving() {
     const inFeedSection = document.getElementById('main-in-feed-section');
     if (!inFeedSection) return;
@@ -24,14 +111,16 @@
       return;
     }
 
-    // 2. Lấy danh sách các bài viết
+    // 2. Lấy danh sách các bài viết hiển thị (loại trừ các bài độc quyền @ đã ẩn)
     const feedContainer = document.getElementById('posts-feed-container') || document.querySelector('.posts-feed');
     if (!feedContainer) {
       inFeedSection.style.display = 'none';
       return;
     }
 
-    const posts = feedContainer.querySelectorAll('.post-card');
+    const posts = Array.from(feedContainer.querySelectorAll('.post-card')).filter(function(card) {
+      return card.style.display !== 'none';
+    });
     if (!posts || posts.length === 0) {
       inFeedSection.style.display = 'none';
       return;
@@ -304,11 +393,15 @@
   }
 
   function initHomepageInterleavedWidgets() {
+    initPostCardsProcessing();
     initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();
     initNewsletterActions();
+    if (window.AITransparency && typeof window.AITransparency.reinject === 'function') {
+      window.AITransparency.reinject();
+    }
   }
 
   // Khởi chạy khi DOM sẵn sàng

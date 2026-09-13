@@ -310,7 +310,7 @@ Bạn hoàn toàn có thể **Thêm, Sửa, Xoá hoặc Sắp xếp** bất kỳ
           ┌──────────────────┬─────────┴─────────┬──────────────────┐
           ▼                  ▼                   ▼                  ▼
     1. Menu Chính      2. Thanh Chủ Đề     3. Chính Sách      4. Mạng Xã Hội
-     (LinkList1)         (LinkList2)         (LinkList3)        (LinkList4)
+     (LinkList1)          (Label1)            (LinkList3)        (LinkList4)
       Tại Header       Dưới Banner Cover    Footer Cột 2        Footer Cột 3
 ```
 
@@ -324,13 +324,13 @@ Bạn hoàn toàn có thể **Thêm, Sửa, Xoá hoặc Sắp xếp** bất kỳ
     * `_Sách & Công Cụ | Books & Tools` (Mục con 2)
   * Theme sẽ tự động biến chúng thành menu đổ xuống nhiều cấp tuyệt đẹp!
 
-#### 🏷️ 2. Thanh Chủ Đề (`LinkList2` - Khu vực `Thanh Chủ Đề (Category Tabs)`)
-* **Vị trí:** Nằm ngay dưới Ảnh bìa Profile Cover, hiển thị xuyên suốt các trang.
-* **Thao tác:** Bấm ✏️ để thêm hoặc xoá các viên thuốc chủ đề (Pill tabs).
-* **Cấu hình đường dẫn nhãn:**
-  * Tên: `Góc Nhìn & Tư Duy | Perspectives`
-  * URL: `/search/label/Góc Nhìn & Tư Duy` (hoặc URL đầy đủ của blog).
-* **Xoá hoặc đổi thứ tự:** Bấm biểu tượng 🗑️ để xoá bỏ tab không muốn dùng, bấm 🔼 / 🔽 để di chuyển vị trí.
+#### 🏷️ 2. Thanh Chủ Đề Tự Động (`Label1` - Khu vực `Thanh Chủ Đề (Category Tabs)`)
+* **Cơ chế tự động hóa 100%:** Được vận hành bởi widget `Label1` chuẩn của Google Blogger kết hợp thuật toán đồng bộ thông minh. **Mỗi khi bạn đăng bài viết mới và gắn nhãn (Labels), nhãn đó sẽ tự động xuất hiện ngay trên Thanh Chủ Đề**!
+* **Bộ lọc thông minh (Smart Filter):** Theme tự động lọc bỏ các nhãn tính năng bắt đầu bằng `@` (như `@Quote`, `@Tiêu điểm`) và nhãn AI (`ai:assisted`, `ai:generated`) để thanh menu chủ đề luôn gọn gàng và chuẩn mực.
+* **Nhận diện trạng thái chọn (Active State):** Khi người đọc click vào bất kỳ chủ đề nào, tab đó sẽ tự động phát sáng màu chủ đạo (active pill), đồng thời "✦ Tất cả" sẽ nhường chỗ cho chuyên mục đang xem.
+* **Tùy biến trong Bố cục (Layout):** Bạn có thể bấm ✏️ tại widget `🏷️ Thanh Chủ Đề` để chọn:
+  * Hiển thị tất cả nhãn hoặc chỉ chọn những nhãn bạn muốn hiển thị.
+  * Sắp xếp theo Bảng chữ cái (Alphabetical) hoặc Tần suất bài viết (Frequency).
 
 #### ⚖️ 3. Chính Sách & Minh Bạch (`LinkList3` - Footer Cột 2)
 * **Vị trí:** Cột thứ 2 tại Tầng 1 của Footer.

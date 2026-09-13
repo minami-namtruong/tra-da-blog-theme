@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T02:48:27.741Z -->
+<!-- Compiled at: 2026-09-13T03:03:35.809Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -4684,27 +4684,24 @@ body.view-not-homepage #main-above-feed {
       </b:widget>
     </b:section>
 
-    <!-- Dynamic Category Tabs (Configurable via Layout > LinkList2) -->
+    <!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='LinkList2' type='LinkList' version='2' title='🏷️ Thanh Chủ Đề (Category Tabs)'>
+      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
         <b:widget-settings>
-          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+          <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
+          <b:widget-setting name='display'>LIST</b:widget-setting>
+          <b:widget-setting name='selectedLabelsList'/>
+          <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
         </b:widget-settings>
         <b:includable id='main'>
           <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <b:if cond='data:links and not data:links.empty'>
-              <b:loop values='data:links' var='link' index='tabIdx'>
-                <a expr:class='data:tabIdx == 0 ? "tab-pill active" : "tab-pill"' expr:href='data:link.target' data-bilingual='true'>
-                  <data:link.name/>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+            <b:if cond='data:labels and not data:labels.empty'>
+              <b:loop values='data:labels' var='label'>
+                <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                  <data:label.name/>
                 </a>
               </b:loop>
-            <b:else/>
-              <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
             </b:if>
           </nav>
         </b:includable>
@@ -4755,23 +4752,17 @@ body.view-not-homepage #main-above-feed {
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <!-- ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
-                         isExclusiveFeaturePost = true chỉ khi 100% nhãn đều bắt đầu bằng "@".
-                         Nếu bài có cả nhãn thường (VD: Thể thao) → luôn hiển thị bình thường. -->
-                    <b:with value='data:post.labels every (label =&gt; label.name startsWith "@")' var='isExclusiveFeaturePost'>
-                    <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
-                    <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:aiLabels and not data:aiLabels.empty'>
-                        <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                      <b:if cond='data:post.labels and not data:post.labels.empty'>
+                        <span class='post-labels-raw' style='display:none;'>
+                          <b:loop values='data:post.labels' var='lbl'>
+                            <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                          </b:loop>
+                        </span>
+                        <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
                       </b:if>
                       <div class='post-card-body'>
                         <div>
-                          <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                            <b:if cond='data:normalLabels and not data:normalLabels.empty'>
-                              <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
-                            </b:if>
-                          </b:with>
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
@@ -4792,9 +4783,6 @@ body.view-not-homepage #main-above-feed {
                         </b:if>
                       </b:if>
                     </article>
-                    </b:if><!-- /isExclusiveFeaturePost -->
-                    </b:with><!-- /aiLabels -->
-                    </b:with>
                   </b:loop>
                 </div>
 
@@ -4811,7 +4799,7 @@ body.view-not-homepage #main-above-feed {
               <!-- ── STATIC PAGE OR SINGLE POST VIEW ── -->
               <b:else/>
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
-                <b:if cond='data:view.isPage and (data:view.url.canonical.endsWith("p/muc-luc.html") or data:view.url.canonical.endsWith("p/archive.html"))'>
+                <b:if cond='data:view.isPage and (data:view.url.path == "/p/muc-luc.html" or data:view.url.path == "/p/archive.html")'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
                     <!-- Thanh Tìm Kiếm Tức Thì -->
                     <div class='archive-search-wrap'>
@@ -4832,22 +4820,23 @@ body.view-not-homepage #main-above-feed {
                   </div>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                  <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                    <b:if cond='data:aiLabels and not data:aiLabels.empty'>
-                      <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
+                    <b:if cond='data:post.labels and not data:post.labels.empty'>
+                      <span class='post-labels-raw' style='display:none;'>
+                        <b:loop values='data:post.labels' var='lbl'>
+                          <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                        </b:loop>
+                      </span>
                     </b:if>
 
                     <!-- Breadcrumbs -->
                     <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
-                      <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                        <b:if cond='data:normalLabels and not data:normalLabels.empty'>
-                          <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
-                          <span class='separator'>›</span>
-                        </b:if>
-                      </b:with>
+                      <b:if cond='data:post.labels and not data:post.labels.empty'>
+                        <a class='breadcrumb-category-link' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
+                        <span class='separator'>›</span>
+                      </b:if>
                       <span><data:post.title/></span>
                     </nav>
 
@@ -4984,7 +4973,6 @@ body.view-not-homepage #main-above-feed {
                     </div>
 
                   </article>
-                  </b:with><!-- /aiLabels -->
                 </b:loop>
               </b:if>
             </b:if>
@@ -5535,19 +5523,128 @@ body.view-not-homepage #main-above-feed {
   }
 
   function ensureCategoryTabs() {
+    var catBar = document.getElementById('category-tabs-bar') || document.querySelector('.category-tabs-bar');
     var catSection = document.getElementById('category-tabs-section');
-    if (catSection && (!catSection.children.length || !catSection.querySelector('.category-tabs-bar, .tab-pill'))) {
-      catSection.innerHTML = '<nav class="category-tabs-bar" id="category-tabs-bar" aria-label="Lọc theo chủ đề">' +
-        '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>' +
-        '<a class="tab-pill" href="/search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>' +
-        '<a class="tab-pill" href="/search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>' +
-        '<a class="tab-pill" href="/search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>' +
-        '<a class="tab-pill" href="/search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>' +
-        '<a class="tab-pill" href="/search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI" data-bilingual="true">Công Nghệ &amp; AI | Tech &amp; AI</a>' +
-      '</nav>';
-      if (window.applyBilingualElements) {
-        window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+
+    if (!catBar && catSection) {
+      catBar = document.createElement('nav');
+      catBar.className = 'category-tabs-bar';
+      catBar.id = 'category-tabs-bar';
+      catBar.setAttribute('aria-label', 'Lọc theo chủ đề');
+      catBar.innerHTML = '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>';
+      catSection.appendChild(catBar);
+    }
+    if (!catBar) return;
+
+    // 1. Dọn sạch các nhãn tính năng đặc biệt (@...) và nhãn minh bạch AI (ai:...)
+    var existingPills = Array.from(catBar.querySelectorAll('.tab-pill'));
+    var realLabelsCount = 0;
+    var allPill = null;
+
+    existingPills.forEach(function(pill) {
+      var href = pill.getAttribute('href') || '';
+      var label = (pill.getAttribute('data-label') || pill.textContent || '').trim();
+      if (href === '/' || href === window.location.origin + '/' || label.startsWith('✦')) {
+        allPill = pill;
+        return;
       }
+      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-')) {
+        pill.remove();
+        return;
+      }
+      realLabelsCount++;
+    });
+
+    if (!allPill) {
+      allPill = document.createElement('a');
+      allPill.className = 'tab-pill active';
+      allPill.href = '/';
+      allPill.setAttribute('data-bilingual', 'true');
+      allPill.textContent = '✦ Tất cả | All';
+      catBar.insertBefore(allPill, catBar.firstChild);
+    }
+
+    // 2. Nhận diện và gán class active cho tab tương ứng với URL hiện tại
+    function updateActivePill() {
+      var currentPath = window.location.pathname;
+      var activeFound = false;
+      if (currentPath.indexOf('/search/label/') !== -1) {
+        var rawLabel = currentPath.split('/search/label/')[1].split('/')[0].split('?')[0];
+        var currentLabel = decodeURIComponent(rawLabel).toLowerCase();
+        catBar.querySelectorAll('.tab-pill').forEach(function(pill) {
+          var pillHref = pill.getAttribute('href') || '';
+          if (pillHref.indexOf('/search/label/') !== -1) {
+            var pillRawLabel = pillHref.split('/search/label/')[1].split('/')[0].split('?')[0];
+            var pillLabel = decodeURIComponent(pillRawLabel).toLowerCase();
+            if (pillLabel === currentLabel) {
+              pill.classList.add('active');
+              activeFound = true;
+            } else {
+              pill.classList.remove('active');
+            }
+          } else {
+            pill.classList.remove('active');
+          }
+        });
+      }
+      if (!activeFound && allPill) {
+        allPill.classList.add('active');
+      }
+    }
+
+    updateActivePill();
+
+    // 3. Cơ chế đồng bộ tức thì: Nếu máy chủ Blogger chưa kịp kết xuất danh sách nhãn (0 nhãn)
+    // tự động truy vấn Blogger Feed API để cập nhật chính xác nhãn từ các bài viết vừa đăng
+    if (realLabelsCount === 0) {
+      fetch('/feeds/posts/summary?alt=json&max-results=150')
+        .then(function(res) {
+          if (!res.ok) throw new Error('Network error');
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data || !data.feed || !data.feed.category) return;
+          var categories = data.feed.category;
+          var added = 0;
+          categories.forEach(function(cat) {
+            var term = (cat.term || '').trim();
+            if (!term) return;
+            // Bỏ qua nhãn đặc biệt @ và nhãn AI
+            if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
+              return;
+            }
+            // Tránh thêm trùng lặp
+            var exists = false;
+            catBar.querySelectorAll('.tab-pill').forEach(function(p) {
+              var pLabel = p.getAttribute('data-label') || p.textContent.trim();
+              if (pLabel.toLowerCase() === term.toLowerCase()) exists = true;
+            });
+            if (!exists) {
+              var a = document.createElement('a');
+              a.className = 'tab-pill';
+              a.href = '/search/label/' + encodeURIComponent(term);
+              a.setAttribute('data-label', term);
+              a.setAttribute('data-bilingual', 'true');
+              a.textContent = term;
+              catBar.appendChild(a);
+              added++;
+            }
+          });
+          if (added > 0) {
+            updateActivePill();
+            if (window.applyBilingualElements) {
+              window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+            }
+          }
+        })
+        .catch(function(err) {
+          // Fallback an toàn nếu chạy local sandbox preview
+          console.log('[CategoryTabs] Feed sync bypassed or offline:', err.message);
+        });
+    }
+
+    if (window.applyBilingualElements) {
+      window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
     }
   }
 
@@ -7939,6 +8036,13 @@ body.view-not-homepage #main-above-feed {
       var childWithAI = container.querySelector('[data-ai-type]');
       if (childWithAI) rawType = childWithAI.getAttribute('data-ai-type');
     }
+    if (!rawType) {
+      var rawLabels = container.querySelectorAll('.post-raw-label');
+      for (var i = 0; i < rawLabels.length; i++) {
+        var t = detectAIType(rawLabels[i].textContent);
+        if (t) { rawType = t; container.setAttribute('data-ai-type', t); break; }
+      }
+    }
     if (!rawType) return;
     var aiType = detectAIType(rawType);
     if (!aiType || !AI_TYPES[aiType]) return;
@@ -8012,9 +8116,17 @@ body.view-not-homepage #main-above-feed {
   /* ─── ĐIỂM TÍCH HỢP 2: Post Cards Feed (Standard Badge) ────── */
   function injectPostCardBadges() {
     var lang = getCurrentLang();
-    var cards = document.querySelectorAll('.post-card[data-ai-type]');
+    var cards = document.querySelectorAll('.post-card');
     cards.forEach(function (card) {
       var rawType = card.getAttribute('data-ai-type');
+      if (!rawType) {
+        var rawLabels = card.querySelectorAll('.post-raw-label');
+        for (var i = 0; i < rawLabels.length; i++) {
+          var t = detectAIType(rawLabels[i].textContent);
+          if (t) { rawType = t; card.setAttribute('data-ai-type', t); break; }
+        }
+      }
+      if (!rawType) return;
       var aiType = detectAIType(rawType);
       if (!aiType || !AI_TYPES[aiType]) return;
 
@@ -8201,6 +8313,93 @@ body.view-not-homepage #main-above-feed {
 (function () {
   'use strict';
 
+  function initPostCardsProcessing() {
+    var isHomepage = document.body.classList.contains('view-homepage');
+
+    // 1. Xử lý các thẻ bài viết trên feed (Trang chủ / Danh mục)
+    document.querySelectorAll('.post-card').forEach(function(card) {
+      var rawLabels = card.querySelectorAll('.post-raw-label');
+      if (rawLabels.length > 0) {
+        var allFeatureAt = true;
+        var firstNormalLabel = null;
+        var detectedAiType = null;
+
+        rawLabels.forEach(function(lblEl) {
+          var name = lblEl.textContent.trim();
+          var url = lblEl.getAttribute('data-url');
+          if (name.startsWith('@')) {
+            // Nhãn tính năng cho widget (@Quote, @Tiêu điểm, @Nổi bật, @Điểm tin)
+          } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
+            allFeatureAt = false;
+            if (!detectedAiType) detectedAiType = name.toLowerCase();
+          } else {
+            allFeatureAt = false;
+            if (!firstNormalLabel) firstNormalLabel = { name: name, url: url };
+          }
+        });
+
+        // ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
+        if (allFeatureAt && isHomepage) {
+          card.style.display = 'none';
+          card.classList.add('is-exclusive-feature-hidden');
+          return;
+        }
+
+        // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
+        var badge = card.querySelector('.post-badge');
+        if (badge) {
+          if (firstNormalLabel) {
+            badge.textContent = firstNormalLabel.name;
+            badge.href = firstNormalLabel.url;
+          } else if (allFeatureAt) {
+            badge.textContent = badge.textContent.replace(/^@/, '');
+          }
+        }
+
+        // Tự động gắn data-ai-type để ai-transparency.js kích hoạt badge
+        if (detectedAiType) {
+          card.setAttribute('data-ai-type', detectedAiType);
+        }
+      }
+    });
+
+    // 2. Xử lý trang chi tiết bài viết (Single Post View)
+    var singleContainer = document.querySelector('.single-post-container');
+    if (singleContainer) {
+      var rawLabelsSingle = singleContainer.querySelectorAll('.post-raw-label');
+      if (rawLabelsSingle.length > 0) {
+        var normalLabelSingle = null;
+        var aiTypeSingle = null;
+
+        rawLabelsSingle.forEach(function(lblEl) {
+          var name = lblEl.textContent.trim();
+          var url = lblEl.getAttribute('data-url');
+          if (name.startsWith('@')) {
+            // bỏ qua
+          } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
+            if (!aiTypeSingle) aiTypeSingle = name.toLowerCase();
+          } else {
+            if (!normalLabelSingle) normalLabelSingle = { name: name, url: url };
+          }
+        });
+
+        var breadcrumbCat = singleContainer.querySelector('.breadcrumb-category-link');
+        if (breadcrumbCat) {
+          if (normalLabelSingle) {
+            breadcrumbCat.textContent = normalLabelSingle.name;
+            breadcrumbCat.href = normalLabelSingle.url;
+          } else {
+            breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');
+          }
+        }
+
+        if (aiTypeSingle) {
+          singleContainer.setAttribute('data-ai-type', aiTypeSingle);
+        }
+      }
+    }
+  }
+
   function initInFeedInterleaving() {
     const inFeedSection = document.getElementById('main-in-feed-section');
     if (!inFeedSection) return;
@@ -8214,14 +8413,16 @@ body.view-not-homepage #main-above-feed {
       return;
     }
 
-    // 2. Lấy danh sách các bài viết
+    // 2. Lấy danh sách các bài viết hiển thị (loại trừ các bài độc quyền @ đã ẩn)
     const feedContainer = document.getElementById('posts-feed-container') || document.querySelector('.posts-feed');
     if (!feedContainer) {
       inFeedSection.style.display = 'none';
       return;
     }
 
-    const posts = feedContainer.querySelectorAll('.post-card');
+    const posts = Array.from(feedContainer.querySelectorAll('.post-card')).filter(function(card) {
+      return card.style.display !== 'none';
+    });
     if (!posts || posts.length === 0) {
       inFeedSection.style.display = 'none';
       return;
@@ -8494,11 +8695,15 @@ body.view-not-homepage #main-above-feed {
   }
 
   function initHomepageInterleavedWidgets() {
+    initPostCardsProcessing();
     initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();
     initNewsletterActions();
+    if (window.AITransparency && typeof window.AITransparency.reinject === 'function') {
+      window.AITransparency.reinject();
+    }
   }
 
   // Khởi chạy khi DOM sẵn sàng
