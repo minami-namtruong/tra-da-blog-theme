@@ -752,26 +752,40 @@
   display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
 }
 #main-in-feed-section.in-feed-active {
-  display: block;
-}
-
 /* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
 #main-pre-pagination-section {
   width: 100%;
-  margin-top: 2.25rem;
+  margin-top: 0;
   margin-bottom: 1.75rem;
-  padding-top: 1.5rem;
-  border-top: var(--stroke-hairline) dashed var(--border-color);
+  padding-top: 0;
+  border-top: none;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+.main-content > .section {
+  margin-top: 0;
+}
+.main-content > .section:first-child,
+.main-content > .section:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
 #main-above-feed:empty,
 #main-in-feed-section:empty,
-#main-pre-pagination-section:empty {
+#main-pre-pagination-section:empty,
+body.view-single #main-above-feed,
+body.view-not-homepage #main-above-feed {
   display: none !important;
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
+  height: 0 !important;
 }
 
 /* Khi vào trang đọc bài chi tiết (Single Post) hoặc Lưu Trữ: Ẩn các vùng widget trang chủ */

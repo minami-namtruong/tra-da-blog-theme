@@ -45,6 +45,37 @@
     }
   }
 
+  function sanitizeLegacyMenu() {
+    var menu = document.querySelector('.nav-menu');
+    if (menu) {
+      var text = menu.textContent;
+      if (text.includes('Disclaimer') || text.includes('Privacy') || text.includes('Faq') || text.includes('Term')) {
+        menu.innerHTML = '<li><a class="active" href="/" id="nav-home-btn" data-bilingual="true">Trang Chủ | Home</a></li>' +
+          '<li><a href="/p/muc-luc.html" id="nav-timeline-btn" data-bilingual="true">Dòng Thời Gian | Timeline</a></li>';
+        if (window.applyBilingualElements) {
+          window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+        }
+      }
+    }
+  }
+
+  function ensureCategoryTabs() {
+    var catSection = document.getElementById('category-tabs-section');
+    if (catSection && (!catSection.children.length || !catSection.querySelector('.category-tabs-bar, .tab-pill'))) {
+      catSection.innerHTML = '<nav class="category-tabs-bar" id="category-tabs-bar" aria-label="Lọc theo chủ đề">' +
+        '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>' +
+        '<a class="tab-pill" href="/search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>' +
+        '<a class="tab-pill" href="/search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>' +
+        '<a class="tab-pill" href="/search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>' +
+        '<a class="tab-pill" href="/search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>' +
+        '<a class="tab-pill" href="/search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI" data-bilingual="true">Công Nghệ &amp; AI | Tech &amp; AI</a>' +
+      '</nav>';
+      if (window.applyBilingualElements) {
+        window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+      }
+    }
+  }
+
   function formatDropdownMenus() {
     var menu = document.getElementById('nav-desktop-menu');
     if (!menu) return;
@@ -97,6 +128,8 @@
     navDrawerClose = document.getElementById('nav-drawer-close');
 
     ensureDesktopMenu();
+    sanitizeLegacyMenu();
+    ensureCategoryTabs();
     syncDrawerMenu();
     syncDrawerLogo();
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T02:31:19.819Z -->
+<!-- Compiled at: 2026-09-13T02:40:47.751Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -2017,26 +2017,40 @@ a:hover {
   display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
 }
 #main-in-feed-section.in-feed-active {
-  display: block;
-}
-
 /* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
 #main-pre-pagination-section {
   width: 100%;
-  margin-top: 2.25rem;
+  margin-top: 0;
   margin-bottom: 1.75rem;
-  padding-top: 1.5rem;
-  border-top: var(--stroke-hairline) dashed var(--border-color);
+  padding-top: 0;
+  border-top: none;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+.main-content > .section {
+  margin-top: 0;
+}
+.main-content > .section:first-child,
+.main-content > .section:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
 #main-above-feed:empty,
 #main-in-feed-section:empty,
-#main-pre-pagination-section:empty {
+#main-pre-pagination-section:empty,
+body.view-single #main-above-feed,
+body.view-not-homepage #main-above-feed {
   display: none !important;
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
+  height: 0 !important;
 }
 
 /* Khi vào trang đọc bài chi tiết (Single Post) hoặc Lưu Trữ: Ẩn các vùng widget trang chủ */
@@ -5504,6 +5518,37 @@ body.view-not-homepage #main-above-feed {
     }
   }
 
+  function sanitizeLegacyMenu() {
+    var menu = document.querySelector('.nav-menu');
+    if (menu) {
+      var text = menu.textContent;
+      if (text.includes('Disclaimer') || text.includes('Privacy') || text.includes('Faq') || text.includes('Term')) {
+        menu.innerHTML = '<li><a class="active" href="/" id="nav-home-btn" data-bilingual="true">Trang Chủ | Home</a></li>' +
+          '<li><a href="/p/muc-luc.html" id="nav-timeline-btn" data-bilingual="true">Dòng Thời Gian | Timeline</a></li>';
+        if (window.applyBilingualElements) {
+          window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+        }
+      }
+    }
+  }
+
+  function ensureCategoryTabs() {
+    var catSection = document.getElementById('category-tabs-section');
+    if (catSection && (!catSection.children.length || !catSection.querySelector('.category-tabs-bar, .tab-pill'))) {
+      catSection.innerHTML = '<nav class="category-tabs-bar" id="category-tabs-bar" aria-label="Lọc theo chủ đề">' +
+        '<a class="tab-pill active" href="/" data-bilingual="true">✦ Tất cả | All</a>' +
+        '<a class="tab-pill" href="/search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>' +
+        '<a class="tab-pill" href="/search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>' +
+        '<a class="tab-pill" href="/search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>' +
+        '<a class="tab-pill" href="/search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>' +
+        '<a class="tab-pill" href="/search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI" data-bilingual="true">Công Nghệ &amp; AI | Tech &amp; AI</a>' +
+      '</nav>';
+      if (window.applyBilingualElements) {
+        window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+      }
+    }
+  }
+
   function formatDropdownMenus() {
     var menu = document.getElementById('nav-desktop-menu');
     if (!menu) return;
@@ -5556,6 +5601,8 @@ body.view-not-homepage #main-above-feed {
     navDrawerClose = document.getElementById('nav-drawer-close');
 
     ensureDesktopMenu();
+    sanitizeLegacyMenu();
+    ensureCategoryTabs();
     syncDrawerMenu();
     syncDrawerLogo();
 
