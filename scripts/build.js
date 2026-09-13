@@ -123,11 +123,9 @@ ${darkModeJs}
   //]]>
   </script>
 
-  <!-- Blogger Theme Designer Variables + Styles -->
+  <!-- Blogger Theme Designer Variables -->
   <b:skin><![CDATA[
 ${bSkinVariables}
-
-${combinedCss}
 
 /* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
 :root {
@@ -141,6 +139,13 @@ ${combinedCss}
   --font-main: $(font.family);
 }
   ]]></b:skin>
+
+  <!-- Complete Core Theme Stylesheet (Served 100% Intact by Blogger) -->
+  <style>
+  /*<![CDATA[*/
+${combinedCss}
+  /*]]>*/
+  </style>
 
   <!-- SEO Schema.org JSON-LD -->
   <b:if cond='data:view.isHomepage'>
@@ -290,11 +295,11 @@ ${combinedCss}
 
         <!-- Desktop Navigation (Single Source of Truth) -->
         <b:section id='nav-menu-section' name='Menu Điều Hướng Chính' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='LinkList1' type='LinkList' version='2'>
+          <b:widget id='LinkList1' type='LinkList' version='2' title='Menu Điều Hướng Chính'>
             <b:includable id='main'>
               <nav class='nav-menu-wrapper' aria-label='Menu chính'>
                 <ul class='nav-menu'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='link'>
                       <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
                         <li class='has-dropdown'>
@@ -308,11 +313,19 @@ ${combinedCss}
                       </b:if>
                     </b:loop>
                   <b:else/>
-                    <!-- Fallback mặc định khi blog chưa cấu hình LinkList1 -->
-                    <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
-                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
-                    <li><a href='#category-tabs-section' data-bilingual='true'>Chủ Đề | Topics</a></li>
-                    <li><a href='#profile-cover-section' data-bilingual='true'>Về Tác Giả | About</a></li>
+                    <!-- Menu chuẩn 100% giống preview.html khi chưa cấu hình LinkList1 -->
+                    <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
+                    <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn"' data-category='Góc Nhìn' data-bilingual='true'>Góc Nhìn | Perspectives</a></li>
+                    <li class='has-dropdown'>
+                      <a href='#' data-bilingual='true'>Chuyên Mục | Categories</a>
+                      <ul class='dropdown-menu'>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-category='Trải Nghiệm Sống' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-category='Sách &amp; Công Cụ' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-category='Phát Triển Bản Thân' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a></li>
+                      </ul>
+                    </li>
+                    <li><a href='#footer' data-bilingual='true'>Về Tôi | About Me</a></li>
                   </b:if>
                 </ul>
               </nav>
@@ -326,6 +339,16 @@ ${combinedCss}
           <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
           <!-- Dark Mode Toggle -->
           <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Multi-language Switcher -->
+          <div class='lang-dropdown-wrapper'>
+            <button class='lang-dropdown-toggle' id='lang-toggle-btn' aria-haspopup='true' aria-expanded='false' onclick='document.getElementById(&quot;lang-dropdown-menu&quot;).classList.toggle(&quot;show&quot;)'>
+              <span class='lang-flag' id='current-lang-flag'>🇻🇳</span> <span class='lang-text' id='current-lang-text'>VI</span> <span class='dropdown-arrow'>▼</span>
+            </button>
+            <ul class='lang-dropdown-menu' id='lang-dropdown-menu'>
+              <li><button class='lang-option' onclick='setLanguage(&quot;vi&quot;)'><span class='lang-flag'>🇻🇳</span> Tiếng Việt</button></li>
+              <li><button class='lang-option' onclick='setLanguage(&quot;en&quot;)'><span class='lang-flag'>🇬🇧</span> English</button></li>
+            </ul>
+          </div>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
             <span/>
@@ -369,7 +392,7 @@ ${combinedCss}
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
             <div class='cover-image-wrapper' id='cover-image-wrapper'
-                 style='background-image: url(&apos;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&apos;);'>
+                 style='min-height: 240px; background-image: url(https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80); background-size: cover; background-position: center;'>
             </div>
             <div class='cover-info-card'>
               <div class='avatar-wrapper'>
@@ -383,7 +406,7 @@ ${combinedCss}
                 <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
               <div class='profile-cta-area'>
-                <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+                <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>
               </div>
             </div>
             <b:if cond='data:content'>
@@ -396,11 +419,11 @@ ${combinedCss}
 
     <!-- Dynamic Category Tabs (Visible Across Pages) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='Label1' type='Label' version='2'>
+      <b:widget id='Label1' type='Label' version='2' title='Thanh Chủ Đề (Tabs)'>
         <b:includable id='main'>
-          <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả</a>
-            <b:if cond='data:labels.notEmpty'>
+          <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+            <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
                 <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
                 <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
@@ -408,11 +431,12 @@ ${combinedCss}
                 </b:if>
               </b:loop>
             <b:else/>
-              <!-- Fallback khi blog mới chưa gắn nhãn -->
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Phong Cách Sống</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Chiêm Nghiệm</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Công Nghệ &amp; AI</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Sách &amp; Góc Nhìn</a>
+              <!-- Fallback chuẩn 100% giống preview.html khi blog mới chưa gắn nhãn -->
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
             </b:if>
           </nav>
         </b:includable>
@@ -470,13 +494,13 @@ ${combinedCss}
                     <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                     <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:aiLabels.notEmpty'>
+                      <b:if cond='data:aiLabels and not data:aiLabels.empty'>
                         <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
                       </b:if>
                       <div class='post-card-body'>
                         <div>
                           <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                            <b:if cond='data:normalLabels.notEmpty'>
+                            <b:if cond='data:normalLabels and not data:normalLabels.empty'>
                               <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
                             </b:if>
                           </b:with>
@@ -542,7 +566,7 @@ ${combinedCss}
                   <b:loop values='data:posts' var='post'>
                   <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                    <b:if cond='data:aiLabels.notEmpty'>
+                    <b:if cond='data:aiLabels and not data:aiLabels.empty'>
                       <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
                     </b:if>
 
@@ -551,7 +575,7 @@ ${combinedCss}
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
                       <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                        <b:if cond='data:normalLabels.notEmpty'>
+                        <b:if cond='data:normalLabels and not data:normalLabels.empty'>
                           <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
                           <span class='separator'>›</span>
                         </b:if>
@@ -913,7 +937,7 @@ ${combinedCss}
             <b:includable id='main'>
               <div class='sidebar-widget'>
                 <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
-                <b:if cond='data:posts.notEmpty'>
+                <b:if cond='data:posts and not data:posts.empty'>
                   <ul class='popular-posts-list'>
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
                       <li>
@@ -1028,7 +1052,7 @@ ${combinedCss}
               <div class='footer-col-legal'>
                 <h4 class='footer-col-title'><b:eval expr='data:title ? data:title : &quot;⚖️ Chính Sách &amp; Minh Bạch&quot;'/></h4>
                 <ul class='footer-links'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='llink'>
                       <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
                     </b:loop>
@@ -1066,7 +1090,7 @@ ${combinedCss}
             <b:includable id='main'>
               <div class='footer-col-social'>
                 <div class='footer-social-grid'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='slink'>
                       <a class='footer-social-icon'
                          expr:href='data:slink.target'
@@ -1117,7 +1141,7 @@ ${combinedCss}
               <b:includable id='main'>
                 <nav aria-label='Footer navigation'>
                   <ul class='footer-bottom-nav'>
-                    <b:if cond='data:links.notEmpty'>
+                    <b:if cond='data:links and not data:links.empty'>
                       <b:loop values='data:links' var='bmlink'>
                         <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
                       </b:loop>

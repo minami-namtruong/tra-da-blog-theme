@@ -10,7 +10,47 @@
   var navDrawerBackdrop = null;
   var navDrawerClose = null;
 
+  function ensureDesktopMenu() {
+    var navWrapper = document.querySelector('.nav-menu-wrapper');
+    var navMenu = document.querySelector('.nav-menu');
+    if (!navMenu || !navMenu.children.length) {
+      var headerInner = document.querySelector('.site-header .header-inner');
+      if (headerInner) {
+        if (!navWrapper) {
+          navWrapper = document.createElement('nav');
+          navWrapper.className = 'nav-menu-wrapper';
+          navWrapper.setAttribute('aria-label', 'Menu chính');
+          var headerActions = document.querySelector('.site-header .header-actions');
+          if (headerActions) {
+            headerInner.insertBefore(navWrapper, headerActions);
+          } else {
+            headerInner.appendChild(navWrapper);
+          }
+        }
+        navWrapper.innerHTML = '<ul class="nav-menu">' +
+          '<li><a class="active" href="/" data-bilingual="true">Trang Chủ | Home</a></li>' +
+          '<li><a href="/p/muc-luc.html" data-bilingual="true">Dòng Thời Gian | Timeline</a></li>' +
+          '<li><a href="/search/label/G%C3%B3c%20Nh%C3%ACn" data-bilingual="true">Góc Nhìn | Perspectives</a></li>' +
+          '<li class="has-dropdown">' +
+            '<a href="#" data-bilingual="true">Chuyên Mục | Categories</a>' +
+            '<ul class="dropdown-menu">' +
+              '<li><a href="/search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a></li>' +
+              '<li><a href="/search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a></li>' +
+              '<li><a href="/search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n" data-bilingual="true">Phát Triển Bản Thân | Self Development</a></li>' +
+            '</ul>' +
+          '</li>' +
+          '<li><a href="#footer" data-bilingual="true">Về Tôi | About Me</a></li>' +
+        '</ul>';
+        // Kích hoạt dịch song ngữ cho menu vừa tạo nếu bilingual.js đã tải
+        if (window.applyBilingualElements) {
+          window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+        }
+      }
+    }
+  }
+
   function syncDrawerMenu() {
+    ensureDesktopMenu();
     var desktopMenu = document.querySelector('.nav-menu');
     var drawerMenu = document.querySelector('.nav-drawer-menu');
     if (desktopMenu && drawerMenu && !drawerMenu.children.length) {
@@ -32,6 +72,7 @@
     navDrawerBackdrop = document.getElementById('nav-drawer-backdrop');
     navDrawerClose = document.getElementById('nav-drawer-close');
 
+    ensureDesktopMenu();
     syncDrawerMenu();
     syncDrawerLogo();
 

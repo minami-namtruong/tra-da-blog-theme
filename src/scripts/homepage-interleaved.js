@@ -148,6 +148,14 @@
       }
     }
 
+    // Đảm bảo Banner và Avatar luôn luôn có ảnh hiển thị (Zero Blank Banner)
+    if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
+      coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
+    }
+    if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined'))) {
+      avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+    }
+
     // 3. Đọc cấu hình tùy chỉnh từ ô Content của widget HTML1
     const configEl = document.getElementById('profile-custom-config');
     if (!configEl) return;
@@ -161,10 +169,13 @@
       return;
     }
 
-    // Nếu người dùng chèn ảnh đại diện qua nút "Chèn hình ảnh" của Blogger trong ô Content
-    const inlineImg = configEl.querySelector('img');
-    if (inlineImg && inlineImg.src && avatarImg) {
-      avatarImg.src = inlineImg.src;
+    // Nếu người dùng chèn ảnh qua nút "Chèn hình ảnh" của Blogger trong ô Content
+    const inlineImgs = configEl.querySelectorAll('img');
+    if (inlineImgs.length === 1) {
+      if (inlineImgs[0].src && avatarImg) avatarImg.src = inlineImgs[0].src;
+    } else if (inlineImgs.length >= 2) {
+      if (inlineImgs[0].src) coverWrapper.style.backgroundImage = `url("${inlineImgs[0].src}")`;
+      if (inlineImgs[1].src && avatarImg) avatarImg.src = inlineImgs[1].src;
     }
 
     const rawContent = configEl.innerHTML.trim();
