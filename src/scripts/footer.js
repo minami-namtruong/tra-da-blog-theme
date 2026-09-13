@@ -68,8 +68,8 @@
         bottomNavSection.innerHTML = '<nav aria-label="Footer navigation">' +
           '<ul class="footer-bottom-nav">' +
             '<li><a href="/" data-bilingual="true">Trang Chủ | Home</a></li>' +
-            '<li><a href="/p/muc-luc.html" data-bilingual="true">Mục Lục | Archive</a></li>' +
-            '<li><a href="/feeds/posts/default" target="_blank">RSS Feed</a></li>' +
+            '<li><a href="#profile-cover-section" data-bilingual="true">Về Tôi | About Me</a></li>' +
+            '<li><a href="/p/lien-he.html" data-bilingual="true">Liên Hệ | Contact</a></li>' +
           '</ul>' +
         '</nav>';
       }
