@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T02:02:21.106Z -->
+<!-- Compiled at: 2026-09-13T02:19:22.801Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -5397,11 +5397,13 @@ body.view-not-homepage #main-above-feed {
           <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
             <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
               <b:includable id='main'>
-                <b:if cond='data:content'>
-                  <span class='footer-copyright'><data:content/></span>
-                <b:else/>
-                  <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
-                </b:if>
+                <span class='footer-copyright'>
+                  <b:if cond='data:content'>
+                    <data:content/>
+                  <b:else/>
+                    © 2026 <data:blog.title/>. <span data-i18n='copyrightSuffix'>Tất cả quyền được bảo lưu.</span>
+                  </b:if>
+                </span>
               </b:includable>
             </b:widget>
           </b:section>
@@ -6563,7 +6565,7 @@ body.view-not-homepage #main-above-feed {
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
     // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs (spec §4.2.A)
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a'
+      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a'
     );
   
     targets.forEach(el => {
