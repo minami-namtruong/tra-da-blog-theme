@@ -449,7 +449,7 @@ ${combinedCss}
 
         <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
              Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
-        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' showaddelement='yes'>
+        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' maxwidgets='1' showaddelement='yes'>
           <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
@@ -1070,7 +1070,7 @@ ${combinedCss}
         </b:section>
 
         <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI (Cấu hình qua Bố cục) ── -->
-        <b:section id='footer-col3-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng XÃ Hội)' maxwidgets='2' showaddelement='yes'>
+        <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng Xã Hội)' maxwidgets='2' showaddelement='yes'>
           <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer)'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
