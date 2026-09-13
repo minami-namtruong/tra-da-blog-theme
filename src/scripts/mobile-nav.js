@@ -19,12 +19,18 @@
         if (!navWrapper) {
           navWrapper = document.createElement('nav');
           navWrapper.className = 'nav-menu-wrapper';
+          navWrapper.id = 'nav-menu-wrapper';
           navWrapper.setAttribute('aria-label', 'Menu chính');
-          var headerActions = document.querySelector('.site-header .header-actions');
-          if (headerActions) {
-            headerInner.insertBefore(navWrapper, headerActions);
+          var logoSection = document.querySelector('.site-header .brand-logo-section, .site-header .brand-logo');
+          if (logoSection && logoSection.nextSibling) {
+            headerInner.insertBefore(navWrapper, logoSection.nextSibling);
           } else {
-            headerInner.appendChild(navWrapper);
+            var headerActions = document.querySelector('.site-header .header-actions');
+            if (headerActions) {
+              headerInner.insertBefore(navWrapper, headerActions);
+            } else {
+              headerInner.appendChild(navWrapper);
+            }
           }
         }
         navWrapper.innerHTML = '<ul class="nav-menu">' +

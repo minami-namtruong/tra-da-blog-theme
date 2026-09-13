@@ -221,11 +221,94 @@
     }
   }
 
+  function showToast(msg) {
+    var toast = document.getElementById('theme-toast-notification');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'theme-toast-notification';
+      toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#0f172a;color:#fff;padding:0.85rem 1.4rem;border-radius:999px;font-size:0.92rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:99999;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:0.5rem;border:1px solid rgba(255,255,255,0.15);';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.transform = 'translateY(0)';
+    toast.style.opacity = '1';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function() {
+      toast.style.transform = 'translateY(20px)';
+      toast.style.opacity = '0';
+    }, 3500);
+  }
+
+  function initNewsletterActions() {
+    // 1. Cuộn mượt tới khung đăng ký bản tin khi bấm nút "Nhận Bản Tin"
+    document.querySelectorAll('a[href="#newsletter"], .btn-subscribe').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById('newsletter') || document.querySelector('.pre-pagination-newsletter, .sidebar-widget, .footer-col-newsletter');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          var input = target.querySelector('input[type="email"]');
+          if (input) {
+            setTimeout(function() {
+              input.focus();
+              input.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.4)';
+              setTimeout(function() { input.style.boxShadow = ''; }, 1600);
+            }, 500);
+          }
+        }
+      });
+    });
+
+    // 2. Xử lý sự kiện đăng ký bản tin (ở cả Feed, Sidebar và Footer)
+    var forms = document.querySelectorAll('.pre-pagination-newsletter-form, .sidebar-newsletter-form, .newsletter-form');
+    forms.forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var input = form.querySelector('input[type="email"]');
+        var btn = form.querySelector('button[type="submit"], .pre-pagination-newsletter-btn, .sidebar-submit-btn, .btn-submit');
+        if (!input) return;
+
+        var email = input.value.trim();
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          input.style.borderColor = '#ef4444';
+          input.focus();
+          showToast('⚠️ Vui lòng nhập địa chỉ email hợp lệ!');
+          setTimeout(function() { input.style.borderColor = ''; }, 2500);
+          return;
+        }
+
+        // Trạng thái thành công
+        var origText = btn ? btn.innerHTML : '';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '✓ Đã Đăng Ký!';
+          btn.style.backgroundColor = '#10b981';
+          btn.style.borderColor = '#10b981';
+          btn.style.color = '#ffffff';
+        }
+        input.value = '';
+        showToast('🎉 Cảm ơn bạn! Đã ghi nhận email đăng ký bản tin thành công.');
+
+        setTimeout(function() {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = origText;
+            btn.style.backgroundColor = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }
+        }, 4000);
+      });
+    });
+  }
+
   function initHomepageInterleavedWidgets() {
     initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();
+    initNewsletterActions();
   }
 
   // Khởi chạy khi DOM sẵn sàng
