@@ -752,6 +752,8 @@
   display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
 }
 #main-in-feed-section.in-feed-active {
+  display: block;
+}
 /* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
 #main-pre-pagination-section {
   width: 100%;

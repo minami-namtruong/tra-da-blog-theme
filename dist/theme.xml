@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T02:40:47.751Z -->
+<!-- Compiled at: 2026-09-13T02:48:27.741Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -2017,6 +2017,8 @@ a:hover {
   display: none; /* Mặc định ẩn, JS kích hoạt khi chèn đúng vị trí */
 }
 #main-in-feed-section.in-feed-active {
+  display: block;
+}
 /* Tầng 3: Khoảng cách của vùng Kết Luồng Bài Viết (Trên nút phân trang) */
 #main-pre-pagination-section {
   width: 100%;
