@@ -68,21 +68,43 @@
       var bodySourceEl = card.querySelector('.post-body-snippet-source');
       var rawBodyText = '';
       if (bodySourceEl) {
-        rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+        var viEl = bodySourceEl.querySelector('[data-lang="vi"]');
+        var enEl = bodySourceEl.querySelector('[data-lang="en"]');
+        
+        // Cắt gọn một đoạn text (tối đa 140 ký tự)
+        function truncateText(txt) {
+          if (!txt) return '';
+          txt = txt.replace(/\s+/g, ' ').trim();
+          if (txt.length <= 140) return txt;
+          var cut = txt.lastIndexOf(' ', 140);
+          return txt.substring(0, cut === -1 ? 140 : cut) + '...';
+        }
+
+        if (viEl && enEl) {
+          // Xử lý song ngữ dùng data-lang
+          var viText = truncateText(viEl.textContent || viEl.innerText);
+          var enText = truncateText(enEl.textContent || enEl.innerText);
+          rawBodyText = viText + ' | ' + enText;
+        } else {
+          // Xử lý text thông thường hoặc dùng cú pháp "|" truyền thống
+          rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+          if (rawBodyText.indexOf('|') === -1) {
+             rawBodyText = truncateText(rawBodyText);
+          }
+        }
       }
 
-      if (snippetEl) {
-        var currentSnippet = snippetEl.textContent.trim();
-        if (!currentSnippet && rawBodyText) {
-          var maxLength = 160;
-          if (rawBodyText.length > maxLength) {
-            var cutIndex = rawBodyText.lastIndexOf(' ', maxLength);
-            if (cutIndex === -1 || cutIndex < 100) cutIndex = maxLength;
-            currentSnippet = rawBodyText.substring(0, cutIndex) + '...';
-          } else {
-            currentSnippet = rawBodyText;
-          }
-          snippetEl.textContent = currentSnippet;
+      // Luôn ghi đè snippet bằng rawBodyText (vì data:post.snippet của Blogger hay bị cụt chữ và làm hỏng cú pháp song ngữ)
+      if (snippetEl && rawBodyText) {
+        snippetEl.textContent = rawBodyText;
+        snippetEl.setAttribute('data-bilingual', 'true');
+        snippetEl.setAttribute('data-raw-label', rawBodyText);
+        var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        if (window.parseBilingualText) {
+          snippetEl.textContent = window.parseBilingualText(rawBodyText, currentLang);
+        } else {
+          var parts = rawBodyText.split('|');
+          snippetEl.textContent = currentLang === 'en' && parts.length > 1 ? parts[1].trim() : parts[0].trim();
         }
       }
 

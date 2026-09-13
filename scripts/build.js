@@ -416,9 +416,11 @@ ${combinedCss}
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
             <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
-                <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
-                  <data:label.name/>
-                </a>
+                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot;)'>
+                  <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                    <data:label.name/>
+                  </a>
+                </b:if>
               </b:loop>
             </b:if>
           </nav>
@@ -470,45 +472,53 @@ ${combinedCss}
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <div class='post-card-body'>
-                        <div>
-                          <b:if cond='data:post.labels and not data:post.labels.empty'>
-                            <span class='post-labels-raw' style='display:none;'>
-                              <b:loop values='data:post.labels' var='lbl'>
-                                <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
-                              </b:loop>
-                            </span>
-                            <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                          </b:if>
-                          <h2 class='post-card-title' itemprop='headline'>
-                            <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
-                          </h2>
-                          <div class='post-card-snippet'>
-                            <b:if cond='data:post.snippet and not data:post.snippet.empty'>
-                              <data:post.snippet/>
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;))' var='displayLabels'>
+                      <b:with value='data:post.labels and not data:post.labels.empty and data:displayLabels.empty' var='isExclusiveFeaturePost'>
+                        <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
+                          <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                            <div class='post-card-body'>
+                              <div>
+                                <b:if cond='data:post.labels and not data:post.labels.empty'>
+                                  <span class='post-labels-raw' style='display:none;'>
+                                    <b:loop values='data:post.labels' var='lbl'>
+                                      <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                                    </b:loop>
+                                  </span>
+                                  <b:if cond='data:displayLabels and not data:displayLabels.empty'>
+                                    <a class='post-badge' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
+                                  </b:if>
+                                </b:if>
+                                <h2 class='post-card-title' itemprop='headline'>
+                                  <a expr:href='data:post.url' itemprop='url' data-bilingual='true'><data:post.title/></a>
+                                </h2>
+                                <div class='post-card-snippet' data-bilingual='true'>
+                                  <b:if cond='data:post.snippet and not data:post.snippet.empty'>
+                                    <data:post.snippet/>
+                                  </b:if>
+                                </div>
+                                <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
+                                <div class='post-body-snippet-source' style='display:none;'>
+                                  <data:post.body/>
+                                </div>
+                              </div>
+                              <div class='post-card-meta'>
+                                <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
+                                <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
+                              </div>
+                            </div>
+                            <b:if cond='data:post.featuredImage'>
+                              <b:if cond='data:idx == 0'>
+                                <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                                     width='220' height='150' fetchpriority='high' decoding='async'/>
+                              <b:else/>
+                                <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                                     width='220' height='150' loading='lazy' decoding='async'/>
+                              </b:if>
                             </b:if>
-                          </div>
-                          <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
-                          <div class='post-body-snippet-source' style='display:none;'>
-                            <data:post.body/>
-                          </div>
-                        </div>
-                        <div class='post-card-meta'>
-                          <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
-                          <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
-                        </div>
-                      </div>
-                      <b:if cond='data:post.featuredImage'>
-                        <b:if cond='data:idx == 0'>
-                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
-                               width='220' height='150' fetchpriority='high' decoding='async'/>
-                        <b:else/>
-                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
-                               width='220' height='150' loading='lazy' decoding='async'/>
+                          </article>
                         </b:if>
-                      </b:if>
-                    </article>
+                      </b:with>
+                    </b:with>
                   </b:loop>
                 </div>
 
@@ -525,7 +535,7 @@ ${combinedCss}
               <!-- ── STATIC PAGE OR SINGLE POST VIEW ── -->
               <b:else/>
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
-                <b:if cond='data:view.isPage and (data:view.url.path == "/p/muc-luc.html" or data:view.url.path == "/p/archive.html")'>
+                <b:if cond='data:view.isPage and (data:blog.url contains &quot;/p/muc-luc.html&quot; or data:blog.url contains &quot;/p/archive.html&quot; or data:blog.url contains &quot;/p/dong-thoi-gian.html&quot; or data:blog.pageName == &quot;Dòng Thời Gian&quot; or data:blog.pageName == &quot;Mục Lục&quot;)'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
                     <!-- Thanh Tìm Kiếm Tức Thì -->
                     <div class='archive-search-wrap'>
@@ -560,14 +570,18 @@ ${combinedCss}
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
                       <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <a class='breadcrumb-category-link' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                        <span class='separator'>›</span>
+                        <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;))' var='displayLabels'>
+                          <b:if cond='data:displayLabels and not data:displayLabels.empty'>
+                            <a class='breadcrumb-category-link' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
+                            <span class='separator'>›</span>
+                          </b:if>
+                        </b:with>
                       </b:if>
-                      <span><data:post.title/></span>
+                      <span data-bilingual='true'><data:post.title/></span>
                     </nav>
 
                     <!-- Post H1 Title -->
-                    <h1 class='single-post-title' itemprop='headline'><data:post.title/></h1>
+                    <h1 class='single-post-title' itemprop='headline' data-bilingual='true'><data:post.title/></h1>
 
                     <!-- Post Meta Row -->
                     <div class='post-meta-header'>
@@ -798,7 +812,7 @@ ${combinedCss}
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
           <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-bai-viet-noi-bat'
                      data-pattern='ranked'
@@ -815,7 +829,6 @@ ${combinedCss}
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -823,7 +836,7 @@ ${combinedCss}
           <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
           <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-chiem-nghiem'
                      data-pattern='quote'
@@ -839,7 +852,6 @@ ${combinedCss}
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -847,7 +859,7 @@ ${combinedCss}
           <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
           <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-diem-tin'
                      data-pattern='digest'
@@ -864,7 +876,6 @@ ${combinedCss}
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -872,7 +883,7 @@ ${combinedCss}
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
           <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-tieu-diem'
                      data-pattern='spotlight'
@@ -888,7 +899,6 @@ ${combinedCss}
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 

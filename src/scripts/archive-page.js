@@ -58,8 +58,10 @@
       Boolean(container) ||
       pathname.endsWith('/p/muc-luc.html') ||
       pathname.endsWith('/p/archive.html') ||
+      pathname.endsWith('/p/dong-thoi-gian.html') ||
       href.indexOf('/p/muc-luc.html') !== -1 ||
       href.indexOf('/p/archive.html') !== -1 ||
+      href.indexOf('/p/dong-thoi-gian.html') !== -1 ||
       window.location.hash === '#archive'
     );
   }
@@ -96,6 +98,15 @@
         })
         .then(function (data) {
           var entries = (data.feed && data.feed.entry) || [];
+          if (entries.length === 0) {
+            var container = document.getElementById('archive-app-body');
+            if (container) {
+              container.innerHTML = '<div style="padding:2rem;color:orange;border:1px solid orange;background:#fffaf0;margin-bottom:1rem;border-radius:8px;">' +
+                '<strong>[Cảnh Báo] API tải thành công nhưng mảng bài viết (entries) bị rỗng!</strong><br><br>' +
+                'Vui lòng kiểm tra lại xem có bài viết nào được XUẤT BẢN chưa, hoặc Feed có đang bị giới hạn không.' +
+                '</div>';
+            }
+          }
           var posts = [];
           entries.forEach(function (entry) {
             var allLabels = [];
@@ -161,6 +172,14 @@
         })
         .catch(function (err) {
           console.warn('[Archive] Feed fetch failed, using fallback:', err);
+          var container = document.getElementById('archive-app-body');
+          if (container) {
+            container.innerHTML = '<div style="padding:2rem;color:red;border:1px solid red;background:#fff5f5;margin-bottom:1rem;border-radius:8px;">' +
+              '<strong>[Lỗi Kỹ Thuật] Không thể tải dữ liệu bài viết (Feed API Failed)</strong><br><br>' +
+              'Chi tiết lỗi: <code>' + err.toString() + '</code><br><br>' +
+              'Vui lòng chụp ảnh màn hình khung đỏ này và gửi cho kỹ thuật viên.' +
+              '</div>';
+          }
           useFallbackData(callback);
         });
     } else {
@@ -375,8 +394,8 @@
       body.innerHTML = [
         '<div class="archive-empty-state">',
         '  <div class="archive-empty-icon">🔍</div>',
-        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào phù hợp</h3>',
-        '  <p class="archive-empty-desc">Thử tìm kiếm với từ khóa khác hoặc bấm để xem toàn bộ bài viết.</p>',
+        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào</h3>',
+        '  <p class="archive-empty-desc">Nếu bạn đã đăng bài mà vẫn thấy thông báo này, vui lòng vào <strong>Cài đặt Blogger &gt; Nguồn cấp dữ liệu trang web (Site feed) &gt; Cho phép nguồn cấp dữ liệu blog</strong> và chọn <strong>Đầy đủ (Full)</strong>.</p>',
         '  <button type="button" class="archive-btn-reset" id="archive-reset-btn">↺ Xem tất cả bài viết</button>',
         '</div>'
       ].join('');
@@ -428,10 +447,15 @@
       group.posts.forEach(function (post) {
         var aiAttr = post.aiType ? ' data-ai-type="' + post.aiType + '"' : '';
         html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '"' + aiAttr + '>';
+        var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        var rawCat = post.category || 'Góc Nhìn';
+        var parsedCat = window.parseBilingualText ? window.parseBilingualText(rawCat, lang) : rawCat.split('|')[0].trim();
+        var parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+
         // Cột 1: Chuyên mục
-        html += '  <span class="archive-post-cat-pill">' + escapeHtml(post.category || 'Góc Nhìn') + '</span>';
+        html += '  <span class="archive-post-cat-pill" data-bilingual="true" data-raw-label="' + escapeHtml(rawCat) + '">' + escapeHtml(parsedCat) + '</span>';
         // Cột 2: Tiêu đề
-        html += '  <span class="archive-post-card-title">' + escapeHtml(post.title) + '</span>';
+        html += '  <span class="archive-post-card-title" data-bilingual="true" data-raw-label="' + escapeHtml(post.title) + '">' + escapeHtml(parsedTitle) + '</span>';
         // Cột 2b: AI Micro Badge (nếu có nhãn AI)
         if (post.aiType && window.AITransparency) {
           var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';

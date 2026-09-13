@@ -313,15 +313,17 @@
      WIDGET SHELL — Header + Body
      ═══════════════════════════════════════════════════════════════ */
   function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const cleanTitle = title ? escapeHtml(title) : '';
-    const viewAllUrl = rawLabels
-      ? buildLabelUrl(splitLabels(rawLabels)[0])
-      : '/';
+    const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
+    
+    const viewAllUrl = rawLabels.length > 0 ? ('/search/label/' + encodeURIComponent(rawLabels[0])) : '/search';
+    const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header">
-        <h3 class="sp-widget-title">${cleanTitle}</h3>
-        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link">${escapeHtml(viewAllText)}</a>
+        <h3 class="sp-widget-title" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</h3>
+        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>
       </div>` : '';
 
     return `
@@ -355,12 +357,14 @@
       const aiType  = extractAIType(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
+      const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+
       return `
         <a href="${escapeHtml(post.url)}" class="sp-ranked-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <span class="sp-rank-number">${rankNum}</span>
           ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
           <div class="sp-ranked-content">
-            <h4 class="sp-ranked-title">${escapeHtml(post.title)}</h4>
+            <h4 class="sp-ranked-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h4>
             <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}${aiHtml}</span>
           </div>
         </a>`;
@@ -383,17 +387,21 @@
     const aiType = extractAIType(post.labels || []);
     const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
+    const parsedBadge = window.parseBilingualText ? window.parseBilingualText(badge, lang) : badge.split('|')[0].trim();
+    const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+    const parsedSnippet = (post.snippet && window.parseBilingualText) ? window.parseBilingualText(post.snippet, lang) : (post.snippet || '').split('|')[0].trim();
+
     return `
       <a href="${escapeHtml(post.url)}" class="sp-spotlight-card"${aiType ? ` data-ai-type="${aiType}"` : ''}>
         ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
         <div class="sp-spotlight-info">
           <div class="sp-spotlight-meta">
-            ${badge ? `<span class="sp-spotlight-badge">${escapeHtml(badge)}</span>` : ''}
+            ${badge ? `<span class="sp-spotlight-badge" data-bilingual="true" data-raw-label="${escapeHtml(badge)}">${escapeHtml(parsedBadge)}</span>` : ''}
             <span class="sp-spotlight-date">📅 ${escapeHtml(post.dateFormatted)}</span>
             ${aiHtml}
           </div>
-          <h3 class="sp-spotlight-title">${escapeHtml(post.title)}</h3>
-          ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet">${escapeHtml(post.snippet)}</p>` : ''}
+          <h3 class="sp-spotlight-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h3>
+          ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet" data-bilingual="true" data-raw-label="${escapeHtml(post.snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
         </div>
       </a>`;
@@ -401,18 +409,22 @@
 
   /* ── 3. QUOTE ───────────────────────────────────────────────── */
   function renderQuotePattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       // Lấy tiêu đề bài làm câu trích dẫn, snippet làm lời bình
       const quoteText = post.title;
       const snippet   = (opts.showSnippet && post.snippet) ? post.snippet : '';
+      
+      const parsedQuote = window.parseBilingualText ? window.parseBilingualText(quoteText, lang) : quoteText.split('|')[0].trim();
+      const parsedSnippet = (snippet && window.parseBilingualText) ? window.parseBilingualText(snippet, lang) : snippet.split('|')[0].trim();
 
       return `
         <a href="${escapeHtml(post.url)}" class="sp-quote-card">
           <span class="sp-quote-mark-open">\u201C</span>
-          <p class="sp-quote-text">${escapeHtml(quoteText)}</p>
+          <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(quoteText)}">${escapeHtml(parsedQuote)}</p>
           <span class="sp-quote-mark-close">\u201D</span>
           <div class="sp-quote-author">\u2014 ${escapeHtml(post.dateFormatted)}</div>
-          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet">${escapeHtml(snippet)}</p>` : ''}
+          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
         </a>`;
     }).join('');
@@ -428,14 +440,17 @@
       const aiType  = extractAIType(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
+      const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+      const parsedSnippet = (snippet && window.parseBilingualText) ? window.parseBilingualText(snippet, lang) : snippet.split('|')[0].trim();
+
       return `
         <a href="${escapeHtml(post.url)}" class="sp-digest-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <div class="sp-digest-timestamp">
             <span class="sp-digest-bullet">✦</span>
             ${escapeHtml(post.dateFormatted)}${aiHtml}
           </div>
-          <div class="sp-digest-title">${escapeHtml(post.title)}</div>
-          ${snippet ? `<div class="sp-digest-snippet">${escapeHtml(snippet)}</div>` : ''}
+          <div class="sp-digest-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</div>
+          ${snippet ? `<div class="sp-digest-snippet" data-bilingual="true" data-raw-label="${escapeHtml(snippet)}">${escapeHtml(parsedSnippet)}</div>` : ''}
         </a>`;
     }).join('');
 

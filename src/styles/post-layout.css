@@ -21,6 +21,7 @@
 }
 
 .post-card {
+  position: relative;
   background: var(--bg-card);
   border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -58,6 +59,8 @@
 }
 
 .post-badge {
+  position: relative;
+  z-index: 2;
   display: inline-block;
   font-size: 0.72rem;
   font-weight: 700;
@@ -76,6 +79,12 @@
   line-height: 1.4;
 }
 .post-card-title a { color: var(--text-main); text-decoration: none; }
+.post-card-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
 .post-card-title a:hover { color: var(--primary); }
 
 .post-card-snippet {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T03:16:28.289Z -->
+<!-- Compiled at: 2026-09-13T15:56:16.389Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -1286,6 +1286,7 @@ a:hover {
 }
 
 .post-card {
+  position: relative;
   background: var(--bg-card);
   border: var(--stroke-hairline) solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -1323,6 +1324,8 @@ a:hover {
 }
 
 .post-badge {
+  position: relative;
+  z-index: 2;
   display: inline-block;
   font-size: 0.72rem;
   font-weight: 700;
@@ -1341,6 +1344,12 @@ a:hover {
   line-height: 1.4;
 }
 .post-card-title a { color: var(--text-main); text-decoration: none; }
+.post-card-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
 .post-card-title a:hover { color: var(--primary); }
 
 .post-card-snippet {
@@ -4701,9 +4710,11 @@ body.view-not-homepage #main-above-feed {
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
             <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
-                <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
-                  <data:label.name/>
-                </a>
+                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot;)'>
+                  <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                    <data:label.name/>
+                  </a>
+                </b:if>
               </b:loop>
             </b:if>
           </nav>
@@ -4755,45 +4766,53 @@ body.view-not-homepage #main-above-feed {
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <div class='post-card-body'>
-                        <div>
-                          <b:if cond='data:post.labels and not data:post.labels.empty'>
-                            <span class='post-labels-raw' style='display:none;'>
-                              <b:loop values='data:post.labels' var='lbl'>
-                                <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
-                              </b:loop>
-                            </span>
-                            <a class='post-badge' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                          </b:if>
-                          <h2 class='post-card-title' itemprop='headline'>
-                            <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
-                          </h2>
-                          <div class='post-card-snippet'>
-                            <b:if cond='data:post.snippet and not data:post.snippet.empty'>
-                              <data:post.snippet/>
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;))' var='displayLabels'>
+                      <b:with value='data:post.labels and not data:post.labels.empty and data:displayLabels.empty' var='isExclusiveFeaturePost'>
+                        <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
+                          <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                            <div class='post-card-body'>
+                              <div>
+                                <b:if cond='data:post.labels and not data:post.labels.empty'>
+                                  <span class='post-labels-raw' style='display:none;'>
+                                    <b:loop values='data:post.labels' var='lbl'>
+                                      <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
+                                    </b:loop>
+                                  </span>
+                                  <b:if cond='data:displayLabels and not data:displayLabels.empty'>
+                                    <a class='post-badge' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
+                                  </b:if>
+                                </b:if>
+                                <h2 class='post-card-title' itemprop='headline'>
+                                  <a expr:href='data:post.url' itemprop='url' data-bilingual='true'><data:post.title/></a>
+                                </h2>
+                                <div class='post-card-snippet' data-bilingual='true'>
+                                  <b:if cond='data:post.snippet and not data:post.snippet.empty'>
+                                    <data:post.snippet/>
+                                  </b:if>
+                                </div>
+                                <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
+                                <div class='post-body-snippet-source' style='display:none;'>
+                                  <data:post.body/>
+                                </div>
+                              </div>
+                              <div class='post-card-meta'>
+                                <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
+                                <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
+                              </div>
+                            </div>
+                            <b:if cond='data:post.featuredImage'>
+                              <b:if cond='data:idx == 0'>
+                                <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                                     width='220' height='150' fetchpriority='high' decoding='async'/>
+                              <b:else/>
+                                <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
+                                     width='220' height='150' loading='lazy' decoding='async'/>
+                              </b:if>
                             </b:if>
-                          </div>
-                          <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
-                          <div class='post-body-snippet-source' style='display:none;'>
-                            <data:post.body/>
-                          </div>
-                        </div>
-                        <div class='post-card-meta'>
-                          <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
-                          <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
-                        </div>
-                      </div>
-                      <b:if cond='data:post.featuredImage'>
-                        <b:if cond='data:idx == 0'>
-                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
-                               width='220' height='150' fetchpriority='high' decoding='async'/>
-                        <b:else/>
-                          <img class='post-card-thumb' expr:src='data:post.featuredImage' expr:alt='data:post.title'
-                               width='220' height='150' loading='lazy' decoding='async'/>
+                          </article>
                         </b:if>
-                      </b:if>
-                    </article>
+                      </b:with>
+                    </b:with>
                   </b:loop>
                 </div>
 
@@ -4810,7 +4829,7 @@ body.view-not-homepage #main-above-feed {
               <!-- ── STATIC PAGE OR SINGLE POST VIEW ── -->
               <b:else/>
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
-                <b:if cond='data:view.isPage and (data:view.url.path == "/p/muc-luc.html" or data:view.url.path == "/p/archive.html")'>
+                <b:if cond='data:view.isPage and (data:blog.url contains &quot;/p/muc-luc.html&quot; or data:blog.url contains &quot;/p/archive.html&quot; or data:blog.url contains &quot;/p/dong-thoi-gian.html&quot; or data:blog.pageName == &quot;Dòng Thời Gian&quot; or data:blog.pageName == &quot;Mục Lục&quot;)'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
                     <!-- Thanh Tìm Kiếm Tức Thì -->
                     <div class='archive-search-wrap'>
@@ -4845,14 +4864,18 @@ body.view-not-homepage #main-above-feed {
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
                       <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <a class='breadcrumb-category-link' expr:href='data:post.labels.first.url' data-bilingual='true'><data:post.labels.first.name/></a>
-                        <span class='separator'>›</span>
+                        <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;))' var='displayLabels'>
+                          <b:if cond='data:displayLabels and not data:displayLabels.empty'>
+                            <a class='breadcrumb-category-link' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
+                            <span class='separator'>›</span>
+                          </b:if>
+                        </b:with>
                       </b:if>
-                      <span><data:post.title/></span>
+                      <span data-bilingual='true'><data:post.title/></span>
                     </nav>
 
                     <!-- Post H1 Title -->
-                    <h1 class='single-post-title' itemprop='headline'><data:post.title/></h1>
+                    <h1 class='single-post-title' itemprop='headline' data-bilingual='true'><data:post.title/></h1>
 
                     <!-- Post Meta Row -->
                     <div class='post-meta-header'>
@@ -5083,7 +5106,7 @@ body.view-not-homepage #main-above-feed {
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
           <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-bai-viet-noi-bat'
                      data-pattern='ranked'
@@ -5100,7 +5123,6 @@ body.view-not-homepage #main-above-feed {
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -5108,7 +5130,7 @@ body.view-not-homepage #main-above-feed {
           <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
           <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-chiem-nghiem'
                      data-pattern='quote'
@@ -5124,7 +5146,6 @@ body.view-not-homepage #main-above-feed {
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -5132,7 +5153,7 @@ body.view-not-homepage #main-above-feed {
           <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
           <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-diem-tin'
                      data-pattern='digest'
@@ -5149,7 +5170,6 @@ body.view-not-homepage #main-above-feed {
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -5157,7 +5177,7 @@ body.view-not-homepage #main-above-feed {
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
           <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
             <b:includable id='main'>
-              <div class='sidebar-widget'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
                      id='widget-tieu-diem'
                      data-pattern='spotlight'
@@ -5173,7 +5193,6 @@ body.view-not-homepage #main-above-feed {
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -6141,8 +6160,10 @@ body.view-not-homepage #main-above-feed {
       Boolean(container) ||
       pathname.endsWith('/p/muc-luc.html') ||
       pathname.endsWith('/p/archive.html') ||
+      pathname.endsWith('/p/dong-thoi-gian.html') ||
       href.indexOf('/p/muc-luc.html') !== -1 ||
       href.indexOf('/p/archive.html') !== -1 ||
+      href.indexOf('/p/dong-thoi-gian.html') !== -1 ||
       window.location.hash === '#archive'
     );
   }
@@ -6179,6 +6200,15 @@ body.view-not-homepage #main-above-feed {
         })
         .then(function (data) {
           var entries = (data.feed && data.feed.entry) || [];
+          if (entries.length === 0) {
+            var container = document.getElementById('archive-app-body');
+            if (container) {
+              container.innerHTML = '<div style="padding:2rem;color:orange;border:1px solid orange;background:#fffaf0;margin-bottom:1rem;border-radius:8px;">' +
+                '<strong>[Cảnh Báo] API tải thành công nhưng mảng bài viết (entries) bị rỗng!</strong><br><br>' +
+                'Vui lòng kiểm tra lại xem có bài viết nào được XUẤT BẢN chưa, hoặc Feed có đang bị giới hạn không.' +
+                '</div>';
+            }
+          }
           var posts = [];
           entries.forEach(function (entry) {
             var allLabels = [];
@@ -6244,6 +6274,14 @@ body.view-not-homepage #main-above-feed {
         })
         .catch(function (err) {
           console.warn('[Archive] Feed fetch failed, using fallback:', err);
+          var container = document.getElementById('archive-app-body');
+          if (container) {
+            container.innerHTML = '<div style="padding:2rem;color:red;border:1px solid red;background:#fff5f5;margin-bottom:1rem;border-radius:8px;">' +
+              '<strong>[Lỗi Kỹ Thuật] Không thể tải dữ liệu bài viết (Feed API Failed)</strong><br><br>' +
+              'Chi tiết lỗi: <code>' + err.toString() + '</code><br><br>' +
+              'Vui lòng chụp ảnh màn hình khung đỏ này và gửi cho kỹ thuật viên.' +
+              '</div>';
+          }
           useFallbackData(callback);
         });
     } else {
@@ -6458,8 +6496,8 @@ body.view-not-homepage #main-above-feed {
       body.innerHTML = [
         '<div class="archive-empty-state">',
         '  <div class="archive-empty-icon">🔍</div>',
-        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào phù hợp</h3>',
-        '  <p class="archive-empty-desc">Thử tìm kiếm với từ khóa khác hoặc bấm để xem toàn bộ bài viết.</p>',
+        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào</h3>',
+        '  <p class="archive-empty-desc">Nếu bạn đã đăng bài mà vẫn thấy thông báo này, vui lòng vào <strong>Cài đặt Blogger &gt; Nguồn cấp dữ liệu trang web (Site feed) &gt; Cho phép nguồn cấp dữ liệu blog</strong> và chọn <strong>Đầy đủ (Full)</strong>.</p>',
         '  <button type="button" class="archive-btn-reset" id="archive-reset-btn">↺ Xem tất cả bài viết</button>',
         '</div>'
       ].join('');
@@ -6511,10 +6549,15 @@ body.view-not-homepage #main-above-feed {
       group.posts.forEach(function (post) {
         var aiAttr = post.aiType ? ' data-ai-type="' + post.aiType + '"' : '';
         html += '<a class="archive-post-card" href="' + escapeHtml(post.url) + '"' + aiAttr + '>';
+        var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        var rawCat = post.category || 'Góc Nhìn';
+        var parsedCat = window.parseBilingualText ? window.parseBilingualText(rawCat, lang) : rawCat.split('|')[0].trim();
+        var parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+
         // Cột 1: Chuyên mục
-        html += '  <span class="archive-post-cat-pill">' + escapeHtml(post.category || 'Góc Nhìn') + '</span>';
+        html += '  <span class="archive-post-cat-pill" data-bilingual="true" data-raw-label="' + escapeHtml(rawCat) + '">' + escapeHtml(parsedCat) + '</span>';
         // Cột 2: Tiêu đề
-        html += '  <span class="archive-post-card-title">' + escapeHtml(post.title) + '</span>';
+        html += '  <span class="archive-post-card-title" data-bilingual="true" data-raw-label="' + escapeHtml(post.title) + '">' + escapeHtml(parsedTitle) + '</span>';
         // Cột 2b: AI Micro Badge (nếu có nhãn AI)
         if (post.aiType && window.AITransparency) {
           var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
@@ -7434,15 +7477,17 @@ body.view-not-homepage #main-above-feed {
      WIDGET SHELL — Header + Body
      ═══════════════════════════════════════════════════════════════ */
   function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const cleanTitle = title ? escapeHtml(title) : '';
-    const viewAllUrl = rawLabels
-      ? buildLabelUrl(splitLabels(rawLabels)[0])
-      : '/';
+    const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
+    
+    const viewAllUrl = rawLabels.length > 0 ? ('/search/label/' + encodeURIComponent(rawLabels[0])) : '/search';
+    const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header">
-        <h3 class="sp-widget-title">${cleanTitle}</h3>
-        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link">${escapeHtml(viewAllText)}</a>
+        <h3 class="sp-widget-title" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</h3>
+        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>
       </div>` : '';
 
     return `
@@ -7476,12 +7521,14 @@ body.view-not-homepage #main-above-feed {
       const aiType  = extractAIType(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
+      const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+
       return `
         <a href="${escapeHtml(post.url)}" class="sp-ranked-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <span class="sp-rank-number">${rankNum}</span>
           ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
           <div class="sp-ranked-content">
-            <h4 class="sp-ranked-title">${escapeHtml(post.title)}</h4>
+            <h4 class="sp-ranked-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h4>
             <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}${aiHtml}</span>
           </div>
         </a>`;
@@ -7504,17 +7551,21 @@ body.view-not-homepage #main-above-feed {
     const aiType = extractAIType(post.labels || []);
     const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
+    const parsedBadge = window.parseBilingualText ? window.parseBilingualText(badge, lang) : badge.split('|')[0].trim();
+    const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+    const parsedSnippet = (post.snippet && window.parseBilingualText) ? window.parseBilingualText(post.snippet, lang) : (post.snippet || '').split('|')[0].trim();
+
     return `
       <a href="${escapeHtml(post.url)}" class="sp-spotlight-card"${aiType ? ` data-ai-type="${aiType}"` : ''}>
         ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
         <div class="sp-spotlight-info">
           <div class="sp-spotlight-meta">
-            ${badge ? `<span class="sp-spotlight-badge">${escapeHtml(badge)}</span>` : ''}
+            ${badge ? `<span class="sp-spotlight-badge" data-bilingual="true" data-raw-label="${escapeHtml(badge)}">${escapeHtml(parsedBadge)}</span>` : ''}
             <span class="sp-spotlight-date">📅 ${escapeHtml(post.dateFormatted)}</span>
             ${aiHtml}
           </div>
-          <h3 class="sp-spotlight-title">${escapeHtml(post.title)}</h3>
-          ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet">${escapeHtml(post.snippet)}</p>` : ''}
+          <h3 class="sp-spotlight-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h3>
+          ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet" data-bilingual="true" data-raw-label="${escapeHtml(post.snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
         </div>
       </a>`;
@@ -7522,18 +7573,22 @@ body.view-not-homepage #main-above-feed {
 
   /* ── 3. QUOTE ───────────────────────────────────────────────── */
   function renderQuotePattern(posts, opts) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       // Lấy tiêu đề bài làm câu trích dẫn, snippet làm lời bình
       const quoteText = post.title;
       const snippet   = (opts.showSnippet && post.snippet) ? post.snippet : '';
+      
+      const parsedQuote = window.parseBilingualText ? window.parseBilingualText(quoteText, lang) : quoteText.split('|')[0].trim();
+      const parsedSnippet = (snippet && window.parseBilingualText) ? window.parseBilingualText(snippet, lang) : snippet.split('|')[0].trim();
 
       return `
         <a href="${escapeHtml(post.url)}" class="sp-quote-card">
           <span class="sp-quote-mark-open">\u201C</span>
-          <p class="sp-quote-text">${escapeHtml(quoteText)}</p>
+          <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(quoteText)}">${escapeHtml(parsedQuote)}</p>
           <span class="sp-quote-mark-close">\u201D</span>
           <div class="sp-quote-author">\u2014 ${escapeHtml(post.dateFormatted)}</div>
-          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet">${escapeHtml(snippet)}</p>` : ''}
+          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
         </a>`;
     }).join('');
@@ -7549,14 +7604,17 @@ body.view-not-homepage #main-above-feed {
       const aiType  = extractAIType(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
+      const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+      const parsedSnippet = (snippet && window.parseBilingualText) ? window.parseBilingualText(snippet, lang) : snippet.split('|')[0].trim();
+
       return `
         <a href="${escapeHtml(post.url)}" class="sp-digest-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <div class="sp-digest-timestamp">
             <span class="sp-digest-bullet">✦</span>
             ${escapeHtml(post.dateFormatted)}${aiHtml}
           </div>
-          <div class="sp-digest-title">${escapeHtml(post.title)}</div>
-          ${snippet ? `<div class="sp-digest-snippet">${escapeHtml(snippet)}</div>` : ''}
+          <div class="sp-digest-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</div>
+          ${snippet ? `<div class="sp-digest-snippet" data-bilingual="true" data-raw-label="${escapeHtml(snippet)}">${escapeHtml(parsedSnippet)}</div>` : ''}
         </a>`;
     }).join('');
 
@@ -8473,21 +8531,43 @@ body.view-not-homepage #main-above-feed {
       var bodySourceEl = card.querySelector('.post-body-snippet-source');
       var rawBodyText = '';
       if (bodySourceEl) {
-        rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+        var viEl = bodySourceEl.querySelector('[data-lang="vi"]');
+        var enEl = bodySourceEl.querySelector('[data-lang="en"]');
+        
+        // Cắt gọn một đoạn text (tối đa 140 ký tự)
+        function truncateText(txt) {
+          if (!txt) return '';
+          txt = txt.replace(/\s+/g, ' ').trim();
+          if (txt.length <= 140) return txt;
+          var cut = txt.lastIndexOf(' ', 140);
+          return txt.substring(0, cut === -1 ? 140 : cut) + '...';
+        }
+
+        if (viEl && enEl) {
+          // Xử lý song ngữ dùng data-lang
+          var viText = truncateText(viEl.textContent || viEl.innerText);
+          var enText = truncateText(enEl.textContent || enEl.innerText);
+          rawBodyText = viText + ' | ' + enText;
+        } else {
+          // Xử lý text thông thường hoặc dùng cú pháp "|" truyền thống
+          rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+          if (rawBodyText.indexOf('|') === -1) {
+             rawBodyText = truncateText(rawBodyText);
+          }
+        }
       }
 
-      if (snippetEl) {
-        var currentSnippet = snippetEl.textContent.trim();
-        if (!currentSnippet && rawBodyText) {
-          var maxLength = 160;
-          if (rawBodyText.length > maxLength) {
-            var cutIndex = rawBodyText.lastIndexOf(' ', maxLength);
-            if (cutIndex === -1 || cutIndex < 100) cutIndex = maxLength;
-            currentSnippet = rawBodyText.substring(0, cutIndex) + '...';
-          } else {
-            currentSnippet = rawBodyText;
-          }
-          snippetEl.textContent = currentSnippet;
+      // Luôn ghi đè snippet bằng rawBodyText (vì data:post.snippet của Blogger hay bị cụt chữ và làm hỏng cú pháp song ngữ)
+      if (snippetEl && rawBodyText) {
+        snippetEl.textContent = rawBodyText;
+        snippetEl.setAttribute('data-bilingual', 'true');
+        snippetEl.setAttribute('data-raw-label', rawBodyText);
+        var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        if (window.parseBilingualText) {
+          snippetEl.textContent = window.parseBilingualText(rawBodyText, currentLang);
+        } else {
+          var parts = rawBodyText.split('|');
+          snippetEl.textContent = currentLang === 'en' && parts.length > 1 ? parts[1].trim() : parts[0].trim();
         }
       }
 
