@@ -484,11 +484,19 @@ ${combinedCss}
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
-                          <div class='post-card-snippet'><data:post.snippet/></div>
+                          <div class='post-card-snippet'>
+                            <b:if cond='data:post.snippet and not data:post.snippet.empty'>
+                              <data:post.snippet/>
+                            </b:if>
+                          </div>
+                          <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
+                          <div class='post-body-snippet-source' style='display:none;'>
+                            <data:post.body/>
+                          </div>
                         </div>
                         <div class='post-card-meta'>
                           <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
-                          <span>⏱️ <span class='read-time-est'>5 phút</span></span>
+                          <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
                         </div>
                       </div>
                       <b:if cond='data:post.featuredImage'>

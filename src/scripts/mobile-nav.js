@@ -214,6 +214,32 @@
           });
         }
 
+        // Đồng thời dự phòng trích xuất tóm tắt bài viết nếu thẻ bài viết chưa có snippet
+        if (data.feed.entry && Array.isArray(data.feed.entry)) {
+          data.feed.entry.forEach(function(entry) {
+            var postTitle = (entry.title && entry.title.$t) || '';
+            var summary = (entry.summary && entry.summary.$t) || '';
+            if (!summary && entry.content && entry.content.$t) summary = entry.content.$t;
+            if (!summary) return;
+
+            document.querySelectorAll('.post-card').forEach(function(card) {
+              var cardTitle = card.querySelector('.post-card-title');
+              var cardSnippet = card.querySelector('.post-card-snippet');
+              if (cardTitle && cardSnippet && !cardSnippet.textContent.trim()) {
+                if (cardTitle.textContent.trim().toLowerCase() === postTitle.trim().toLowerCase()) {
+                  var plain = summary.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                  if (plain.length > 160) {
+                    var cutIdx = plain.lastIndexOf(' ', 160);
+                    if (cutIdx === -1 || cutIdx < 100) cutIdx = 160;
+                    plain = plain.substring(0, cutIdx) + '...';
+                  }
+                  cardSnippet.textContent = plain;
+                }
+              }
+            });
+          });
+        }
+
         var addedCount = 0;
         categories.forEach(function(term) {
           addOrUpdateTab(term);

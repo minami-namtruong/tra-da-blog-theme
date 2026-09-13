@@ -62,6 +62,43 @@
           card.setAttribute('data-ai-type', detectedAiType);
         }
       }
+
+      // Trích xuất đoạn tóm tắt bài viết (Snippet) tự động nếu data:post.snippet rỗng
+      var snippetEl = card.querySelector('.post-card-snippet');
+      var bodySourceEl = card.querySelector('.post-body-snippet-source');
+      var rawBodyText = '';
+      if (bodySourceEl) {
+        rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+      }
+
+      if (snippetEl) {
+        var currentSnippet = snippetEl.textContent.trim();
+        if (!currentSnippet && rawBodyText) {
+          var maxLength = 160;
+          if (rawBodyText.length > maxLength) {
+            var cutIndex = rawBodyText.lastIndexOf(' ', maxLength);
+            if (cutIndex === -1 || cutIndex < 100) cutIndex = maxLength;
+            currentSnippet = rawBodyText.substring(0, cutIndex) + '...';
+          } else {
+            currentSnippet = rawBodyText;
+          }
+          snippetEl.textContent = currentSnippet;
+        }
+      }
+
+      // Tính toán số phút đọc ước tính theo dung lượng từ thực tế
+      var readTimeEl = card.querySelector('.read-time-est');
+      if (readTimeEl && rawBodyText) {
+        var words = rawBodyText.split(/\s+/).filter(Boolean).length;
+        var mins = Math.max(1, Math.ceil(words / 200));
+        var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        readTimeEl.setAttribute('data-raw-label', mins + ' phút đọc | ' + mins + ' min read');
+        readTimeEl.textContent = (currentLang === 'en') ? (mins + ' min read') : (mins + ' phút đọc');
+      }
+
+      if (bodySourceEl) {
+        bodySourceEl.remove(); // Dọn dẹp DOM sạch sẽ sau khi bóc tách
+      }
     });
 
     // 2. Xử lý trang chi tiết bài viết (Single Post View)

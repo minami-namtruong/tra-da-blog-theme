@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T03:11:05.926Z -->
+<!-- Compiled at: 2026-09-13T03:16:28.289Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -4769,11 +4769,19 @@ body.view-not-homepage #main-above-feed {
                           <h2 class='post-card-title' itemprop='headline'>
                             <a expr:href='data:post.url' itemprop='url'><data:post.title/></a>
                           </h2>
-                          <div class='post-card-snippet'><data:post.snippet/></div>
+                          <div class='post-card-snippet'>
+                            <b:if cond='data:post.snippet and not data:post.snippet.empty'>
+                              <data:post.snippet/>
+                            </b:if>
+                          </div>
+                          <!-- Thẻ ẩn chứa nội dung bài viết để trích xuất snippet tự động khi data:post.snippet rỗng -->
+                          <div class='post-body-snippet-source' style='display:none;'>
+                            <data:post.body/>
+                          </div>
                         </div>
                         <div class='post-card-meta'>
                           <span>📅 <time expr:datetime='data:post.date.iso8601'><data:post.date/></time></span>
-                          <span>⏱️ <span class='read-time-est'>5 phút</span></span>
+                          <span>⏱️ <span class='read-time-est' data-bilingual='true'>5 phút đọc | 5 min read</span></span>
                         </div>
                       </div>
                       <b:if cond='data:post.featuredImage'>
@@ -5861,6 +5869,32 @@ body.view-not-homepage #main-above-feed {
                 if (c && c.term) categories.push(c.term);
               });
             }
+          });
+        }
+
+        // Đồng thời dự phòng trích xuất tóm tắt bài viết nếu thẻ bài viết chưa có snippet
+        if (data.feed.entry && Array.isArray(data.feed.entry)) {
+          data.feed.entry.forEach(function(entry) {
+            var postTitle = (entry.title && entry.title.$t) || '';
+            var summary = (entry.summary && entry.summary.$t) || '';
+            if (!summary && entry.content && entry.content.$t) summary = entry.content.$t;
+            if (!summary) return;
+
+            document.querySelectorAll('.post-card').forEach(function(card) {
+              var cardTitle = card.querySelector('.post-card-title');
+              var cardSnippet = card.querySelector('.post-card-snippet');
+              if (cardTitle && cardSnippet && !cardSnippet.textContent.trim()) {
+                if (cardTitle.textContent.trim().toLowerCase() === postTitle.trim().toLowerCase()) {
+                  var plain = summary.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                  if (plain.length > 160) {
+                    var cutIdx = plain.lastIndexOf(' ', 160);
+                    if (cutIdx === -1 || cutIdx < 100) cutIdx = 160;
+                    plain = plain.substring(0, cutIdx) + '...';
+                  }
+                  cardSnippet.textContent = plain;
+                }
+              }
+            });
           });
         }
 
@@ -8432,6 +8466,43 @@ body.view-not-homepage #main-above-feed {
         if (detectedAiType) {
           card.setAttribute('data-ai-type', detectedAiType);
         }
+      }
+
+      // Trích xuất đoạn tóm tắt bài viết (Snippet) tự động nếu data:post.snippet rỗng
+      var snippetEl = card.querySelector('.post-card-snippet');
+      var bodySourceEl = card.querySelector('.post-body-snippet-source');
+      var rawBodyText = '';
+      if (bodySourceEl) {
+        rawBodyText = (bodySourceEl.textContent || bodySourceEl.innerText || '').replace(/\s+/g, ' ').trim();
+      }
+
+      if (snippetEl) {
+        var currentSnippet = snippetEl.textContent.trim();
+        if (!currentSnippet && rawBodyText) {
+          var maxLength = 160;
+          if (rawBodyText.length > maxLength) {
+            var cutIndex = rawBodyText.lastIndexOf(' ', maxLength);
+            if (cutIndex === -1 || cutIndex < 100) cutIndex = maxLength;
+            currentSnippet = rawBodyText.substring(0, cutIndex) + '...';
+          } else {
+            currentSnippet = rawBodyText;
+          }
+          snippetEl.textContent = currentSnippet;
+        }
+      }
+
+      // Tính toán số phút đọc ước tính theo dung lượng từ thực tế
+      var readTimeEl = card.querySelector('.read-time-est');
+      if (readTimeEl && rawBodyText) {
+        var words = rawBodyText.split(/\s+/).filter(Boolean).length;
+        var mins = Math.max(1, Math.ceil(words / 200));
+        var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        readTimeEl.setAttribute('data-raw-label', mins + ' phút đọc | ' + mins + ' min read');
+        readTimeEl.textContent = (currentLang === 'en') ? (mins + ' min read') : (mins + ' phút đọc');
+      }
+
+      if (bodySourceEl) {
+        bodySourceEl.remove(); // Dọn dẹp DOM sạch sẽ sau khi bóc tách
       }
     });
 
