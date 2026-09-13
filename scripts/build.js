@@ -1131,11 +1131,13 @@ ${combinedCss}
           <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
             <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
               <b:includable id='main'>
-                <b:if cond='data:content'>
-                  <span class='footer-copyright'><data:content/></span>
-                <b:else/>
-                  <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
-                </b:if>
+                <span class='footer-copyright'>
+                  <b:if cond='data:content'>
+                    <data:content/>
+                  <b:else/>
+                    © 2026 <data:blog.title/>. <span data-i18n='copyrightSuffix'>Tất cả quyền được bảo lưu.</span>
+                  </b:if>
+                </span>
               </b:includable>
             </b:widget>
           </b:section>

@@ -62,7 +62,7 @@
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
     // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs (spec §4.2.A)
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a'
+      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a'
     );
   
     targets.forEach(el => {
