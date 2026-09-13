@@ -60,12 +60,17 @@
 
   function applyBilingualElements(lang) {
     // Bộ chọn toàn bộ các phần tử hỗ trợ cú pháp VI | EN
-    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs (spec §4.2.A)
+    // Bao gồm: data-bilingual="true", badge thẻ bài, tab chủ đề, pill timeline, breadcrumbs, footer
     const targets = document.querySelectorAll(
-      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a'
+      '[data-bilingual="true"], .post-badge, .tab-pill, .archive-post-cat-pill, .breadcrumbs a, .footer-copyright, .footer-copyright a, .footer-bottom-nav a, .footer-links a'
     );
   
     targets.forEach(el => {
+      // Bỏ qua thẻ cha .footer-copyright nếu bên trong đã có thẻ link <a> để không xoá mất link
+      if (el.classList.contains('footer-copyright') && el.querySelector('a')) {
+        return;
+      }
+
       // 1. Lưu lại nội dung gốc ban đầu
       if (el.dataset.rawText === undefined) {
         el.dataset.rawText = el.textContent.trim();
@@ -77,9 +82,6 @@
       if (raw.includes('|')) {
         const parts = raw.split('|').map(s => s.trim());
         el.textContent = (lang === 'en' ? parts[1] : parts[0]) || parts[0];
-      } else {
-        // Cơ chế An toàn (Graceful Fallback)
-        el.textContent = raw;
       }
     });
   }
@@ -148,6 +150,7 @@
   
   // Legacy support for switchLanguage
   window.switchLanguage = window.setLanguage;
+  window.applyBilingualElements = applyBilingualElements;
 
   // Close dropdown when clicking outside
   document.addEventListener('click', function(event) {
