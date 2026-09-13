@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T01:10:07.396Z -->
+<!-- Compiled at: 2026-09-13T01:23:50.347Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -48,69 +48,32 @@
   <!-- Zero-FOUC Dark Mode (must be in <head>) -->
   <script>
   //<![CDATA[
-/* Zero-FOUC Multi-Theme Switcher (Light / Dark / Airy Pastel) */
+/* Zero-FOUC Dark Mode Switcher */
 (function() {
-  const THEMES = ["light", "dark", "airy-pastel"];
-  const THEME_CONFIG = {
-    "light": {
-      icon: "☀️",
-      name: "Giao diện Sáng",
-      nextTheme: "dark",
-      nextName: "Tối"
-    },
-    "dark": {
-      icon: "🌙",
-      name: "Giao diện Tối",
-      nextTheme: "airy-pastel",
-      nextName: "Xanh Mint"
-    },
-    "airy-pastel": {
-      icon: "🍃",
-      name: "Giao diện Xanh Mint",
-      nextTheme: "light",
-      nextName: "Sáng"
-    }
-  };
-
-  const savedTheme = localStorage.getItem("theme");
-  const initialTheme = THEMES.includes(savedTheme)
-    ? savedTheme
-    : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-
-  document.documentElement.setAttribute("data-theme", initialTheme);
+  const currentTheme = localStorage.getItem("theme") || 
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", currentTheme);
 
   window.toggleTheme = function() {
-    const active = document.documentElement.getAttribute("data-theme") || "light";
-    const currentIndex = THEMES.indexOf(active);
-    const nextTheme = THEMES[(currentIndex + 1) % THEMES.length];
-
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    localStorage.setItem("theme", nextTheme);
+    const active = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", active);
+    localStorage.setItem("theme", active);
     updateThemeIcon();
   };
 
   function updateThemeIcon() {
-    const active = document.documentElement.getAttribute("data-theme") || "light";
-    const config = THEME_CONFIG[active] || THEME_CONFIG["light"];
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
     const btn = document.getElementById("theme-toggle-btn");
-    if (btn) {
-      btn.innerHTML = config.icon;
-      btn.setAttribute("title", config.name + " (Click để chuyển sang " + config.nextName + ")");
-      btn.setAttribute("aria-label", "Đổi giao diện: hiện tại " + config.name + ", chuyển sang " + config.nextName);
-    }
+    if (btn) btn.innerHTML = isDark ? "☀️" : "🌙";
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", updateThemeIcon);
-  } else {
-    updateThemeIcon();
-  }
+  document.addEventListener("DOMContentLoaded", updateThemeIcon);
 })();
 
   //]]>
   </script>
 
-  <!-- Blogger Theme Designer Variables + Styles -->
+  <!-- Blogger Theme Designer Variables -->
   <b:skin><![CDATA[
 <Variable name="body.background" description="Màu nền toàn trang" type="color" default="#f8fafc" value="#f8fafc"/>
 <Variable name="card.background" description="Màu nền thẻ Card &amp; Bài viết" type="color" default="#ffffff" value="#ffffff"/>
@@ -120,6 +83,22 @@
 <Variable name="text.muted" description="Màu chữ phụ (Metadata, Snippet)" type="color" default="#475569" value="#475569"/>
 <Variable name="font.family" description="Phông chữ chính" type="font" default="normal 400 16px 'Be Vietnam Pro', sans-serif" value="normal 400 16px 'Be Vietnam Pro', sans-serif"/>
 
+/* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
+:root {
+  --bg-body: $(body.background);
+  --bg-card: $(card.background);
+  --primary: $(primary.color);
+  --primary-hover: $(primary.color);
+  --accent: $(accent.color);
+  --text-main: $(text.main);
+  --text-muted: $(text.muted);
+  --font-main: $(font.family);
+}
+  ]]></b:skin>
+
+  <!-- Complete Core Theme Stylesheet (Served 100% Intact by Blogger) -->
+  <style>
+  /*<![CDATA[*/
 /* ==========================================
    DESIGN TOKENS & CSS VARIABLES
    ========================================== */
@@ -272,240 +251,6 @@
   --ai-micro-bg: rgba(168, 85, 247, 0.22);
   --ai-micro-text: #c084fc;
 }
-
-/* ============================================================
-   THEME PRESET: AIRY MINT PASTEL (LIGHT SOFT MINT)
-   Tông Xanh Mint Nhẹ Sáng Thanh Thoát & Hiện Đại
-   ============================================================ */
-[data-theme="airy-pastel"],
-:root[data-theme-preset="airy-pastel"],
-[data-theme="light"][data-theme-preset="airy-pastel"] {
-  /* 1. Nền trang & Bề mặt (Phảng phất sắc sương mai xanh mint dịu mắt) */
-  --surface-page: #f4faf7;                     /* Nền sáng ánh mint nhạt */
-  --surface-card: #ffffff;                     /* Thẻ card trắng tinh khiết */
-  --surface-surface: #edf7f2;                  /* Bề mặt widget, sidebar mint nhẹ */
-  --surface-overlay: rgba(255, 255, 255, 0.88);/* Kính mờ Header */
-  --bg-body: var(--surface-page);
-  --bg-card: var(--surface-card);
-  --bg-surface: var(--surface-surface);
-  --bg-input: #ffffff;
-  --header-bg: var(--surface-overlay);
-
-  /* 2. Màu chữ tương phản mềm dịu */
-  --text-primary: #0f241d;                     /* Xanh thông rừng đậm (dễ chịu hơn đen tuyền) */
-  --text-secondary: #2d4a3e;                   /* Xanh xám trung tính */
-  --text-muted: #628274;                       /* Xám lục mờ nhẹ */
-  --text-main: var(--text-primary);
-  --text-light: var(--text-muted);
-
-  /* 3. Chuẩn mực Hairline & Shadow ngọc bích */
-  --border-hairline: rgba(16, 185, 129, 0.10); /* Viền mỏng sợi tơ mint */
-  --border-subtle: rgba(16, 185, 129, 0.18);
-  --border-divider: rgba(16, 185, 129, 0.08);
-  --border-color: rgba(16, 185, 129, 0.12);
-  --border-hover: rgba(16, 185, 129, 0.40);
-
-  --shadow-hairline: 0 1px 2px 0 rgba(16, 185, 129, 0.04);
-  --shadow-ambient: 0 4px 24px -2px rgba(15, 36, 29, 0.04);
-  --shadow-float: 0 12px 36px -4px rgba(15, 36, 29, 0.08);
-  --shadow-sm: var(--shadow-hairline);
-  --shadow-md: var(--shadow-ambient);
-  --shadow-lg: var(--shadow-float);
-
-  /* 4. Màu thương hiệu & Nút bấm Gradient Xanh Mint - Cyan */
-  --action-primary: #059669;                   /* Mint đậm chuẩn WCAG AA */
-  --action-hover: #047857;
-  --primary: #059669;
-  --primary-hover: #047857;
-  --primary-light: rgba(16, 185, 129, 0.12);
-  --primary-gradient: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-  --primary-glow: 0 4px 18px 0 rgba(16, 185, 129, 0.35);
-
-  --btn-primary-bg-gradient: var(--primary-gradient);
-  --btn-primary-text-color: #ffffff;
-  --btn-primary-radius: var(--radius-md);
-  --btn-primary-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.32);
-  --btn-primary-shadow-hover: 0 6px 22px 0 rgba(16, 185, 129, 0.45);
-
-  /* 5. Nhãn Danh mục (Category Badge - Mint & Soft Teal) */
-  --badge-bg-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
-  --badge-border: 1px solid rgba(16, 185, 129, 0.28);
-  --badge-text-color: #047857;
-  --badge-radius: var(--radius-full);
-  --badge-padding-y: 4px;
-  --badge-padding-x: 11px;
-  --badge-font-size: 0.72rem;
-  --badge-font-weight: 700;
-
-  /* 6. Thẻ Bài Viết (Post Card) */
-  --post-card-bg: var(--surface-card);
-  --post-card-border: var(--stroke-hairline) solid var(--border-hairline);
-  --post-card-border-hover: var(--stroke-hairline) solid rgba(16, 185, 129, 0.38);
-  --post-card-radius: 16px;
-  --post-card-padding: 1.5rem;
-  --post-card-shadow: var(--shadow-hairline);
-  --post-card-shadow-hover: var(--shadow-ambient);
-  --post-card-hover-y: -3px;
-  --post-thumb-radius: 12px;
-
-  /* 7. Cover Gradient (Mint Dawn) */
-  --cover-default-gradient: linear-gradient(135deg, #059669 0%, #10b981 40%, #06b6d4 100%);
-
-  /* 8. Buy Me A Coffee (Mint Cream) */
-  --coffee-btn-bg: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-  --coffee-btn-border: #6ee7b7;
-  --coffee-btn-text: #065f46;
-  --coffee-btn-bg-hover: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  --coffee-btn-border-hover: #34d399;
-  --coffee-btn-text-hover: #064e3b;
-
-  /* 9. AI Transparency Badge (Mint Ice) */
-  --ai-badge-bg: linear-gradient(135deg, rgba(236, 253, 245, 0.9) 0%, rgba(204, 251, 241, 0.9) 100%);
-  --ai-badge-border: rgba(52, 211, 153, 0.45);
-  --ai-badge-text: #047857;
-  --ai-callout-bg: rgba(236, 253, 245, 0.6);
-  --ai-callout-border: #10b981;
-  --ai-callout-text: #065f46;
-  --ai-micro-bg: rgba(16, 185, 129, 0.12);
-  --ai-micro-text: #059669;
-}
-
-/* ============================================================
-   THEME PRESET: AIRY MINT PASTEL (DARK OBSIDIAN PINE MODE)
-   ============================================================ */
-[data-theme="dark"][data-theme-preset="airy-pastel"] {
-  --surface-page: #091612;                     /* Rừng thông đen đêm sâu */
-  --surface-card: #0f241d;
-  --surface-surface: #163329;
-  --surface-overlay: rgba(15, 36, 29, 0.88);
-  --bg-body: var(--surface-page);
-  --bg-card: var(--surface-card);
-  --bg-surface: var(--surface-surface);
-  --header-bg: var(--surface-overlay);
-
-  --text-primary: #f0fdf4;
-  --text-secondary: #a7f3d0;
-  --text-muted: #6ee7b7;
-  --text-main: var(--text-primary);
-  --text-light: var(--text-muted);
-
-  --border-hairline: rgba(52, 211, 153, 0.15);
-  --border-subtle: rgba(52, 211, 153, 0.22);
-  --border-divider: rgba(52, 211, 153, 0.08);
-  --border-color: rgba(52, 211, 153, 0.15);
-  --border-hover: rgba(52, 211, 153, 0.45);
-
-  --action-primary: #34d399;
-  --primary: var(--action-primary);
-  --primary-hover: #6ee7b7;
-  --primary-gradient: linear-gradient(135deg, #34d399 0%, #22d3ee 100%);
-  --btn-primary-shadow: 0 4px 18px 0 rgba(52, 211, 153, 0.40);
-  --btn-primary-shadow-hover: 0 6px 26px 0 rgba(52, 211, 153, 0.55);
-
-  --badge-bg-gradient: linear-gradient(135deg, rgba(52, 211, 153, 0.2) 0%, rgba(34, 211, 238, 0.2) 100%);
-  --badge-border: 1px solid rgba(52, 211, 153, 0.40);
-  --badge-text-color: #a7f3d0;
-
-  --post-card-bg: var(--surface-card);
-  --post-card-border: var(--stroke-hairline) solid var(--border-hairline);
-  --post-card-border-hover: var(--stroke-hairline) solid rgba(52, 211, 153, 0.5);
-  --post-card-shadow-hover: 0 8px 30px -4px rgba(0, 0, 0, 0.5);
-}
-
-/* ============================================================
-   AIRY MINT COMPONENT REFINEMENTS
-   ============================================================ */
-[data-theme="airy-pastel"] .site-header,
-[data-theme-preset="airy-pastel"] .site-header {
-  border-bottom: 1px solid var(--border-hairline);
-  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.04);
-}
-
-[data-theme="airy-pastel"] .post-badge,
-[data-theme-preset="airy-pastel"] .post-badge {
-  background: var(--badge-bg-gradient);
-  border: var(--badge-border);
-  color: var(--badge-text-color);
-  border-radius: var(--badge-radius, 9999px);
-  padding: var(--badge-padding-y, 4px) var(--badge-padding-x, 11px);
-  display: inline-block;
-  font-size: var(--badge-font-size, 0.72rem);
-  font-weight: var(--badge-font-weight, 700);
-  letter-spacing: 0.04em;
-  transition: var(--transition);
-  text-decoration: none;
-}
-[data-theme="airy-pastel"] .post-badge:hover,
-[data-theme-preset="airy-pastel"] .post-badge:hover {
-  transform: translateY(-1px);
-  filter: brightness(0.96);
-}
-
-/* Multi-Category Pastel Palettes */
-[data-theme="airy-pastel"] .post-badge[href*="G%C3%B3c"],
-[data-theme="airy-pastel"] .post-badge[href*="goc"] {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.12) 100%);
-  border-color: rgba(16, 185, 129, 0.30);
-  color: #047857;
-}
-[data-theme="airy-pastel"] .post-badge[href*="C%C3%B4ng"],
-[data-theme="airy-pastel"] .post-badge[href*="cong"],
-[data-theme="airy-pastel"] .post-badge[href*="AI"],
-[data-theme="airy-pastel"] .post-badge[href*="ai"] {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
-  border-color: rgba(6, 182, 212, 0.30);
-  color: #0e7490;
-}
-[data-theme="airy-pastel"] .post-badge[href*="%C4%90%E1%BB%9Di"],
-[data-theme="airy-pastel"] .post-badge[href*="doi"] {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.14) 0%, rgba(16, 185, 129, 0.14) 100%);
-  border-color: rgba(52, 211, 153, 0.32);
-  color: #065f46;
-}
-[data-theme="airy-pastel"] .post-badge[href*="S%C3%A1ch"],
-[data-theme="airy-pastel"] .post-badge[href*="sach"] {
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.14) 0%, rgba(45, 212, 191, 0.14) 100%);
-  border-color: rgba(20, 184, 166, 0.30);
-  color: #0f766e;
-}
-
-/* Quote Widget in Airy Mint */
-[data-theme="airy-pastel"] .sp-quote-card,
-[data-theme-preset="airy-pastel"] .sp-quote-card {
-  background: linear-gradient(135deg, rgba(236, 253, 245, 0.7) 0%, rgba(240, 253, 250, 0.5) 100%);
-  border: 1px solid rgba(110, 231, 183, 0.35);
-}
-[data-theme="airy-pastel"] .sp-quote-mark-open,
-[data-theme="airy-pastel"] .sp-quote-mark-close,
-[data-theme-preset="airy-pastel"] .sp-quote-mark-open,
-[data-theme-preset="airy-pastel"] .sp-quote-mark-close {
-  color: rgba(16, 185, 129, 0.4);
-}
-
-/* Subscribe Button & Tab Pills in Airy Mint */
-[data-theme="airy-pastel"] .btn-subscribe,
-[data-theme-preset="airy-pastel"] .btn-subscribe {
-  background: var(--primary-gradient);
-  box-shadow: var(--btn-primary-shadow);
-}
-[data-theme="airy-pastel"] .btn-subscribe:hover,
-[data-theme-preset="airy-pastel"] .btn-subscribe:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--btn-primary-shadow-hover);
-  filter: brightness(1.04);
-}
-
-[data-theme="airy-pastel"] .tab-pill.active,
-[data-theme="airy-pastel"] .tab-pill:hover,
-[data-theme-preset="airy-pastel"] .tab-pill.active,
-[data-theme-preset="airy-pastel"] .tab-pill:hover {
-  background: var(--primary-gradient);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
-}
-
-
 
 
 /* ==========================================
@@ -1242,11 +987,15 @@ a:hover {
 
 .cover-image-wrapper {
   position: relative;
-  height: var(--cover-height-desktop);
-  background: var(--cover-default-gradient);
+  width: 100%;
+  min-height: 240px;
+  height: var(--cover-height-desktop, 240px);
+  background-color: #1e3a8a;
+  background-image: var(--cover-default-gradient, linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%));
   background-size: cover;
   background-position: center;
   overflow: hidden;
+  display: block;
 }
 .cover-image-wrapper::after {
   content: '';
@@ -4597,19 +4346,8 @@ body.view-not-homepage #main-above-feed {
   }
 }
 
-
-/* Blogger Theme Designer Dynamic Bindings (Overrides defaults with Theme Designer values) */
-:root {
-  --bg-body: $(body.background);
-  --bg-card: $(card.background);
-  --primary: $(primary.color);
-  --primary-hover: $(primary.color);
-  --accent: $(accent.color);
-  --text-main: $(text.main);
-  --text-muted: $(text.muted);
-  --font-main: $(font.family);
-}
-  ]]></b:skin>
+  /*]]>*/
+  </style>
 
   <!-- SEO Schema.org JSON-LD -->
   <b:if cond='data:view.isHomepage'>
@@ -4759,11 +4497,11 @@ body.view-not-homepage #main-above-feed {
 
         <!-- Desktop Navigation (Single Source of Truth) -->
         <b:section id='nav-menu-section' name='Menu Điều Hướng Chính' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='LinkList1' type='LinkList' version='2'>
+          <b:widget id='LinkList1' type='LinkList' version='2' title='Menu Điều Hướng Chính'>
             <b:includable id='main'>
               <nav class='nav-menu-wrapper' aria-label='Menu chính'>
                 <ul class='nav-menu'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='link'>
                       <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
                         <li class='has-dropdown'>
@@ -4777,11 +4515,19 @@ body.view-not-homepage #main-above-feed {
                       </b:if>
                     </b:loop>
                   <b:else/>
-                    <!-- Fallback mặc định khi blog chưa cấu hình LinkList1 -->
-                    <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
-                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
-                    <li><a href='#category-tabs-section' data-bilingual='true'>Chủ Đề | Topics</a></li>
-                    <li><a href='#profile-cover-section' data-bilingual='true'>Về Tác Giả | About</a></li>
+                    <!-- Menu chuẩn 100% giống preview.html khi chưa cấu hình LinkList1 -->
+                    <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
+                    <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn"' data-category='Góc Nhìn' data-bilingual='true'>Góc Nhìn | Perspectives</a></li>
+                    <li class='has-dropdown'>
+                      <a href='#' data-bilingual='true'>Chuyên Mục | Categories</a>
+                      <ul class='dropdown-menu'>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-category='Trải Nghiệm Sống' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-category='Sách &amp; Công Cụ' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a></li>
+                        <li><a class='nav-filter-link' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-category='Phát Triển Bản Thân' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a></li>
+                      </ul>
+                    </li>
+                    <li><a href='#footer' data-bilingual='true'>Về Tôi | About Me</a></li>
                   </b:if>
                 </ul>
               </nav>
@@ -4793,8 +4539,18 @@ body.view-not-homepage #main-above-feed {
         <div class='header-actions'>
           <!-- Search -->
           <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
-          <!-- Multi-Theme Toggle -->
-          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện' title='Đổi giao diện'>🌙</button>
+          <!-- Dark Mode Toggle -->
+          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Multi-language Switcher -->
+          <div class='lang-dropdown-wrapper'>
+            <button class='lang-dropdown-toggle' id='lang-toggle-btn' aria-haspopup='true' aria-expanded='false' onclick='document.getElementById(&quot;lang-dropdown-menu&quot;).classList.toggle(&quot;show&quot;)'>
+              <span class='lang-flag' id='current-lang-flag'>🇻🇳</span> <span class='lang-text' id='current-lang-text'>VI</span> <span class='dropdown-arrow'>▼</span>
+            </button>
+            <ul class='lang-dropdown-menu' id='lang-dropdown-menu'>
+              <li><button class='lang-option' onclick='setLanguage(&quot;vi&quot;)'><span class='lang-flag'>🇻🇳</span> Tiếng Việt</button></li>
+              <li><button class='lang-option' onclick='setLanguage(&quot;en&quot;)'><span class='lang-flag'>🇬🇧</span> English</button></li>
+            </ul>
+          </div>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
             <span/>
@@ -4838,7 +4594,7 @@ body.view-not-homepage #main-above-feed {
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
             <div class='cover-image-wrapper' id='cover-image-wrapper'
-                 style='background-image: url(&apos;https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80&apos;);'>
+                 style='min-height: 240px; background-image: url(https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80); background-size: cover; background-position: center;'>
             </div>
             <div class='cover-info-card'>
               <div class='avatar-wrapper'>
@@ -4852,7 +4608,7 @@ body.view-not-homepage #main-above-feed {
                 <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
               <div class='profile-cta-area'>
-                <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
+                <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>
               </div>
             </div>
             <b:if cond='data:content'>
@@ -4865,11 +4621,11 @@ body.view-not-homepage #main-above-feed {
 
     <!-- Dynamic Category Tabs (Visible Across Pages) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='Label1' type='Label' version='2'>
+      <b:widget id='Label1' type='Label' version='2' title='Thanh Chủ Đề (Tabs)'>
         <b:includable id='main'>
-          <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
-            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả</a>
-            <b:if cond='data:labels.notEmpty'>
+          <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+            <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
                 <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
                 <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
@@ -4877,11 +4633,12 @@ body.view-not-homepage #main-above-feed {
                 </b:if>
               </b:loop>
             <b:else/>
-              <!-- Fallback khi blog mới chưa gắn nhãn -->
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Phong Cách Sống</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Chiêm Nghiệm</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Công Nghệ &amp; AI</a>
-              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Sách &amp; Góc Nhìn</a>
+              <!-- Fallback chuẩn 100% giống preview.html khi blog mới chưa gắn nhãn -->
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/G%C3%B3c%20Nh%C3%ACn%20%26%20T%C6%B0%20Duy"' data-bilingual='true'>Góc Nhìn &amp; Tư Duy | Perspectives</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng"' data-bilingual='true'>Trải Nghiệm Sống | Life Stories</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5"' data-bilingual='true'>Sách &amp; Công Cụ | Books &amp; Tools</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n"' data-bilingual='true'>Phát Triển Bản Thân | Self Development</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl + "search/label/C%C3%B4ng%20Ngh%E1%BB%87%20%26%20AI"' data-bilingual='true'>Công Nghệ &amp; AI | Tech &amp; AI</a>
             </b:if>
           </nav>
         </b:includable>
@@ -4939,13 +4696,13 @@ body.view-not-homepage #main-above-feed {
                     <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                     <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                     <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                      <b:if cond='data:aiLabels.notEmpty'>
+                      <b:if cond='data:aiLabels and not data:aiLabels.empty'>
                         <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
                       </b:if>
                       <div class='post-card-body'>
                         <div>
                           <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                            <b:if cond='data:normalLabels.notEmpty'>
+                            <b:if cond='data:normalLabels and not data:normalLabels.empty'>
                               <a class='post-badge' expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
                             </b:if>
                           </b:with>
@@ -5011,7 +4768,7 @@ body.view-not-homepage #main-above-feed {
                   <b:loop values='data:posts' var='post'>
                   <b:with value='data:post.labels filter (l =&gt; l.name startsWith "ai:" or l.name startsWith "AI-")' var='aiLabels'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                    <b:if cond='data:aiLabels.notEmpty'>
+                    <b:if cond='data:aiLabels and not data:aiLabels.empty'>
                       <b:attr name='data-ai-type' expr:value='data:aiLabels.first.name.toLowerCase()'/>
                     </b:if>
 
@@ -5020,7 +4777,7 @@ body.view-not-homepage #main-above-feed {
                       <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
                       <span class='separator'>›</span>
                       <b:with value='data:post.labels filter (l =&gt; not (l.name startsWith "@" or l.name startsWith "ai:" or l.name startsWith "AI-"))' var='normalLabels'>
-                        <b:if cond='data:normalLabels.notEmpty'>
+                        <b:if cond='data:normalLabels and not data:normalLabels.empty'>
                           <a expr:href='data:normalLabels.first.url' data-bilingual='true'><data:normalLabels.first.name/></a>
                           <span class='separator'>›</span>
                         </b:if>
@@ -5382,7 +5139,7 @@ body.view-not-homepage #main-above-feed {
             <b:includable id='main'>
               <div class='sidebar-widget'>
                 <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
-                <b:if cond='data:posts.notEmpty'>
+                <b:if cond='data:posts and not data:posts.empty'>
                   <ul class='popular-posts-list'>
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
                       <li>
@@ -5497,7 +5254,7 @@ body.view-not-homepage #main-above-feed {
               <div class='footer-col-legal'>
                 <h4 class='footer-col-title'><b:eval expr='data:title ? data:title : &quot;⚖️ Chính Sách &amp; Minh Bạch&quot;'/></h4>
                 <ul class='footer-links'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='llink'>
                       <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
                     </b:loop>
@@ -5535,7 +5292,7 @@ body.view-not-homepage #main-above-feed {
             <b:includable id='main'>
               <div class='footer-col-social'>
                 <div class='footer-social-grid'>
-                  <b:if cond='data:links.notEmpty'>
+                  <b:if cond='data:links and not data:links.empty'>
                     <b:loop values='data:links' var='slink'>
                       <a class='footer-social-icon'
                          expr:href='data:slink.target'
@@ -5586,7 +5343,7 @@ body.view-not-homepage #main-above-feed {
               <b:includable id='main'>
                 <nav aria-label='Footer navigation'>
                   <ul class='footer-bottom-nav'>
-                    <b:if cond='data:links.notEmpty'>
+                    <b:if cond='data:links and not data:links.empty'>
                       <b:loop values='data:links' var='bmlink'>
                         <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
                       </b:loop>
@@ -5648,7 +5405,47 @@ body.view-not-homepage #main-above-feed {
   var navDrawerBackdrop = null;
   var navDrawerClose = null;
 
+  function ensureDesktopMenu() {
+    var navWrapper = document.querySelector('.nav-menu-wrapper');
+    var navMenu = document.querySelector('.nav-menu');
+    if (!navMenu || !navMenu.children.length) {
+      var headerInner = document.querySelector('.site-header .header-inner');
+      if (headerInner) {
+        if (!navWrapper) {
+          navWrapper = document.createElement('nav');
+          navWrapper.className = 'nav-menu-wrapper';
+          navWrapper.setAttribute('aria-label', 'Menu chính');
+          var headerActions = document.querySelector('.site-header .header-actions');
+          if (headerActions) {
+            headerInner.insertBefore(navWrapper, headerActions);
+          } else {
+            headerInner.appendChild(navWrapper);
+          }
+        }
+        navWrapper.innerHTML = '<ul class="nav-menu">' +
+          '<li><a class="active" href="/" data-bilingual="true">Trang Chủ | Home</a></li>' +
+          '<li><a href="/p/muc-luc.html" data-bilingual="true">Dòng Thời Gian | Timeline</a></li>' +
+          '<li><a href="/search/label/G%C3%B3c%20Nh%C3%ACn" data-bilingual="true">Góc Nhìn | Perspectives</a></li>' +
+          '<li class="has-dropdown">' +
+            '<a href="#" data-bilingual="true">Chuyên Mục | Categories</a>' +
+            '<ul class="dropdown-menu">' +
+              '<li><a href="/search/label/Tr%E1%BA%A3i%20Nghi%E1%BB%87m%20S%E1%BB%91ng" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a></li>' +
+              '<li><a href="/search/label/S%C3%A1ch%20%26%20C%C3%B4ng%20C%E1%BB%A5" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a></li>' +
+              '<li><a href="/search/label/Ph%C3%A1t%20Tri%E1%BB%83n%20B%E1%BA%A3n%20Th%C3%A2n" data-bilingual="true">Phát Triển Bản Thân | Self Development</a></li>' +
+            '</ul>' +
+          '</li>' +
+          '<li><a href="#footer" data-bilingual="true">Về Tôi | About Me</a></li>' +
+        '</ul>';
+        // Kích hoạt dịch song ngữ cho menu vừa tạo nếu bilingual.js đã tải
+        if (window.applyBilingualElements) {
+          window.applyBilingualElements(localStorage.getItem('user_lang') || 'vi');
+        }
+      }
+    }
+  }
+
   function syncDrawerMenu() {
+    ensureDesktopMenu();
     var desktopMenu = document.querySelector('.nav-menu');
     var drawerMenu = document.querySelector('.nav-drawer-menu');
     if (desktopMenu && drawerMenu && !drawerMenu.children.length) {
@@ -5670,6 +5467,7 @@ body.view-not-homepage #main-above-feed {
     navDrawerBackdrop = document.getElementById('nav-drawer-backdrop');
     navDrawerClose = document.getElementById('nav-drawer-close');
 
+    ensureDesktopMenu();
     syncDrawerMenu();
     syncDrawerLogo();
 
@@ -8326,6 +8124,14 @@ body.view-not-homepage #main-above-feed {
       }
     }
 
+    // Đảm bảo Banner và Avatar luôn luôn có ảnh hiển thị (Zero Blank Banner)
+    if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
+      coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
+    }
+    if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined'))) {
+      avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+    }
+
     // 3. Đọc cấu hình tùy chỉnh từ ô Content của widget HTML1
     const configEl = document.getElementById('profile-custom-config');
     if (!configEl) return;
@@ -8339,10 +8145,13 @@ body.view-not-homepage #main-above-feed {
       return;
     }
 
-    // Nếu người dùng chèn ảnh đại diện qua nút "Chèn hình ảnh" của Blogger trong ô Content
-    const inlineImg = configEl.querySelector('img');
-    if (inlineImg && inlineImg.src && avatarImg) {
-      avatarImg.src = inlineImg.src;
+    // Nếu người dùng chèn ảnh qua nút "Chèn hình ảnh" của Blogger trong ô Content
+    const inlineImgs = configEl.querySelectorAll('img');
+    if (inlineImgs.length === 1) {
+      if (inlineImgs[0].src && avatarImg) avatarImg.src = inlineImgs[0].src;
+    } else if (inlineImgs.length >= 2) {
+      if (inlineImgs[0].src) coverWrapper.style.backgroundImage = `url("${inlineImgs[0].src}")`;
+      if (inlineImgs[1].src && avatarImg) avatarImg.src = inlineImgs[1].src;
     }
 
     const rawContent = configEl.innerHTML.trim();
