@@ -68,7 +68,9 @@ const bSkinVariables = `
 // ──────────────────────────────────────────
 // 4. Assemble Blogger XML
 // ──────────────────────────────────────────
+const nowIso = new Date().toISOString();
 const xml = `<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Compiled at: ${nowIso} -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -1086,9 +1088,19 @@ ${combinedJs}
 </html>`;
 
 // ──────────────────────────────────────────
-// 5. Write output
+// 5. Write output (Delete old file first to force clean inode allocation and trigger editor reloads)
 // ──────────────────────────────────────────
-fs.writeFileSync(path.join(distDir, "theme.xml"), xml, "utf8");
+const themeXmlPath = path.join(distDir, "theme.xml");
+if (fs.existsSync(themeXmlPath)) {
+  try {
+    fs.unlinkSync(themeXmlPath);
+  } catch (err) {
+    // fallback if file is locked
+  }
+}
+fs.writeFileSync(themeXmlPath, xml, { encoding: "utf8", flag: "w" });
 
 const sizeKB = (Buffer.byteLength(xml, "utf8") / 1024).toFixed(1);
-console.log(`✅ dist/theme.xml compiled successfully! (${sizeKB} KB)`);
+const lineCount = xml.split("\n").length;
+const buildTime = new Date().toLocaleTimeString("vi-VN");
+console.log(`✅ dist/theme.xml compiled successfully at ${buildTime}! (${sizeKB} KB, ${lineCount} lines)`);
