@@ -294,18 +294,26 @@ ${combinedCss}
             <b:includable id='main'>
               <nav class='nav-menu-wrapper' aria-label='Menu chính'>
                 <ul class='nav-menu'>
-                  <b:loop values='data:links' var='link'>
-                    <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
-                      <li class='has-dropdown'>
-                        <a href='#'><b:eval expr='data:link.name.substring(1)'/></a>
-                        <ul class='dropdown-menu'>
-                          <li><a expr:href='data:link.target'><b:eval expr='data:link.name.substring(1)'/></a></li>
-                        </ul>
-                      </li>
-                    <b:else/>
-                      <li><a expr:href='data:link.target'><data:link.name/></a></li>
-                    </b:if>
-                  </b:loop>
+                  <b:if cond='data:links.notEmpty'>
+                    <b:loop values='data:links' var='link'>
+                      <b:if cond='data:link.name.startsWith(&quot;_&quot;)'>
+                        <li class='has-dropdown'>
+                          <a href='#'><b:eval expr='data:link.name.substring(1)'/></a>
+                          <ul class='dropdown-menu'>
+                            <li><a expr:href='data:link.target'><b:eval expr='data:link.name.substring(1)'/></a></li>
+                          </ul>
+                        </li>
+                      <b:else/>
+                        <li><a expr:href='data:link.target' data-bilingual='true'><data:link.name/></a></li>
+                      </b:if>
+                    </b:loop>
+                  <b:else/>
+                    <!-- Fallback mặc định khi blog chưa cấu hình LinkList1 -->
+                    <li><a expr:href='data:blog.homepageUrl' data-bilingual='true'>Trang Chủ | Home</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' data-bilingual='true'>Mục Lục | Archive</a></li>
+                    <li><a href='#category-tabs-section' data-bilingual='true'>Chủ Đề | Topics</a></li>
+                    <li><a href='#profile-cover-section' data-bilingual='true'>Về Tác Giả | About</a></li>
+                  </b:if>
                 </ul>
               </nav>
             </b:includable>
@@ -336,9 +344,9 @@ ${combinedCss}
   <div class='site-wrapper'>
 
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
-    <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='3' showaddelement='yes'>
-      <!-- Widget Tải Ảnh Trực Tiếp Từ Máy Tính (Có nút Chọn Tệp / Upload file từ máy) -->
-      <b:widget id='Image1' type='Image' version='2' title='🖼️ Tải Lên Ảnh Bìa (Từ Máy Tính)'>
+    <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='4' showaddelement='yes'>
+      <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
+      <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
         <b:includable id='main'>
           <b:if cond='data:sourceUrl'>
             <div id='profile-uploaded-banner' style='display:none;'><data:sourceUrl/></div>
@@ -346,7 +354,17 @@ ${combinedCss}
         </b:includable>
       </b:widget>
 
-      <b:widget id='HTML1' type='HTML' version='2' title='Ảnh Bìa &amp; Tác Giả'>
+      <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
+      <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
+        <b:includable id='main'>
+          <b:if cond='data:sourceUrl'>
+            <div id='profile-uploaded-avatar' style='display:none;'><data:sourceUrl/></div>
+          </b:if>
+        </b:includable>
+      </b:widget>
+
+      <!-- Widget 3: Tên & Lời Giới Thiệu Tác Giả -->
+      <b:widget id='HTML1' type='HTML' version='2' title='✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả'>
         <b:includable id='main'>
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
@@ -368,6 +386,9 @@ ${combinedCss}
                 <a class='btn-subscribe' href='#newsletter'>💌 Nhận Bản Tin</a>
               </div>
             </div>
+            <b:if cond='data:title and data:title != "✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả"'>
+              <div id='profile-widget-title' style='display:none;'><data:title/></div>
+            </b:if>
             <b:if cond='data:content'>
               <div id='profile-custom-config' style='display:none;'><data:content/></div>
             </b:if>
@@ -382,12 +403,20 @@ ${combinedCss}
         <b:includable id='main'>
           <nav class='category-tabs-bar' aria-label='Lọc theo chủ đề'>
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả</a>
-            <b:loop values='data:labels' var='label'>
-              <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
-              <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
-                <a class='tab-pill' expr:href='data:label.url' data-bilingual='true'><data:label.name/></a>
-              </b:if>
-            </b:loop>
+            <b:if cond='data:labels.notEmpty'>
+              <b:loop values='data:labels' var='label'>
+                <!-- LOẠI TRỪ HOÀN TOÀN nhãn widget (@) và nhãn AI (ai:) -->
+                <b:if cond='not (data:label.name startsWith "@" or data:label.name startsWith "ai:" or data:label.name startsWith "AI-")'>
+                  <a class='tab-pill' expr:href='data:label.url' data-bilingual='true'><data:label.name/></a>
+                </b:if>
+              </b:loop>
+            <b:else/>
+              <!-- Fallback khi blog mới chưa gắn nhãn -->
+              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Phong Cách Sống</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Chiêm Nghiệm</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Công Nghệ &amp; AI</a>
+              <a class='tab-pill' expr:href='data:blog.homepageUrl' data-bilingual='true'>Sách &amp; Góc Nhìn</a>
+            </b:if>
           </nav>
         </b:includable>
       </b:widget>
@@ -861,68 +890,82 @@ ${combinedCss}
           </b:widget>
 
           <!-- Widget: About Me -->
-          <b:widget id='HTML2' type='HTML' version='2'>
+          <b:widget id='HTML2' type='HTML' version='2' title='👤 Về Tác Giả (Sidebar)'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'>👤 Về Tác Giả</h3>
-                <img class='sidebar-about-avatar'
-                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&amp;auto=format&amp;fit=crop&amp;q=80'
-                     alt='Avatar tác giả' width='64' height='64'/>
-                <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
-                <div class='sidebar-socials'>
-                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
-                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
-                  <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
-                </div>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả&quot;'/></h3>
+                <b:if cond='data:content'>
+                  <div class='sidebar-about-custom-content'><data:content/></div>
+                <b:else/>
+                  <img class='sidebar-about-avatar'
+                       src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&amp;auto=format&amp;fit=crop&amp;q=80'
+                       alt='Avatar tác giả' width='64' height='64'/>
+                  <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
+                  <div class='sidebar-socials'>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
+                  </div>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
 
           <!-- Widget: Popular Posts -->
-          <b:widget id='PopularPosts1' type='PopularPosts' version='2'>
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'>🔥 Bài Viết Nổi Bật</h3>
-                <ul class='popular-posts-list'>
-                  <b:loop values='data:posts' var='ppPost' index='ppIdx'>
-                    <li>
-                      <a class='popular-post-item' expr:href='data:ppPost.url'>
-                        <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
-                        <b:if cond='data:ppPost.featuredImage'>
-                          <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
-                               expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
-                        </b:if>
-                        <div class='popular-post-info'>
-                          <div class='popular-post-title'><data:ppPost.title/></div>
-                          <div class='popular-post-date'>📅 <data:ppPost.date/></div>
-                        </div>
-                      </a>
-                    </li>
-                  </b:loop>
-                </ul>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
+                <b:if cond='data:posts.notEmpty'>
+                  <ul class='popular-posts-list'>
+                    <b:loop values='data:posts' var='ppPost' index='ppIdx'>
+                      <li>
+                        <a class='popular-post-item' expr:href='data:ppPost.url'>
+                          <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
+                          <b:if cond='data:ppPost.featuredImage'>
+                            <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
+                                 expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
+                          </b:if>
+                          <div class='popular-post-info'>
+                            <div class='popular-post-title'><data:ppPost.title/></div>
+                            <div class='popular-post-date'>📅 <data:ppPost.date/></div>
+                          </div>
+                        </a>
+                      </li>
+                    </b:loop>
+                  </ul>
+                <b:else/>
+                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
 
           <!-- Widget: Newsletter -->
-          <b:widget id='HTML4' type='HTML' version='2'>
+          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin (Sidebar)'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'>📨 Nhận Bài Viết Mới</h3>
-                <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
-                <div class='sidebar-newsletter-form'>
-                  <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
-                  <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
-                </div>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;📨 Nhận Bản Tin&quot;'/></h3>
+                <b:if cond='data:content'>
+                  <div class='sidebar-newsletter-custom'><data:content/></div>
+                <b:else/>
+                  <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+                  <div class='sidebar-newsletter-form'>
+                    <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
+                    <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
+                  </div>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
 
           <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng) -->
-          <b:widget id='HTML3' type='HTML' version='2'>
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)'>
             <b:includable id='main'>
               <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
-                <!-- Google AdSense 300x250 / 300x600 code here -->
+                <b:if cond='data:content'>
+                  <data:content/>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
@@ -950,17 +993,32 @@ ${combinedCss}
             <b:includable id='main'>
               <div class='footer-col-brand'>
                 <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
-                <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+                <b:if cond='data:content'>
+                  <div class='footer-tagline'><data:content/></div>
+                <b:else/>
+                  <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
           <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕'>
             <b:includable id='main'>
               <div class='footer-coffee-wrapper'>
-                <a class='btn-coffee-compact' href='https://buymeacoffee.com/yourname' target='_blank' rel='noopener noreferrer'>
-                  <span class='coffee-icon'>☕</span>
-                  <span class='coffee-label'>Mời tôi ly cà phê</span>
-                </a>
+                <b:if cond='data:content'>
+                  <b:if cond='data:content.trim().startsWith(&quot;http&quot;)'>
+                    <a class='btn-coffee-compact' expr:href='data:content.trim()' target='_blank' rel='noopener noreferrer'>
+                      <span class='coffee-icon'>☕</span>
+                      <span class='coffee-label'>Mời tôi ly cà phê</span>
+                    </a>
+                  <b:else/>
+                    <data:content/>
+                  </b:if>
+                <b:else/>
+                  <a class='btn-coffee-compact' href='https://buymeacoffee.com/yourname' target='_blank' rel='noopener noreferrer'>
+                    <span class='coffee-icon'>☕</span>
+                    <span class='coffee-label'>Mời tôi ly cà phê</span>
+                  </a>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
@@ -971,11 +1029,18 @@ ${combinedCss}
           <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
             <b:includable id='main'>
               <div class='footer-col-legal'>
-                <h4 class='footer-col-title'><data:title/></h4>
+                <h4 class='footer-col-title'><b:eval expr='data:title ? data:title : &quot;⚖️ Chính Sách &amp; Minh Bạch&quot;'/></h4>
                 <ul class='footer-links'>
-                  <b:loop values='data:links' var='llink'>
-                    <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
-                  </b:loop>
+                  <b:if cond='data:links.notEmpty'>
+                    <b:loop values='data:links' var='llink'>
+                      <li><a expr:href='data:llink.target'><data:llink.name/></a></li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a expr:href='data:blog.homepageUrl + &quot;p/chinh-sach-bao-mat.html&quot;'>Chính Sách Bảo Mật</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + &quot;p/dieu-khoan-su-dung.html&quot;'>Điều Khoản Sử Dụng</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + &quot;p/ai-transparency.html&quot;'>Minh Bạch Nội Dung AI</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + &quot;p/lien-he.html&quot;'>Liên Hệ Hợp Tác</a></li>
+                  </b:if>
                 </ul>
               </div>
             </b:includable>
@@ -987,12 +1052,16 @@ ${combinedCss}
           <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
-                <h4 class='footer-col-title'>📬 Nhận Bài Viết Mới</h4>
-                <p class='footer-newsletter-desc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
-                <form class='newsletter-form' onsubmit='return false;'>
-                  <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin'/>
-                  <button class='btn-submit' id='footer-subscribe-btn' type='submit'>Đăng Ký</button>
-                </form>
+                <h4 class='footer-col-title'><b:eval expr='data:title ? data:title : &quot;📬 Nhận Bài Viết Mới&quot;'/></h4>
+                <b:if cond='data:content'>
+                  <div class='footer-newsletter-custom'><data:content/></div>
+                <b:else/>
+                  <p class='footer-newsletter-desc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
+                  <form class='newsletter-form' onsubmit='return false;'>
+                    <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin'/>
+                    <button class='btn-submit' id='footer-subscribe-btn' type='submit'>Đăng Ký</button>
+                  </form>
+                </b:if>
               </div>
             </b:includable>
           </b:widget>
@@ -1000,14 +1069,21 @@ ${combinedCss}
             <b:includable id='main'>
               <div class='footer-col-social'>
                 <div class='footer-social-grid'>
-                  <b:loop values='data:links' var='slink'>
-                    <a class='footer-social-icon'
-                       expr:href='data:slink.target'
-                       target='_blank'
-                       rel='noopener noreferrer'
-                       expr:aria-label='data:slink.name'
-                       expr:title='data:slink.name'><data:slink.name/></a>
-                  </b:loop>
+                  <b:if cond='data:links.notEmpty'>
+                    <b:loop values='data:links' var='slink'>
+                      <a class='footer-social-icon'
+                         expr:href='data:slink.target'
+                         target='_blank'
+                         rel='noopener noreferrer'
+                         expr:aria-label='data:slink.name'
+                         expr:title='data:slink.name'><data:slink.name/></a>
+                    </b:loop>
+                  <b:else/>
+                    <a class='footer-social-icon' href='https://facebook.com' target='_blank' rel='noopener' title='Facebook'>FB</a>
+                    <a class='footer-social-icon' href='https://twitter.com' target='_blank' rel='noopener' title='X (Twitter)'>𝕏</a>
+                    <a class='footer-social-icon' href='https://github.com' target='_blank' rel='noopener' title='GitHub'>GH</a>
+                    <a class='footer-social-icon' href='https://youtube.com' target='_blank' rel='noopener' title='YouTube'>YT</a>
+                  </b:if>
                 </div>
               </div>
             </b:includable>
@@ -1029,7 +1105,11 @@ ${combinedCss}
           <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
             <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
               <b:includable id='main'>
-                <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
+                <b:if cond='data:content'>
+                  <span class='footer-copyright'><data:content/></span>
+                <b:else/>
+                  <span class='footer-copyright'>© 2026 <data:blog.title/>. Tất cả quyền được bảo lưu.</span>
+                </b:if>
               </b:includable>
             </b:widget>
           </b:section>
@@ -1040,9 +1120,15 @@ ${combinedCss}
               <b:includable id='main'>
                 <nav aria-label='Footer navigation'>
                   <ul class='footer-bottom-nav'>
-                    <b:loop values='data:links' var='bmlink'>
-                      <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
-                    </b:loop>
+                    <b:if cond='data:links.notEmpty'>
+                      <b:loop values='data:links' var='bmlink'>
+                        <li><a expr:href='data:bmlink.target'><data:bmlink.name/></a></li>
+                      </b:loop>
+                    <b:else/>
+                      <li><a expr:href='data:blog.homepageUrl'>Trang Chủ</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + &quot;p/muc-luc.html&quot;'>Mục Lục</a></li>
+                      <li><a expr:href='data:blog.homepageUrl + &quot;feeds/posts/default&quot;' target='_blank'>RSS Feed</a></li>
+                    </b:if>
                   </ul>
                 </nav>
               </b:includable>
@@ -1066,9 +1152,13 @@ ${combinedCss}
         <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang'>
           <b:includable id='main'>
             <div class='footer-ads-tier'>
-              <div class='footer-ads-slot'>
-                📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
-              </div>
+              <b:if cond='data:content'>
+                <data:content/>
+              <b:else/>
+                <div class='footer-ads-slot'>
+                  📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
+                </div>
+              </b:if>
             </div>
           </b:includable>
         </b:widget>

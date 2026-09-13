@@ -126,10 +126,27 @@
     const coverWrapper = document.getElementById('cover-image-wrapper');
     if (!coverWrapper) return;
 
-    // Ưu tiên 1: Ảnh tải lên trực tiếp từ máy tính qua widget Image1 (Tải Lên Ảnh Bìa)
+    // Ưu tiên 1A: Ảnh Banner tải lên trực tiếp từ máy tính qua widget Image1
     const uploadedBannerEl = document.getElementById('profile-uploaded-banner');
     if (uploadedBannerEl && uploadedBannerEl.textContent.trim()) {
       coverWrapper.style.backgroundImage = `url("${uploadedBannerEl.textContent.trim()}")`;
+    }
+
+    // Ưu tiên 1B: Ảnh Avatar tải lên trực tiếp từ máy tính qua widget Image2
+    const uploadedAvatarEl = document.getElementById('profile-uploaded-avatar');
+    if (uploadedAvatarEl && uploadedAvatarEl.textContent.trim()) {
+      const avatarImg = document.getElementById('profile-avatar-img');
+      if (avatarImg) avatarImg.src = uploadedAvatarEl.textContent.trim();
+    }
+
+    // Ưu tiên 1C: Đổi tên tác giả nếu người dùng đặt Tiêu đề cho widget HTML1
+    const customTitleEl = document.getElementById('profile-widget-title');
+    const nameEl = document.getElementById('profile-author-name');
+    const bioEl = document.getElementById('profile-author-bio');
+    const avatarImg = document.getElementById('profile-avatar-img');
+
+    if (customTitleEl && customTitleEl.textContent.trim() && nameEl) {
+      nameEl.textContent = customTitleEl.textContent.trim();
     }
 
     const configEl = document.getElementById('profile-custom-config');
@@ -139,7 +156,7 @@
     if (!rawContent) return;
 
     // Case 1: Người dùng dán nguyên khối HTML tùy chỉnh hoàn toàn
-    if (configEl.querySelector('.profile-cover-section') || (rawContent.startsWith('<') && !rawContent.includes('banner:') && !rawContent.includes('avatar:'))) {
+    if (configEl.querySelector('.profile-cover-section') || (rawContent.startsWith('<') && !rawContent.includes('banner:') && !rawContent.includes('avatar:') && !rawContent.includes('bio:'))) {
       const coverSection = document.getElementById('profile-cover-section');
       if (coverSection) {
         coverSection.outerHTML = rawContent;
@@ -147,20 +164,15 @@
       return;
     }
 
-    // Case 2: Người dùng dán link ảnh hoặc cú pháp ngắn
+    // Case 2: Người dùng dán link ảnh hoặc cú pháp ngắn hoặc văn bản tự nhiên
     const textOnly = configEl.textContent.trim();
     if (textOnly) {
-      const coverWrapper = document.getElementById('cover-image-wrapper');
-      const avatarImg = document.getElementById('profile-avatar-img');
-      const bioEl = document.getElementById('profile-author-bio');
-      const nameEl = document.getElementById('profile-author-name');
-
       // Nếu chỉ dán mỗi link ảnh (http...)
       if (/^https?:\/\/[^\s]+$/i.test(textOnly)) {
         if (coverWrapper) {
           coverWrapper.style.backgroundImage = `url("${textOnly}")`;
         }
-      } else {
+      } else if (textOnly.includes('|') || /(?:banner|avatar|bio|name)\s*:/i.test(textOnly)) {
         // Cú pháp: banner: https://... | avatar: https://... | bio: ... | name: ...
         const parts = textOnly.split('|').map(s => s.trim());
         parts.forEach(part => {
@@ -180,6 +192,15 @@
             if (coverWrapper) coverWrapper.style.backgroundImage = `url("${part.trim()}")`;
           }
         });
+      } else {
+        // Văn bản tự nhiên: người dùng mở widget và gõ lời giới thiệu hoặc tên + giới thiệu
+        const lines = textOnly.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (lines.length > 1 && lines[0].length < 50) {
+          if (nameEl) nameEl.textContent = lines[0];
+          if (bioEl) bioEl.innerHTML = lines.slice(1).join('<br/>');
+        } else {
+          if (bioEl) bioEl.textContent = textOnly;
+        }
       }
     }
   }
