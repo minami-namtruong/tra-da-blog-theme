@@ -26,6 +26,16 @@
   flex-direction: column;
   height: 100%;
 }
+.footer-section-col .widget,
+.footer-section-col .widget-content,
+#footer-bottom-menu-section,
+#footer-bottom-menu-section .widget,
+#footer-bottom-menu-section .widget-content {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
 .footer-tier1 .widget:has(.footer-coffee-wrapper),
 .footer-tier1 .widget:has(.footer-col-social) {
   margin-top: auto;
