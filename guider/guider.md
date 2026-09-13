@@ -267,27 +267,36 @@ Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xá
 ---
 
 ### 3.4. Cấu Hình Widget Ảnh Bìa & Tác Giả (Profile Cover Hero)
-Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (trong khu vực **Ảnh Bìa & Tác Giả**). Bạn có thể tải ảnh trực tiếp từ máy tính lên hoặc dùng link ảnh online theo 2 cách rất tiện:
+Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (trong khu vực **Ảnh Bìa & Tác Giả**). Theme đã tách bạch sẵn **3 tiện ích riêng biệt** để bạn thao tác nhanh chóng và thuận tiện nhất:
 
-#### Cách 1: Tải ảnh trực tiếp từ máy tính (Có sẵn nút "Chọn Tệp / Upload")
-Trong mục **Bố cục (Layout)** ➔ khu vực **Ảnh Bìa & Tác Giả**, bạn sẽ thấy tiện ích:  
-👉 **🖼️ Tải Lên Ảnh Bìa (Từ Máy Tính)**:
-1. Bấm **Chỉnh sửa** tiện ích này.
-2. Tại mục **Hình ảnh (Image)**, chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm nút **Chọn tệp (Choose File)** và chọn bức ảnh từ máy tính của bạn.
-3. Bấm **LƯU (SAVE)**.
-4. **Xong!** Theme sẽ tự động lấy bức ảnh bạn vừa tải lên làm hình nền Banner của blog!
+#### 1. Tải Ảnh Bìa Banner (Widget `Image1` — `🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)`)
+1. Trong mục **Bố cục (Layout)** ➔ khu vực **Ảnh Bìa & Tác Giả**, bấm **Chỉnh sửa** tại widget `🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)`.
+2. Tại mục **Hình ảnh (Image)**, chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm nút **Chọn tệp (Choose File)** và chọn ảnh bìa từ máy của bạn.
+3. Bấm **LƯU (SAVE)**. Theme sẽ tự động lấy ảnh này làm hình nền Banner toàn màn hình!
 
-#### Cách 2: Nhập link ảnh hoặc cấu hình qua ô "Content" (Widget `HTML1`)
-Bấm **Chỉnh sửa** widget **Ảnh Bìa & Tác Giả** (`HTML1`):
-* **Để trống ô Content:** Theme sử dụng ảnh bìa và avatar mặc định của trang Preview.
-* **Chỉ đổi ảnh bìa bằng link:** Dán thẳng link ảnh `https://...` vào ô `Content` ➔ Bấm **LƯU**.
-* **Đổi cả Banner, Avatar, Lời Giới Thiệu & Tên:**
-  Sử dụng cú pháp phân tách bằng dấu gạch đứng `|`:
+#### 2. Tải Avatar Tròn Tác Giả (Widget `Image2` — `👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)`)
+1. Bấm **Chỉnh sửa** tại widget `👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)`.
+2. Chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm **Chọn tệp (Choose File)** và chọn ảnh đại diện của bạn.
+3. Bấm **LƯU (SAVE)**. Theme tự động gán ảnh vào khung avatar tròn viền trắng sang trọng!
+
+#### 3. Cài Đặt Tên & Lời Giới Thiệu (Widget `HTML1` — `✍️ 3. Tên & Lời Giới Thiệu Tác Giả`)
+Bấm **Chỉnh sửa** widget này:
+* **Đổi Tên Tác Giả:** Nhập trực tiếp tên bạn vào ô **Tiêu đề (Title)** (Ví dụ: `Nam Trương`).
+* **Đổi Lời Giới Thiệu (Bio):** Nhập trực tiếp đoạn văn bản giới thiệu về bạn vào ô **Nội dung (Content)**.
+  > Không cần phải nhớ cú pháp phức tạp! Bạn chỉ cần gõ văn bản tự nhiên, theme sẽ tự động nhận diện và cập nhật ngay lập tức.
+* **Tùy chọn nâng cao:** Nếu bạn muốn dùng link ảnh trực tuyến ngoài thay vì tải từ máy tính, bạn có thể gõ vào ô Content:
   ```text
-  banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Chia sẻ về cuộc sống và tri thức | name: Nam Trương
+  banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Lời giới thiệu của bạn | name: Tên của bạn
   ```
 
-> **Mẹo lấy link ảnh lưu vĩnh viễn trên Google CDN:** Khi viết bất kỳ bài đăng nào trên Blogger, bạn bấm biểu tượng **Chèn hình ảnh ➔ Tải lên từ máy tính**. Sau khi ảnh tải lên, bạn nhấp chuột phải vào ảnh chọn **"Sao chép địa chỉ hình ảnh"**. Link này được lưu trữ miễn phí, tốc độ cao trên máy chủ Google để bạn dán vào bất cứ widget nào!
+---
+
+### 3.5. Cơ Chế Smart Fallback Tự Động (Chống Lỗi Cho Blog Mới Cài Đặt)
+Từ phiên bản này, theme tích hợp cơ chế **Smart Fallback** toàn diện:
+* **Tự động lấy bài mới nhất:** Nếu bạn cấu hình widget lọc theo nhãn (như `@Tiêu điểm`, `@Nổi bật`, `@Điểm tin`,...) nhưng blog của bạn chưa kịp gắn nhãn đó, widget sẽ **tự động lấy các bài viết mới nhất** để hiển thị lấp đầy, thay vì báo lỗi "Không thể tải nội dung mục này."
+* **Trích dẫn chiêm nghiệm dự phòng:** Nếu widget Trích dẫn (`quote`) chưa có bài gắn nhãn `@Quote`, theme sẽ tự động hiển thị câu danh ngôn triết lý nghệ thuật mặc định.
+* **Gõ câu nói trực tiếp vào widget Trích dẫn:** Bạn có thể mở bất kỳ widget trích dẫn nào và gõ thẳng câu nói tâm đắc của bạn vào ô **Nội dung (Content)** (Ví dụ: `"Cuộc sống là một hành trình. - Khuyết danh"`), widget sẽ hiển thị ngay câu nói đó!
+* **Dự phòng Menu & Danh mục khi blog mới:** Nếu bạn chưa kịp tạo menu (`LinkList1`), liên kết mạng xã hội (`LinkList4`) hay thanh danh mục (`Label1`), theme tự động hiển thị các đề mục mẫu hoàn chỉnh, đảm bảo blog luôn sống động và đầy đủ cấu trúc.
 
 ---
 

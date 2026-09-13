@@ -82,8 +82,32 @@
         container.classList.remove('special-posts-widget');
         return;
       }
-      // Case C: Người dùng chỉ gõ tên nhãn dạng văn bản (VD: "Triết lý", "label: Sách", "labels: A, B | limit: 3")
+      // Case C: Người dùng chỉ gõ tên nhãn dạng văn bản hoặc câu trích dẫn
       const textOnly = userConfigEl.textContent.trim();
+      const currentPattern = container.dataset.pattern || 'digest';
+
+      // Nếu là kiểu quote và người dùng gõ trực tiếp một câu nói / trích dẫn:
+      if (currentPattern === 'quote' && textOnly && !/^(labels?|nhãn|posts|links|limit|sort)\s*:/i.test(textOnly) && (textOnly.length > 20 || textOnly.includes('"') || textOnly.includes('“') || textOnly.includes(' - '))) {
+        let quoteText = textOnly;
+        let quoteAuthor = 'Chiêm nghiệm';
+        if (quoteText.includes(' - ')) {
+          const qParts = quoteText.split(' - ');
+          quoteText = qParts[0].trim().replace(/^["“]+|["”]+$/g, '');
+          quoteAuthor = qParts.slice(1).join(' - ').trim();
+        }
+        const customQuotePost = [{
+          title: quoteText,
+          url: '#',
+          dateFormatted: '',
+          author: quoteAuthor,
+          snippet: ''
+        }];
+        const widgetTitle = container.dataset.title || '';
+        container.innerHTML = buildWidgetShell(widgetTitle, '', '', currentPattern, renderQuotePattern(customQuotePost, { showThumb: false, showSnippet: false }));
+        userConfigEl.remove();
+        return;
+      }
+
       if (textOnly) {
         const parts = textOnly.split('|').map(s => s.trim());
         parts.forEach(part => {
@@ -145,36 +169,54 @@
         try {
           posts = await fetchPopularPosts(limit, timeRange, rawLabels);
         } catch (e) {
-          // Fallback về latest nếu API Popular Posts không khả dụng
-          console.warn('[SpecialPostsWidget] Popular Posts API không khả dụng, fallback → latest', e);
-          if (rawLabels) {
-            const labelList = splitLabels(rawLabels);
-            posts = await fetchMultiLabelPosts(labelList, limit, 'latest');
-          }
+          posts = [];
+        }
+        // Fallback về bài mới nhất nếu chưa có đủ dữ liệu lượt xem
+        if (!posts || posts.length === 0) {
+          posts = await fetchLatestPosts(limit);
         }
       } else if (rawLabels) {
         // Chế độ Multi-label
         const labelList = splitLabels(rawLabels);
-        posts = await fetchMultiLabelPosts(labelList, limit, sort);
-      }
-
-      if ((!posts || posts.length === 0) && typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
-        var mockAll = window.__SPECIAL_POSTS_MOCK__;
-        if (rawLabels) {
-          var lList = splitLabels(rawLabels).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
-          posts = mockAll.filter(function(p) {
-            var pLabels = (p.labels || []).map(function(l) { return l.toLowerCase().replace(/^[@#_~]+/, ''); });
-            return lList.some(function(req) { return pLabels.indexOf(req) !== -1; });
-          });
+        try {
+          posts = await fetchMultiLabelPosts(labelList, limit, sort);
+        } catch (e) {
+          posts = [];
         }
+        // TỰ ĐỘNG FALLBACK THÔNG MINH:
+        // Nếu nhãn yêu cầu chưa có bài nào (VD blog mới cài chưa gắn nhãn @Tiêu điểm, @Quote, @Điểm tin...)
+        // Tự động lấy các bài viết mới nhất để lấp đầy widget, đảm bảo blog luôn sống động và không báo lỗi!
         if (!posts || posts.length === 0) {
-          posts = mockAll;
+          posts = await fetchLatestPosts(limit);
         }
-        posts = posts.slice(0, limit);
+      } else {
+        // Không chỉ định nhãn -> Lấy bài viết mới nhất
+        posts = await fetchLatestPosts(limit);
       }
 
+      // NẾU LÀ KIỂU TRÍCH DẪN (QUOTE) MÀ VẪN CHƯA CÓ BÀI NÀO:
+      if (pattern === 'quote' && (!posts || posts.length === 0)) {
+        posts = [{
+          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế.",
+          url: "#",
+          dateFormatted: formatDate(new Date().toISOString()),
+          author: "Trà Đá Triết Lý",
+          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn."
+        }];
+      }
+
+      // NẾU BLOG HOÀN TOÀN TRỐNG (Chưa có bài đăng nào trên cả blog)
       if (!posts || posts.length === 0) {
-        renderEmptyState(container, widgetTitle, viewAllText, rawLabels);
+        container.innerHTML = buildWidgetShell(
+          widgetTitle,
+          viewAllText,
+          rawLabels,
+          pattern,
+          `<div class="sp-empty-state" style="padding: 1.5rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+            <span style="font-size: 1.6rem; display: block; margin-bottom: 0.35rem;">✨</span>
+            <span>Chưa có bài viết nào. Hãy đăng bài đầu tiên để làm nổi bật tại đây!</span>
+          </div>`
+        );
         return;
       }
 
@@ -189,26 +231,33 @@
       );
 
     } catch (err) {
-      if (typeof window !== 'undefined' && window.__SPECIAL_POSTS_MOCK__) {
-        var mockAll = window.__SPECIAL_POSTS_MOCK__;
-        var posts = mockAll.slice(0, limit);
-        var renderer = PATTERN_RENDERERS[pattern] || PATTERN_RENDERERS.digest;
-        container.innerHTML = buildWidgetShell(
-          widgetTitle,
-          viewAllText,
-          rawLabels,
-          pattern,
-          renderer(posts, { showThumb, showSnippet, limit })
-        );
-        return;
+      console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu, thử fallback về bài mới nhất:', err);
+      try {
+        const fallbackPosts = await fetchLatestPosts(limit);
+        if (fallbackPosts && fallbackPosts.length > 0) {
+          const renderer = PATTERN_RENDERERS[pattern] || PATTERN_RENDERERS.digest;
+          container.innerHTML = buildWidgetShell(
+            widgetTitle,
+            viewAllText,
+            rawLabels,
+            pattern,
+            renderer(fallbackPosts, { showThumb, showSnippet, limit })
+          );
+          return;
+        }
+      } catch (fbErr) {
+        // ignore
       }
-      console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu:', err);
+
+      // Trường hợp bất khả kháng mới hiện thông báo nhẹ nhàng thay vì lỗi đỏ
       container.innerHTML = buildWidgetShell(
         widgetTitle,
         viewAllText,
         rawLabels,
         pattern,
-        '<div class="sp-error">Không thể tải nội dung mục này.</div>'
+        `<div class="sp-empty-state" style="padding: 1.25rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+          <span>✨ Mục này sẽ tự động hiển thị khi bạn đăng bài viết mới.</span>
+        </div>`
       );
     }
   }
@@ -430,16 +479,41 @@
     const cached   = readCache(cacheKey);
     if (cached) return cached;
 
-    const encodedLabel = encodeURIComponent(label);
-    const blogUrl      = getBlogBaseUrl();
-    const url          = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=${count}&orderby=published`;
+    try {
+      const encodedLabel = encodeURIComponent(label);
+      const blogUrl      = getBlogBaseUrl();
+      const url          = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=${count}&orderby=published`;
 
-    const res  = await fetch(url);
-    const json = await res.json();
+      const res  = await fetch(url);
+      if (!res.ok) return [];
+      const json = await res.json();
 
-    const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
-    writeCache(cacheKey, posts);
-    return posts;
+      const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+      writeCache(cacheKey, posts);
+      return posts;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /* ── Fetch bài viết mới nhất toàn blog (Fallback tự động) ─────── */
+  async function fetchLatestPosts(count) {
+    const cacheKey = CACHE_PREFIX + 'latest_' + count;
+    const cached   = readCache(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const blogUrl = getBlogBaseUrl();
+      const url     = `${blogUrl}/feeds/posts/summary?alt=json&max-results=${count}&orderby=published`;
+      const res     = await fetch(url);
+      if (!res.ok) return [];
+      const json    = await res.json();
+      const posts   = parseFeedEntries(json.feed ? json.feed.entry : []);
+      writeCache(cacheKey, posts);
+      return posts;
+    } catch (e) {
+      return [];
+    }
   }
 
   /* ── Fetch Popular Posts (lượt xem nhiều nhất) ──────────────── */
@@ -450,26 +524,27 @@
       return filterByLabels(cached, labelFilter, limit);
     }
 
-    // Blogger Popular Posts JSON Feed
-    const blogUrl = getBlogBaseUrl();
-    // Blogger không có Public Popular Posts API trực tiếp;
-    // dùng feed với orderby=updated (phổ biến nhất) kết hợp max-results lớn
-    // và sắp xếp theo label nếu có
-    let url;
-    if (labelFilter) {
-      const labelList    = splitLabels(labelFilter);
-      const encodedLabel = encodeURIComponent(labelList[0]);
-      url = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=20&orderby=updated`;
-    } else {
-      url = `${blogUrl}/feeds/posts/summary?alt=json&max-results=20&orderby=updated`;
+    try {
+      const blogUrl = getBlogBaseUrl();
+      let url;
+      if (labelFilter) {
+        const labelList    = splitLabels(labelFilter);
+        const encodedLabel = encodeURIComponent(labelList[0]);
+        url = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=20&orderby=updated`;
+      } else {
+        url = `${blogUrl}/feeds/posts/summary?alt=json&max-results=20&orderby=updated`;
+      }
+
+      const res  = await fetch(url);
+      if (!res.ok) return [];
+      const json = await res.json();
+
+      const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+      writeCache(cacheKey, posts);
+      return posts.slice(0, limit);
+    } catch (e) {
+      return [];
     }
-
-    const res  = await fetch(url);
-    const json = await res.json();
-
-    const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
-    writeCache(cacheKey, posts);
-    return posts.slice(0, limit);
   }
 
   /* ── Fetch các bài viết theo danh sách URL chỉ định ─────────── */
