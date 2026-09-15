@@ -317,7 +317,9 @@
     const cleanTitle = title ? escapeHtml(title) : '';
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
-    const viewAllUrl = rawLabels.length > 0 ? ('/search/label/' + encodeURIComponent(rawLabels[0])) : '/search';
+    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
+    const firstLabel = labelsArr.length > 0 ? labelsArr[0] : '';
+    const viewAllUrl = firstLabel ? buildLabelUrl(firstLabel) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -381,9 +383,7 @@
     const thumb  = (opts.showThumb && post.thumbnail)
       ? optimizeThumbnail(post.thumbnail, 's600-c')
       : '';
-    const badge  = post.labels && post.labels[0]
-      ? formatLabelName(post.labels[0])
-      : '';
+    const badge  = extractNormalCategory(post.labels || []);
     const aiType = extractAIType(post.labels || []);
     const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
@@ -645,6 +645,19 @@
   /* ═══════════════════════════════════════════════════════════════
      UTILS
      ═══════════════════════════════════════════════════════════════ */
+
+  /** Trích xuất nhãn chuyên mục thường đầu tiên (loại trừ @ và ai:) */
+  function extractNormalCategory(labels) {
+    if (!labels || !labels.length) return '';
+    for (var i = 0; i < labels.length; i++) {
+      var raw = (labels[i] || '').trim();
+      var lower = raw.toLowerCase();
+      if (!raw.startsWith('@') && !lower.startsWith('ai:') && !lower.startsWith('ai-') && !lower.startsWith('series:')) {
+        return raw;
+      }
+    }
+    return '';
+  }
 
   /** Lọc ký tự @ # _ ~ khỏi tên nhãn trước khi hiển thị */
   function formatLabelName(raw) {

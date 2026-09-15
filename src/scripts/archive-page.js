@@ -11,7 +11,8 @@
 (function () {
   'use strict';
 
-  var CACHE_KEY = 'blogger_archive_posts';
+  var CACHE_KEY = 'blogger_archive_posts_v4';
+  var CACHE_TTL = 3 * 60 * 1000; // 3 phút
   var allPosts = [];
   var activeCategory = 'all';
   var searchQuery = '';
@@ -53,9 +54,14 @@
     var pathname = window.location.pathname.toLowerCase();
     var href = window.location.href.toLowerCase();
     var container = document.getElementById('editorial-archive-app');
+    var isContainerVisible = container && (
+      container.offsetParent !== null ||
+      !container.closest('#archive-page-wrapper') ||
+      container.closest('#archive-page-wrapper').style.display !== 'none'
+    );
 
     return (
-      Boolean(container) ||
+      Boolean(isContainerVisible) ||
       pathname.endsWith('/p/muc-luc.html') ||
       pathname.endsWith('/p/archive.html') ||
       pathname.endsWith('/p/dong-thoi-gian.html') ||
@@ -68,15 +74,26 @@
 
   // Thu thập dữ liệu bài viết (Cache -> API -> Fallback Mock Data)
   function loadArchiveData(callback) {
-    // 1. Kiểm tra Cache trong sessionStorage
+    // 0. Dọn sạch các cache cũ không có TTL
+    try {
+      sessionStorage.removeItem('blogger_archive_posts');
+      sessionStorage.removeItem('blogger_archive_posts_v2');
+      sessionStorage.removeItem('blogger_archive_posts_v3');
+      sessionStorage.removeItem('editorial_archive_posts');
+      sessionStorage.removeItem('editorial_archive_posts_v2');
+    } catch (e) {}
+
+    // 1. Kiểm tra Cache trong sessionStorage (hợp lệ trong 3 phút)
     try {
       var cached = sessionStorage.getItem(CACHE_KEY);
       if (cached) {
         var parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          allPosts = parsed;
+        if (parsed && parsed.ts && (Date.now() - parsed.ts < CACHE_TTL) && Array.isArray(parsed.posts) && parsed.posts.length > 0) {
+          allPosts = parsed.posts;
           if (callback) callback(allPosts);
           return;
+        } else {
+          sessionStorage.removeItem(CACHE_KEY);
         }
       }
     } catch (e) {
@@ -84,14 +101,14 @@
     }
 
     // 2. Thử tải Blogger JSON Feed API
-    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500';
+    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500&_cb=' + Date.now();
     var isPreviewOrLocal =
       window.location.protocol === 'file:' ||
       window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1';
 
     if (!isPreviewOrLocal) {
-      fetch(feedUrl)
+      fetch(feedUrl, { cache: 'no-cache' })
         .then(function (res) {
           if (!res.ok) throw new Error('Feed fetch failed: ' + res.status);
           return res.json();
@@ -114,9 +131,37 @@
               allLabels = entry.category.map(function(c) { return c.term || ''; });
             }
             
-            // QUY TẮC VÀNG: Bỏ qua bài viết nếu TẤT CẢ nhãn đều bắt đầu bằng "@"
-            var isExclusiveFeature = allLabels.length > 0 && allLabels.every(function(l) { return l.indexOf('@') === 0; });
-            if (isExclusiveFeature) return;
+            // 1. Phân tách nhãn thường vs nhãn tính năng (@) vs nhãn AI (ai:) vs nhãn series (series:)
+            var normalLabels = allLabels.filter(function(l) {
+              var lower = l.toLowerCase();
+              return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-') && !lower.startsWith('series:');
+            });
+
+            // 2. Trích xuất nhãn AI nếu có
+            var aiType = null;
+            allLabels.forEach(function(l) {
+              if (!aiType) {
+                var lower = l.toLowerCase().replace(/-/g, ':');
+                if (lower.startsWith('ai:')) aiType = lower;
+              }
+            });
+
+            // 3. Trích xuất nhãn Series nếu có
+            var hasSeriesLabel = allLabels.some(function(l) { return l.toLowerCase().startsWith('series:'); });
+            var seriesName = '';
+            if (hasSeriesLabel) {
+              var sLabel = allLabels.find(function(l) { return l.toLowerCase().startsWith('series:'); });
+              if (sLabel) seriesName = sLabel.replace(/^series:\s*/i, '').trim();
+            }
+
+            // ══ QUY TẮC VÀNG (Đặc tả: FEAT-TIMELINE-PAGE-V3 & FEAT-AI-TRANSPARENCY) ══
+            // Bỏ qua bài viết nếu ĐỘC QUYỀN TÍNH NĂNG (@)
+            // (Bài viết có nhãn nhưng TẤT CẢ nhãn đều là @ hoặc @ kết hợp ai:, không có nhãn chuyên mục thường nào VÀ không thuộc series nào)
+            // -> Bài viết này chỉ phục vụ hiển thị trên Widget chuyên biệt (@Tiêu điểm, @Quote, @Điểm tin...),
+            //    tuyệt đối KHÔNG xuất hiện trên Dòng Thời Gian / Mục Lục!
+            if (allLabels.length > 0 && normalLabels.length === 0 && !hasSeriesLabel) {
+              return;
+            }
 
             var title = (entry.title && entry.title.$t) || 'Bài viết không tiêu đề';
             var postUrl = '#';
@@ -129,23 +174,7 @@
             var dateStr = formatDateStr(published);
             var timestamp = published ? new Date(published).getTime() : 0;
             
-            var category = 'Chưa phân loại';
-            var aiType = null; // Nhãn AI (ai:assisted, ai:product, ai:generated)
-            if (allLabels.length > 0) {
-              var normalLabels = allLabels.filter(function(l) {
-                var lower = l.toLowerCase();
-                return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-');
-              });
-              category = normalLabels.length > 0 ? normalLabels[0] : allLabels[0];
-
-              // Trích xuất nhãn AI nếu có
-              allLabels.forEach(function(l) {
-                if (!aiType) {
-                  var lower = l.toLowerCase().replace(/-/g, ':');
-                  if (lower.startsWith('ai:')) aiType = lower;
-                }
-              });
-            }
+            var category = normalLabels.length > 0 ? normalLabels[0] : (seriesName || 'Chưa phân loại');
             // Lọc sạch các tiền tố đặc biệt nếu còn sót lại
             category = category.replace(/^[@#_~]+/, '').trim();
 
@@ -165,7 +194,10 @@
 
           allPosts = posts;
           try {
-            sessionStorage.setItem(CACHE_KEY, JSON.stringify(posts));
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+              ts: Date.now(),
+              posts: posts
+            }));
           } catch (e) {}
 
           if (callback) callback(allPosts);
@@ -328,16 +360,42 @@
     });
   }
 
+  // Kiểm tra khớp chuyên mục giữa bài viết và category đang chọn (hỗ trợ cả song ngữ VI | EN)
+  function isCategoryMatch(postCat, targetCat) {
+    if (!targetCat || targetCat === 'all') return true;
+    if (!postCat) return false;
+
+    var pLower = postCat.toLowerCase().trim();
+    var tLower = targetCat.toLowerCase().trim();
+
+    // 1. Khớp chính xác hoàn toàn
+    if (pLower === tLower) return true;
+
+    // 2. Tách song ngữ để khớp theo từng vế
+    var pParts = pLower.split('|').map(function (s) { return s.trim(); });
+    var tParts = tLower.split('|').map(function (s) { return s.trim(); });
+
+    for (var i = 0; i < pParts.length; i++) {
+      for (var j = 0; j < tParts.length; j++) {
+        if (pParts[i] && tParts[j]) {
+          if (pParts[i] === tParts[j] || pParts[i].indexOf(tParts[j]) !== -1 || tParts[j].indexOf(pParts[i]) !== -1) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   // Lọc bài viết theo searchQuery & activeCategory
   function filterPosts() {
     var queryRaw = searchQuery.toLowerCase().trim();
     var queryNormalized = removeVietnameseDiacritics(searchQuery);
 
     return allPosts.filter(function (post) {
-      // 1. Lọc theo chuyên mục
+      // 1. Lọc theo chuyên mục (hỗ trợ song ngữ)
       if (activeCategory !== 'all') {
-        var postCat = (post.category || '').toLowerCase();
-        if (postCat !== activeCategory.toLowerCase()) {
+        if (!isCategoryMatch(post.category, activeCategory)) {
           return false;
         }
       }
@@ -410,10 +468,7 @@
           if (searchInput) searchInput.value = '';
           if (clearBtn) clearBtn.style.display = 'none';
 
-          var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
-          tabs.forEach(function (t, idx) {
-            t.classList.toggle('active', idx === 0);
-          });
+          updateActiveCategoryTabs();
 
           syncUrlParams();
           applyFilterAndRender(container);
@@ -498,6 +553,9 @@
         }
       });
     });
+
+    // Luôn đồng bộ trạng thái active của Category Tabs dưới banner
+    updateActiveCategoryTabs();
   }
 
   // Khởi tạo toàn bộ sự kiện tìm kiếm & điều khiển
@@ -600,28 +658,59 @@
     container.innerHTML = html;
   }
 
-  // Kết nối thanh nhãn Chuyên mục dưới banner (.category-tabs-bar) để lọc bài viết
-  function bindCategoryTabs(container) {
-    var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
-    tabs.forEach(function (pill) {
-      if (pill._archiveBound) return;
-      pill._archiveBound = true;
+  // Cập nhật trạng thái active cho các tab chuyên mục dưới banner
+  function updateActiveCategoryTabs() {
+    var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill, #category-tabs-bar .tab-pill');
+    tabs.forEach(function (t) {
+      var href = t.getAttribute('href') || '';
+      var raw = (t.getAttribute('data-raw-label') || t.getAttribute('data-label') || t.textContent || '').trim();
+      var clean = raw.replace(/^✦\s*/, '').trim();
+      var isAll = href === '/' || href === (window.location.origin + '/') || 
+                  clean.toLowerCase().indexOf('tất cả') !== -1 || 
+                  clean.toLowerCase() === 'all';
 
-      pill.addEventListener('click', function (e) {
-        var appEl = document.getElementById('editorial-archive-app');
-        if (appEl && appEl.offsetParent !== null) {
-          e.preventDefault();
-          tabs.forEach(function (t) { t.classList.remove('active'); });
-          pill.classList.add('active');
-
-          var catText = pill.textContent.replace('✦', '').trim();
-          activeCategory = (catText === 'Tất cả') ? 'all' : catText;
-
-          syncUrlParams();
-          applyFilterAndRender(appEl);
-        }
-      });
+      if (activeCategory === 'all') {
+        t.classList.toggle('active', isAll);
+      } else {
+        t.classList.toggle('active', isCategoryMatch(clean, activeCategory));
+      }
     });
+  }
+
+  // Kết nối thanh nhãn Chuyên mục dưới banner (.category-tabs-bar) để lọc bài viết trên trang Timeline
+  function bindCategoryTabs(container) {
+    if (window._categoryTabsBound) return;
+    window._categoryTabsBound = true;
+
+    // Bắt sự kiện click ngay tại document (giai đoạn capture) để luôn chặn điều hướng trang chủ
+    document.addEventListener('click', function (e) {
+      var pill = e.target.closest('.category-tabs-bar .tab-pill, #category-tabs-bar .tab-pill');
+      if (!pill) return;
+
+      // Chỉ can thiệp khi đang ở trang Dòng thời gian / Mục lục
+      if (!isArchivePage()) return;
+
+      var appEl = document.getElementById('editorial-archive-app');
+      if (!appEl) return;
+
+      // CHẶN HOÀN TOÀN việc chuyển hướng trình duyệt về trang chủ
+      e.preventDefault();
+      e.stopPropagation();
+
+      var href = pill.getAttribute('href') || '';
+      var rawLabel = (pill.getAttribute('data-raw-label') || pill.getAttribute('data-label') || pill.textContent || '').trim();
+      var cleanLabel = rawLabel.replace(/^✦\s*/, '').trim();
+
+      var isAll = href === '/' || href === (window.location.origin + '/') || 
+                  cleanLabel.toLowerCase().indexOf('tất cả') !== -1 || 
+                  cleanLabel.toLowerCase() === 'all';
+
+      activeCategory = isAll ? 'all' : cleanLabel;
+
+      syncUrlParams();
+      updateActiveCategoryTabs();
+      applyFilterAndRender(appEl);
+    }, true);
   }
 
   // Escape HTML để ngăn ngừa XSS
@@ -645,6 +734,7 @@
     parseUrlParams();
     bindArchiveEvents(container);
     bindCategoryTabs(container);
+    updateActiveCategoryTabs();
 
     loadArchiveData(function (posts) {
       applyFilterAndRender(container);

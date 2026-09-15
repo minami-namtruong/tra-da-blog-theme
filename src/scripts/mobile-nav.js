@@ -79,8 +79,8 @@
     function addOrUpdateTab(rawTerm, url) {
       var term = (rawTerm || '').trim();
       if (!term) return;
-      // Bỏ qua nhãn tính năng (@...) và nhãn AI (ai:...)
-      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
+      // Bỏ qua nhãn tính năng (@...), nhãn AI (ai:...), và nhãn Series (series:...)
+      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-') || term.toLowerCase().startsWith('series:')) {
         return;
       }
 
@@ -130,7 +130,7 @@
         return;
       }
 
-      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-')) {
+      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-') || label.toLowerCase().startsWith('series:')) {
         pill.remove();
         return;
       }

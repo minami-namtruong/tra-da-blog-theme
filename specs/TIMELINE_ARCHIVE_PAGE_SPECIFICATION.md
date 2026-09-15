@@ -2,7 +2,7 @@
 
 > **Mã tính năng**: `FEAT-TIMELINE-PAGE-V3`  
 > **Dự án**: Blogger Editorial Theme (Blogspot XML v3)  
-> **Phiên bản đặc tả**: `v1.0.0`  
+> **Phiên bản đặc tả**: `v1.0.0` (Đã được nâng cấp lên `v4.0.0` tại [BRANCHING_TIMELINE_ARCHIVE_SPECIFICATION.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/BRANCHING_TIMELINE_ARCHIVE_SPECIFICATION.md))  
 > **Trạng thái**: Bản thảo thiết kế (Design Specification)  
 > **Đường dẫn mục tiêu**: `https://[domain-blog]/p/muc-luc.html` (hoặc `/p/archive.html`)
 

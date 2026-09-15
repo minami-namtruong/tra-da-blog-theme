@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-13T15:56:16.389Z -->
+<!-- Compiled at: 2026-09-15T04:35:25.090Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -307,7 +307,9 @@ a:hover {
   line-height: 1.8;
   color: var(--text-main);
   word-wrap: break-word;
+  overflow-wrap: break-word;
   max-width: var(--content-max-width);
+  min-width: 0;
 }
 
 .post-body p {
@@ -346,13 +348,32 @@ a:hover {
 }
 .post-body blockquote p:last-child { margin-bottom: 0; }
 
+/* ── Hình ảnh bài viết: mở rộng phóng to full-width & đổ bóng sang trọng ── */
+.post-body .separator,
+.post-body .separator a {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: center !important;
+  display: block !important;
+  clear: both !important;
+}
+
 .post-body img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius-md);
-  margin: 1.5em auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: var(--radius-lg);
+  margin: 2.25rem auto;
   display: block;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-body img:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .post-body ul, .post-body ol {
@@ -393,9 +414,12 @@ a:hover {
 
 .post-body table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 1.75em 0;
   font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
 }
 .post-body th, .post-body td {
   padding: 0.75em 1em;
@@ -1270,7 +1294,7 @@ a:hover {
 /* Main 2-column grid */
 .layout-grid {
   display: grid;
-  grid-template-columns: 1fr var(--sidebar-width);
+  grid-template-columns: minmax(0, 1fr) var(--sidebar-width);
   gap: 2.5rem;
   margin-bottom: 3rem;
   align-items: start;
@@ -1474,6 +1498,8 @@ a:hover {
   line-height: 1.25;
   margin: 0 0 1.25rem;
   letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Post Meta Header Row */
@@ -1515,7 +1541,135 @@ a:hover {
   margin-top: 0.1rem;
 }
 
-/* Bilingual Switcher */
+/* Post Header Actions (Top-Right Share Dropdown) */
+.post-header-actions {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.post-share-dropdown {
+  position: relative;
+}
+
+.post-share-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.05rem;
+  border-radius: var(--radius-full);
+  border: none;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: #ffffff !important;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.32);
+  user-select: none;
+  font-family: inherit;
+}
+
+.post-share-trigger:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.post-share-trigger[aria-expanded="true"] {
+  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.post-share-trigger .share-icon {
+  width: 15px;
+  height: 15px;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+  flex-shrink: 0;
+}
+
+/* Post Share Menu Dropdown */
+.post-share-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: var(--bg-card);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.97);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+  pointer-events: none;
+}
+
+.post-share-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.share-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.share-menu-item:hover {
+  background: var(--bg-surface);
+  color: var(--primary);
+  transform: translateX(2px);
+}
+
+.share-menu-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.share-menu-item.share-menu-fb:hover {
+  color: #1877f2;
+}
+
+.share-menu-item.share-menu-tw:hover {
+  color: var(--text-main);
+}
+
+.share-menu-item.share-menu-li:hover {
+  color: #0a66c2;
+}
+
+.share-menu-item.share-menu-native {
+  border-top: var(--stroke-hairline) solid var(--border-color);
+  margin-top: 0.2rem;
+  padding-top: 0.6rem;
+}
+
+/* Bilingual Switcher (Legacy / Fallback) */
 .bilingual-switcher {
   display: inline-flex;
   background: var(--bg-surface);
@@ -1541,7 +1695,7 @@ a:hover {
   color: var(--text-inverse);
 }
 .bilingual-switcher-wrapper {
-  display: none; /* hidden by default, shown by JS when bilingual content detected */
+  display: none;
 }
 .bilingual-switcher-wrapper.is-visible {
   display: flex;
@@ -1598,44 +1752,180 @@ a:hover {
   color: var(--primary);
 }
 
-/* Social Share Bar */
-.social-share-bar {
+/* Post Bottom Share Section */
+.post-bottom-share {
+  margin: 2.5rem 0;
+  padding: 1.15rem 1.5rem;
+  background: var(--bg-surface);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.post-bottom-share-inner {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin: 2.5rem 0;
-  padding: 1.25rem 0;
-  border-top: var(--stroke-hairline) solid var(--border-color);
-  border-bottom: var(--stroke-hairline) solid var(--border-color);
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 1rem;
 }
-.share-title {
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  margin-right: 0.25rem;
-}
-.btn-share {
-  display: inline-flex;
+
+.post-bottom-share-text {
+  display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: var(--radius-full);
-  font-size: 0.83rem;
+  gap: 0.5rem;
   font-weight: 600;
-  text-decoration: none;
-  transition: var(--transition);
-  border: var(--stroke-hairline) solid var(--border-color);
-  color: var(--text-muted);
-  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.95rem;
 }
-.btn-share:hover {
+
+.share-prompt-icon {
+  font-size: 1.25rem;
+}
+
+/* ==========================================
+   NEWSLETTER MODAL (POPUP DIALOG)
+   ========================================== */
+.newsletter-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-backdrop-bg, rgba(0, 0, 0, 0.6));
+  backdrop-filter: var(--modal-backdrop-blur, blur(4px));
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  padding: 1rem;
+}
+
+.newsletter-modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.newsletter-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.newsletter-modal-card {
+  position: relative;
+  background: var(--bg-card);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2rem;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  z-index: 1;
+}
+
+.newsletter-modal-overlay.is-open .newsletter-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.newsletter-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.newsletter-modal-close:hover {
+  background: var(--danger);
   color: var(--text-inverse);
 }
-.btn-share.btn-share-fb:hover { background: var(--brand-facebook); border-color: var(--brand-facebook); }
-.btn-share.btn-share-tw:hover { background: var(--brand-twitter); border-color: var(--brand-twitter); }
-.btn-share.btn-share-li:hover { background: var(--brand-linkedin); border-color: var(--brand-linkedin); }
-.btn-share.btn-share-copy:hover { background: var(--success); border-color: var(--success); color: var(--text-inverse); }
+
+.newsletter-modal-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.newsletter-modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.newsletter-modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.newsletter-modal-input {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.newsletter-modal-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.newsletter-modal-btn {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  font-family: inherit;
+}
+
+.newsletter-modal-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+.newsletter-modal-footer {
+  margin-top: 1rem;
+  font-size: 0.76rem;
+  color: var(--text-light);
+}
 
 /* ==========================================
    AUTHOR BIO BOX
@@ -1689,7 +1979,7 @@ a:hover {
    ========================================== */
 .post-nav-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1rem;
   margin: 2.5rem 0;
 }
@@ -1703,6 +1993,7 @@ a:hover {
   border-radius: var(--radius-lg);
   text-decoration: none;
   transition: var(--transition);
+  min-width: 0;
 }
 .post-nav-link:hover {
   border-color: var(--primary);
@@ -1746,7 +2037,7 @@ a:hover {
 }
 .related-posts-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
 }
 .related-post-card {
@@ -1771,6 +2062,16 @@ a:hover {
   border-radius: var(--radius-sm);
   object-fit: cover;
   background: var(--bg-surface);
+}
+.related-post-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--border-color) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
 }
 .related-post-title {
   font-size: 0.88rem;
@@ -1969,13 +2270,13 @@ a:hover {
    ========================================== */
 @media (max-width: 1024px) {
   .layout-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .sidebar {
     position: static;
   }
   .related-posts-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -2044,6 +2345,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  min-width: 0;
+  width: 100%;
 }
 .main-content > .section {
   margin-top: 0;
@@ -2212,6 +2515,671 @@ body.view-not-homepage #main-above-feed {
   }
 }
 
+
+
+/* ==========================================================================
+   POST SERIES NAVIGATOR — LUXURY EDITORIAL EDITION
+   - Minimalist Editorial Pill (Top)
+   - Connected Vertical Journey Stepper (Timeline)
+   - Active Illuminated Chapter Card
+   - Spotlight Next-Chapter Action Card
+   - Precision Typography & Micro-Animations
+   - Full Dark Mode & Mobile Responsive
+   ========================================================================== */
+
+/* ── 1. Top Series Editorial Pill ── */
+.series-header-pill-wrapper {
+  margin: 0.85rem 0 1.5rem;
+}
+
+.series-header-pill {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.65rem;
+  background: rgba(37, 99, 235, 0.04);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(8px);
+}
+
+.series-header-pill:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.series-pill-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.series-pill-divider {
+  color: var(--text-light);
+  font-weight: 300;
+  font-size: 0.78rem;
+}
+
+.series-pill-title {
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.series-pill-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.series-pill-action {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  margin-left: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.series-header-pill:hover .series-pill-action {
+  color: var(--primary);
+  transform: translateY(1px);
+}
+
+/* ── 2. Bottom Series Roadmap Box (Master Card) ── */
+.series-roadmap-box {
+  margin: 3rem 0 2.5rem;
+  padding: 2rem 2.25rem;
+  background: var(--bg-card);
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 60%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+/* ── 3. Box Header & Progress ── */
+.series-box-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.series-box-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.series-box-kicker-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.series-box-icon {
+  font-size: 0.75rem;
+  color: var(--primary);
+  animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.series-box-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.series-box-progress-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.series-progress-count {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.series-progress-label {
+  color: var(--text-muted);
+}
+
+.series-box-title {
+  font-family: var(--font-serif, inherit);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main);
+  margin: 0.35rem 0 1rem;
+  line-height: 1.3;
+}
+
+/* Micro-Progress Bar */
+.series-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-surface);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.series-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #6366f1 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── 4. Connected Vertical Journey Timeline ── */
+.series-steps-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0 0 1.75rem;
+  padding: 0 0 0 2.5rem;
+  list-style: none;
+}
+
+/* Connecting vertical timeline track */
+.series-steps-list::before {
+  content: '';
+  position: absolute;
+  left: 1.05rem;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  width: 2px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+/* Step Item Row */
+.series-step-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md, 12px);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+  color: var(--text-main);
+  background: transparent;
+  z-index: 2;
+  min-width: 0;
+}
+
+.series-step-item:hover:not(.is-active) {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+  transform: translateX(4px);
+}
+
+/* Step Timeline Node (Circular Indicator) */
+.series-step-node {
+  position: absolute;
+  left: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-light);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  z-index: 3;
+}
+
+/* ── Node State: Completed ── */
+.series-step-item.is-read .series-step-node {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.series-step-item.is-read .series-step-title {
+  color: var(--text-muted);
+}
+
+.series-step-item.is-read:hover .series-step-title {
+  color: var(--text-main);
+}
+
+/* ── Node State: Active (Currently Reading) ── */
+.series-step-item.is-active {
+  background: linear-gradient(135deg, var(--primary-light) 0%, rgba(37, 99, 235, 0.03) 100%);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.07);
+}
+
+.series-step-item.is-active .series-step-node {
+  background: var(--primary);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.22), 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.series-step-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.series-step-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--text-main);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.series-step-item.is-active .series-step-title {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Step Badges — Always right-aligned */
+.series-step-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.series-step-badge.badge-active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: blink-dot 1.8s infinite ease-in-out;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.series-step-badge.badge-read {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.series-step-badge.badge-next {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.series-step-badge.badge-upcoming {
+  background: var(--bg-surface);
+  color: var(--text-light);
+  border: 1px solid var(--border-color);
+}
+
+/* ── 5. Next & Prev Chapter Spotlight Cards ── */
+.series-nav-spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.series-nav-spotlight.only-next {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.series-nav-spotlight.only-prev {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Common Card Anchor */
+.series-nav-card {
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-md, 12px);
+  min-width: 0;
+}
+
+/* 5.1 Previous Part (Quiet Elegance) */
+.series-nav-prev {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.85rem 1.15rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  max-width: 280px;
+  min-width: 0;
+}
+
+.series-nav-prev:hover {
+  background: var(--bg-card);
+  border-color: var(--border-hover);
+  transform: translateX(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.series-nav-prev .series-nav-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.series-nav-prev .series-nav-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 5.2 Next Part (Hero Spotlight Card) */
+.series-nav-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25), 0 2px 6px rgba(15, 23, 42, 0.1);
+  min-width: 0;
+}
+
+.series-nav-next:hover {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.35);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.series-nav-next-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.series-nav-next .series-nav-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.series-nav-next .series-nav-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.series-nav-arrow-bubble {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.series-nav-arrow-bubble svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke: #ffffff;
+  transition: transform 0.25s ease;
+}
+
+.series-nav-next:hover .series-nav-arrow-bubble {
+  background: #38bdf8;
+}
+
+.series-nav-next:hover .series-nav-arrow-bubble svg {
+  stroke: #0f172a;
+  transform: translateX(3px);
+}
+
+/* 5.3 Completed Message */
+.series-completed-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1.5rem;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px dashed rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-md, 12px);
+  color: #059669;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+/* ── 6. Dark Theme Refinements ── */
+[data-theme="dark"] .series-header-pill {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .series-roadmap-box {
+  background: #111827;
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+  border-color: #1f2937;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .series-step-node {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .series-step-item.is-active .series-step-node {
+  border-color: #111827;
+}
+
+[data-theme="dark"] .series-step-item.is-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.03) 100%);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+[data-theme="dark"] .series-step-badge.badge-read {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+[data-theme="dark"] .series-step-badge.badge-next {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .series-step-badge.badge-upcoming {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .series-nav-next {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e3a8a 100%);
+  border-color: rgba(96, 165, 250, 0.3);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .series-nav-next:hover {
+  background: linear-gradient(135deg, #2e1065 0%, #1e40af 100%);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme="dark"] .series-nav-next .series-nav-kicker {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .series-nav-prev {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .series-completed-msg {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ── 7. Responsive Mobile Tuning ── */
+@media (max-width: 680px) {
+  .series-roadmap-box {
+    padding: 1.35rem 1.15rem;
+    margin: 2.25rem 0 2rem;
+  }
+
+  .series-box-title {
+    font-size: 1.2rem;
+  }
+
+  .series-steps-list {
+    padding-left: 2.2rem;
+  }
+
+  .series-steps-list::before {
+    left: 0.95rem;
+  }
+
+  .series-step-node {
+    left: -2.2rem;
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .series-step-item {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .series-step-title {
+    font-size: 0.88rem;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .series-step-arrow {
+    display: none;
+  }
+
+  .series-nav-spotlight {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .series-nav-prev {
+    max-width: 100%;
+    order: 2;
+  }
+
+  .series-nav-next {
+    order: 1;
+    padding: 1rem 1.15rem;
+  }
+
+  .series-header-pill {
+    width: 100%;
+    border-radius: var(--radius-sm, 8px);
+  }
+}
 
 
 /* ==========================================
@@ -4520,7 +5488,7 @@ body.view-not-homepage #main-above-feed {
   <b:class cond='data:view.isMultipleItems and not data:view.isHomepage' name='view-paged is-paged'/>
 
   <!-- Reading Progress Bar -->
-  <div class='reading-progress-bar' id='reading-progress-bar'/>
+  <div class='reading-progress-bar' id='reading-progress-bar'></div>
 
   <!-- Search Modal -->
   <div class='search-modal-overlay' id='search-modal-overlay' role='dialog' aria-modal='true' aria-label='Tìm kiếm'>
@@ -4537,7 +5505,7 @@ body.view-not-homepage #main-above-feed {
   </div>
 
   <!-- Nav Drawer Backdrop -->
-  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'/>
+  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'></div>
 
   <!-- Mobile Navigation Drawer (auto-synced from LinkList1) -->
   <nav class='nav-drawer' id='nav-drawer' aria-label='Menu điều hướng mobile'>
@@ -4630,9 +5598,9 @@ body.view-not-homepage #main-above-feed {
           </div>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
-            <span/>
-            <span/>
-            <span/>
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
 
@@ -4650,6 +5618,15 @@ body.view-not-homepage #main-above-feed {
       <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
         <b:includable id='main'>
+          <b:if cond='data:imageUrl'>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:imageUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:sourceUrl'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:sourceUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:displayUrl'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:displayUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:image'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:image/>&quot;) !important; }</style>
+          </b:if>
           <div id='profile-uploaded-banner' style='display:none;'>
             <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
           </div>
@@ -4659,6 +5636,17 @@ body.view-not-homepage #main-above-feed {
       <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
         <b:includable id='main'>
+          <b:if cond='data:imageUrl or data:sourceUrl or data:displayUrl or data:image'>
+            <script>
+              (function(){
+                var u = &quot;<b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>&quot;;
+                if (u) {
+                  window.__PROFILE_AVATAR = u;
+                  try { localStorage.setItem('cached_author_avatar', u); } catch(e){}
+                }
+              })();
+            </script>
+          </b:if>
           <div id='profile-uploaded-avatar' style='display:none;'>
             <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
           </div>
@@ -4671,14 +5659,22 @@ body.view-not-homepage #main-above-feed {
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
             <div class='cover-image-wrapper' id='cover-image-wrapper'
-                 style='min-height: 240px; background-image: url(https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80); background-size: cover; background-position: center;'>
+                 style='min-height: 240px;'>
             </div>
             <div class='cover-info-card'>
               <div class='avatar-wrapper'>
                 <img class='profile-avatar' id='profile-avatar-img'
-                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
                      alt='Avatar tác giả'
                      width='120' height='120'/>
+                <script>
+                  (function(){
+                    var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                    if (u) {
+                      var img = document.getElementById('profile-avatar-img');
+                      if (img) img.src = u;
+                    }
+                  })();
+                </script>
               </div>
               <div class='profile-meta'>
                 <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
@@ -4710,7 +5706,7 @@ body.view-not-homepage #main-above-feed {
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
             <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
-                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot;)'>
+                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot; or data:label.name contains &quot;series:&quot; or data:label.name contains &quot;Series:&quot;)'>
                   <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
                     <data:label.name/>
                   </a>
@@ -4766,13 +5762,15 @@ body.view-not-homepage #main-above-feed {
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;))' var='displayLabels'>
-                      <b:with value='data:post.labels and not data:post.labels.empty and data:displayLabels.empty' var='isExclusiveFeaturePost'>
-                        <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
-                          <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                            <div class='post-card-body'>
-                              <div>
-                                <b:if cond='data:post.labels and not data:post.labels.empty'>
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;) and not (l.name contains &quot;series:&quot;) and not (l.name contains &quot;Series:&quot;))' var='displayLabels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;@&quot;)' var='featureLabels'>
+                        <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                          <b:with value='not data:featureLabels.empty and data:displayLabels.empty and data:seriesLabels.empty' var='isExclusiveFeaturePost'>
+                            <b:if cond='not data:isExclusiveFeaturePost'>
+                              <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                                <div class='post-card-body'>
+                                  <div>
+                                    <b:if cond='data:post.labels and not data:post.labels.empty'>
                                   <span class='post-labels-raw' style='display:none;'>
                                     <b:loop values='data:post.labels' var='lbl'>
                                       <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
@@ -4811,6 +5809,8 @@ body.view-not-homepage #main-above-feed {
                             </b:if>
                           </article>
                         </b:if>
+                          </b:with>
+                        </b:with>
                       </b:with>
                     </b:with>
                   </b:loop>
@@ -4843,7 +5843,7 @@ body.view-not-homepage #main-above-feed {
                     <!-- Khung danh sách bài viết -->
                     <div id='archive-app-body' class='archive-tree-container' aria-live='polite'>
                       <div class='archive-loading'>
-                        <div class='archive-spinner'/>
+                        <div class='archive-spinner'></div>
                         <span>Đang đồng bộ danh mục bài viết...</span>
                       </div>
                     </div>
@@ -4859,30 +5859,29 @@ body.view-not-homepage #main-above-feed {
                       </span>
                     </b:if>
 
-                    <!-- Breadcrumbs -->
-                    <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
-                      <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
-                      <span class='separator'>›</span>
-                      <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;))' var='displayLabels'>
-                          <b:if cond='data:displayLabels and not data:displayLabels.empty'>
-                            <a class='breadcrumb-category-link' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
-                            <span class='separator'>›</span>
-                          </b:if>
-                        </b:with>
-                      </b:if>
-                      <span data-bilingual='true'><data:post.title/></span>
-                    </nav>
-
                     <!-- Post H1 Title -->
                     <h1 class='single-post-title' itemprop='headline' data-bilingual='true'><data:post.title/></h1>
 
                     <!-- Post Meta Row -->
                     <div class='post-meta-header'>
                       <div class='author-meta-inline'>
-                        <img class='author-avatar-sm'
-                             src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&amp;auto=format&amp;fit=crop&amp;q=80'
-                             alt='Tác giả' width='44' height='44'/>
+                        <b:if cond='data:post.author.authorPhoto.url'>
+                          <img class='author-avatar-sm'
+                               expr:src='data:post.author.authorPhoto.url'
+                               alt='Author' width='44' height='44'/>
+                        <b:else/>
+                          <img class='author-avatar-sm'
+                               alt='Author' width='44' height='44'/>
+                          <script>
+                            (function(){
+                              var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                              if (u) {
+                                var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                                if (el) el.src = u;
+                              }
+                            })();
+                          </script>
+                        </b:if>
                         <div class='author-meta-text'>
                           <div class='author-name-link' itemprop='author' itemscope='itemscope' itemtype='https://schema.org/Person'>
                             <span itemprop='name'><data:post.author.name/></span>
@@ -4894,14 +5893,59 @@ body.view-not-homepage #main-above-feed {
                           </div>
                         </div>
                       </div>
-                      <!-- Bilingual Switcher (auto-shown by JS if bilingual content detected) -->
-                      <div class='bilingual-switcher-wrapper'>
-                        <div class='bilingual-switcher' role='group' aria-label='Chọn ngôn ngữ'>
-                          <button class='lang-btn lang-btn-vi active' onclick="switchLanguage('vi')" aria-pressed='true'>🇻🇳 VI</button>
-                          <button class='lang-btn lang-btn-en' onclick="switchLanguage('en')" aria-pressed='false'>🇬🇧 EN</button>
+                      <!-- Top-Right Share Dropdown -->
+                      <div class='post-header-actions'>
+                        <div class='post-share-dropdown' id='post-share-dropdown'>
+                          <button class='post-share-trigger' id='post-share-trigger' type='button' aria-expanded='false' aria-haspopup='true' aria-label='Chia sẻ'>
+                            <svg class='share-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                              <circle cx='18' cy='5' r='3'></circle>
+                              <circle cx='6' cy='12' r='3'></circle>
+                              <circle cx='18' cy='19' r='3'></circle>
+                              <line x1='8.59' y1='13.51' x2='15.42' y2='17.49'></line>
+                              <line x1='15.41' y1='6.51' x2='8.59' y2='10.49'></line>
+                            </svg>
+                            <span data-i18n='shareBtn'>Chia sẻ</span>
+                          </button>
+                          <div class='post-share-menu' id='post-share-menu' role='menu'>
+                            <button class='share-menu-item' id='quick-copy-link-btn' type='button' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>
+                              <span data-i18n='copyLink'>Sao chép liên kết</span>
+                            </button>
+                            <a class='share-menu-item share-menu-fb'
+                               expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#1877f2'><path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/></svg>
+                              <span>Facebook</span>
+                            </a>
+                            <a class='share-menu-item share-menu-tw'
+                               expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='currentColor'><path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/></svg>
+                              <span>X (Twitter)</span>
+                            </a>
+                            <a class='share-menu-item share-menu-li'
+                               expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#0a66c2'><path d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z'/></svg>
+                              <span>LinkedIn</span>
+                            </a>
+                            <button class='share-menu-item share-menu-native' id='native-share-btn' type='button' role='menuitem' style='display:none;'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' y1='13.51' x2='15.42' y2='17.49'/><line x1='15.41' y1='6.51' x2='8.59' y2='10.49'/></svg>
+                              <span data-i18n='moreOptions'>Thêm tùy chọn...</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    <!-- Post Series Header Pill (Top) -->
+                    <b:if cond='data:post.labels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                        <b:if cond='data:seriesLabels and not data:seriesLabels.empty'>
+                          <div id='series-header-pill-container' expr:data-series-label='data:seriesLabels.first.name'></div>
+                        </b:if>
+                      </b:with>
+                    </b:if>
 
                     <!-- AdSense Slot 1: Above the fold -->
                     <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
@@ -4909,53 +5953,103 @@ body.view-not-homepage #main-above-feed {
                     </div>
 
                     <!-- Auto Table of Contents -->
-                    <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'/>
+                    <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'></div>
 
                     <!-- Post Body -->
                     <div class='post-body' itemprop='articleBody'>
                       <data:post.body/>
                     </div>
 
+                    <!-- Post Series Roadmap Box (Bottom) -->
+                    <b:if cond='data:post.labels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                        <b:if cond='data:seriesLabels and not data:seriesLabels.empty'>
+                          <div id='series-roadmap-box-container' expr:data-series-label='data:seriesLabels.first.name'></div>
+                        </b:if>
+                      </b:with>
+                    </b:if>
+
                     <!-- AdSense Slot 2: Bottom of post -->
                     <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
                       <!-- Google AdSense code here -->
                     </div>
 
-                    <!-- Social Share Bar -->
-                    <div class='social-share-bar' role='group' aria-label='Chia sẻ bài viết'>
-                      <span class='share-title'>Chia sẻ:</span>
-                      <a class='btn-share btn-share-fb'
-                         expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên Facebook'>
-                        <b>f</b> Facebook
-                      </a>
-                      <a class='btn-share btn-share-tw'
-                         expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên X'>
-                        𝕏 X
-                      </a>
-                      <a class='btn-share btn-share-li'
-                         expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên LinkedIn'>
-                        in LinkedIn
-                      </a>
-                      <button class='btn-share btn-share-copy' id='copy-link-btn' aria-label='Sao chép link bài viết'>
-                        🔗 Sao chép link
-                      </button>
+                    <!-- Post Bottom Share Area -->
+                    <div class='post-bottom-share' role='group' aria-label='Chia sẻ bài viết'>
+                      <div class='post-bottom-share-inner'>
+                        <div class='post-bottom-share-text'>
+                          <span class='share-prompt-icon'>✨</span>
+                          <span class='share-prompt-label' data-i18n='sharePrompt'>Thấy bài viết hữu ích? Hãy chia sẻ cùng bạn bè:</span>
+                        </div>
+                        <div class='post-share-dropdown' id='post-share-dropdown-bottom'>
+                          <button class='post-share-trigger' type='button' aria-expanded='false' aria-haspopup='true' aria-label='Chia sẻ'>
+                            <svg class='share-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'>
+                              <circle cx='18' cy='5' r='3'></circle>
+                              <circle cx='6' cy='12' r='3'></circle>
+                              <circle cx='18' cy='19' r='3'></circle>
+                              <line x1='8.59' y1='13.51' x2='15.42' y2='17.49'></line>
+                              <line x1='15.41' y1='6.51' x2='8.59' y2='10.49'></line>
+                            </svg>
+                            <span data-i18n='shareBtn'>Chia sẻ</span>
+                          </button>
+                          <div class='post-share-menu' role='menu'>
+                            <button class='share-menu-item quick-share-copy' type='button' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>
+                              <span data-i18n='copyLink'>Sao chép liên kết</span>
+                            </button>
+                            <a class='share-menu-item share-menu-fb'
+                               expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#1877f2'><path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/></svg>
+                              <span>Facebook</span>
+                            </a>
+                            <a class='share-menu-item share-menu-tw'
+                               expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='currentColor'><path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/></svg>
+                              <span>X (Twitter)</span>
+                            </a>
+                            <a class='share-menu-item share-menu-li'
+                               expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#0a66c2'><path d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z'/></svg>
+                              <span>LinkedIn</span>
+                            </a>
+                            <button class='share-menu-item share-menu-native' type='button' role='menuitem' style='display:none;'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' y1='13.51' x2='15.42' y2='17.49'/><line x1='15.41' y1='6.51' x2='8.59' y2='10.49'/></svg>
+                              <span data-i18n='moreOptions'>Thêm tùy chọn...</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <!-- Author Bio Box -->
                     <div class='author-bio-box'>
-                      <img class='author-bio-avatar'
-                           src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&amp;auto=format&amp;fit=crop&amp;q=80'
-                           alt='Ảnh tác giả' width='80' height='80'/>
+                      <b:if cond='data:post.author.authorPhoto.url'>
+                        <img class='author-bio-avatar'
+                             expr:src='data:post.author.authorPhoto.url'
+                             alt='Author' width='80' height='80'/>
+                      <b:else/>
+                        <img class='author-bio-avatar'
+                             alt='Author' width='80' height='80'/>
+                        <script>
+                          (function(){
+                            var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                            if (u) {
+                              var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                              if (el) el.src = u;
+                            }
+                          })();
+                        </script>
+                      </b:if>
                       <div class='author-bio-content'>
-                        <div class='author-bio-label'>Về tác giả</div>
+                        <div class='author-bio-label' data-i18n='aboutAuthor'>Về tác giả</div>
                         <h3 class='author-bio-name'><data:post.author.name/></h3>
-                        <p class='author-bio-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
+                        <p class='author-bio-text' data-i18n='authorBioDesc'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
                         <div class='author-bio-actions'>
-                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer'>☕ Mời tôi ly cà phê</a>
-                          <a class='btn-subscribe' href='#newsletter'>💌 Đăng ký bản tin</a>
+                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer' data-i18n='buyMeACoffee'>☕ Mời tôi ly cà phê</a>
+                          <a class='btn-subscribe' href='#newsletter' data-i18n='subscribeNewsletter'>💌 Đăng ký bản tin</a>
                         </div>
                       </div>
                     </div>
@@ -4964,53 +6058,55 @@ body.view-not-homepage #main-above-feed {
                     <div class='post-nav-container'>
                       <b:if cond='data:newerPageUrl'>
                         <a class='post-nav-link post-nav-prev' expr:href='data:newerPageUrl'>
-                          <span class='post-nav-direction'>« Bài trước</span>
-                          <span class='post-nav-title'>Bài viết mới hơn</span>
+                          <span class='post-nav-direction' data-i18n='previousPost'>« Bài trước</span>
+                          <span class='post-nav-title' data-i18n='newerPostTitle'>Bài viết mới hơn</span>
                         </a>
                       <b:else/>
-                        <div/>
+                        <div></div>
                       </b:if>
                       <b:if cond='data:olderPageUrl'>
                         <a class='post-nav-link post-nav-next' expr:href='data:olderPageUrl'>
-                          <span class='post-nav-direction'>Bài sau »</span>
-                          <span class='post-nav-title'>Bài viết cũ hơn</span>
+                          <span class='post-nav-direction' data-i18n='nextPost'>Bài sau »</span>
+                          <span class='post-nav-title' data-i18n='olderPostTitle'>Bài viết cũ hơn</span>
                         </a>
                       </b:if>
                     </div>
 
-                    <!-- Related Posts -->
-                    <div class='related-posts-section'>
-                      <h3 class='related-posts-title'>📚 Bài Viết Liên Quan</h3>
-                      <b:if cond='data:post.labels'>
-                        <div class='related-posts-grid'>
-                          <b:loop values='data:posts' var='relPost' index='rIdx'>
-                            <b:if cond='data:rIdx lt 3 and data:relPost.id != data:post.id'>
-                              <a class='related-post-card' expr:href='data:relPost.url'>
-                                <b:if cond='data:relPost.featuredImage'>
-                                  <img class='related-post-thumb'
-                                       expr:src='data:relPost.featuredImage'
-                                       expr:alt='data:relPost.title'
-                                       loading='lazy' decoding='async'/>
-                                </b:if>
-                                <span class='related-post-title'><data:relPost.title/></span>
-                                <span class='related-post-date'>📅 <data:relPost.date/></span>
-                              </a>
-                            </b:if>
-                          </b:loop>
+                    <!-- Related Posts Section (Dynamic Feed API) -->
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;) and not (l.name contains &quot;series:&quot;) and not (l.name contains &quot;Series:&quot;))' var='relLabels'>
+                      <div class='related-posts-section'
+                           id='related-posts-section'
+                           expr:data-label='data:relLabels and not data:relLabels.empty ? data:relLabels.first.name : &quot;&quot;'
+                           expr:data-current-url='data:post.url'>
+                        <h3 class='related-posts-title' data-i18n='relatedPosts'>📚 Bài Viết Liên Quan</h3>
+                        <div class='related-posts-grid' id='related-posts-grid'>
+                          <!-- Auto-loaded via Blogger Feed API -->
                         </div>
-                      </b:if>
-                    </div>
+                      </div>
+                    </b:with>
 
                     <!-- Comments -->
-                    <div class='comments-section'>
-                      <b:include name='comment-form'/>
-                    </div>
+                    <b:if cond='data:post.allowComments'>
+                      <b:include data='post' name='comment-form'/>
+                    </b:if>
 
                   </article>
                 </b:loop>
               </b:if>
             </b:if>
 
+            </b:includable>
+
+            <!-- Includable for comment form -->
+            <b:includable id='comment-form' var='post'>
+              <b:if cond='data:post.allowComments'>
+                <div class='comments-section' id='comments'>
+                  <h3 class='comments-title' style='margin-bottom: 1.5rem; font-size: 1.25rem;' data-i18n='commentsTitle'>💬 Bình Luận</h3>
+                  <b:if cond='data:post.commentFormIframeSrc'>
+                    <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:src='data:post.commentFormIframeSrc' frameborder='0' height='410' id='comment-editor' name='comment-editor' width='100%'></iframe>
+                  </b:if>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
@@ -5205,8 +6301,16 @@ body.view-not-homepage #main-above-feed {
                   <div class='sidebar-about-custom-content'><data:content/></div>
                 <b:else/>
                   <img class='sidebar-about-avatar'
-                       src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&amp;auto=format&amp;fit=crop&amp;q=80'
                        alt='Avatar tác giả' width='64' height='64'/>
+                  <script>
+                    (function(){
+                      var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                      if (u) {
+                        var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                        if (el) el.src = u;
+                      }
+                    })();
+                  </script>
                   <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
                   <div class='sidebar-socials'>
                     <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
@@ -5228,13 +6332,13 @@ body.view-not-homepage #main-above-feed {
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
                       <li>
                         <a class='popular-post-item' expr:href='data:ppPost.url'>
-                          <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
+                          <span class='popular-post-num'><b:if cond='data:ppIdx &lt; 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
                           <b:if cond='data:ppPost.featuredImage'>
                             <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
                                  expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
                           </b:if>
                           <div class='popular-post-info'>
-                            <div class='popular-post-title'><data:ppPost.title/></div>
+                            <div class='popular-post-title' data-bilingual='true' expr:data-raw-label='data:ppPost.title'><data:ppPost.title/></div>
                             <div class='popular-post-date'>📅 <data:ppPost.date/></div>
                           </div>
                         </a>
@@ -5488,6 +6592,26 @@ body.view-not-homepage #main-above-feed {
 
   </footer>
 
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
+       ═══════════════════════════════════════════════════ -->
+  <div class='newsletter-modal-overlay' id='newsletter-modal' aria-hidden='true' style='display:none;'>
+    <div class='newsletter-modal-backdrop' id='newsletter-modal-backdrop'></div>
+    <div class='newsletter-modal-card' role='dialog' aria-modal='true' aria-labelledby='newsletter-modal-title'>
+      <button class='newsletter-modal-close' id='newsletter-modal-close' type='button' aria-label='Đóng'>✕</button>
+      <div class='newsletter-modal-icon'>💌</div>
+      <h3 class='newsletter-modal-title' id='newsletter-modal-title' data-i18n='newsletterTitle'>Nhận bài viết mới</h3>
+      <p class='newsletter-modal-desc' data-i18n='newsletterSubDesc'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+      <form class='newsletter-modal-form' id='newsletter-modal-form' onsubmit='return false;'>
+        <input class='newsletter-modal-input' id='newsletter-modal-email' type='email' placeholder='Nhập email của bạn...' aria-label='Email' required='required'/>
+        <button class='newsletter-modal-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
+      </form>
+      <div class='newsletter-modal-footer'>
+        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Body-end Scripts -->
   <script>
   //<![CDATA[
@@ -5508,13 +6632,25 @@ body.view-not-homepage #main-above-feed {
     vi: {
       searchPlaceholder: 'Tìm kiếm bài viết...',
       readingTime: 'phút đọc',
-      tableOfContents: 'Mục Lục Bài Viết',
+      tableOfContents: '📑 Mục Lục Bài Viết',
       previousPost: '« Bài trước',
       nextPost: 'Bài sau »',
+      newerPostTitle: 'Bài viết mới hơn',
+      olderPostTitle: 'Bài viết cũ hơn',
+      shareBtn: 'Chia sẻ',
       shareTitle: 'Chia sẻ bài viết:',
-      copiedLink: 'Đã sao chép liên kết!',
-      aboutAuthor: 'Về Tác Giả',
-      buyMeACoffee: 'Mời tôi ly cà phê',
+      sharePrompt: 'Thấy bài viết hữu ích? Hãy chia sẻ cùng bạn bè:',
+      copyLink: 'Sao chép liên kết',
+      copyLinkBtn: '🔗 Sao chép link',
+      copiedLink: '✅ Đã sao chép liên kết!',
+      moreOptions: 'Thêm tùy chọn...',
+      breadcrumbHome: '🏠 Trang chủ',
+      relatedPosts: '📚 Bài Viết Liên Quan',
+      commentsTitle: '💬 Bình Luận',
+      aboutAuthor: 'Về tác giả',
+      authorBioDesc: 'Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!',
+      buyMeACoffee: '☕ Mời tôi ly cà phê',
+      subscribeNewsletter: '💌 Đăng ký bản tin',
       newsletterTitle: 'Nhận bài viết mới',
       newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
       subscribeBtn: 'Đăng Ký',
@@ -5527,13 +6663,25 @@ body.view-not-homepage #main-above-feed {
     en: {
       searchPlaceholder: 'Search articles...',
       readingTime: 'min read',
-      tableOfContents: 'Table of Contents',
+      tableOfContents: '📑 Table of Contents',
       previousPost: '« Previous Post',
       nextPost: 'Next Post »',
+      newerPostTitle: 'Newer Article',
+      olderPostTitle: 'Older Article',
+      shareBtn: 'Share',
       shareTitle: 'Share this post:',
-      copiedLink: 'Link copied to clipboard!',
-      aboutAuthor: 'About The Author',
-      buyMeACoffee: 'Buy me a coffee',
+      sharePrompt: 'Enjoyed this article? Share it with friends:',
+      copyLink: 'Copy Link',
+      copyLinkBtn: '🔗 Copy link',
+      copiedLink: '✅ Link copied to clipboard!',
+      moreOptions: 'More options...',
+      breadcrumbHome: '🏠 Home',
+      relatedPosts: '📚 Related Articles',
+      commentsTitle: '💬 Comments',
+      aboutAuthor: 'About the author',
+      authorBioDesc: 'I write about self-discovery, mindful living, and mental models to live more purposefully. If you find my work helpful, consider buying me a coffee!',
+      buyMeACoffee: '☕ Buy me a coffee',
+      subscribeNewsletter: '💌 Newsletter',
       newsletterTitle: 'Newsletter',
       newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
       subscribeBtn: 'Subscribe',
@@ -5561,6 +6709,23 @@ body.view-not-homepage #main-above-feed {
     return rawText.trim();
   }
   window.parseBilingualText = parseBilingualText;
+
+  function localizeDates(lang) {
+    var timeEls = document.querySelectorAll('time[datetime]');
+    timeEls.forEach(function(el) {
+      var iso = el.getAttribute('datetime');
+      if (!iso) return;
+      try {
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return;
+        if (lang === 'en') {
+          el.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        } else {
+          el.textContent = d.getDate() + ' tháng ' + (d.getMonth() + 1) + ', ' + d.getFullYear();
+        }
+      } catch (e) {}
+    });
+  }
 
   function applyBilingualElements(lang) {
     lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
@@ -5614,22 +6779,26 @@ body.view-not-homepage #main-above-feed {
       dropdown.classList.remove('show');
     }
 
-    // 2. Toggle in-post bilingual content blocks
-    var viContents = document.querySelectorAll("[data-lang='vi']");
-    var enContents = document.querySelectorAll("[data-lang='en']");
+    // 2. Toggle in-post bilingual content blocks (if bilingual blocks exist)
+    var viContents = document.querySelectorAll("[data-lang='vi'], [lang='vi'], .lang-vi");
+    var enContents = document.querySelectorAll("[data-lang='en'], [lang='en'], .lang-en");
 
     if (lang === 'en') {
-      viContents.forEach(el => { el.style.display = 'none'; });
-      enContents.forEach(el => { el.style.display = 'block'; });
+      if (enContents.length > 0) {
+        viContents.forEach(el => { el.style.display = 'none'; });
+        enContents.forEach(el => { el.style.display = 'block'; });
+      }
     } else {
-      enContents.forEach(el => { el.style.display = 'none'; });
+      if (enContents.length > 0) {
+        enContents.forEach(el => { el.style.display = 'none'; });
+      }
       viContents.forEach(el => { el.style.display = 'block'; });
     }
 
     // 3. Apply VI | EN syntax parsing
     applyBilingualElements(lang);
 
-    // 4. Translate static dictionary terms (optional, depending on where data-i18n is used in template)
+    // 4. Translate static dictionary terms
     var i18nTargets = document.querySelectorAll('[data-i18n]');
     i18nTargets.forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -5641,6 +6810,9 @@ body.view-not-homepage #main-above-feed {
         }
       }
     });
+
+    // 5. Localize dates
+    localizeDates(lang);
 
     // Save to localStorage
     if (save !== false) {
@@ -5756,8 +6928,8 @@ body.view-not-homepage #main-above-feed {
     function addOrUpdateTab(rawTerm, url) {
       var term = (rawTerm || '').trim();
       if (!term) return;
-      // Bỏ qua nhãn tính năng (@...) và nhãn AI (ai:...)
-      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-')) {
+      // Bỏ qua nhãn tính năng (@...), nhãn AI (ai:...), và nhãn Series (series:...)
+      if (term.startsWith('@') || term.toLowerCase().startsWith('ai:') || term.toUpperCase().startsWith('AI-') || term.toLowerCase().startsWith('series:')) {
         return;
       }
 
@@ -5807,7 +6979,7 @@ body.view-not-homepage #main-above-feed {
         return;
       }
 
-      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-')) {
+      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-') || label.toLowerCase().startsWith('series:')) {
         pill.remove();
         return;
       }
@@ -6113,7 +7285,8 @@ body.view-not-homepage #main-above-feed {
 (function () {
   'use strict';
 
-  var CACHE_KEY = 'blogger_archive_posts';
+  var CACHE_KEY = 'blogger_archive_posts_v4';
+  var CACHE_TTL = 3 * 60 * 1000; // 3 phút
   var allPosts = [];
   var activeCategory = 'all';
   var searchQuery = '';
@@ -6155,9 +7328,14 @@ body.view-not-homepage #main-above-feed {
     var pathname = window.location.pathname.toLowerCase();
     var href = window.location.href.toLowerCase();
     var container = document.getElementById('editorial-archive-app');
+    var isContainerVisible = container && (
+      container.offsetParent !== null ||
+      !container.closest('#archive-page-wrapper') ||
+      container.closest('#archive-page-wrapper').style.display !== 'none'
+    );
 
     return (
-      Boolean(container) ||
+      Boolean(isContainerVisible) ||
       pathname.endsWith('/p/muc-luc.html') ||
       pathname.endsWith('/p/archive.html') ||
       pathname.endsWith('/p/dong-thoi-gian.html') ||
@@ -6170,15 +7348,26 @@ body.view-not-homepage #main-above-feed {
 
   // Thu thập dữ liệu bài viết (Cache -> API -> Fallback Mock Data)
   function loadArchiveData(callback) {
-    // 1. Kiểm tra Cache trong sessionStorage
+    // 0. Dọn sạch các cache cũ không có TTL
+    try {
+      sessionStorage.removeItem('blogger_archive_posts');
+      sessionStorage.removeItem('blogger_archive_posts_v2');
+      sessionStorage.removeItem('blogger_archive_posts_v3');
+      sessionStorage.removeItem('editorial_archive_posts');
+      sessionStorage.removeItem('editorial_archive_posts_v2');
+    } catch (e) {}
+
+    // 1. Kiểm tra Cache trong sessionStorage (hợp lệ trong 3 phút)
     try {
       var cached = sessionStorage.getItem(CACHE_KEY);
       if (cached) {
         var parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          allPosts = parsed;
+        if (parsed && parsed.ts && (Date.now() - parsed.ts < CACHE_TTL) && Array.isArray(parsed.posts) && parsed.posts.length > 0) {
+          allPosts = parsed.posts;
           if (callback) callback(allPosts);
           return;
+        } else {
+          sessionStorage.removeItem(CACHE_KEY);
         }
       }
     } catch (e) {
@@ -6186,14 +7375,14 @@ body.view-not-homepage #main-above-feed {
     }
 
     // 2. Thử tải Blogger JSON Feed API
-    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500';
+    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500&_cb=' + Date.now();
     var isPreviewOrLocal =
       window.location.protocol === 'file:' ||
       window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1';
 
     if (!isPreviewOrLocal) {
-      fetch(feedUrl)
+      fetch(feedUrl, { cache: 'no-cache' })
         .then(function (res) {
           if (!res.ok) throw new Error('Feed fetch failed: ' + res.status);
           return res.json();
@@ -6216,9 +7405,37 @@ body.view-not-homepage #main-above-feed {
               allLabels = entry.category.map(function(c) { return c.term || ''; });
             }
             
-            // QUY TẮC VÀNG: Bỏ qua bài viết nếu TẤT CẢ nhãn đều bắt đầu bằng "@"
-            var isExclusiveFeature = allLabels.length > 0 && allLabels.every(function(l) { return l.indexOf('@') === 0; });
-            if (isExclusiveFeature) return;
+            // 1. Phân tách nhãn thường vs nhãn tính năng (@) vs nhãn AI (ai:) vs nhãn series (series:)
+            var normalLabels = allLabels.filter(function(l) {
+              var lower = l.toLowerCase();
+              return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-') && !lower.startsWith('series:');
+            });
+
+            // 2. Trích xuất nhãn AI nếu có
+            var aiType = null;
+            allLabels.forEach(function(l) {
+              if (!aiType) {
+                var lower = l.toLowerCase().replace(/-/g, ':');
+                if (lower.startsWith('ai:')) aiType = lower;
+              }
+            });
+
+            // 3. Trích xuất nhãn Series nếu có
+            var hasSeriesLabel = allLabels.some(function(l) { return l.toLowerCase().startsWith('series:'); });
+            var seriesName = '';
+            if (hasSeriesLabel) {
+              var sLabel = allLabels.find(function(l) { return l.toLowerCase().startsWith('series:'); });
+              if (sLabel) seriesName = sLabel.replace(/^series:\s*/i, '').trim();
+            }
+
+            // ══ QUY TẮC VÀNG (Đặc tả: FEAT-TIMELINE-PAGE-V3 & FEAT-AI-TRANSPARENCY) ══
+            // Bỏ qua bài viết nếu ĐỘC QUYỀN TÍNH NĂNG (@)
+            // (Bài viết có nhãn nhưng TẤT CẢ nhãn đều là @ hoặc @ kết hợp ai:, không có nhãn chuyên mục thường nào VÀ không thuộc series nào)
+            // -> Bài viết này chỉ phục vụ hiển thị trên Widget chuyên biệt (@Tiêu điểm, @Quote, @Điểm tin...),
+            //    tuyệt đối KHÔNG xuất hiện trên Dòng Thời Gian / Mục Lục!
+            if (allLabels.length > 0 && normalLabels.length === 0 && !hasSeriesLabel) {
+              return;
+            }
 
             var title = (entry.title && entry.title.$t) || 'Bài viết không tiêu đề';
             var postUrl = '#';
@@ -6231,23 +7448,7 @@ body.view-not-homepage #main-above-feed {
             var dateStr = formatDateStr(published);
             var timestamp = published ? new Date(published).getTime() : 0;
             
-            var category = 'Chưa phân loại';
-            var aiType = null; // Nhãn AI (ai:assisted, ai:product, ai:generated)
-            if (allLabels.length > 0) {
-              var normalLabels = allLabels.filter(function(l) {
-                var lower = l.toLowerCase();
-                return l.indexOf('@') !== 0 && !lower.startsWith('ai:') && !lower.startsWith('ai-');
-              });
-              category = normalLabels.length > 0 ? normalLabels[0] : allLabels[0];
-
-              // Trích xuất nhãn AI nếu có
-              allLabels.forEach(function(l) {
-                if (!aiType) {
-                  var lower = l.toLowerCase().replace(/-/g, ':');
-                  if (lower.startsWith('ai:')) aiType = lower;
-                }
-              });
-            }
+            var category = normalLabels.length > 0 ? normalLabels[0] : (seriesName || 'Chưa phân loại');
             // Lọc sạch các tiền tố đặc biệt nếu còn sót lại
             category = category.replace(/^[@#_~]+/, '').trim();
 
@@ -6267,7 +7468,10 @@ body.view-not-homepage #main-above-feed {
 
           allPosts = posts;
           try {
-            sessionStorage.setItem(CACHE_KEY, JSON.stringify(posts));
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+              ts: Date.now(),
+              posts: posts
+            }));
           } catch (e) {}
 
           if (callback) callback(allPosts);
@@ -6430,16 +7634,42 @@ body.view-not-homepage #main-above-feed {
     });
   }
 
+  // Kiểm tra khớp chuyên mục giữa bài viết và category đang chọn (hỗ trợ cả song ngữ VI | EN)
+  function isCategoryMatch(postCat, targetCat) {
+    if (!targetCat || targetCat === 'all') return true;
+    if (!postCat) return false;
+
+    var pLower = postCat.toLowerCase().trim();
+    var tLower = targetCat.toLowerCase().trim();
+
+    // 1. Khớp chính xác hoàn toàn
+    if (pLower === tLower) return true;
+
+    // 2. Tách song ngữ để khớp theo từng vế
+    var pParts = pLower.split('|').map(function (s) { return s.trim(); });
+    var tParts = tLower.split('|').map(function (s) { return s.trim(); });
+
+    for (var i = 0; i < pParts.length; i++) {
+      for (var j = 0; j < tParts.length; j++) {
+        if (pParts[i] && tParts[j]) {
+          if (pParts[i] === tParts[j] || pParts[i].indexOf(tParts[j]) !== -1 || tParts[j].indexOf(pParts[i]) !== -1) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   // Lọc bài viết theo searchQuery & activeCategory
   function filterPosts() {
     var queryRaw = searchQuery.toLowerCase().trim();
     var queryNormalized = removeVietnameseDiacritics(searchQuery);
 
     return allPosts.filter(function (post) {
-      // 1. Lọc theo chuyên mục
+      // 1. Lọc theo chuyên mục (hỗ trợ song ngữ)
       if (activeCategory !== 'all') {
-        var postCat = (post.category || '').toLowerCase();
-        if (postCat !== activeCategory.toLowerCase()) {
+        if (!isCategoryMatch(post.category, activeCategory)) {
           return false;
         }
       }
@@ -6512,10 +7742,7 @@ body.view-not-homepage #main-above-feed {
           if (searchInput) searchInput.value = '';
           if (clearBtn) clearBtn.style.display = 'none';
 
-          var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
-          tabs.forEach(function (t, idx) {
-            t.classList.toggle('active', idx === 0);
-          });
+          updateActiveCategoryTabs();
 
           syncUrlParams();
           applyFilterAndRender(container);
@@ -6600,6 +7827,9 @@ body.view-not-homepage #main-above-feed {
         }
       });
     });
+
+    // Luôn đồng bộ trạng thái active của Category Tabs dưới banner
+    updateActiveCategoryTabs();
   }
 
   // Khởi tạo toàn bộ sự kiện tìm kiếm & điều khiển
@@ -6702,28 +7932,59 @@ body.view-not-homepage #main-above-feed {
     container.innerHTML = html;
   }
 
-  // Kết nối thanh nhãn Chuyên mục dưới banner (.category-tabs-bar) để lọc bài viết
-  function bindCategoryTabs(container) {
-    var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill');
-    tabs.forEach(function (pill) {
-      if (pill._archiveBound) return;
-      pill._archiveBound = true;
+  // Cập nhật trạng thái active cho các tab chuyên mục dưới banner
+  function updateActiveCategoryTabs() {
+    var tabs = document.querySelectorAll('.category-tabs-bar .tab-pill, #category-tabs-bar .tab-pill');
+    tabs.forEach(function (t) {
+      var href = t.getAttribute('href') || '';
+      var raw = (t.getAttribute('data-raw-label') || t.getAttribute('data-label') || t.textContent || '').trim();
+      var clean = raw.replace(/^✦\s*/, '').trim();
+      var isAll = href === '/' || href === (window.location.origin + '/') || 
+                  clean.toLowerCase().indexOf('tất cả') !== -1 || 
+                  clean.toLowerCase() === 'all';
 
-      pill.addEventListener('click', function (e) {
-        var appEl = document.getElementById('editorial-archive-app');
-        if (appEl && appEl.offsetParent !== null) {
-          e.preventDefault();
-          tabs.forEach(function (t) { t.classList.remove('active'); });
-          pill.classList.add('active');
-
-          var catText = pill.textContent.replace('✦', '').trim();
-          activeCategory = (catText === 'Tất cả') ? 'all' : catText;
-
-          syncUrlParams();
-          applyFilterAndRender(appEl);
-        }
-      });
+      if (activeCategory === 'all') {
+        t.classList.toggle('active', isAll);
+      } else {
+        t.classList.toggle('active', isCategoryMatch(clean, activeCategory));
+      }
     });
+  }
+
+  // Kết nối thanh nhãn Chuyên mục dưới banner (.category-tabs-bar) để lọc bài viết trên trang Timeline
+  function bindCategoryTabs(container) {
+    if (window._categoryTabsBound) return;
+    window._categoryTabsBound = true;
+
+    // Bắt sự kiện click ngay tại document (giai đoạn capture) để luôn chặn điều hướng trang chủ
+    document.addEventListener('click', function (e) {
+      var pill = e.target.closest('.category-tabs-bar .tab-pill, #category-tabs-bar .tab-pill');
+      if (!pill) return;
+
+      // Chỉ can thiệp khi đang ở trang Dòng thời gian / Mục lục
+      if (!isArchivePage()) return;
+
+      var appEl = document.getElementById('editorial-archive-app');
+      if (!appEl) return;
+
+      // CHẶN HOÀN TOÀN việc chuyển hướng trình duyệt về trang chủ
+      e.preventDefault();
+      e.stopPropagation();
+
+      var href = pill.getAttribute('href') || '';
+      var rawLabel = (pill.getAttribute('data-raw-label') || pill.getAttribute('data-label') || pill.textContent || '').trim();
+      var cleanLabel = rawLabel.replace(/^✦\s*/, '').trim();
+
+      var isAll = href === '/' || href === (window.location.origin + '/') || 
+                  cleanLabel.toLowerCase().indexOf('tất cả') !== -1 || 
+                  cleanLabel.toLowerCase() === 'all';
+
+      activeCategory = isAll ? 'all' : cleanLabel;
+
+      syncUrlParams();
+      updateActiveCategoryTabs();
+      applyFilterAndRender(appEl);
+    }, true);
   }
 
   // Escape HTML để ngăn ngừa XSS
@@ -6747,6 +8008,7 @@ body.view-not-homepage #main-above-feed {
     parseUrlParams();
     bindArchiveEvents(container);
     bindCategoryTabs(container);
+    updateActiveCategoryTabs();
 
     loadArchiveData(function (posts) {
       applyFilterAndRender(container);
@@ -6844,21 +8106,25 @@ body.view-not-homepage #main-above-feed {
     });
 
     // Detect language for title
-    var isEn = document.querySelector('.lang-btn-en.active') !== null;
+    var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+    var isEn = (currentLang === 'en');
     var tocTitleText = isEn ? '📑 Table of Contents' : '📑 Mục Lục Bài Viết';
 
     // Build TOC HTML
     var html = '<div class="toc-title" onclick="toggleTocList()" role="button" tabindex="0">' +
-               '<span>' + tocTitleText + '</span>' +
+               '<span data-i18n="tableOfContents">' + tocTitleText + '</span>' +
                '<span class="toc-toggle-icon" id="toc-toggle-icon">' + (isCollapsed ? '▼' : '▲') + '</span>' +
                '</div>' +
                '<ul class="toc-list" id="toc-list-items"' + (isCollapsed ? ' style="display:none;"' : '') + '>';
 
     headings.forEach(function(heading) {
       var tagClass = heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2';
+      var headingText = (typeof window.parseBilingualText === 'function')
+        ? window.parseBilingualText(heading.innerText, currentLang)
+        : heading.innerText;
       html += '<li class="' + tagClass + '">' +
               '<a href="#' + heading.id + '" onclick="scrollToSection(event, \'' + heading.id + '\')">' +
-              heading.innerText + '</a></li>';
+              headingText + '</a></li>';
     });
 
     html += '</ul>';
@@ -6968,33 +8234,162 @@ body.view-not-homepage #main-above-feed {
     }
   }, { passive: true });
 
-  // Reading Time Calculator
+  // Reading Time Calculator (Localized)
   function calcReadingTime() {
     var postBody = document.querySelector('.post-body');
     var readTimeEl = document.getElementById('reading-time-val');
     if (!postBody || !readTimeEl) return;
 
+    var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
     var text = postBody.innerText || postBody.textContent || '';
     var words = text.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length;
-    // ~200 wpm for Vietnamese readers
     var minutes = Math.max(1, Math.ceil(words / 200));
-    readTimeEl.innerText = minutes + ' phút đọc';
+    var unit = (lang === 'en') ? 'min read' : 'phút đọc';
+    readTimeEl.innerText = minutes + ' ' + unit;
   }
 
-  // Copy share link button
+  // Copy share link buttons
   function initCopyLink() {
-    var copyBtn = document.getElementById('copy-link-btn');
-    if (!copyBtn) return;
-    copyBtn.addEventListener('click', function() {
-      var url = window.location.href;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(function() {
-          showCopiedToast();
-        }).catch(function() {
+    var copyBtns = document.querySelectorAll('#copy-link-btn, #quick-copy-link-btn, .btn-share-copy, .quick-share-copy');
+    if (!copyBtns.length) return;
+    copyBtns.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var url = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function() {
+            showCopiedToast();
+          }).catch(function() {
+            fallbackCopy(url);
+          });
+        } else {
           fallbackCopy(url);
+        }
+      });
+    });
+  }
+
+  // Share Dropdowns & Web Share API (Handles both Header and Bottom share buttons)
+  function initShareDropdown() {
+    var dropdowns = document.querySelectorAll('.post-share-dropdown');
+    if (!dropdowns.length) return;
+
+    dropdowns.forEach(function(wrapper) {
+      var trigger = wrapper.querySelector('.post-share-trigger');
+      var menu = wrapper.querySelector('.post-share-menu');
+      if (!trigger || !menu) return;
+
+      var nativeBtn = wrapper.querySelector('.share-menu-native');
+      if (navigator.share && nativeBtn) {
+        nativeBtn.style.display = 'flex';
+        nativeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeMenu();
+          navigator.share({
+            title: document.title,
+            url: window.location.href
+          }).catch(function() {});
         });
-      } else {
-        fallbackCopy(url);
+      }
+
+      function toggleMenu(open) {
+        var isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+        var state = (typeof open === 'boolean') ? open : !isExpanded;
+        if (state) {
+          // Close other open dropdowns
+          document.querySelectorAll('.post-share-dropdown').forEach(function(other) {
+            if (other !== wrapper) {
+              var ot = other.querySelector('.post-share-trigger');
+              var om = other.querySelector('.post-share-menu');
+              if (ot) ot.setAttribute('aria-expanded', 'false');
+              if (om) om.classList.remove('show');
+            }
+          });
+        }
+        trigger.setAttribute('aria-expanded', state ? 'true' : 'false');
+        if (state) {
+          menu.classList.add('show');
+        } else {
+          menu.classList.remove('show');
+        }
+      }
+
+      function closeMenu() {
+        toggleMenu(false);
+      }
+
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!wrapper.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      // Social share links popup window
+      var socialLinks = menu.querySelectorAll('a.share-menu-item');
+      socialLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var href = this.getAttribute('href');
+          if (href && !href.startsWith('#')) {
+            e.preventDefault();
+            window.open(href, '_blank', 'width=600,height=500,menubar=no,toolbar=no');
+            closeMenu();
+          }
+        });
+      });
+
+      // Close menu when clicking copy link
+      var copyBtn = menu.querySelector('#quick-copy-link-btn, .quick-share-copy');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          closeMenu();
+        });
+      }
+    });
+  }
+
+  // Auto-enhance Post Images: upscale Blogger CDN images & remove restrictive inline dimensions
+  function enhancePostImages() {
+    var postBody = document.querySelector('.post-body');
+    if (!postBody) return;
+
+    var images = postBody.querySelectorAll('img');
+    images.forEach(function(img) {
+      // 1. Remove fixed width/height HTML attributes and inline style constraints
+      img.removeAttribute('width');
+      img.removeAttribute('height');
+      if (img.style.width) img.style.width = '';
+      if (img.style.height) img.style.height = '';
+
+      // 2. Upgrade resolution in Blogger/Google CDN URLs to full HD (s1600)
+      var src = img.getAttribute('src');
+      if (src && (src.includes('blogger.googleusercontent.com') || src.includes('.bp.blogspot.com') || src.includes('googleusercontent.com'))) {
+        // Matches /s72-c/, /s320/, /s400/, /s640/, /s800/, /w320-h180/, etc.
+        var newSrc = src.replace(/\/(s(72|120|200|320|400|640|800|1024|1200)(-[a-z0-9]+)?|w[0-9]+-h[0-9]+(-[a-z0-9]+)?)\//i, '/s1600/');
+        if (newSrc !== src) {
+          img.src = newSrc;
+        }
+      }
+
+      // 3. Ensure parent link/separator does not clip or restrict image
+      var parent = img.parentElement;
+      if (parent && (parent.classList.contains('separator') || parent.tagName === 'A')) {
+        parent.style.maxWidth = '100%';
+        parent.style.display = 'block';
+        if (parent.parentElement && parent.parentElement.classList.contains('separator')) {
+          parent.parentElement.style.maxWidth = '100%';
+          parent.parentElement.style.display = 'block';
+        }
       }
     });
   }
@@ -7015,9 +8410,12 @@ body.view-not-homepage #main-above-feed {
     var existing = document.getElementById('copied-toast');
     if (existing) existing.remove();
 
+    var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+    var toastMsg = (lang === 'en') ? '✅ Link copied to clipboard!' : '✅ Đã sao chép liên kết!';
+
     var toast = document.createElement('div');
     toast.id = 'copied-toast';
-    toast.innerText = '✅ Đã sao chép link!';
+    toast.innerText = toastMsg;
     toast.style.cssText = [
       'position: fixed',
       'bottom: 1.5rem',
@@ -7050,6 +8448,100 @@ body.view-not-homepage #main-above-feed {
     }, 2200);
   }
 
+  // Newsletter Subscription Modal
+  function initNewsletterModal() {
+    var modal = document.getElementById('newsletter-modal');
+    if (!modal) return;
+
+    var closeBtn = document.getElementById('newsletter-modal-close');
+    var form = document.getElementById('newsletter-modal-form');
+    var emailInput = document.getElementById('newsletter-modal-email');
+    var backdrop = document.getElementById('newsletter-modal-backdrop');
+
+    function openModal() {
+      modal.style.display = 'flex';
+      requestAnimationFrame(function() {
+        modal.classList.add('is-open');
+        if (emailInput) emailInput.focus();
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      setTimeout(function() {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 250);
+    }
+
+    window.openNewsletterModal = openModal;
+    window.closeNewsletterModal = closeModal;
+
+    // Attach click event to all newsletter triggers across the page
+    document.querySelectorAll('a[href="#newsletter"], .btn-subscribe, .btn-newsletter-trigger').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closeModal();
+      }
+    });
+
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!emailInput) return;
+        var email = emailInput.value.trim();
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          emailInput.style.borderColor = '#ef4444';
+          emailInput.focus();
+          setTimeout(function() { emailInput.style.borderColor = ''; }, 2500);
+          return;
+        }
+
+        var submitBtn = form.querySelector('button[type="submit"]');
+        var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        var origText = submitBtn ? submitBtn.innerText : '';
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerText = (lang === 'en') ? '✓ Subscribed!' : '✓ Đã Đăng Ký!';
+          submitBtn.style.background = '#10b981';
+        }
+
+        // Show toast
+        var successMsg = (lang === 'en')
+          ? '🎉 Thank you! You have subscribed to our newsletter.'
+          : '🎉 Cảm ơn bạn! Đã đăng ký nhận bản tin thành công.';
+        
+        var toast = document.createElement('div');
+        toast.className = 'newsletter-success-toast';
+        toast.innerText = successMsg;
+        toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:0.75rem 1.5rem;border-radius:9999px;font-weight:700;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.25);';
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, 3500);
+
+        setTimeout(function() {
+          closeModal();
+          emailInput.value = '';
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = origText;
+            submitBtn.style.background = '';
+          }
+        }, 1500);
+      });
+    }
+  }
+
   // Scroll-to-top button
   function initScrollTop() {
     var btn = document.getElementById('scroll-top-btn');
@@ -7060,12 +8552,594 @@ body.view-not-homepage #main-above-feed {
     });
   }
 
+  // Dynamic Related Posts via Blogger JSON Feed API
+  function initRelatedPosts() {
+    var relSection = document.getElementById('related-posts-section');
+    if (!relSection) return;
+    var grid = document.getElementById('related-posts-grid');
+    if (!grid) return;
+
+    // In local preview where Blogger feed doesn't exist, preserve static cards if present
+    if (window.location.protocol === 'file:' && grid.querySelector('.related-post-card')) return;
+
+    var label = (relSection.getAttribute('data-label') || '').trim();
+    var currentUrl = relSection.getAttribute('data-current-url') || window.location.href;
+    var currentPath = '';
+    try {
+      currentPath = new URL(currentUrl, window.location.origin).pathname;
+    } catch(e) {
+      currentPath = window.location.pathname;
+    }
+
+    var lastEntries = null;
+
+    var feedUrl = label
+      ? '/feeds/posts/summary/-/' + encodeURIComponent(label) + '?alt=json&max-results=6&_cb=' + Date.now()
+      : '/feeds/posts/summary?alt=json&max-results=6&_cb=' + Date.now();
+
+    function renderPosts(entries) {
+      if (!entries || !entries.length) {
+        if (label) {
+          // If category feed returned empty, fallback to recent posts
+          label = '';
+          fetchFeed('/feeds/posts/summary?alt=json&max-results=6&_cb=' + Date.now());
+        } else {
+          relSection.style.display = 'none';
+        }
+        return;
+      }
+
+      var validPosts = [];
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
+        var postUrl = '';
+        if (entry.link) {
+          for (var j = 0; j < entry.link.length; j++) {
+            if (entry.link[j].rel === 'alternate') {
+              postUrl = entry.link[j].href;
+              break;
+            }
+          }
+        }
+
+        // Avoid showing current post
+        if (postUrl) {
+          var entryPath = '';
+          try {
+            entryPath = new URL(postUrl, window.location.origin).pathname;
+            if (entryPath === currentPath) continue;
+          } catch(err) {
+            if (postUrl === currentUrl) continue;
+          }
+
+          // Deduplicate: avoid showing posts that already belong to the active series
+          if (window.SERIES_POST_URLS && window.SERIES_POST_URLS.length) {
+            var isSeriesPost = false;
+            for (var s = 0; s < window.SERIES_POST_URLS.length; s++) {
+              var sUrl = window.SERIES_POST_URLS[s];
+              if (sUrl === postUrl) { isSeriesPost = true; break; }
+              try {
+                if (entryPath && new URL(sUrl, window.location.origin).pathname === entryPath) {
+                  isSeriesPost = true; break;
+                }
+              } catch(se) {}
+            }
+            if (isSeriesPost) continue;
+          }
+        }
+
+        var title = entry.title ? (entry.title.$t || '') : '';
+        var published = entry.published ? (entry.published.$t || '') : '';
+        var dateStr = '';
+        if (published) {
+          try {
+            var d = new Date(published);
+            var day = ('0' + d.getDate()).slice(-2);
+            var month = ('0' + (d.getMonth() + 1)).slice(-2);
+            var year = d.getFullYear();
+            dateStr = day + '/' + month + '/' + year;
+          } catch(e) {
+            dateStr = published.substring(0, 10);
+          }
+        }
+
+        // Extract thumbnail and upgrade resolution
+        var thumb = '';
+        if (entry.media$thumbnail && entry.media$thumbnail.url) {
+          thumb = entry.media$thumbnail.url;
+          thumb = thumb.replace(/\/s72-c\//, '/w600-h360-c/')
+                       .replace(/\/w72-h72-p-k-no-nu\//, '/w600-h360-c/')
+                       .replace(/\/s1600-w[0-9]+-h[0-9]+-c\//, '/w600-h360-c/');
+        } else if (entry.content && entry.content.$t) {
+          var match = entry.content.$t.match(/<img[^>]+src=["']([^"']+)["']/i);
+          if (match && match[1]) thumb = match[1];
+        }
+
+        validPosts.push({
+          title: title,
+          url: postUrl || '#',
+          date: dateStr,
+          thumb: thumb
+        });
+
+        if (validPosts.length >= 3) break;
+      }
+
+      if (validPosts.length === 0) {
+        relSection.style.display = 'none';
+        return;
+      }
+
+      grid.innerHTML = '';
+      validPosts.forEach(function(item) {
+        var card = document.createElement('a');
+        card.className = 'related-post-card';
+        card.href = item.url;
+
+        var imgHtml = item.thumb
+          ? '<img class="related-post-thumb" src="' + item.thumb + '" alt="' + item.title.replace(/"/g, '&quot;') + '" loading="lazy" decoding="async"/>'
+          : '<div class="related-post-thumb-placeholder">📰</div>';
+
+        card.innerHTML = imgHtml +
+          '<span class="related-post-title" data-bilingual="true">' + item.title + '</span>' +
+          '<span class="related-post-date">📅 ' + item.date + '</span>';
+
+        grid.appendChild(card);
+      });
+
+      if (window.applyBilingualElements) {
+        window.applyBilingualElements();
+      }
+    }
+
+    function fetchFeed(url) {
+      fetch(url, { cache: 'no-cache' })
+        .then(function(res) {
+          if (!res.ok) throw new Error('Network error');
+          return res.json();
+        })
+        .then(function(data) {
+          var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+          lastEntries = entries;
+          renderPosts(entries);
+        })
+        .catch(function() {
+          if (label) {
+            label = '';
+            fetch('/feeds/posts/summary?alt=json&max-results=6&_cb=' + Date.now(), { cache: 'no-cache' })
+              .then(function(r) { return r.json(); })
+              .then(function(d) {
+                var entries = (d && d.feed && d.feed.entry) ? d.feed.entry : [];
+                lastEntries = entries;
+                renderPosts(entries);
+              })
+              .catch(function() {
+                relSection.style.display = 'none';
+              });
+          } else {
+            relSection.style.display = 'none';
+          }
+        });
+    }
+
+    // When series widget finishes loading, re-render related posts to ensure deduplication
+    window.addEventListener('seriesLoaded', function() {
+      if (lastEntries && lastEntries.length) {
+        renderPosts(lastEntries);
+      }
+    });
+
+    fetchFeed(feedUrl);
+  }
+
+  // Update on language changed
+  window.addEventListener('languageChanged', function() {
+    calcReadingTime();
+  });
+
   document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.querySelector('.reading-progress-bar');
     calcReadingTime();
     initCopyLink();
+    initShareDropdown();
+    initNewsletterModal();
+    enhancePostImages();
     initScrollTop();
+    initRelatedPosts();
   });
+})();
+
+
+/* ==========================================================================
+   POST SERIES NAVIGATOR — LUXURY EDITORIAL EDITION (ROBUST V3)
+   - Detects posts with 'series:[name]' label
+   - Queries Blogger JSON Feed API for all parts with cache-buster
+   - Stale-while-revalidate caching (invalidates if current post missing)
+   - Robust URL/Slug pathname matching
+   - Connected Vertical Journey Stepper (Timeline)
+   - Active Illuminated Chapter Card & Next Chapter Spotlight
+   - Populates window.SERIES_POST_URLS to deduplicate Related Posts
+   - Localized (VI/EN)
+   ========================================================================== */
+(function() {
+  'use strict';
+
+  var SERIES_I18N = {
+    vi: {
+      seriesBadge: 'CHUYÊN ĐỀ',
+      partLabel: 'Phần',
+      progressText: 'Tiến trình:',
+      completedRatio: 'hoàn thành',
+      currentReading: 'Đang đọc',
+      readStatus: 'Đã đọc',
+      nextChapterBadge: 'Tiếp theo',
+      upcomingBadge: 'Chưa đọc',
+      nextKicker: 'Bài tiếp theo',
+      prevKicker: 'Bài trước',
+      completedSeriesMsg: 'Bạn đã hoàn thành tất cả các phần trong chuyên đề này.',
+      viewRoadmap: 'Lộ trình ↓'
+    },
+    en: {
+      seriesBadge: 'SERIES',
+      partLabel: 'Part',
+      progressText: 'Progress:',
+      completedRatio: 'completed',
+      currentReading: 'Reading Now',
+      readStatus: 'Completed',
+      nextChapterBadge: 'Next Up',
+      upcomingBadge: 'Upcoming',
+      nextKicker: 'Next Chapter',
+      prevKicker: 'Previous',
+      completedSeriesMsg: 'You have completed all parts of this series.',
+      viewRoadmap: 'Roadmap ↓'
+    }
+  };
+
+  function getLang() {
+    return (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+  }
+
+  function formatSeriesTitle(rawLabel) {
+    if (!rawLabel) return '';
+    var name = rawLabel.replace(/^series:\s*/i, '').trim();
+    if (name.indexOf('-') > -1 && name.indexOf(' ') === -1) {
+      name = name.split('-').map(function(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(' ');
+    }
+    return name;
+  }
+
+  function initPostSeries() {
+    var pillContainer = document.getElementById('series-header-pill-container');
+    var boxContainer = document.getElementById('series-roadmap-box-container');
+
+    var seriesLabel = (pillContainer && pillContainer.getAttribute('data-series-label')) ||
+                      (boxContainer && boxContainer.getAttribute('data-series-label')) || '';
+
+    if (!seriesLabel) {
+      var seriesEl = document.querySelector('[data-series-label]');
+      if (seriesEl) seriesLabel = seriesEl.getAttribute('data-series-label');
+    }
+
+    if (!seriesLabel) {
+      var rawLabels = document.querySelectorAll('.post-raw-label');
+      rawLabels.forEach(function(lbl) {
+        var txt = (lbl.innerText || lbl.textContent || '').trim();
+        if (/^series:/i.test(txt)) {
+          seriesLabel = txt;
+        }
+      });
+    }
+
+    if (!seriesLabel || !/^series:/i.test(seriesLabel)) {
+      if (pillContainer) pillContainer.style.display = 'none';
+      if (boxContainer) boxContainer.style.display = 'none';
+      return;
+    }
+
+    var seriesTitle = formatSeriesTitle(seriesLabel);
+    var currentUrl = window.location.href;
+    var currentPath = window.location.pathname;
+
+    // Use versioned cache key to discard old invalid caches
+    var cacheKey = 'post_series_v3_' + encodeURIComponent(seriesLabel);
+    var cachedData = null;
+    try {
+      var raw = sessionStorage.getItem(cacheKey);
+      if (raw) cachedData = JSON.parse(raw);
+    } catch(e) {}
+
+    // Verify if cachedData actually contains the post we are currently reading
+    var isCacheValid = false;
+    if (cachedData && Array.isArray(cachedData) && cachedData.length > 0) {
+      for (var c = 0; c < cachedData.length; c++) {
+        try {
+          var cp = new URL(cachedData[c].url, window.location.origin).pathname;
+          if (cp === currentPath || currentPath.indexOf(cp) > -1 || cp.indexOf(currentPath) > -1 || cachedData[c].url === currentUrl) {
+            isCacheValid = true;
+            break;
+          }
+        } catch(e) {}
+      }
+    }
+
+    if (isCacheValid) {
+      // 1. Render immediately from valid cache for 0ms CLS
+      renderSeries(cachedData, seriesTitle, currentUrl, currentPath);
+      // 2. Revalidate in background to pick up newly published parts
+      fetchSeriesFeed(seriesLabel, seriesTitle, currentUrl, currentPath, cacheKey, true);
+    } else {
+      // Cache missing or invalid (does not contain current post) -> fetch immediately
+      fetchSeriesFeed(seriesLabel, seriesTitle, currentUrl, currentPath, cacheKey, false);
+    }
+  }
+
+  function fetchSeriesFeed(seriesLabel, seriesTitle, currentUrl, currentPath, cacheKey, isBackgroundRevalidate) {
+    // If preview sandbox environment offline, do not crash but wire up pill click
+    if (window.location.protocol === 'file:') {
+      var pillTrigger = document.getElementById('series-pill-trigger');
+      if (pillTrigger) {
+        pillTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = document.getElementById('series-roadmap-box');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.style.outline = '2px solid var(--primary)';
+            setTimeout(function() { target.style.outline = 'none'; }, 2000);
+          }
+        });
+      }
+      return;
+    }
+
+    // Add cache buster timestamp to prevent stale browser disk cache
+    var feedUrl = '/feeds/posts/summary/-/' + encodeURIComponent(seriesLabel) +
+                  '?alt=json&max-results=50&_cb=' + Date.now();
+
+    fetch(feedUrl, { cache: 'no-cache' })
+      .then(function(res) {
+        if (!res.ok) throw new Error('Failed to fetch series feed: ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        var entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+        if (!entries.length) return;
+
+        var posts = [];
+        entries.forEach(function(entry) {
+          var postUrl = '';
+          if (entry.link) {
+            for (var i = 0; i < entry.link.length; i++) {
+              if (entry.link[i].rel === 'alternate') {
+                postUrl = entry.link[i].href;
+                break;
+              }
+            }
+          }
+
+          var title = entry.title ? (entry.title.$t || '') : '';
+          var published = entry.published ? (entry.published.$t || '') : '';
+
+          if (postUrl && title) {
+            posts.push({
+              title: title,
+              url: postUrl,
+              published: published
+            });
+          }
+        });
+
+        // Sort CHRONOLOGICALLY (oldest = Part 1)
+        posts.sort(function(a, b) {
+          return new Date(a.published) - new Date(b.published);
+        });
+
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(posts));
+        } catch(e) {}
+
+        renderSeries(posts, seriesTitle, currentUrl, currentPath);
+      })
+      .catch(function(err) {
+        console.warn('Series feed error:', err);
+      });
+  }
+
+  function renderSeries(posts, seriesTitle, currentUrl, currentPath) {
+    if (!posts || !posts.length) return;
+
+    // Register all series URLs globally so Related Posts can exclude them
+    window.SERIES_POST_URLS = posts.map(function(p) { return p.url; });
+    try {
+      window.dispatchEvent(new CustomEvent('seriesLoaded', { detail: { urls: window.SERIES_POST_URLS } }));
+    } catch(e) {}
+
+    // Find active post index
+    var activeIdx = -1;
+    for (var i = 0; i < posts.length; i++) {
+      var pUrl = posts[i].url;
+      try {
+        var pPath = new URL(pUrl, window.location.origin).pathname;
+        if (pPath === currentPath || currentPath.endsWith(pPath) || pPath.endsWith(currentPath)) {
+          activeIdx = i;
+          break;
+        }
+      } catch(e) {
+        if (pUrl === currentUrl || currentUrl.indexOf(pUrl) > -1) {
+          activeIdx = i;
+          break;
+        }
+      }
+    }
+
+    // Fallback: match by post title in document.title if pathname matching didn't catch
+    if (activeIdx === -1) {
+      var docTitle = document.title || '';
+      for (var j = 0; j < posts.length; j++) {
+        if (posts[j].title && docTitle.indexOf(posts[j].title.slice(0, 25)) > -1) {
+          activeIdx = j;
+          break;
+        }
+      }
+    }
+
+    if (activeIdx === -1) activeIdx = 0;
+
+    var currentPartNum = activeIdx + 1;
+    var totalParts = posts.length;
+    var progressPct = Math.round((currentPartNum / totalParts) * 100);
+
+    var lang = getLang();
+    var i18n = SERIES_I18N[lang] || SERIES_I18N.vi;
+
+    // 1. Render Top Pill
+    var pillContainer = document.getElementById('series-header-pill-container');
+    if (pillContainer) {
+      pillContainer.style.display = 'block';
+      pillContainer.innerHTML =
+        '<div class="series-header-pill-wrapper">' +
+          '<a href="#series-roadmap-box" class="series-header-pill" id="series-pill-trigger">' +
+            '<span class="series-pill-kicker">' + i18n.seriesBadge + '</span>' +
+            '<span class="series-pill-divider">/</span>' +
+            '<span class="series-pill-title" data-bilingual="true">' + seriesTitle + '</span>' +
+            '<span class="series-pill-badge">' + i18n.partLabel + ' ' + currentPartNum + '/' + totalParts + '</span>' +
+            '<span class="series-pill-action">' + i18n.viewRoadmap + '</span>' +
+          '</a>' +
+        '</div>';
+
+      var pillTrigger = document.getElementById('series-pill-trigger');
+      if (pillTrigger) {
+        pillTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = document.getElementById('series-roadmap-box');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.style.outline = '2px solid var(--primary)';
+            target.style.transition = 'outline 0.3s ease';
+            setTimeout(function() { target.style.outline = 'none'; }, 2000);
+          }
+        });
+      }
+    }
+
+    // 2. Render Bottom Roadmap Box
+    var boxContainer = document.getElementById('series-roadmap-box-container');
+    if (boxContainer) {
+      boxContainer.style.display = 'block';
+
+      var stepsHtml = '';
+      posts.forEach(function(post, idx) {
+        var partNum = ('0' + (idx + 1)).slice(-2);
+        var isCurrent = (idx === activeIdx);
+        var isRead = (idx < activeIdx);
+        var isNext = (idx === activeIdx + 1);
+
+        var itemClass = 'series-step-item';
+        if (isCurrent) itemClass += ' is-active';
+        if (isRead) itemClass += ' is-read';
+
+        var badgeHtml = '';
+        if (isCurrent) {
+          badgeHtml = '<span class="series-step-badge badge-active"><span class="badge-dot"></span>' + i18n.currentReading + '</span>';
+        } else if (isRead) {
+          badgeHtml = '<span class="series-step-badge badge-read">✓ ' + i18n.readStatus + '</span>';
+        } else if (isNext) {
+          badgeHtml = '<span class="series-step-badge badge-next">' + i18n.nextChapterBadge + '</span>';
+        } else {
+          badgeHtml = '<span class="series-step-badge badge-upcoming">' + i18n.upcomingBadge + '</span>';
+        }
+
+        var nodeContent = isRead ? '✓' : partNum;
+        var tag = isCurrent ? 'div' : 'a';
+        var hrefAttr = isCurrent ? '' : ' href="' + post.url + '"';
+        var cleanTitle = (post.title || '').replace(/"/g, '&quot;');
+
+        stepsHtml +=
+          '<' + tag + ' class="' + itemClass + '"' + hrefAttr + ' title="' + cleanTitle + '">' +
+            '<div class="series-step-node">' + nodeContent + '</div>' +
+            '<div class="series-step-content">' +
+              '<span class="series-step-title" data-bilingual="true" title="' + cleanTitle + '">' + post.title + '</span>' +
+              badgeHtml +
+            '</div>' +
+          '</' + tag + '>';
+      });
+
+      // Navigation Spotlight Cards
+      var navHtml = '';
+      var hasPrev = (activeIdx > 0);
+      var hasNext = (activeIdx < posts.length - 1);
+
+      if (hasPrev || hasNext) {
+        var navClass = 'series-nav-spotlight';
+        if (hasPrev && !hasNext) navClass += ' only-prev';
+        if (!hasPrev && hasNext) navClass += ' only-next';
+
+        navHtml += '<div class="' + navClass + '">';
+
+        if (hasPrev) {
+          var prevPost = posts[activeIdx - 1];
+          var cleanPrevTitle = (prevPost.title || '').replace(/"/g, '&quot;');
+          navHtml +=
+            '<a class="series-nav-card series-nav-prev" href="' + prevPost.url + '" title="' + cleanPrevTitle + '">' +
+              '<span class="series-nav-kicker">← ' + i18n.prevKicker + '</span>' +
+              '<span class="series-nav-title" data-bilingual="true" title="' + cleanPrevTitle + '">' + prevPost.title + '</span>' +
+            '</a>';
+        }
+
+        if (hasNext) {
+          var nextPost = posts[activeIdx + 1];
+          var cleanNextTitle = (nextPost.title || '').replace(/"/g, '&quot;');
+          navHtml +=
+            '<a class="series-nav-card series-nav-next" href="' + nextPost.url + '" title="' + cleanNextTitle + '">' +
+              '<div class="series-nav-next-content">' +
+                '<span class="series-nav-kicker">' + i18n.nextKicker + ' →</span>' +
+                '<span class="series-nav-title" data-bilingual="true" title="' + cleanNextTitle + '">' + nextPost.title + '</span>' +
+              '</div>' +
+              '<div class="series-nav-arrow-bubble">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
+              '</div>' +
+            '</a>';
+        }
+
+        navHtml += '</div>';
+      } else if (posts.length > 1 && activeIdx === posts.length - 1) {
+        navHtml = '<div class="series-completed-msg"><span>🏆</span> ' + i18n.completedSeriesMsg + '</div>';
+      }
+
+      boxContainer.innerHTML =
+        '<div class="series-roadmap-box" id="series-roadmap-box">' +
+          '<div class="series-box-header">' +
+            '<div class="series-box-top-row">' +
+              '<div class="series-box-kicker-group">' +
+                '<span class="series-box-icon">✦</span>' +
+                '<span class="series-box-kicker">' + i18n.seriesBadge + '</span>' +
+              '</div>' +
+              '<div class="series-box-progress-pill">' +
+                '<span class="series-progress-count">' + currentPartNum + ' / ' + totalParts + '</span>' +
+                '<span class="series-progress-label">' + i18n.completedRatio + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<h4 class="series-box-title" data-bilingual="true">' + seriesTitle + '</h4>' +
+            '<div class="series-progress-track">' +
+              '<div class="series-progress-fill" style="width: ' + progressPct + '%;"></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="series-steps-list">' + stepsHtml + '</div>' +
+          navHtml +
+        '</div>';
+    }
+
+    if (window.applyBilingualElements) {
+      window.applyBilingualElements();
+    }
+  }
+
+  window.addEventListener('languageChanged', function() {
+    initPostSeries();
+  });
+
+  document.addEventListener('DOMContentLoaded', initPostSeries);
 })();
 
 
@@ -7481,7 +9555,9 @@ body.view-not-homepage #main-above-feed {
     const cleanTitle = title ? escapeHtml(title) : '';
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
-    const viewAllUrl = rawLabels.length > 0 ? ('/search/label/' + encodeURIComponent(rawLabels[0])) : '/search';
+    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
+    const firstLabel = labelsArr.length > 0 ? labelsArr[0] : '';
+    const viewAllUrl = firstLabel ? buildLabelUrl(firstLabel) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -7545,9 +9621,7 @@ body.view-not-homepage #main-above-feed {
     const thumb  = (opts.showThumb && post.thumbnail)
       ? optimizeThumbnail(post.thumbnail, 's600-c')
       : '';
-    const badge  = post.labels && post.labels[0]
-      ? formatLabelName(post.labels[0])
-      : '';
+    const badge  = extractNormalCategory(post.labels || []);
     const aiType = extractAIType(post.labels || []);
     const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
@@ -7809,6 +9883,19 @@ body.view-not-homepage #main-above-feed {
   /* ═══════════════════════════════════════════════════════════════
      UTILS
      ═══════════════════════════════════════════════════════════════ */
+
+  /** Trích xuất nhãn chuyên mục thường đầu tiên (loại trừ @ và ai:) */
+  function extractNormalCategory(labels) {
+    if (!labels || !labels.length) return '';
+    for (var i = 0; i < labels.length; i++) {
+      var raw = (labels[i] || '').trim();
+      var lower = raw.toLowerCase();
+      if (!raw.startsWith('@') && !lower.startsWith('ai:') && !lower.startsWith('ai-') && !lower.startsWith('series:')) {
+        return raw;
+      }
+    }
+    return '';
+  }
 
   /** Lọc ký tự @ # _ ~ khỏi tên nhãn trước khi hiển thị */
   function formatLabelName(raw) {
@@ -8491,8 +10578,11 @@ body.view-not-homepage #main-above-feed {
           if (name.startsWith('@')) {
             // Nhãn tính năng cho widget (@Quote, @Tiêu điểm, @Nổi bật, @Điểm tin)
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
-            allFeatureAt = false;
+            // Nhãn AI minh bạch - KHÔNG tính là nhãn chuyên mục thường
             if (!detectedAiType) detectedAiType = name.toLowerCase();
+          } else if (name.toLowerCase().startsWith('series:')) {
+            // Nhãn Series Navigator - Không dùng làm badge chuyên mục nhưng không phải nhãn ẩn @
+            allFeatureAt = false;
           } else {
             allFeatureAt = false;
             if (!firstNormalLabel) firstNormalLabel = { name: name, url: url };
@@ -8500,7 +10590,8 @@ body.view-not-homepage #main-above-feed {
         });
 
         // ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
-        if (allFeatureAt && isHomepage) {
+        // Bài viết chỉ có nhãn @ (và có thể kèm ai:) mà không có nhãn chuyên mục thường -> Ẩn khỏi Trang chủ
+        if (allFeatureAt && !firstNormalLabel && isHomepage) {
           card.style.display = 'none';
           card.classList.add('is-exclusive-feature-hidden');
           return;
@@ -8515,8 +10606,8 @@ body.view-not-homepage #main-above-feed {
             badge.setAttribute('data-bilingual', 'true');
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
-          } else if (allFeatureAt) {
-            badge.textContent = badge.textContent.replace(/^@/, '');
+          } else {
+            badge.style.display = 'none';
           }
         }
 
@@ -8601,6 +10692,8 @@ body.view-not-homepage #main-above-feed {
             // bỏ qua
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
             if (!aiTypeSingle) aiTypeSingle = name.toLowerCase();
+          } else if (name.toLowerCase().startsWith('series:')) {
+            // bỏ qua không lấy làm breadcrumb chuyên mục
           } else {
             if (!normalLabelSingle) normalLabelSingle = { name: name, url: url };
           }
@@ -8615,7 +10708,9 @@ body.view-not-homepage #main-above-feed {
             breadcrumbCat.textContent = window.parseBilingualText ? window.parseBilingualText(normalLabelSingle.name, currentLang) : normalLabelSingle.name.split('|')[0].trim();
             breadcrumbCat.href = normalLabelSingle.url;
           } else {
-            breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');
+            breadcrumbCat.style.display = 'none';
+            var nextSep = breadcrumbCat.nextElementSibling;
+            if (nextSep && nextSep.classList.contains('separator')) nextSep.style.display = 'none';
           }
         }
 
@@ -8747,6 +10842,15 @@ body.view-not-homepage #main-above-feed {
 
     if (!coverWrapper) return;
 
+    function syncSiteAvatars(avatarUrl) {
+      if (!avatarUrl) return;
+      document.querySelectorAll('.author-avatar-sm, .author-bio-avatar, .sidebar-about-avatar').forEach(function(img) {
+        if (!img.src || img.src.includes('data:image') || img.src.includes('unsplash')) {
+          img.src = avatarUrl;
+        }
+      });
+    }
+
     // 1. Ảnh Banner tải lên trực tiếp từ máy tính qua widget Image1
     const uploadedBannerEl = document.getElementById('profile-uploaded-banner');
     if (uploadedBannerEl) {
@@ -8760,17 +10864,22 @@ body.view-not-homepage #main-above-feed {
     const uploadedAvatarEl = document.getElementById('profile-uploaded-avatar');
     if (uploadedAvatarEl) {
       const avatarText = uploadedAvatarEl.textContent.trim();
-      if (/^https?:\/\/[^\s]+/i.test(avatarText) && avatarImg) {
-        avatarImg.src = avatarText;
+      if (/^https?:\/\/[^\s]+/i.test(avatarText)) {
+        if (avatarImg) avatarImg.src = avatarText;
+        try { localStorage.setItem('cached_author_avatar', avatarText); } catch(e){}
+        syncSiteAvatars(avatarText);
       }
     }
 
-    // Đảm bảo Banner và Avatar luôn luôn có ảnh hiển thị (Zero Blank Banner)
-    if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
-      coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
-    }
-    if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined'))) {
-      avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+    // Chỉ dùng Unsplash fallback khi ở môi trường Local Preview (preview.html hoặc localhost)
+    const isLocalDev = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalDev) {
+      if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
+        coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
+      }
+      if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined') || avatarImg.src.startsWith('data:image'))) {
+        avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+      }
     }
 
     // 3. Đọc cấu hình tùy chỉnh từ ô Content của widget HTML1
@@ -8789,10 +10898,18 @@ body.view-not-homepage #main-above-feed {
     // Nếu người dùng chèn ảnh qua nút "Chèn hình ảnh" của Blogger trong ô Content
     const inlineImgs = configEl.querySelectorAll('img');
     if (inlineImgs.length === 1) {
-      if (inlineImgs[0].src && avatarImg) avatarImg.src = inlineImgs[0].src;
+      if (inlineImgs[0].src && avatarImg) {
+        avatarImg.src = inlineImgs[0].src;
+        try { localStorage.setItem('cached_author_avatar', inlineImgs[0].src); } catch(e){}
+        syncSiteAvatars(inlineImgs[0].src);
+      }
     } else if (inlineImgs.length >= 2) {
       if (inlineImgs[0].src) coverWrapper.style.backgroundImage = `url("${inlineImgs[0].src}")`;
-      if (inlineImgs[1].src && avatarImg) avatarImg.src = inlineImgs[1].src;
+      if (inlineImgs[1].src && avatarImg) {
+        avatarImg.src = inlineImgs[1].src;
+        try { localStorage.setItem('cached_author_avatar', inlineImgs[1].src); } catch(e){}
+        syncSiteAvatars(inlineImgs[1].src);
+      }
     }
 
     const rawContent = configEl.innerHTML.trim();
@@ -8813,6 +10930,8 @@ body.view-not-homepage #main-above-feed {
           } else if (/^avatar\s*:\s*(https?:\/\/[^\s]+)/i.test(part)) {
             const url = part.match(/^avatar\s*:\s*(https?:\/\/[^\s]+)/i)[1];
             if (avatarImg) avatarImg.src = url;
+            try { localStorage.setItem('cached_author_avatar', url); } catch(e){}
+            syncSiteAvatars(url);
           } else if (/^bio\s*:\s*(.+)/i.test(part)) {
             const bio = part.match(/^bio\s*:\s*(.+)/i)[1].trim();
             if (bioEl) bioEl.textContent = bio;

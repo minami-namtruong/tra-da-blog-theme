@@ -52,7 +52,9 @@ a:hover {
   line-height: 1.8;
   color: var(--text-main);
   word-wrap: break-word;
+  overflow-wrap: break-word;
   max-width: var(--content-max-width);
+  min-width: 0;
 }
 
 .post-body p {
@@ -91,13 +93,32 @@ a:hover {
 }
 .post-body blockquote p:last-child { margin-bottom: 0; }
 
+/* ── Hình ảnh bài viết: mở rộng phóng to full-width & đổ bóng sang trọng ── */
+.post-body .separator,
+.post-body .separator a {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: center !important;
+  display: block !important;
+  clear: both !important;
+}
+
 .post-body img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius-md);
-  margin: 1.5em auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: var(--radius-lg);
+  margin: 2.25rem auto;
   display: block;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-body img:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .post-body ul, .post-body ol {
@@ -138,9 +159,12 @@ a:hover {
 
 .post-body table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 1.75em 0;
   font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
 }
 .post-body th, .post-body td {
   padding: 0.75em 1em;

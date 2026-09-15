@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="styles/archive-page.css?v=2.0"/>
   <link rel="stylesheet" href="styles/special-posts.css?v=2.0"/>
   <link rel="stylesheet" href="styles/ai-transparency.css?v=1.0"/>
+  <link rel="stylesheet" href="styles/post-series.css?v=1.0"/>
 </head>
 <body>
 
@@ -370,38 +371,72 @@
         <div id="single-post-wrapper" style="display: none;" data-ai-type="ai:assisted">
           <article class="single-post-container">
 
-            <!-- Breadcrumbs -->
-            <nav class="breadcrumbs">
-              <a href="#" id="breadcrumb-home-link">🏠 Trang chủ</a>
-              <span class="separator">›</span>
-              <a href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
-              <span class="separator">›</span>
-              <span>Nghịch Lý Của Việc Chọn Lựa</span>
-            </nav>
-
             <!-- H1 Title -->
-            <h1 class="single-post-title">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn</h1>
+            <h1 class="single-post-title" data-bilingual="true">Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn | The Paradox of Choice: Why More Is Less</h1>
 
             <!-- Post Meta -->
             <div class="post-meta-header">
               <div class="author-meta-inline">
                 <img class="author-avatar-sm"
                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80"
-                     alt="Nam Trương" width="44" height="44"/>
+                     alt="Author" width="44" height="44"/>
                 <div class="author-meta-text">
                   <div class="author-name-link">Nam Trương</div>
                   <div class="author-meta-details">
-                    <span>📅 09 tháng 9, 2026</span>
+                    <span>📅 <time datetime="2026-09-09T08:00:00Z">09 tháng 9, 2026</time></span>
                     <span>•</span>
                     <span>⏱️ <span id="reading-time-val"><span data-i18n="readingTime">phút đọc</span></span></span>
                   </div>
                 </div>
               </div>
-              <div class="bilingual-switcher-wrapper is-visible">
-                <div class="bilingual-switcher">
-                  <button class="lang-btn lang-btn-vi active" onclick="switchLanguage('vi')">🇻🇳 VI</button>
-                  <button class="lang-btn lang-btn-en" onclick="switchLanguage('en')">🇬🇧 EN</button>
+              <div class="post-header-actions">
+                <div class="post-share-dropdown" id="post-share-dropdown">
+                  <button class="post-share-trigger" id="post-share-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Chia sẻ">
+                    <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    <span data-i18n="shareBtn">Chia sẻ</span>
+                  </button>
+                  <div class="post-share-menu" id="post-share-menu" role="menu">
+                    <button class="share-menu-item" id="quick-copy-link-btn" type="button" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                      <span data-i18n="copyLink">Sao chép liên kết</span>
+                    </button>
+                    <a class="share-menu-item share-menu-fb" href="https://www.facebook.com/sharer/sharer.php" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span>Facebook</span>
+                    </a>
+                    <a class="share-menu-item share-menu-tw" href="https://twitter.com/intent/tweet" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span>X (Twitter)</span>
+                    </a>
+                    <a class="share-menu-item share-menu-li" href="https://www.linkedin.com/sharing/share-offsite" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="#0a66c2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z"/></svg>
+                      <span>LinkedIn</span>
+                    </a>
+                    <button class="share-menu-item share-menu-native" id="native-share-btn" type="button" role="menuitem" style="display:none;">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                      <span data-i18n="moreOptions">Thêm tùy chọn...</span>
+                    </button>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <!-- Post Series Header Pill (Demo Preview) -->
+            <div id="series-header-pill-container" data-series-label="series:Tự Do Tài Chính">
+              <div class="series-header-pill-wrapper">
+                <a href="#series-roadmap-box" class="series-header-pill" id="series-pill-trigger">
+                  <span class="series-pill-kicker">CHUYÊN ĐỀ</span>
+                  <span class="series-pill-divider">/</span>
+                  <span class="series-pill-title" data-bilingual="true">Tự Do Tài Chính</span>
+                  <span class="series-pill-badge">Phần 2/4</span>
+                  <span class="series-pill-action">Lộ trình ↓</span>
+                </a>
               </div>
             </div>
 
@@ -500,18 +535,120 @@
               </div>
             </div>
 
+            <!-- Post Series Roadmap Box (Demo Preview) -->
+            <div id="series-roadmap-box-container" data-series-label="series:Tự Do Tài Chính">
+              <div class="series-roadmap-box" id="series-roadmap-box">
+                <div class="series-box-header">
+                  <div class="series-box-top-row">
+                    <div class="series-box-kicker-group">
+                      <span class="series-box-icon">✦</span>
+                      <span class="series-box-kicker">CHUYÊN ĐỀ</span>
+                    </div>
+                    <div class="series-box-progress-pill">
+                      <span class="series-progress-count">2 / 4</span>
+                      <span class="series-progress-label">hoàn thành</span>
+                    </div>
+                  </div>
+                  <h4 class="series-box-title" data-bilingual="true">Tự Do Tài Chính Tuổi 30</h4>
+                  <div class="series-progress-track">
+                    <div class="series-progress-fill" style="width: 50%;"></div>
+                  </div>
+                </div>
+                <div class="series-steps-list">
+                  <a class="series-step-item is-read" href="#" title="Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp">
+                    <div class="series-step-node">✓</div>
+                    <div class="series-step-content">
+                      <span class="series-step-title" title="Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp">Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp</span>
+                      <span class="series-step-badge badge-read">✓ Đã đọc</span>
+                    </div>
+                  </a>
+                  <div class="series-step-item is-active" title="Phần 2: Chiến Lược Đầu Tư Thụ Động Quỹ Chỉ Số Cho Người Mới">
+                    <div class="series-step-node">02</div>
+                    <div class="series-step-content">
+                      <span class="series-step-title" title="Phần 2: Chiến Lược Đầu Tư Thụ Động Quỹ Chỉ Số Cho Người Mới">Phần 2: Chiến Lược Đầu Tư Thụ Động Quỹ Chỉ Số Cho Người Mới</span>
+                      <span class="series-step-badge badge-active"><span class="badge-dot"></span>Đang đọc</span>
+                    </div>
+                  </div>
+                  <a class="series-step-item" href="#" title="Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản">
+                    <div class="series-step-node">03</div>
+                    <div class="series-step-content">
+                      <span class="series-step-title" title="Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản">Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản</span>
+                      <span class="series-step-badge badge-next">Tiếp theo</span>
+                    </div>
+                  </a>
+                  <a class="series-step-item" href="#" title="Phần 4: Kế Hoạch Rút Tiền 4% &amp; Độc Lập Tài Chính Ở Tuổi 35">
+                    <div class="series-step-node">04</div>
+                    <div class="series-step-content">
+                      <span class="series-step-title" title="Phần 4: Kế Hoạch Rút Tiền 4% &amp; Độc Lập Tài Chính Ở Tuổi 35">Phần 4: Kế Hoạch Rút Tiền 4% &amp; Độc Lập Tài Chính Ở Tuổi 35</span>
+                      <span class="series-step-badge badge-upcoming">Chưa đọc</span>
+                    </div>
+                  </a>
+                </div>
+                <div class="series-nav-spotlight">
+                  <a class="series-nav-card series-nav-prev" href="#" title="Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp">
+                    <span class="series-nav-kicker">← Quay lại</span>
+                    <span class="series-nav-title" title="Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp">Phần 1: Xây Dựng Thói Quen Tiết Kiệm và Quỹ Khẩn Cấp</span>
+                  </a>
+                  <a class="series-nav-card series-nav-next" href="#" title="Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản">
+                    <div class="series-nav-next-content">
+                      <span class="series-nav-kicker">Tiếp tục hành trình →</span>
+                      <span class="series-nav-title" title="Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản">Phần 3: Quản Trị Rủi Ro &amp; Đa Dạng Hóa Danh Mục Tài Sản</span>
+                    </div>
+                    <div class="series-nav-arrow-bubble">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <!-- AdSense Bottom -->
             <div class="adsense-slot adsense-bottom" style="display:flex; align-items:center; justify-content:center;">
               <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Cuối Bài (min-height: 250px)</span>
             </div>
 
-            <!-- Social Share Bar -->
-            <div class="social-share-bar">
-              <span class="share-title">Chia sẻ bài viết:</span>
-              <a class="btn-share btn-share-fb" href="#"><b>f</b> Facebook</a>
-              <a class="btn-share btn-share-tw" href="#">𝕏 X / Twitter</a>
-              <a class="btn-share btn-share-li" href="#">in LinkedIn</a>
-              <button class="btn-share btn-share-copy" id="copy-link-btn">🔗 Sao chép link</button>
+            <!-- Post Bottom Share Area -->
+            <div class="post-bottom-share" role="group" aria-label="Chia sẻ bài viết">
+              <div class="post-bottom-share-inner">
+                <div class="post-bottom-share-text">
+                  <span class="share-prompt-icon">✨</span>
+                  <span class="share-prompt-label" data-i18n="sharePrompt">Thấy bài viết hữu ích? Hãy chia sẻ cùng bạn bè:</span>
+                </div>
+                <div class="post-share-dropdown" id="post-share-dropdown-bottom">
+                  <button class="post-share-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Chia sẻ">
+                    <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    <span data-i18n="shareBtn">Chia sẻ</span>
+                  </button>
+                  <div class="post-share-menu" role="menu">
+                    <button class="share-menu-item quick-share-copy" type="button" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                      <span data-i18n="copyLink">Sao chép liên kết</span>
+                    </button>
+                    <a class="share-menu-item share-menu-fb" href="https://www.facebook.com/sharer/sharer.php" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span>Facebook</span>
+                    </a>
+                    <a class="share-menu-item share-menu-tw" href="https://twitter.com/intent/tweet" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span>X (Twitter)</span>
+                    </a>
+                    <a class="share-menu-item share-menu-li" href="https://www.linkedin.com/sharing/share-offsite" target="_blank" rel="nofollow noopener" role="menuitem">
+                      <svg viewBox="0 0 24 24" fill="#0a66c2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z"/></svg>
+                      <span>LinkedIn</span>
+                    </a>
+                    <button class="share-menu-item share-menu-native" type="button" role="menuitem" style="display:none;">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span data-i18n="moreOptions">Thêm tùy chọn...</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Author Bio Box -->
@@ -520,12 +657,12 @@
                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&auto=format&fit=crop&q=80"
                    alt="Nam Trương" width="80" height="80"/>
               <div class="author-bio-content">
-                <div class="author-bio-label">Về tác giả</div>
+                <div class="author-bio-label" data-i18n="aboutAuthor">Về tác giả</div>
                 <h3 class="author-bio-name">Nam Trương</h3>
-                <p class="author-bio-text">Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
+                <p class="author-bio-text" data-i18n="authorBioDesc">Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
                 <div class="author-bio-actions">
-                  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer">☕ <span data-i18n="buyMeACoffee">Mời tôi ly cà phê</span></a>
-                  <a class="btn-subscribe" href="#newsletter">💌 Đăng ký bản tin</a>
+                  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer" data-i18n="buyMeACoffee">☕ Mời tôi ly cà phê</a>
+                  <a class="btn-subscribe" href="#newsletter" data-i18n="subscribeNewsletter">💌 Đăng ký bản tin</a>
                 </div>
               </div>
             </div>
@@ -533,18 +670,18 @@
             <!-- Post Navigation -->
             <div class="post-nav-container">
               <a class="post-nav-link post-nav-prev" href="#">
-                <span class="post-nav-direction">« Bài trước</span>
-                <span class="post-nav-title">30 Ngày Không Dùng Điện Thoại Buổi Sáng</span>
+                <span class="post-nav-direction" data-i18n="previousPost">« Bài trước</span>
+                <span class="post-nav-title" data-i18n="newerPostTitle">Bài viết mới hơn</span>
               </a>
               <a class="post-nav-link post-nav-next" href="#">
-                <span class="post-nav-direction">Bài sau »</span>
-                <span class="post-nav-title">Review Sách: Tư Duy Nhanh và Chậm</span>
+                <span class="post-nav-direction" data-i18n="nextPost">Bài sau »</span>
+                <span class="post-nav-title" data-i18n="olderPostTitle">Bài viết cũ hơn</span>
               </a>
             </div>
 
             <!-- Related Posts -->
             <div class="related-posts-section">
-              <h3 class="related-posts-title">📚 Bài Viết Liên Quan</h3>
+              <h3 class="related-posts-title" data-i18n="relatedPosts">📚 Bài Viết Liên Quan</h3>
               <div class="related-posts-grid">
                 <a class="related-post-card" href="#">
                   <img class="related-post-thumb"
@@ -1128,7 +1265,7 @@
         if (categoryTabs) categoryTabs.style.display = "";
 
         if (title) {
-          var postTitleEl = document.querySelector("#single-post-wrapper .post-title-main");
+          var postTitleEl = document.querySelector("#single-post-wrapper .single-post-title, #single-post-wrapper .post-title-main");
           if (postTitleEl) postTitleEl.textContent = title;
         }
 
@@ -1512,6 +1649,7 @@
   <script src="scripts/auto-toc.js"></script>
   <script src="scripts/bilingual.js"></script>
   <script src="scripts/reading-time.js"></script>
+  <script src="scripts/post-series.js"></script>
   <script src="scripts/footer.js"></script>
   <script src="scripts/special-posts.js"></script>
   <script src="scripts/ai-transparency.js"></script>
@@ -1696,7 +1834,11 @@
         var snipHtml = (showSnippet && p.snippet)
           ? '<p class="sp-spotlight-snippet">' + escapeHtml(p.snippet) + '</p>'
           : '';
-        var badge = p.labels && p.labels[0] ? p.labels[0].replace(/^[@#_~]/, '') : 'Tiêu Điểm';
+        var normalLabel = (p.labels || []).find(function(l) {
+          var lower = l.toLowerCase();
+          return !l.startsWith('@') && !lower.startsWith('ai:') && !lower.startsWith('ai-') && !lower.startsWith('series:');
+        });
+        var badge = normalLabel || '';
         var aiType = getAIType(p.labels);
         var aiHtml = aiType ? '<span class="ai-badge ai-badge-standard" data-ai-type="' + aiType + '" data-ai-variant="standard"><span class="ai-badge-icon">✨</span><span class="ai-badge-label">Hỗ trợ bởi AI</span></span>' : '';
 
@@ -1704,7 +1846,7 @@
                thumbHtml +
                '<div class="sp-spotlight-info">' +
                '  <div class="sp-spotlight-meta">' +
-               '    <span class="sp-spotlight-badge">' + escapeHtml(badge) + '</span>' +
+               (badge ? '    <span class="sp-spotlight-badge">' + escapeHtml(badge) + '</span>' : '') +
                '    <span class="sp-spotlight-date">📅 ' + escapeHtml(p.dateFormatted) + '</span>' +
                (aiHtml ? '    ' + aiHtml : '') +
                '  </div>' +
@@ -1948,5 +2090,25 @@
       updateLiveWidget();
     })();
   </script>
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
+       ═══════════════════════════════════════════════════ -->
+  <div class="newsletter-modal-overlay" id="newsletter-modal" aria-hidden="true" style="display:none;">
+    <div class="newsletter-modal-backdrop" id="newsletter-modal-backdrop"></div>
+    <div class="newsletter-modal-card" role="dialog" aria-modal="true" aria-labelledby="newsletter-modal-title">
+      <button class="newsletter-modal-close" id="newsletter-modal-close" type="button" aria-label="Đóng">✕</button>
+      <div class="newsletter-modal-icon">💌</div>
+      <h3 class="newsletter-modal-title" id="newsletter-modal-title" data-i18n="newsletterTitle">Nhận bài viết mới</h3>
+      <p class="newsletter-modal-desc" data-i18n="newsletterSubDesc">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+      <form class="newsletter-modal-form" id="newsletter-modal-form" onsubmit="return false;">
+        <input class="newsletter-modal-input" id="newsletter-modal-email" type="email" placeholder="Nhập email của bạn..." aria-label="Email" required="required"/>
+        <button class="newsletter-modal-btn" type="submit" data-i18n="subscribeBtn">Đăng Ký</button>
+      </form>
+      <div class="newsletter-modal-footer">
+        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

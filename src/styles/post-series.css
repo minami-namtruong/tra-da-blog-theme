@@ -1,0 +1,663 @@
+/* ==========================================================================
+   POST SERIES NAVIGATOR — LUXURY EDITORIAL EDITION
+   - Minimalist Editorial Pill (Top)
+   - Connected Vertical Journey Stepper (Timeline)
+   - Active Illuminated Chapter Card
+   - Spotlight Next-Chapter Action Card
+   - Precision Typography & Micro-Animations
+   - Full Dark Mode & Mobile Responsive
+   ========================================================================== */
+
+/* ── 1. Top Series Editorial Pill ── */
+.series-header-pill-wrapper {
+  margin: 0.85rem 0 1.5rem;
+}
+
+.series-header-pill {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.65rem;
+  background: rgba(37, 99, 235, 0.04);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(8px);
+}
+
+.series-header-pill:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.series-pill-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.series-pill-divider {
+  color: var(--text-light);
+  font-weight: 300;
+  font-size: 0.78rem;
+}
+
+.series-pill-title {
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.series-pill-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.series-pill-action {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  margin-left: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.series-header-pill:hover .series-pill-action {
+  color: var(--primary);
+  transform: translateY(1px);
+}
+
+/* ── 2. Bottom Series Roadmap Box (Master Card) ── */
+.series-roadmap-box {
+  margin: 3rem 0 2.5rem;
+  padding: 2rem 2.25rem;
+  background: var(--bg-card);
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 60%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+/* ── 3. Box Header & Progress ── */
+.series-box-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.series-box-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.series-box-kicker-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.series-box-icon {
+  font-size: 0.75rem;
+  color: var(--primary);
+  animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.series-box-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.series-box-progress-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.series-progress-count {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.series-progress-label {
+  color: var(--text-muted);
+}
+
+.series-box-title {
+  font-family: var(--font-serif, inherit);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main);
+  margin: 0.35rem 0 1rem;
+  line-height: 1.3;
+}
+
+/* Micro-Progress Bar */
+.series-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-surface);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.series-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #6366f1 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── 4. Connected Vertical Journey Timeline ── */
+.series-steps-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0 0 1.75rem;
+  padding: 0 0 0 2.5rem;
+  list-style: none;
+}
+
+/* Connecting vertical timeline track */
+.series-steps-list::before {
+  content: '';
+  position: absolute;
+  left: 1.05rem;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  width: 2px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+/* Step Item Row */
+.series-step-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md, 12px);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+  color: var(--text-main);
+  background: transparent;
+  z-index: 2;
+  min-width: 0;
+}
+
+.series-step-item:hover:not(.is-active) {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+  transform: translateX(4px);
+}
+
+/* Step Timeline Node (Circular Indicator) */
+.series-step-node {
+  position: absolute;
+  left: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-light);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  z-index: 3;
+}
+
+/* ── Node State: Completed ── */
+.series-step-item.is-read .series-step-node {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.series-step-item.is-read .series-step-title {
+  color: var(--text-muted);
+}
+
+.series-step-item.is-read:hover .series-step-title {
+  color: var(--text-main);
+}
+
+/* ── Node State: Active (Currently Reading) ── */
+.series-step-item.is-active {
+  background: linear-gradient(135deg, var(--primary-light) 0%, rgba(37, 99, 235, 0.03) 100%);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.07);
+}
+
+.series-step-item.is-active .series-step-node {
+  background: var(--primary);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.22), 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.series-step-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.series-step-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--text-main);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.series-step-item.is-active .series-step-title {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Step Badges — Always right-aligned */
+.series-step-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.series-step-badge.badge-active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: blink-dot 1.8s infinite ease-in-out;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.series-step-badge.badge-read {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.series-step-badge.badge-next {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.series-step-badge.badge-upcoming {
+  background: var(--bg-surface);
+  color: var(--text-light);
+  border: 1px solid var(--border-color);
+}
+
+/* ── 5. Next & Prev Chapter Spotlight Cards ── */
+.series-nav-spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.series-nav-spotlight.only-next {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.series-nav-spotlight.only-prev {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Common Card Anchor */
+.series-nav-card {
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-md, 12px);
+  min-width: 0;
+}
+
+/* 5.1 Previous Part (Quiet Elegance) */
+.series-nav-prev {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.85rem 1.15rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  max-width: 280px;
+  min-width: 0;
+}
+
+.series-nav-prev:hover {
+  background: var(--bg-card);
+  border-color: var(--border-hover);
+  transform: translateX(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.series-nav-prev .series-nav-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.series-nav-prev .series-nav-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 5.2 Next Part (Hero Spotlight Card) */
+.series-nav-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25), 0 2px 6px rgba(15, 23, 42, 0.1);
+  min-width: 0;
+}
+
+.series-nav-next:hover {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.35);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.series-nav-next-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.series-nav-next .series-nav-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.series-nav-next .series-nav-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.series-nav-arrow-bubble {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.series-nav-arrow-bubble svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke: #ffffff;
+  transition: transform 0.25s ease;
+}
+
+.series-nav-next:hover .series-nav-arrow-bubble {
+  background: #38bdf8;
+}
+
+.series-nav-next:hover .series-nav-arrow-bubble svg {
+  stroke: #0f172a;
+  transform: translateX(3px);
+}
+
+/* 5.3 Completed Message */
+.series-completed-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1.5rem;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px dashed rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-md, 12px);
+  color: #059669;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+/* ── 6. Dark Theme Refinements ── */
+[data-theme="dark"] .series-header-pill {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .series-roadmap-box {
+  background: #111827;
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+  border-color: #1f2937;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .series-step-node {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .series-step-item.is-active .series-step-node {
+  border-color: #111827;
+}
+
+[data-theme="dark"] .series-step-item.is-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.03) 100%);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+[data-theme="dark"] .series-step-badge.badge-read {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+[data-theme="dark"] .series-step-badge.badge-next {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .series-step-badge.badge-upcoming {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .series-nav-next {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e3a8a 100%);
+  border-color: rgba(96, 165, 250, 0.3);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .series-nav-next:hover {
+  background: linear-gradient(135deg, #2e1065 0%, #1e40af 100%);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme="dark"] .series-nav-next .series-nav-kicker {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .series-nav-prev {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .series-completed-msg {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ── 7. Responsive Mobile Tuning ── */
+@media (max-width: 680px) {
+  .series-roadmap-box {
+    padding: 1.35rem 1.15rem;
+    margin: 2.25rem 0 2rem;
+  }
+
+  .series-box-title {
+    font-size: 1.2rem;
+  }
+
+  .series-steps-list {
+    padding-left: 2.2rem;
+  }
+
+  .series-steps-list::before {
+    left: 0.95rem;
+  }
+
+  .series-step-node {
+    left: -2.2rem;
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .series-step-item {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .series-step-title {
+    font-size: 0.88rem;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .series-step-arrow {
+    display: none;
+  }
+
+  .series-nav-spotlight {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .series-nav-prev {
+    max-width: 100%;
+    order: 2;
+  }
+
+  .series-nav-next {
+    order: 1;
+    padding: 1rem 1.15rem;
+  }
+
+  .series-header-pill {
+    width: 100%;
+    border-radius: var(--radius-sm, 8px);
+  }
+}

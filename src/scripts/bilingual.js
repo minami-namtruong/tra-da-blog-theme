@@ -15,13 +15,25 @@
     vi: {
       searchPlaceholder: 'Tìm kiếm bài viết...',
       readingTime: 'phút đọc',
-      tableOfContents: 'Mục Lục Bài Viết',
+      tableOfContents: '📑 Mục Lục Bài Viết',
       previousPost: '« Bài trước',
       nextPost: 'Bài sau »',
+      newerPostTitle: 'Bài viết mới hơn',
+      olderPostTitle: 'Bài viết cũ hơn',
+      shareBtn: 'Chia sẻ',
       shareTitle: 'Chia sẻ bài viết:',
-      copiedLink: 'Đã sao chép liên kết!',
-      aboutAuthor: 'Về Tác Giả',
-      buyMeACoffee: 'Mời tôi ly cà phê',
+      sharePrompt: 'Thấy bài viết hữu ích? Hãy chia sẻ cùng bạn bè:',
+      copyLink: 'Sao chép liên kết',
+      copyLinkBtn: '🔗 Sao chép link',
+      copiedLink: '✅ Đã sao chép liên kết!',
+      moreOptions: 'Thêm tùy chọn...',
+      breadcrumbHome: '🏠 Trang chủ',
+      relatedPosts: '📚 Bài Viết Liên Quan',
+      commentsTitle: '💬 Bình Luận',
+      aboutAuthor: 'Về tác giả',
+      authorBioDesc: 'Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!',
+      buyMeACoffee: '☕ Mời tôi ly cà phê',
+      subscribeNewsletter: '💌 Đăng ký bản tin',
       newsletterTitle: 'Nhận bài viết mới',
       newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
       subscribeBtn: 'Đăng Ký',
@@ -34,13 +46,25 @@
     en: {
       searchPlaceholder: 'Search articles...',
       readingTime: 'min read',
-      tableOfContents: 'Table of Contents',
+      tableOfContents: '📑 Table of Contents',
       previousPost: '« Previous Post',
       nextPost: 'Next Post »',
+      newerPostTitle: 'Newer Article',
+      olderPostTitle: 'Older Article',
+      shareBtn: 'Share',
       shareTitle: 'Share this post:',
-      copiedLink: 'Link copied to clipboard!',
-      aboutAuthor: 'About The Author',
-      buyMeACoffee: 'Buy me a coffee',
+      sharePrompt: 'Enjoyed this article? Share it with friends:',
+      copyLink: 'Copy Link',
+      copyLinkBtn: '🔗 Copy link',
+      copiedLink: '✅ Link copied to clipboard!',
+      moreOptions: 'More options...',
+      breadcrumbHome: '🏠 Home',
+      relatedPosts: '📚 Related Articles',
+      commentsTitle: '💬 Comments',
+      aboutAuthor: 'About the author',
+      authorBioDesc: 'I write about self-discovery, mindful living, and mental models to live more purposefully. If you find my work helpful, consider buying me a coffee!',
+      buyMeACoffee: '☕ Buy me a coffee',
+      subscribeNewsletter: '💌 Newsletter',
       newsletterTitle: 'Newsletter',
       newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
       subscribeBtn: 'Subscribe',
@@ -68,6 +92,23 @@
     return rawText.trim();
   }
   window.parseBilingualText = parseBilingualText;
+
+  function localizeDates(lang) {
+    var timeEls = document.querySelectorAll('time[datetime]');
+    timeEls.forEach(function(el) {
+      var iso = el.getAttribute('datetime');
+      if (!iso) return;
+      try {
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return;
+        if (lang === 'en') {
+          el.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        } else {
+          el.textContent = d.getDate() + ' tháng ' + (d.getMonth() + 1) + ', ' + d.getFullYear();
+        }
+      } catch (e) {}
+    });
+  }
 
   function applyBilingualElements(lang) {
     lang = lang || (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'vi';
@@ -121,22 +162,26 @@
       dropdown.classList.remove('show');
     }
 
-    // 2. Toggle in-post bilingual content blocks
-    var viContents = document.querySelectorAll("[data-lang='vi']");
-    var enContents = document.querySelectorAll("[data-lang='en']");
+    // 2. Toggle in-post bilingual content blocks (if bilingual blocks exist)
+    var viContents = document.querySelectorAll("[data-lang='vi'], [lang='vi'], .lang-vi");
+    var enContents = document.querySelectorAll("[data-lang='en'], [lang='en'], .lang-en");
 
     if (lang === 'en') {
-      viContents.forEach(el => { el.style.display = 'none'; });
-      enContents.forEach(el => { el.style.display = 'block'; });
+      if (enContents.length > 0) {
+        viContents.forEach(el => { el.style.display = 'none'; });
+        enContents.forEach(el => { el.style.display = 'block'; });
+      }
     } else {
-      enContents.forEach(el => { el.style.display = 'none'; });
+      if (enContents.length > 0) {
+        enContents.forEach(el => { el.style.display = 'none'; });
+      }
       viContents.forEach(el => { el.style.display = 'block'; });
     }
 
     // 3. Apply VI | EN syntax parsing
     applyBilingualElements(lang);
 
-    // 4. Translate static dictionary terms (optional, depending on where data-i18n is used in template)
+    // 4. Translate static dictionary terms
     var i18nTargets = document.querySelectorAll('[data-i18n]');
     i18nTargets.forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -148,6 +193,9 @@
         }
       }
     });
+
+    // 5. Localize dates
+    localizeDates(lang);
 
     // Save to localStorage
     if (save !== false) {

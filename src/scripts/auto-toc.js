@@ -64,21 +64,25 @@
     });
 
     // Detect language for title
-    var isEn = document.querySelector('.lang-btn-en.active') !== null;
+    var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+    var isEn = (currentLang === 'en');
     var tocTitleText = isEn ? '📑 Table of Contents' : '📑 Mục Lục Bài Viết';
 
     // Build TOC HTML
     var html = '<div class="toc-title" onclick="toggleTocList()" role="button" tabindex="0">' +
-               '<span>' + tocTitleText + '</span>' +
+               '<span data-i18n="tableOfContents">' + tocTitleText + '</span>' +
                '<span class="toc-toggle-icon" id="toc-toggle-icon">' + (isCollapsed ? '▼' : '▲') + '</span>' +
                '</div>' +
                '<ul class="toc-list" id="toc-list-items"' + (isCollapsed ? ' style="display:none;"' : '') + '>';
 
     headings.forEach(function(heading) {
       var tagClass = heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2';
+      var headingText = (typeof window.parseBilingualText === 'function')
+        ? window.parseBilingualText(heading.innerText, currentLang)
+        : heading.innerText;
       html += '<li class="' + tagClass + '">' +
               '<a href="#' + heading.id + '" onclick="scrollToSection(event, \'' + heading.id + '\')">' +
-              heading.innerText + '</a></li>';
+              headingText + '</a></li>';
     });
 
     html += '</ul>';

@@ -156,15 +156,15 @@
     }
 
     /* 2. Blogger JSON Feed */
-    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500';
-    fetch(feedUrl)
+    var feedUrl = '/feeds/posts/summary?alt=json&max-results=500&_cb=' + Date.now();
+    fetch(feedUrl, { cache: 'no-cache' })
       .then(function (res) {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
       })
       .then(function (data) {
         var entries = (data && data.feed && data.feed.entry) || [];
-        allPostsData = entries.map(parseEntry);
+        allPostsData = entries.map(parseEntry).filter(Boolean);
         allPostsData.sort(function (a, b) { return b.timestamp - a.timestamp; });
         buildCategoryPills(allPostsData);
         renderTimeline(allPostsData);
@@ -177,12 +177,36 @@
   }
 
   function parseEntry(entry) {
+    var rawLabels = (entry.category || []).map(function (c) { return (c.term || '').trim(); }).filter(Boolean);
+    var normalLabels = [];
+    var featureLabels = [];
+    var aiType = null;
+    var seriesLabel = null;
+
+    rawLabels.forEach(function (lbl) {
+      var lower = lbl.toLowerCase();
+      if (lbl.startsWith('@')) {
+        featureLabels.push(lbl);
+      } else if (lower.startsWith('ai:') || lower.startsWith('ai-')) {
+        if (!aiType) aiType = lower.replace(/-/g, ':');
+      } else if (lower.startsWith('series:')) {
+        if (!seriesLabel) seriesLabel = lbl.replace(/^series:\s*/i, '').trim();
+      } else {
+        normalLabels.push(lbl);
+      }
+    });
+
+    // Ẩn hoàn toàn bài viết độc quyền tính năng (@) khỏi Timeline Modal
+    // (Chỉ ẩn khi có nhãn tính năng @ và KHÔNG có nhãn thường lẫn nhãn series)
+    if (rawLabels.length > 0 && normalLabels.length === 0 && !seriesLabel) {
+      return null;
+    }
+
     var title   = entry.title ? entry.title.$t : 'Bài viết không có tiêu đề';
     var linkObj = entry.link && entry.link.find(function (l) { return l.rel === 'alternate'; });
     var url     = linkObj ? linkObj.href : '#';
     var pubDate = entry.published ? entry.published.$t : new Date().toISOString();
-    var cats    = entry.category || [];
-    var cat     = cats.length > 0 ? cats[0].term : 'Khác';
+    var cat     = normalLabels.length > 0 ? normalLabels[0] : (seriesLabel || (rawLabels.length === 0 ? 'Chưa phân loại' : 'Khác'));
 
     var d     = new Date(pubDate);
     var year  = d.getFullYear() || new Date().getFullYear();
@@ -195,6 +219,7 @@
       year: year,
       dateStr: day + '/' + month,
       category: cat,
+      aiType: aiType,
       timestamp: d.getTime()
     };
   }
@@ -249,9 +274,12 @@
       return catSet[b] - catSet[a]; // sort by frequency desc
     });
 
-    var html = '<button class="timeline-cat-pill is-active" data-cat="all">✦ Tất cả</button>';
+    var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+    var allText = window.parseBilingualText ? window.parseBilingualText('✦ Tất cả | All', lang) : '✦ Tất cả';
+    var html = '<button class="timeline-cat-pill is-active" data-cat="all" data-bilingual="true" data-raw-label="✦ Tất cả | All">' + esc(allText) + '</button>';
     cats.forEach(function (c) {
-      html += '<button class="timeline-cat-pill" data-cat="' + escAttr(c) + '">' + esc(c) + '</button>';
+      var parsedCat = window.parseBilingualText ? window.parseBilingualText(c, lang) : c.split('|')[0].trim();
+      html += '<button class="timeline-cat-pill" data-cat="' + escAttr(c) + '" data-bilingual="true" data-raw-label="' + escAttr(c) + '">' + esc(parsedCat) + '</button>';
     });
     timelineCatPills.innerHTML = html;
 
@@ -337,11 +365,22 @@
 
       /* Post cards */
       html += '<div class="timeline-year-posts">';
+      var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
       list.forEach(function (post) {
+        var rawCat = post.category || 'Khác';
+        var parsedCat = window.parseBilingualText ? window.parseBilingualText(rawCat, lang) : rawCat.split('|')[0].trim();
+        var parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+        var aiHtml = '';
+        if (post.aiType && window.AITransparency) {
+          aiHtml = window.AITransparency.renderAIBadge(post.aiType, 'micro', lang);
+        }
+        var aiAttr = post.aiType ? ' data-ai-type="' + post.aiType + '"' : '';
+
         html +=
-          '<a class="timeline-post-card" href="' + escAttr(post.url) + '">' +
-            '<span class="timeline-post-cat">' + esc(post.category || 'Khác') + '</span>' +
-            '<span class="timeline-post-title">' + esc(post.title) + '</span>' +
+          '<a class="timeline-post-card" href="' + escAttr(post.url) + '"' + aiAttr + '>' +
+            '<span class="timeline-post-cat" data-bilingual="true" data-raw-label="' + escAttr(rawCat) + '">' + esc(parsedCat) + '</span>' +
+            '<span class="timeline-post-title" data-bilingual="true" data-raw-label="' + escAttr(post.title) + '">' + esc(parsedTitle) + '</span>' +
+            aiHtml +
             '<span class="timeline-post-date">📅 ' + esc(post.dateStr) + '</span>' +
             '<span class="timeline-post-arrow" aria-hidden="true">→</span>' +
           '</a>';

@@ -28,8 +28,11 @@
           if (name.startsWith('@')) {
             // Nhãn tính năng cho widget (@Quote, @Tiêu điểm, @Nổi bật, @Điểm tin)
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
-            allFeatureAt = false;
+            // Nhãn AI minh bạch - KHÔNG tính là nhãn chuyên mục thường
             if (!detectedAiType) detectedAiType = name.toLowerCase();
+          } else if (name.toLowerCase().startsWith('series:')) {
+            // Nhãn Series Navigator - Không dùng làm badge chuyên mục nhưng không phải nhãn ẩn @
+            allFeatureAt = false;
           } else {
             allFeatureAt = false;
             if (!firstNormalLabel) firstNormalLabel = { name: name, url: url };
@@ -37,7 +40,8 @@
         });
 
         // ══ QUY TẮC VÀNG: Ẩn bài viết "độc quyền @" khỏi Trang chủ ══
-        if (allFeatureAt && isHomepage) {
+        // Bài viết chỉ có nhãn @ (và có thể kèm ai:) mà không có nhãn chuyên mục thường -> Ẩn khỏi Trang chủ
+        if (allFeatureAt && !firstNormalLabel && isHomepage) {
           card.style.display = 'none';
           card.classList.add('is-exclusive-feature-hidden');
           return;
@@ -52,8 +56,8 @@
             badge.setAttribute('data-bilingual', 'true');
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
-          } else if (allFeatureAt) {
-            badge.textContent = badge.textContent.replace(/^@/, '');
+          } else {
+            badge.style.display = 'none';
           }
         }
 
@@ -138,6 +142,8 @@
             // bỏ qua
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
             if (!aiTypeSingle) aiTypeSingle = name.toLowerCase();
+          } else if (name.toLowerCase().startsWith('series:')) {
+            // bỏ qua không lấy làm breadcrumb chuyên mục
           } else {
             if (!normalLabelSingle) normalLabelSingle = { name: name, url: url };
           }
@@ -152,7 +158,9 @@
             breadcrumbCat.textContent = window.parseBilingualText ? window.parseBilingualText(normalLabelSingle.name, currentLang) : normalLabelSingle.name.split('|')[0].trim();
             breadcrumbCat.href = normalLabelSingle.url;
           } else {
-            breadcrumbCat.textContent = breadcrumbCat.textContent.replace(/^@/, '');
+            breadcrumbCat.style.display = 'none';
+            var nextSep = breadcrumbCat.nextElementSibling;
+            if (nextSep && nextSep.classList.contains('separator')) nextSep.style.display = 'none';
           }
         }
 
@@ -284,6 +292,15 @@
 
     if (!coverWrapper) return;
 
+    function syncSiteAvatars(avatarUrl) {
+      if (!avatarUrl) return;
+      document.querySelectorAll('.author-avatar-sm, .author-bio-avatar, .sidebar-about-avatar').forEach(function(img) {
+        if (!img.src || img.src.includes('data:image') || img.src.includes('unsplash')) {
+          img.src = avatarUrl;
+        }
+      });
+    }
+
     // 1. Ảnh Banner tải lên trực tiếp từ máy tính qua widget Image1
     const uploadedBannerEl = document.getElementById('profile-uploaded-banner');
     if (uploadedBannerEl) {
@@ -297,17 +314,22 @@
     const uploadedAvatarEl = document.getElementById('profile-uploaded-avatar');
     if (uploadedAvatarEl) {
       const avatarText = uploadedAvatarEl.textContent.trim();
-      if (/^https?:\/\/[^\s]+/i.test(avatarText) && avatarImg) {
-        avatarImg.src = avatarText;
+      if (/^https?:\/\/[^\s]+/i.test(avatarText)) {
+        if (avatarImg) avatarImg.src = avatarText;
+        try { localStorage.setItem('cached_author_avatar', avatarText); } catch(e){}
+        syncSiteAvatars(avatarText);
       }
     }
 
-    // Đảm bảo Banner và Avatar luôn luôn có ảnh hiển thị (Zero Blank Banner)
-    if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
-      coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
-    }
-    if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined'))) {
-      avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+    // Chỉ dùng Unsplash fallback khi ở môi trường Local Preview (preview.html hoặc localhost)
+    const isLocalDev = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalDev) {
+      if (!coverWrapper.style.backgroundImage || coverWrapper.style.backgroundImage === 'none') {
+        coverWrapper.style.backgroundImage = 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&auto=format&fit=crop&q=80")';
+      }
+      if (avatarImg && (!avatarImg.src || avatarImg.src.includes('undefined') || avatarImg.src.startsWith('data:image'))) {
+        avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80';
+      }
     }
 
     // 3. Đọc cấu hình tùy chỉnh từ ô Content của widget HTML1
@@ -326,10 +348,18 @@
     // Nếu người dùng chèn ảnh qua nút "Chèn hình ảnh" của Blogger trong ô Content
     const inlineImgs = configEl.querySelectorAll('img');
     if (inlineImgs.length === 1) {
-      if (inlineImgs[0].src && avatarImg) avatarImg.src = inlineImgs[0].src;
+      if (inlineImgs[0].src && avatarImg) {
+        avatarImg.src = inlineImgs[0].src;
+        try { localStorage.setItem('cached_author_avatar', inlineImgs[0].src); } catch(e){}
+        syncSiteAvatars(inlineImgs[0].src);
+      }
     } else if (inlineImgs.length >= 2) {
       if (inlineImgs[0].src) coverWrapper.style.backgroundImage = `url("${inlineImgs[0].src}")`;
-      if (inlineImgs[1].src && avatarImg) avatarImg.src = inlineImgs[1].src;
+      if (inlineImgs[1].src && avatarImg) {
+        avatarImg.src = inlineImgs[1].src;
+        try { localStorage.setItem('cached_author_avatar', inlineImgs[1].src); } catch(e){}
+        syncSiteAvatars(inlineImgs[1].src);
+      }
     }
 
     const rawContent = configEl.innerHTML.trim();
@@ -350,6 +380,8 @@
           } else if (/^avatar\s*:\s*(https?:\/\/[^\s]+)/i.test(part)) {
             const url = part.match(/^avatar\s*:\s*(https?:\/\/[^\s]+)/i)[1];
             if (avatarImg) avatarImg.src = url;
+            try { localStorage.setItem('cached_author_avatar', url); } catch(e){}
+            syncSiteAvatars(url);
           } else if (/^bio\s*:\s*(.+)/i.test(part)) {
             const bio = part.match(/^bio\s*:\s*(.+)/i)[1].trim();
             if (bioEl) bioEl.textContent = bio;

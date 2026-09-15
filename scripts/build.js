@@ -20,6 +20,7 @@ const cssFiles = [
   "typography.css",
   "header-banner.css",
   "post-layout.css",
+  "post-series.css",
   "affiliate-ui.css",
   "footer.css",
   "archive-page.css",
@@ -40,6 +41,7 @@ const jsFiles = [
   "archive-page.js",
   "auto-toc.js",
   "reading-time.js",
+  "post-series.js",
   "footer.js",
   "special-posts.js",
   "ai-transparency.js",
@@ -226,7 +228,7 @@ ${combinedCss}
   <b:class cond='data:view.isMultipleItems and not data:view.isHomepage' name='view-paged is-paged'/>
 
   <!-- Reading Progress Bar -->
-  <div class='reading-progress-bar' id='reading-progress-bar'/>
+  <div class='reading-progress-bar' id='reading-progress-bar'></div>
 
   <!-- Search Modal -->
   <div class='search-modal-overlay' id='search-modal-overlay' role='dialog' aria-modal='true' aria-label='Tìm kiếm'>
@@ -243,7 +245,7 @@ ${combinedCss}
   </div>
 
   <!-- Nav Drawer Backdrop -->
-  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'/>
+  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'></div>
 
   <!-- Mobile Navigation Drawer (auto-synced from LinkList1) -->
   <nav class='nav-drawer' id='nav-drawer' aria-label='Menu điều hướng mobile'>
@@ -336,9 +338,9 @@ ${combinedCss}
           </div>
           <!-- Hamburger (mobile) -->
           <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
-            <span/>
-            <span/>
-            <span/>
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
 
@@ -356,6 +358,15 @@ ${combinedCss}
       <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
         <b:includable id='main'>
+          <b:if cond='data:imageUrl'>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:imageUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:sourceUrl'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:sourceUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:displayUrl'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:displayUrl/>&quot;) !important; }</style>
+          <b:elseif cond='data:image'/>
+            <style>#cover-image-wrapper { background-image: url(&quot;<data:image/>&quot;) !important; }</style>
+          </b:if>
           <div id='profile-uploaded-banner' style='display:none;'>
             <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
           </div>
@@ -365,6 +376,17 @@ ${combinedCss}
       <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
       <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
         <b:includable id='main'>
+          <b:if cond='data:imageUrl or data:sourceUrl or data:displayUrl or data:image'>
+            <script>
+              (function(){
+                var u = &quot;<b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>&quot;;
+                if (u) {
+                  window.__PROFILE_AVATAR = u;
+                  try { localStorage.setItem('cached_author_avatar', u); } catch(e){}
+                }
+              })();
+            </script>
+          </b:if>
           <div id='profile-uploaded-avatar' style='display:none;'>
             <b:if cond='data:imageUrl'><data:imageUrl/><b:elseif cond='data:sourceUrl'/><data:sourceUrl/><b:elseif cond='data:displayUrl'/><data:displayUrl/><b:elseif cond='data:image'/><data:image/></b:if>
           </div>
@@ -377,14 +399,22 @@ ${combinedCss}
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
             <div class='cover-image-wrapper' id='cover-image-wrapper'
-                 style='min-height: 240px; background-image: url(https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&amp;auto=format&amp;fit=crop&amp;q=80); background-size: cover; background-position: center;'>
+                 style='min-height: 240px;'>
             </div>
             <div class='cover-info-card'>
               <div class='avatar-wrapper'>
                 <img class='profile-avatar' id='profile-avatar-img'
-                     src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&amp;auto=format&amp;fit=crop&amp;q=80'
                      alt='Avatar tác giả'
                      width='120' height='120'/>
+                <script>
+                  (function(){
+                    var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                    if (u) {
+                      var img = document.getElementById('profile-avatar-img');
+                      if (img) img.src = u;
+                    }
+                  })();
+                </script>
               </div>
               <div class='profile-meta'>
                 <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
@@ -416,7 +446,7 @@ ${combinedCss}
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
             <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
-                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot;)'>
+                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot; or data:label.name contains &quot;series:&quot; or data:label.name contains &quot;Series:&quot;)'>
                   <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
                     <data:label.name/>
                   </a>
@@ -472,13 +502,15 @@ ${combinedCss}
               <b:if cond='data:view.isMultipleItems'>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
-                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;))' var='displayLabels'>
-                      <b:with value='data:post.labels and not data:post.labels.empty and data:displayLabels.empty' var='isExclusiveFeaturePost'>
-                        <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
-                          <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
-                            <div class='post-card-body'>
-                              <div>
-                                <b:if cond='data:post.labels and not data:post.labels.empty'>
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;) and not (l.name contains &quot;series:&quot;) and not (l.name contains &quot;Series:&quot;))' var='displayLabels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;@&quot;)' var='featureLabels'>
+                        <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                          <b:with value='not data:featureLabels.empty and data:displayLabels.empty and data:seriesLabels.empty' var='isExclusiveFeaturePost'>
+                            <b:if cond='not data:isExclusiveFeaturePost'>
+                              <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
+                                <div class='post-card-body'>
+                                  <div>
+                                    <b:if cond='data:post.labels and not data:post.labels.empty'>
                                   <span class='post-labels-raw' style='display:none;'>
                                     <b:loop values='data:post.labels' var='lbl'>
                                       <span class='post-raw-label' expr:data-url='data:lbl.url'><data:lbl.name/></span>
@@ -517,6 +549,8 @@ ${combinedCss}
                             </b:if>
                           </article>
                         </b:if>
+                          </b:with>
+                        </b:with>
                       </b:with>
                     </b:with>
                   </b:loop>
@@ -549,7 +583,7 @@ ${combinedCss}
                     <!-- Khung danh sách bài viết -->
                     <div id='archive-app-body' class='archive-tree-container' aria-live='polite'>
                       <div class='archive-loading'>
-                        <div class='archive-spinner'/>
+                        <div class='archive-spinner'></div>
                         <span>Đang đồng bộ danh mục bài viết...</span>
                       </div>
                     </div>
@@ -565,30 +599,29 @@ ${combinedCss}
                       </span>
                     </b:if>
 
-                    <!-- Breadcrumbs -->
-                    <nav class='breadcrumbs' aria-label='Điều hướng phân cấp'>
-                      <a expr:href='data:blog.homepageUrl' data-bilingual='true'>🏠 Trang chủ</a>
-                      <span class='separator'>›</span>
-                      <b:if cond='data:post.labels and not data:post.labels.empty'>
-                        <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;))' var='displayLabels'>
-                          <b:if cond='data:displayLabels and not data:displayLabels.empty'>
-                            <a class='breadcrumb-category-link' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
-                            <span class='separator'>›</span>
-                          </b:if>
-                        </b:with>
-                      </b:if>
-                      <span data-bilingual='true'><data:post.title/></span>
-                    </nav>
-
                     <!-- Post H1 Title -->
                     <h1 class='single-post-title' itemprop='headline' data-bilingual='true'><data:post.title/></h1>
 
                     <!-- Post Meta Row -->
                     <div class='post-meta-header'>
                       <div class='author-meta-inline'>
-                        <img class='author-avatar-sm'
-                             src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&amp;auto=format&amp;fit=crop&amp;q=80'
-                             alt='Tác giả' width='44' height='44'/>
+                        <b:if cond='data:post.author.authorPhoto.url'>
+                          <img class='author-avatar-sm'
+                               expr:src='data:post.author.authorPhoto.url'
+                               alt='Author' width='44' height='44'/>
+                        <b:else/>
+                          <img class='author-avatar-sm'
+                               alt='Author' width='44' height='44'/>
+                          <script>
+                            (function(){
+                              var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                              if (u) {
+                                var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                                if (el) el.src = u;
+                              }
+                            })();
+                          </script>
+                        </b:if>
                         <div class='author-meta-text'>
                           <div class='author-name-link' itemprop='author' itemscope='itemscope' itemtype='https://schema.org/Person'>
                             <span itemprop='name'><data:post.author.name/></span>
@@ -600,14 +633,59 @@ ${combinedCss}
                           </div>
                         </div>
                       </div>
-                      <!-- Bilingual Switcher (auto-shown by JS if bilingual content detected) -->
-                      <div class='bilingual-switcher-wrapper'>
-                        <div class='bilingual-switcher' role='group' aria-label='Chọn ngôn ngữ'>
-                          <button class='lang-btn lang-btn-vi active' onclick="switchLanguage('vi')" aria-pressed='true'>🇻🇳 VI</button>
-                          <button class='lang-btn lang-btn-en' onclick="switchLanguage('en')" aria-pressed='false'>🇬🇧 EN</button>
+                      <!-- Top-Right Share Dropdown -->
+                      <div class='post-header-actions'>
+                        <div class='post-share-dropdown' id='post-share-dropdown'>
+                          <button class='post-share-trigger' id='post-share-trigger' type='button' aria-expanded='false' aria-haspopup='true' aria-label='Chia sẻ'>
+                            <svg class='share-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                              <circle cx='18' cy='5' r='3'></circle>
+                              <circle cx='6' cy='12' r='3'></circle>
+                              <circle cx='18' cy='19' r='3'></circle>
+                              <line x1='8.59' y1='13.51' x2='15.42' y2='17.49'></line>
+                              <line x1='15.41' y1='6.51' x2='8.59' y2='10.49'></line>
+                            </svg>
+                            <span data-i18n='shareBtn'>Chia sẻ</span>
+                          </button>
+                          <div class='post-share-menu' id='post-share-menu' role='menu'>
+                            <button class='share-menu-item' id='quick-copy-link-btn' type='button' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>
+                              <span data-i18n='copyLink'>Sao chép liên kết</span>
+                            </button>
+                            <a class='share-menu-item share-menu-fb'
+                               expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#1877f2'><path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/></svg>
+                              <span>Facebook</span>
+                            </a>
+                            <a class='share-menu-item share-menu-tw'
+                               expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='currentColor'><path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/></svg>
+                              <span>X (Twitter)</span>
+                            </a>
+                            <a class='share-menu-item share-menu-li'
+                               expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#0a66c2'><path d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z'/></svg>
+                              <span>LinkedIn</span>
+                            </a>
+                            <button class='share-menu-item share-menu-native' id='native-share-btn' type='button' role='menuitem' style='display:none;'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' y1='13.51' x2='15.42' y2='17.49'/><line x1='15.41' y1='6.51' x2='8.59' y2='10.49'/></svg>
+                              <span data-i18n='moreOptions'>Thêm tùy chọn...</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    <!-- Post Series Header Pill (Top) -->
+                    <b:if cond='data:post.labels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                        <b:if cond='data:seriesLabels and not data:seriesLabels.empty'>
+                          <div id='series-header-pill-container' expr:data-series-label='data:seriesLabels.first.name'></div>
+                        </b:if>
+                      </b:with>
+                    </b:if>
 
                     <!-- AdSense Slot 1: Above the fold -->
                     <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
@@ -615,53 +693,103 @@ ${combinedCss}
                     </div>
 
                     <!-- Auto Table of Contents -->
-                    <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'/>
+                    <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'></div>
 
                     <!-- Post Body -->
                     <div class='post-body' itemprop='articleBody'>
                       <data:post.body/>
                     </div>
 
+                    <!-- Post Series Roadmap Box (Bottom) -->
+                    <b:if cond='data:post.labels'>
+                      <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
+                        <b:if cond='data:seriesLabels and not data:seriesLabels.empty'>
+                          <div id='series-roadmap-box-container' expr:data-series-label='data:seriesLabels.first.name'></div>
+                        </b:if>
+                      </b:with>
+                    </b:if>
+
                     <!-- AdSense Slot 2: Bottom of post -->
                     <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
                       <!-- Google AdSense code here -->
                     </div>
 
-                    <!-- Social Share Bar -->
-                    <div class='social-share-bar' role='group' aria-label='Chia sẻ bài viết'>
-                      <span class='share-title'>Chia sẻ:</span>
-                      <a class='btn-share btn-share-fb'
-                         expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên Facebook'>
-                        <b>f</b> Facebook
-                      </a>
-                      <a class='btn-share btn-share-tw'
-                         expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên X'>
-                        𝕏 X
-                      </a>
-                      <a class='btn-share btn-share-li'
-                         expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
-                         target='_blank' rel='nofollow noopener' aria-label='Chia sẻ lên LinkedIn'>
-                        in LinkedIn
-                      </a>
-                      <button class='btn-share btn-share-copy' id='copy-link-btn' aria-label='Sao chép link bài viết'>
-                        🔗 Sao chép link
-                      </button>
+                    <!-- Post Bottom Share Area -->
+                    <div class='post-bottom-share' role='group' aria-label='Chia sẻ bài viết'>
+                      <div class='post-bottom-share-inner'>
+                        <div class='post-bottom-share-text'>
+                          <span class='share-prompt-icon'>✨</span>
+                          <span class='share-prompt-label' data-i18n='sharePrompt'>Thấy bài viết hữu ích? Hãy chia sẻ cùng bạn bè:</span>
+                        </div>
+                        <div class='post-share-dropdown' id='post-share-dropdown-bottom'>
+                          <button class='post-share-trigger' type='button' aria-expanded='false' aria-haspopup='true' aria-label='Chia sẻ'>
+                            <svg class='share-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'>
+                              <circle cx='18' cy='5' r='3'></circle>
+                              <circle cx='6' cy='12' r='3'></circle>
+                              <circle cx='18' cy='19' r='3'></circle>
+                              <line x1='8.59' y1='13.51' x2='15.42' y2='17.49'></line>
+                              <line x1='15.41' y1='6.51' x2='8.59' y2='10.49'></line>
+                            </svg>
+                            <span data-i18n='shareBtn'>Chia sẻ</span>
+                          </button>
+                          <div class='post-share-menu' role='menu'>
+                            <button class='share-menu-item quick-share-copy' type='button' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>
+                              <span data-i18n='copyLink'>Sao chép liên kết</span>
+                            </button>
+                            <a class='share-menu-item share-menu-fb'
+                               expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#1877f2'><path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/></svg>
+                              <span>Facebook</span>
+                            </a>
+                            <a class='share-menu-item share-menu-tw'
+                               expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='currentColor'><path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/></svg>
+                              <span>X (Twitter)</span>
+                            </a>
+                            <a class='share-menu-item share-menu-li'
+                               expr:href='&quot;https://www.linkedin.com/sharing/share-offsite/?url=&quot; + data:post.url'
+                               target='_blank' rel='nofollow noopener' role='menuitem'>
+                              <svg viewBox='0 0 24 24' fill='#0a66c2'><path d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74V9.92H5.06v8.58h2.8z'/></svg>
+                              <span>LinkedIn</span>
+                            </a>
+                            <button class='share-menu-item share-menu-native' type='button' role='menuitem' style='display:none;'>
+                              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' y1='13.51' x2='15.42' y2='17.49'/><line x1='15.41' y1='6.51' x2='8.59' y2='10.49'/></svg>
+                              <span data-i18n='moreOptions'>Thêm tùy chọn...</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <!-- Author Bio Box -->
                     <div class='author-bio-box'>
-                      <img class='author-bio-avatar'
-                           src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&amp;auto=format&amp;fit=crop&amp;q=80'
-                           alt='Ảnh tác giả' width='80' height='80'/>
+                      <b:if cond='data:post.author.authorPhoto.url'>
+                        <img class='author-bio-avatar'
+                             expr:src='data:post.author.authorPhoto.url'
+                             alt='Author' width='80' height='80'/>
+                      <b:else/>
+                        <img class='author-bio-avatar'
+                             alt='Author' width='80' height='80'/>
+                        <script>
+                          (function(){
+                            var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                            if (u) {
+                              var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                              if (el) el.src = u;
+                            }
+                          })();
+                        </script>
+                      </b:if>
                       <div class='author-bio-content'>
-                        <div class='author-bio-label'>Về tác giả</div>
+                        <div class='author-bio-label' data-i18n='aboutAuthor'>Về tác giả</div>
                         <h3 class='author-bio-name'><data:post.author.name/></h3>
-                        <p class='author-bio-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
+                        <p class='author-bio-text' data-i18n='authorBioDesc'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
                         <div class='author-bio-actions'>
-                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer'>☕ Mời tôi ly cà phê</a>
-                          <a class='btn-subscribe' href='#newsletter'>💌 Đăng ký bản tin</a>
+                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer' data-i18n='buyMeACoffee'>☕ Mời tôi ly cà phê</a>
+                          <a class='btn-subscribe' href='#newsletter' data-i18n='subscribeNewsletter'>💌 Đăng ký bản tin</a>
                         </div>
                       </div>
                     </div>
@@ -670,53 +798,55 @@ ${combinedCss}
                     <div class='post-nav-container'>
                       <b:if cond='data:newerPageUrl'>
                         <a class='post-nav-link post-nav-prev' expr:href='data:newerPageUrl'>
-                          <span class='post-nav-direction'>« Bài trước</span>
-                          <span class='post-nav-title'>Bài viết mới hơn</span>
+                          <span class='post-nav-direction' data-i18n='previousPost'>« Bài trước</span>
+                          <span class='post-nav-title' data-i18n='newerPostTitle'>Bài viết mới hơn</span>
                         </a>
                       <b:else/>
-                        <div/>
+                        <div></div>
                       </b:if>
                       <b:if cond='data:olderPageUrl'>
                         <a class='post-nav-link post-nav-next' expr:href='data:olderPageUrl'>
-                          <span class='post-nav-direction'>Bài sau »</span>
-                          <span class='post-nav-title'>Bài viết cũ hơn</span>
+                          <span class='post-nav-direction' data-i18n='nextPost'>Bài sau »</span>
+                          <span class='post-nav-title' data-i18n='olderPostTitle'>Bài viết cũ hơn</span>
                         </a>
                       </b:if>
                     </div>
 
-                    <!-- Related Posts -->
-                    <div class='related-posts-section'>
-                      <h3 class='related-posts-title'>📚 Bài Viết Liên Quan</h3>
-                      <b:if cond='data:post.labels'>
-                        <div class='related-posts-grid'>
-                          <b:loop values='data:posts' var='relPost' index='rIdx'>
-                            <b:if cond='data:rIdx lt 3 and data:relPost.id != data:post.id'>
-                              <a class='related-post-card' expr:href='data:relPost.url'>
-                                <b:if cond='data:relPost.featuredImage'>
-                                  <img class='related-post-thumb'
-                                       expr:src='data:relPost.featuredImage'
-                                       expr:alt='data:relPost.title'
-                                       loading='lazy' decoding='async'/>
-                                </b:if>
-                                <span class='related-post-title'><data:relPost.title/></span>
-                                <span class='related-post-date'>📅 <data:relPost.date/></span>
-                              </a>
-                            </b:if>
-                          </b:loop>
+                    <!-- Related Posts Section (Dynamic Feed API) -->
+                    <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;) and not (l.name contains &quot;series:&quot;) and not (l.name contains &quot;Series:&quot;))' var='relLabels'>
+                      <div class='related-posts-section'
+                           id='related-posts-section'
+                           expr:data-label='data:relLabels and not data:relLabels.empty ? data:relLabels.first.name : &quot;&quot;'
+                           expr:data-current-url='data:post.url'>
+                        <h3 class='related-posts-title' data-i18n='relatedPosts'>📚 Bài Viết Liên Quan</h3>
+                        <div class='related-posts-grid' id='related-posts-grid'>
+                          <!-- Auto-loaded via Blogger Feed API -->
                         </div>
-                      </b:if>
-                    </div>
+                      </div>
+                    </b:with>
 
                     <!-- Comments -->
-                    <div class='comments-section'>
-                      <b:include name='comment-form'/>
-                    </div>
+                    <b:if cond='data:post.allowComments'>
+                      <b:include data='post' name='comment-form'/>
+                    </b:if>
 
                   </article>
                 </b:loop>
               </b:if>
             </b:if>
 
+            </b:includable>
+
+            <!-- Includable for comment form -->
+            <b:includable id='comment-form' var='post'>
+              <b:if cond='data:post.allowComments'>
+                <div class='comments-section' id='comments'>
+                  <h3 class='comments-title' style='margin-bottom: 1.5rem; font-size: 1.25rem;' data-i18n='commentsTitle'>💬 Bình Luận</h3>
+                  <b:if cond='data:post.commentFormIframeSrc'>
+                    <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:src='data:post.commentFormIframeSrc' frameborder='0' height='410' id='comment-editor' name='comment-editor' width='100%'></iframe>
+                  </b:if>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
@@ -911,8 +1041,16 @@ ${combinedCss}
                   <div class='sidebar-about-custom-content'><data:content/></div>
                 <b:else/>
                   <img class='sidebar-about-avatar'
-                       src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&amp;auto=format&amp;fit=crop&amp;q=80'
                        alt='Avatar tác giả' width='64' height='64'/>
+                  <script>
+                    (function(){
+                      var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                      if (u) {
+                        var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                        if (el) el.src = u;
+                      }
+                    })();
+                  </script>
                   <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
                   <div class='sidebar-socials'>
                     <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
@@ -934,13 +1072,13 @@ ${combinedCss}
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
                       <li>
                         <a class='popular-post-item' expr:href='data:ppPost.url'>
-                          <span class='popular-post-num'><b:if cond='data:ppIdx lt 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
+                          <span class='popular-post-num'><b:if cond='data:ppIdx &lt; 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
                           <b:if cond='data:ppPost.featuredImage'>
                             <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
                                  expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
                           </b:if>
                           <div class='popular-post-info'>
-                            <div class='popular-post-title'><data:ppPost.title/></div>
+                            <div class='popular-post-title' data-bilingual='true' expr:data-raw-label='data:ppPost.title'><data:ppPost.title/></div>
                             <div class='popular-post-date'>📅 <data:ppPost.date/></div>
                           </div>
                         </a>
@@ -1193,6 +1331,26 @@ ${combinedCss}
     </div><!-- /.site-wrapper (Tầng 3) -->
 
   </footer>
+
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
+       ═══════════════════════════════════════════════════ -->
+  <div class='newsletter-modal-overlay' id='newsletter-modal' aria-hidden='true' style='display:none;'>
+    <div class='newsletter-modal-backdrop' id='newsletter-modal-backdrop'></div>
+    <div class='newsletter-modal-card' role='dialog' aria-modal='true' aria-labelledby='newsletter-modal-title'>
+      <button class='newsletter-modal-close' id='newsletter-modal-close' type='button' aria-label='Đóng'>✕</button>
+      <div class='newsletter-modal-icon'>💌</div>
+      <h3 class='newsletter-modal-title' id='newsletter-modal-title' data-i18n='newsletterTitle'>Nhận bài viết mới</h3>
+      <p class='newsletter-modal-desc' data-i18n='newsletterSubDesc'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+      <form class='newsletter-modal-form' id='newsletter-modal-form' onsubmit='return false;'>
+        <input class='newsletter-modal-input' id='newsletter-modal-email' type='email' placeholder='Nhập email của bạn...' aria-label='Email' required='required'/>
+        <button class='newsletter-modal-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
+      </form>
+      <div class='newsletter-modal-footer'>
+        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Body-end Scripts -->
   <script>
