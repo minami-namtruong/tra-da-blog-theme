@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="styles/post-layout.css?v=2.0"/>
   <link rel="stylesheet" href="styles/affiliate-ui.css?v=2.0"/>
   <link rel="stylesheet" href="styles/footer.css?v=2.0"/>
-  <link rel="stylesheet" href="styles/archive-page.css?v=2.0"/>
+  <link rel="stylesheet" href="styles/archive-page.css?v=4.0"/>
   <link rel="stylesheet" href="styles/special-posts.css?v=2.0"/>
   <link rel="stylesheet" href="styles/ai-transparency.css?v=1.0"/>
   <link rel="stylesheet" href="styles/post-series.css?v=1.0"/>
@@ -151,14 +151,18 @@
       </div>
     </div>
 
-    <!-- ── CATEGORY TABS (XYÊN SUỐT) ── -->
-    <nav class="category-tabs-bar">
-      <a class="tab-pill active" href="#" data-bilingual="true">✦ Tất cả | All</a>
-      <a class="tab-pill" href="#" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
-      <a class="tab-pill" href="#" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>
-      <a class="tab-pill" href="#" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>
-      <a class="tab-pill" href="#" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>
-      <a class="tab-pill" href="#" data-bilingual="true">Công Nghệ | Technology</a>
+    <!-- ── CATEGORY TABS (XUYÊN SUỐT) ── -->
+    <nav class="category-tabs-bar" id="category-tabs-bar">
+      <a class="tab-pill active" href="/" data-raw-label="✦ Tất cả | All" data-bilingual="true">✦ Tất cả | All</a>
+      <a class="tab-pill" href="#" data-label="Góc Nhìn & Tư Duy" data-bilingual="true">Góc Nhìn &amp; Tư Duy | Perspectives</a>
+      <a class="tab-pill" href="#" data-label="Trải Nghiệm Sống" data-bilingual="true">Trải Nghiệm Sống | Life Stories</a>
+      <a class="tab-pill" href="#" data-label="Sách & Công Cụ" data-bilingual="true">Sách &amp; Công Cụ | Books &amp; Tools</a>
+      <a class="tab-pill" href="#" data-label="Phát Triển Bản Thân" data-bilingual="true">Phát Triển Bản Thân | Self Development</a>
+      <a class="tab-pill" href="#" data-label="Công Nghệ" data-bilingual="true">Công Nghệ | Technology</a>
+      <span class="cat-bar-separator" aria-hidden="true">┆</span>
+      <a class="tab-pill tab-pill-note" href="#" data-label="@Quote">💬 @Quote</a>
+      <a class="tab-pill tab-pill-note" href="#" data-label="@Điểm tin">⚡ @Điểm tin</a>
+      <a class="tab-pill tab-pill-note" href="#" data-label="@Tiêu điểm">🌟 @Tiêu điểm</a>
     </nav>
 
     <!-- ── MAIN LAYOUT GRID (POSTS + SIDEBAR) ── -->
@@ -704,28 +708,57 @@
         </div><!-- /#single-post-wrapper -->
 
         <!-- ═══════════════════════════════════
-             3. DEDICATED ARCHIVE PAGE VIEW WRAPPER
+             3. DEDICATED ARCHIVE PAGE VIEW WRAPPER (v4 — Branching Timeline)
              ═══════════════════════════════════ -->
         <div id="archive-page-wrapper" style="display: none;">
+          <!-- Container trống — JS sẽ inject toàn bộ cấu trúc qua createArchiveStructure() -->
           <div class="editorial-archive-page" id="editorial-archive-app">
-            <!-- Thanh Tìm Kiếm Tức Thì -->
-            <div class="archive-search-wrap">
-              <span class="archive-search-icon" aria-hidden="true">🔍</span>
-              <input class="archive-search-input" id="archive-search-input" type="search"
-                     placeholder="Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)..."
-                     autocomplete="off" aria-label="Tìm kiếm bài viết" data-i18n="searchPlaceholder"/>
-              <button type="button" class="archive-search-clear" id="archive-search-clear" aria-label="Xóa tìm kiếm" style="display:none;">✕</button>
-            </div>
-
-            <!-- Khung danh sách bài viết -->
-            <div id="archive-app-body" class="archive-tree-container" aria-live="polite">
-              <div class="archive-loading">
-                <div class="archive-spinner"></div>
-                <span>Đang đồng bộ danh mục bài viết...</span>
-              </div>
+            <div class="archive-loading">
+              <div class="archive-spinner"></div>
+              <span>Đang khởi động Cây Dòng Thời Gian...</span>
             </div>
           </div>
         </div><!-- /#archive-page-wrapper -->
+
+        <!-- ═══════════════════════════════════
+             MOCK DATA — FEAT-BRANCHING-TIMELINE-V4 PREVIEW
+             Bao gồm cả bài Viết Dài (articles) và Ghi Nhanh (@) để test 2 nhánh
+             ═══════════════════════════════════ -->
+        <script>
+        window.__TIMELINE_MOCK_POSTS__ = [
+          /* ── NHÁNH BÀI VIẾT (articles) ── */
+          { title: 'Nghịch Lý Của Việc Chọn Lựa | The Paradox of Choice', url: '#', year: 2026, dateStr: '09/09', category: 'Triết Lý | Philosophy', aiType: null, timestamp: 1757376000000 },
+          { title: 'Sự Yên Lặng Sâu Thẳm | The Deep Silence', url: '#', year: 2026, dateStr: '02/09', category: 'Góc Nhìn | Personal', aiType: 'ai:assisted', timestamp: 1756771200000 },
+          { title: '30 Ngày Không Dùng Điện Thoại Buổi Sáng | 30 Days Without Morning Phone', url: '#', year: 2026, dateStr: '05/09', category: 'Trải Nghiệm | Experience', aiType: null, timestamp: 1757030400000 },
+          { title: 'Review Sách: "Tư Duy Nhanh và Chậm" | Book Review: Thinking Fast & Slow', url: '#', year: 2026, dateStr: '01/09', category: 'Sách Hay | Books', aiType: 'ai:generated', timestamp: 1756684800000 },
+          { title: 'Kinh Tế Học Hành Vi và Những Quyết Định Phi Lý | Behavioral Economics', url: '#', year: 2026, dateStr: '20/08', category: 'Công Nghệ | Tech', aiType: null, timestamp: 1755648000000 },
+          { title: 'Mindfulness: Thực Hành Chánh Niệm Mỗi Sáng | Morning Mindfulness Practice', url: '#', year: 2026, dateStr: '12/08', category: 'Trải Nghiệm | Experience', aiType: null, timestamp: 1754956800000 },
+          { title: 'Viết Nhật Ký 365 Ngày — Điều Tôi Học Được | 365 Days of Journaling', url: '#', year: 2026, dateStr: '05/08', category: 'Góc Nhìn | Personal', aiType: null, timestamp: 1754352000000 },
+          { title: 'Stoicism và Những Bài Học Triết Học Thực Dụng | Stoicism Practical Lessons', url: '#', year: 2025, dateStr: '28/12', category: 'Triết Lý | Philosophy', aiType: null, timestamp: 1735344000000 },
+          { title: 'Năm 2025 Nhìn Lại: Những Bước Ngoặt Thay Đổi Cuộc Đời | 2025 Year in Review', url: '#', year: 2025, dateStr: '31/12', category: 'Góc Nhìn | Personal', aiType: null, timestamp: 1735603200000 },
+          { title: 'Chủ Nghĩa Tối Giản — Sống Ít Hơn, Trải Nghiệm Nhiều Hơn | Minimalism', url: '#', year: 2025, dateStr: '15/11', category: 'Trải Nghiệm | Experience', aiType: null, timestamp: 1731628800000 },
+          { title: 'Atomic Habits: Tóm Tắt Và Ứng Dụng Thực Tế | Atomic Habits Summary', url: '#', year: 2025, dateStr: '08/09', category: 'Sách Hay | Books', aiType: 'ai:assisted', timestamp: 1725753600000 },
+          { title: 'Digital Detox — 7 Ngày Cai Mạng Xã Hội | 7 Days Social Media Detox', url: '#', year: 2025, dateStr: '20/07', category: 'Trải Nghiệm | Experience', aiType: null, timestamp: 1721433600000 },
+          { title: 'Sự Khiêm Tốn Trong Thế Giới Của Cái Tôi | Humility in the Age of Ego', url: '#', year: 2024, dateStr: '25/12', category: 'Triết Lý | Philosophy', aiType: null, timestamp: 1703462400000 },
+          { title: 'Deep Work: Làm Sao Làm Việc Sâu Trong Thế Giới Mất Tập Trung | Deep Work', url: '#', year: 2024, dateStr: '10/10', category: 'Công Nghệ | Tech', aiType: null, timestamp: 1728518400000 },
+
+          /* ── NHÁNH GHI NHANH (@) ── */
+          /* @Quote */
+          { title: '"Chúng ta không nhìn thấy thế giới như nó vốn có, mà nhìn thấy nó như chúng ta vốn có." — Anaïs Nin', url: '#', year: 2026, dateStr: '10/09', featureLabel: '@Quote', allFeatureLabels: ['@Quote'], contentSnippet: 'Chúng ta không nhìn thấy thế giới như nó vốn có, mà nhìn thấy nó như chúng ta vốn có.', aiType: null, timestamp: 1757462400000 },
+          { title: '"Hành động là cha đẻ của thói quen." — Aristotle', url: '#', year: 2026, dateStr: '03/09', featureLabel: '@Quote', allFeatureLabels: ['@Quote'], contentSnippet: 'Hành động là cha đẻ của thói quen. Thói quen là cha đẻ của tính cách.', aiType: null, timestamp: 1756857600000 },
+          { title: '"The unexamined life is not worth living." — Socrates', url: '#', year: 2026, dateStr: '22/08', featureLabel: '@Quote', allFeatureLabels: ['@Quote'], contentSnippet: 'Cuộc sống không được kiểm điểm thì không đáng sống.', aiType: null, timestamp: 1755820800000 },
+          { title: '"Đơn giản là tinh xảo tột cùng." — Leonardo da Vinci', url: '#', year: 2025, dateStr: '18/11', featureLabel: '@Quote', allFeatureLabels: ['@Quote'], contentSnippet: 'Simplicity is the ultimate sophistication.', aiType: null, timestamp: 1731888000000 },
+
+          /* @Điểm tin */
+          { title: 'Anthropic ra mắt Claude 4 Sonnet với khả năng lý luận vượt trội', url: '#', year: 2026, dateStr: '08/09', featureLabel: '@Điểm tin', allFeatureLabels: ['@Điểm tin'], contentSnippet: 'Claude 4 Sonnet được đánh giá vượt trội về khả năng lý luận đa bước và lập trình. Anthropic cho biết đây là bước ngoặt trong hành trình phát triển AI an toàn.', aiType: 'ai:assisted', timestamp: 1757289600000 },
+          { title: 'Google DeepMind công bố Gemini 2.0 Ultra có thể hiểu video theo thời gian thực', url: '#', year: 2026, dateStr: '01/09', featureLabel: '@Điểm tin', allFeatureLabels: ['@Điểm tin'], contentSnippet: 'Gemini 2.0 Ultra lần đầu tiên có khả năng xử lý và hiểu nội dung video theo thời gian thực, mở ra ứng dụng mới trong phân tích phương tiện.', aiType: null, timestamp: 1756684800000 },
+          { title: 'Việt Nam vào top 10 quốc gia phát triển AI nhanh nhất ASEAN 2026', url: '#', year: 2026, dateStr: '15/08', featureLabel: '@Điểm tin', allFeatureLabels: ['@Điểm tin'], contentSnippet: 'Theo báo cáo mới nhất từ ASEAN Digital Hub, Việt Nam xếp thứ 4 trong khu vực về tốc độ ứng dụng AI vào sản xuất và dịch vụ.', aiType: null, timestamp: 1755216000000 },
+
+          /* @Tiêu điểm */
+          { title: 'Tại Sao Đọc Sách Vẫn Là Kỹ Năng Quan Trọng Nhất Trong Thời Đại AI | Why Reading Still Matters', url: '#', year: 2026, dateStr: '07/09', featureLabel: '@Tiêu điểm', allFeatureLabels: ['@Tiêu điểm'], contentSnippet: 'Trong bối cảnh AI tổng hợp thông tin ngày càng giỏi, kỹ năng đọc sâu và tư duy phản biện trở thành lợi thế cạnh tranh cốt lõi.', aiType: null, timestamp: 1757203200000 },
+          { title: 'Bài Học Lớn Nhất Từ 3 Năm Viết Blog | The Biggest Lesson from 3 Years of Blogging', url: '#', year: 2025, dateStr: '31/12', featureLabel: '@Tiêu điểm', allFeatureLabels: ['@Tiêu điểm'], contentSnippet: 'Viết không phải để người khác đọc. Viết là để tự mình suy nghĩ rõ hơn.', aiType: null, timestamp: 1735603200000 }
+        ];
+        </script>
 
       </main>
 
@@ -1111,30 +1144,8 @@
   </footer>
 
 
-  <!-- Timeline Mock Data (Dùng trong preview mode) -->
+  <!-- Special Posts Mock Data -->
   <script>
-    window.__TIMELINE_MOCK_POSTS__ = [
-      // 2026
-      { title: 'Nghịch Lý Của Việc Chọn Lựa: Tại Sao Nhiều Lựa Chọn Hơn Lại Khiến Chúng Ta Kém Hạnh Phúc Hơn', url: '#', year: 2026, dateStr: '09/09', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:assisted', timestamp: 1757088000000 },
-      { title: '30 Ngày Không Dùng Điện Thoại Buổi Sáng: Điều Tôi Học Được Về Bản Thân', url: '#', year: 2026, dateStr: '05/09', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1756742400000 },
-      { title: 'Review Sách: "Tư Duy Nhanh và Chậm" — 5 Bài Học Thay Đổi Cách Tôi Ra Quyết Định', url: '#', year: 2026, dateStr: '01/09', category: 'Sách & Công Cụ', aiType: 'ai:generated', timestamp: 1756396800000 },
-      { title: 'Nghệ Thuật Nói Không: Cách Bảo Vệ Thời Gian và Năng Lượng Của Bạn', url: '#', year: 2026, dateStr: '28/08', category: 'Góc Nhìn & Tư Duy', aiType: null, timestamp: 1756051200000 },
-      { title: 'Tôi Đã Thử Thức Dậy Lúc 5 Giờ Sáng Trong 21 Ngày — Đây Là Kết Quả Thật Sự', url: '#', year: 2026, dateStr: '20/08', category: 'Trải Nghiệm Sống', aiType: 'ai:assisted', timestamp: 1755360000000 },
-      { title: 'Kinh Tế Học Hành Vi và Những Bẫy Tư Duy Khiến Chúng Ta Mua Sắm Không Hợp Lý', url: '#', year: 2026, dateStr: '15/08', category: 'Góc Nhìn & Tư Duy', aiType: null, timestamp: 1754928000000 },
-      { title: 'Obsidian vs Notion: Tôi Đã Dùng Cả Hai Và Đây Là Đánh Giá Thật Của Tôi', url: '#', year: 2026, dateStr: '10/08', category: 'Sách & Công Cụ', aiType: 'ai:product', timestamp: 1754496000000 },
-      { title: 'Ký Sự Đường Trường: 7 Ngày Một Mình Phượt Bắc Việt Nam', url: '#', year: 2026, dateStr: '01/08', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1753804800000 },
-      // 2025
-      { title: 'Mindfulness Không Phải Ngồi Thiền — Cách Tôi Luyện Sự Chú Tâm Trong Cuộc Sống Hàng Ngày', url: '#', year: 2025, dateStr: '15/12', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:assisted', timestamp: 1734220800000 },
-      { title: 'Review Sách: "Sapiens" — Lịch Sử Loài Người Qua Lăng Kính Khác Biệt', url: '#', year: 2025, dateStr: '01/12', category: 'Sách & Công Cụ', aiType: null, timestamp: 1733011200000 },
-      { title: 'Tại Sao Tôi Bỏ Mạng Xã Hội 3 Tháng Và Không Hối Tiếc', url: '#', year: 2025, dateStr: '10/11', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1731196800000 },
-      { title: 'Hệ Thống Ghi Chú Thứ Hai (Second Brain): Xây Dựng Như Thế Nào Cho Hiệu Quả?', url: '#', year: 2025, dateStr: '20/10', category: 'Sách & Công Cụ', aiType: 'ai:assisted', timestamp: 1729382400000 },
-      { title: 'Cuộc Trò Chuyện Với Bố Lúc 80 Tuổi Dạy Tôi Điều Quan Trọng Nhất Về Cuộc Đời', url: '#', year: 2025, dateStr: '05/09', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1725494400000 },
-      { title: 'Stoicism Thực Hành: Triết Học Khắc Kỷ Ứng Dụng Vào Cuộc Sống Hiện Đại', url: '#', year: 2025, dateStr: '12/07', category: 'Góc Nhìn & Tư Duy', aiType: 'ai:generated', timestamp: 1720742400000 },
-      // 2024
-      { title: 'Bắt Đầu Blog Cá Nhân Tuổi 28: Tại Sao, Như Thế Nào và Học Được Gì?', url: '#', year: 2024, dateStr: '20/12', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1734652800000 - 31536000000 },
-      { title: 'Review Sách: "Atomic Habits" — 5 Điều Tôi Đã Áp Dụng Được Và 3 Điều Tôi Không Làm Được', url: '#', year: 2024, dateStr: '15/09', category: 'Sách & Công Cụ', aiType: null, timestamp: 1726358400000 - 31536000000 },
-      { title: 'Đi Làm Freelance 1 Năm: Tự Do Thật Sự Hay Chỉ Là Ảo Tưởng?', url: '#', year: 2024, dateStr: '03/06', category: 'Trải Nghiệm Sống', aiType: null, timestamp: 1717372800000 - 31536000000 },
-    ];
 
     window.__SPECIAL_POSTS_MOCK__ = [
       {
@@ -1246,6 +1257,19 @@
         if (resetFilter !== false) {
           var allPostCards = document.querySelectorAll(".posts-feed .post-card");
           allPostCards.forEach(function(c) { c.style.display = ""; });
+          // Khôi phục nút đầu tiên về "✦ Tất cả | All" khi về Home
+          var firstPill = document.querySelector(".category-tabs-bar .tab-pill:not(.tab-pill-note)");
+          if (firstPill) {
+            var orig = firstPill.getAttribute("data-home-label") || "✦ Tất cả | All";
+            firstPill.setAttribute("data-raw-label", orig);
+            firstPill.textContent = window.parseBilingualText ? window.parseBilingualText(orig, localStorage.getItem("user_lang") || "vi") : orig.split("|")[0].trim();
+            firstPill.removeAttribute("data-stream");
+            firstPill.removeAttribute("data-cat");
+          }
+          // Ẩn nút "⚡ Ghi Nhanh" (chỉ dành cho timeline)
+          var notesAllPill = document.querySelector(".category-tabs-bar .tab-pill-notes-all");
+          if (notesAllPill) notesAllPill.style.display = "none";
+
           var allPills = document.querySelectorAll(".category-tabs-bar .tab-pill");
           allPills.forEach(function(p, idx) {
             p.classList.toggle("active", idx === 0);
@@ -1477,6 +1501,12 @@
           pills.forEach(function(p) { p.classList.remove("active"); });
           pill.classList.add("active");
           var cat = pill.innerText.replace("✦", "").trim();
+
+          // Nếu click vào thẻ note (@) trên trang chủ -> chuyển sang mục lục xem luồng note
+          if (cat.indexOf("@") !== -1 && window.setArchiveView) {
+            window.setArchiveView();
+            return;
+          }
 
           // Nếu đang xem mục lục, không switch về home view
           if (archiveWrapper && archiveWrapper.style.display !== "none") {

@@ -446,10 +446,16 @@ ${combinedCss}
             <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
             <b:if cond='data:labels and not data:labels.empty'>
               <b:loop values='data:labels' var='label'>
-                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot; or data:label.name contains &quot;series:&quot; or data:label.name contains &quot;Series:&quot;)'>
-                  <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
-                    <data:label.name/>
-                  </a>
+                <b:if cond='not (data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot; or data:label.name contains &quot;series:&quot; or data:label.name contains &quot;Series:&quot;)'>
+                  <b:if cond='data:label.name contains &quot;@&quot;'>
+                    <a class='tab-pill tab-pill-note' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                      <data:label.name/>
+                    </a>
+                  <b:else/>
+                    <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                      <data:label.name/>
+                    </a>
+                  </b:if>
                 </b:if>
               </b:loop>
             </b:if>
@@ -571,21 +577,9 @@ ${combinedCss}
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
                 <b:if cond='data:view.isPage and (data:blog.url contains &quot;/p/muc-luc.html&quot; or data:blog.url contains &quot;/p/archive.html&quot; or data:blog.url contains &quot;/p/dong-thoi-gian.html&quot; or data:blog.pageName == &quot;Dòng Thời Gian&quot; or data:blog.pageName == &quot;Mục Lục&quot;)'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
-                    <!-- Thanh Tìm Kiếm Tức Thì -->
-                    <div class='archive-search-wrap'>
-                      <span class='archive-search-icon' aria-hidden='true'>🔍</span>
-                      <input class='archive-search-input' id='archive-search-input' type='search'
-                             placeholder='Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)...'
-                             autocomplete='off' aria-label='Tìm kiếm bài viết'/>
-                      <button type='button' class='archive-search-clear' id='archive-search-clear' aria-label='Xóa tìm kiếm' style='display:none;'>✕</button>
-                    </div>
-
-                    <!-- Khung danh sách bài viết -->
-                    <div id='archive-app-body' class='archive-tree-container' aria-live='polite'>
-                      <div class='archive-loading'>
-                        <div class='archive-spinner'></div>
-                        <span>Đang đồng bộ danh mục bài viết...</span>
-                      </div>
+                    <div class='archive-loading'>
+                      <div class='archive-spinner'></div>
+                      <span>Đang đồng bộ danh mục bài viết...</span>
                     </div>
                   </div>
                 <b:else/>

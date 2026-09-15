@@ -122,7 +122,7 @@
       var href = pill.getAttribute('href') || '';
       var label = (pill.getAttribute('data-raw-label') || pill.getAttribute('data-label') || pill.textContent || '').trim();
       
-      if (href === '/' || href === window.location.origin + '/' || label.startsWith('✦')) {
+      if (href === '/' || href === window.location.origin + '/' || label.startsWith('✦') || label.toLowerCase() === 'all' || label.toLowerCase().indexOf('tất cả') !== -1) {
         allPill = pill;
         pill.setAttribute('data-raw-label', '✦ Tất cả | All');
         pill.setAttribute('data-bilingual', 'true');
@@ -130,8 +130,14 @@
         return;
       }
 
-      if (label.startsWith('@') || label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-') || label.toLowerCase().startsWith('series:')) {
+      if (label.toLowerCase().startsWith('ai:') || label.toUpperCase().startsWith('AI-') || label.toLowerCase().startsWith('series:')) {
         pill.remove();
+        return;
+      }
+
+      if (label.startsWith('@')) {
+        pill.classList.add('tab-pill-note');
+        pill.setAttribute('data-raw-label', label);
         return;
       }
 

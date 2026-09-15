@@ -761,16 +761,21 @@
   align-items: center;
   gap: 0.55rem;
   overflow-x: auto;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
   padding: 0.25rem 0 0.5rem;
   margin: 0 0 1.25rem !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 .category-tabs-bar::-webkit-scrollbar { display: none; }
 
 .tab-pill {
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
   padding: 0.45rem 1.1rem;
   background: var(--bg-card);
   border: var(--stroke-hairline) solid var(--border-color);
@@ -788,6 +793,48 @@
   background: var(--primary);
   color: var(--text-inverse);
   border-color: var(--primary);
+}
+
+/* Biệt hóa màu sắc cho category/filter dạng Ghi Nhanh (@) */
+.tab-pill.tab-pill-note {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #b45309;
+}
+.tab-pill.tab-pill-note:hover {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: #f59e0b;
+  color: #92400e;
+}
+.tab-pill.tab-pill-note.active {
+  background: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="dark"] .tab-pill.tab-pill-note {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+[data-theme="dark"] .tab-pill.tab-pill-note:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: #f59e0b;
+  color: #fef3c7;
+}
+[data-theme="dark"] .tab-pill.tab-pill-note.active {
+  background: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #0f172a !important;
+}
+
+.cat-bar-separator {
+  color: var(--border-color);
+  font-size: 0.85rem;
+  padding: 0 0.15rem;
+  user-select: none;
+  flex-shrink: 0;
 }
 
 /* ==========================================
