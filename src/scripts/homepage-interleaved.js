@@ -20,7 +20,9 @@
       if (rawLabels.length > 0) {
         var allFeatureAt = true;
         var firstNormalLabel = null;
-        var detectedAiType = null;
+        var detectedAiTypeContent = null;
+        var detectedAiTypeProduct = null;
+        var priority = ['ai:generated', 'ai:contributed', 'ai:assisted', 'ai:translated'];
 
         rawLabels.forEach(function(lblEl) {
           var name = lblEl.textContent.trim();
@@ -29,7 +31,16 @@
             // Nhãn tính năng cho widget (@Quote, @Tiêu điểm, @Nổi bật, @Điểm tin)
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
             // Nhãn AI minh bạch - KHÔNG tính là nhãn chuyên mục thường
-            if (!detectedAiType) detectedAiType = name.toLowerCase();
+            var t = name.toLowerCase().replace(/-/g, ':');
+            if (t === 'ai:product') {
+              detectedAiTypeProduct = t;
+            } else {
+              if (priority.indexOf(t) !== -1) {
+                if (!detectedAiTypeContent || priority.indexOf(t) < priority.indexOf(detectedAiTypeContent)) {
+                  detectedAiTypeContent = t;
+                }
+              }
+            }
           } else if (name.toLowerCase().startsWith('series:')) {
             // Nhãn Series Navigator - Không dùng làm badge chuyên mục nhưng không phải nhãn ẩn @
             allFeatureAt = false;
@@ -60,6 +71,11 @@
             badge.style.display = 'none';
           }
         }
+
+        var detectedAiTypeArr = [];
+        if (detectedAiTypeContent) detectedAiTypeArr.push(detectedAiTypeContent);
+        if (detectedAiTypeProduct) detectedAiTypeArr.push(detectedAiTypeProduct);
+        var detectedAiType = detectedAiTypeArr.length ? detectedAiTypeArr.join(',') : null;
 
         // Tự động gắn data-ai-type để ai-transparency.js kích hoạt badge
         if (detectedAiType) {
@@ -133,7 +149,9 @@
       var rawLabelsSingle = singleContainer.querySelectorAll('.post-raw-label');
       if (rawLabelsSingle.length > 0) {
         var normalLabelSingle = null;
-        var aiTypeSingle = null;
+        var aiTypeSingleContent = null;
+        var aiTypeSingleProduct = null;
+        var prioritySingle = ['ai:generated', 'ai:contributed', 'ai:assisted', 'ai:translated'];
 
         rawLabelsSingle.forEach(function(lblEl) {
           var name = lblEl.textContent.trim();
@@ -141,7 +159,16 @@
           if (name.startsWith('@')) {
             // bỏ qua
           } else if (name.toLowerCase().startsWith('ai:') || name.toUpperCase().startsWith('AI-')) {
-            if (!aiTypeSingle) aiTypeSingle = name.toLowerCase();
+            var t = name.toLowerCase().replace(/-/g, ':');
+            if (t === 'ai:product') {
+              aiTypeSingleProduct = t;
+            } else {
+              if (prioritySingle.indexOf(t) !== -1) {
+                if (!aiTypeSingleContent || prioritySingle.indexOf(t) < prioritySingle.indexOf(aiTypeSingleContent)) {
+                  aiTypeSingleContent = t;
+                }
+              }
+            }
           } else if (name.toLowerCase().startsWith('series:')) {
             // bỏ qua không lấy làm breadcrumb chuyên mục
           } else {
@@ -164,6 +191,10 @@
           }
         }
 
+        var aiTypeSingleArr = [];
+        if (aiTypeSingleContent) aiTypeSingleArr.push(aiTypeSingleContent);
+        if (aiTypeSingleProduct) aiTypeSingleArr.push(aiTypeSingleProduct);
+        var aiTypeSingle = aiTypeSingleArr.length ? aiTypeSingleArr.join(',') : null;
         if (aiTypeSingle) {
           singleContainer.setAttribute('data-ai-type', aiTypeSingle);
         }

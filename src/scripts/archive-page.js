@@ -108,7 +108,9 @@
 
     var normalLabels = [];
     var featureLabels = [];
-    var aiType = null;
+    var aiTypeContent = null;
+    var aiTypeProduct = null;
+    var priority = ['ai:generated', 'ai:contributed', 'ai:assisted', 'ai:translated'];
     var seriesName = null;
 
     rawLabels.forEach(function (lbl) {
@@ -116,7 +118,16 @@
       if (lbl.startsWith('@')) {
         featureLabels.push(lbl);
       } else if (lower.startsWith('ai:') || lower.startsWith('ai-')) {
-        if (!aiType) aiType = lower.replace(/-/g, ':');
+        var t = lower.replace(/-/g, ':');
+        if (t === 'ai:product') {
+          aiTypeProduct = t;
+        } else {
+          if (priority.indexOf(t) !== -1) {
+            if (!aiTypeContent || priority.indexOf(t) < priority.indexOf(aiTypeContent)) {
+              aiTypeContent = t;
+            }
+          }
+        }
       } else if (lower.startsWith('series:')) {
         if (!seriesName) seriesName = lbl.replace(/^series:\s*/i, '').trim();
       } else {
@@ -133,7 +144,13 @@
     var dateStr = formatDateStr(publishedStr);
     var timestamp = publishedStr ? new Date(publishedStr).getTime() : 0;
 
+    var aiTypeArr = [];
+    if (aiTypeContent) aiTypeArr.push(aiTypeContent);
+    if (aiTypeProduct) aiTypeArr.push(aiTypeProduct);
+    var aiType = aiTypeArr.length > 0 ? aiTypeArr.join(',') : null;
+
     return {
+      id: entry.id.$t,
       title: entry.title ? entry.title.$t : 'Bài viết không có tiêu đề',
       url: extractAlternateLink(entry),
       published: publishedStr,

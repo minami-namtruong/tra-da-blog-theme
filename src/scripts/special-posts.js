@@ -356,7 +356,7 @@
       const thumb   = (opts.showThumb && post.thumbnail)
         ? optimizeThumbnail(post.thumbnail, 's160-c')
         : '';
-      const aiType  = extractAIType(post.labels || []);
+      const aiType  = extractAITypes(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
@@ -384,7 +384,7 @@
       ? optimizeThumbnail(post.thumbnail, 's600-c')
       : '';
     const badge  = extractNormalCategory(post.labels || []);
-    const aiType = extractAIType(post.labels || []);
+    const aiType = extractAITypes(post.labels || []);
     const aiHtml = aiType ? renderAIStandardBadge(aiType, lang) : '';
 
     const parsedBadge = window.parseBilingualText ? window.parseBilingualText(badge, lang) : badge.split('|')[0].trim();
@@ -437,7 +437,7 @@
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       const snippet = (opts.showSnippet && post.snippet) ? post.snippet : '';
-      const aiType  = extractAIType(post.labels || []);
+      const aiType  = extractAITypes(post.labels || []);
       const aiHtml  = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
 
       const parsedTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
@@ -665,41 +665,73 @@
     return decodeURIComponent(String(raw)).replace(/^[@#_~]+/, '').trim();
   }
 
-  /** Trích xuất loại AI từ mảng labels; trả về key hoặc null */
-  function extractAIType(labels) {
-    if (!labels || !labels.length) return null;
-    for (var i = 0; i < labels.length; i++) {
-      var raw = labels[i] || '';
-      var lower = raw.toLowerCase().replace(/-/g, ':');
-      if (lower.startsWith('ai:')) return lower;
+  /** Trích xuất loại AI từ mảng labels; trả về key hoặc null với thứ tự ưu tiên */
+  function extractAITypes(labels) {
+    var aiTypeContent = null;
+    var aiTypeProduct = null;
+    var priority = ['ai:generated', 'ai:contributed', 'ai:assisted', 'ai:translated'];
+    if (labels && labels.length) {
+      for (var i = 0; i < labels.length; i++) {
+        var raw = labels[i] || '';
+        var lower = raw.toLowerCase().replace(/-/g, ':');
+        if (lower.startsWith('ai:')) {
+          if (lower === 'ai:product') {
+             aiTypeProduct = lower;
+          } else {
+             if (priority.indexOf(lower) !== -1) {
+               if (!aiTypeContent || priority.indexOf(lower) < priority.indexOf(aiTypeContent)) {
+                 aiTypeContent = lower;
+               }
+             }
+          }
+        }
+      }
     }
-    return null;
+    var res = [];
+    if (aiTypeContent) res.push(aiTypeContent);
+    if (aiTypeProduct) res.push(aiTypeProduct);
+    return res.length > 0 ? res.join(',') : null;
   }
 
-  /** Render AI badge inline HTML (không phụ thuộc external module để tránh race condition) */
-  function renderAIInlineBadge(aiType) {
-    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
-    var icon = icons[aiType] || '✨';
-    return '<span class="ai-badge ai-badge-inline" data-ai-type="' + aiType + '" data-ai-variant="inline">' +
-      '<span class="ai-badge-icon">' + icon + '</span>' +
-      '<span class="ai-badge-label">AI</span>' +
-    '</span>';
+  function renderAIInlineBadge(aiTypeString) {
+    if (!aiTypeString) return '';
+    var aiTypes = aiTypeString.split(',').filter(Boolean);
+    var html = '';
+    var icons = { 'ai:assisted': '✨', 'ai:contributed': '✨', 'ai:product': '🤖', 'ai:generated': '⚡', 'ai:translated': '🌐' };
+    for (var i = 0; i < aiTypes.length; i++) {
+      var type = aiTypes[i];
+      var icon = icons[type] || '✨';
+      html += '<span class="ai-badge ai-badge-inline" data-ai-type="' + type + '" data-ai-variant="inline">' +
+        '<span class="ai-badge-icon">' + icon + '</span>' +
+        '<span class="ai-badge-label">AI</span>' +
+      '</span>';
+    }
+    return html;
   }
 
-  function renderAIStandardBadge(aiType, lang) {
-    var icons = { 'ai:assisted': '✨', 'ai:product': '🤖', 'ai:generated': '⚡' };
+  function renderAIStandardBadge(aiTypeString, lang) {
+    if (!aiTypeString) return '';
+    var aiTypes = aiTypeString.split(',').filter(Boolean);
+    var html = '';
+    var icons = { 'ai:assisted': '✨', 'ai:contributed': '✨', 'ai:product': '🤖', 'ai:generated': '⚡', 'ai:translated': '🌐' };
     var labels = {
-      'ai:assisted':  { vi: 'Hỗ trợ bởi AI', en: 'AI-Assisted'  },
-      'ai:product':   { vi: 'Sản phẩm AI',   en: 'AI Product'   },
-      'ai:generated': { vi: 'Tạo bởi AI',    en: 'AI-Generated' },
+      'ai:assisted':    { vi: 'Hỗ trợ bởi AI',   en: 'AI-Assisted'   },
+      'ai:contributed': { vi: 'Đóng góp bởi AI', en: 'AI-Contributed' },
+      'ai:product':     { vi: 'Sản phẩm AI',     en: 'AI Product'     },
+      'ai:generated':   { vi: 'Tạo bởi AI',      en: 'AI-Generated'   },
+      'ai:translated':  { vi: 'Dịch bởi AI',     en: 'AI-Translated'  }
     };
-    var icon = icons[aiType] || '✨';
-    var labelCfg = labels[aiType] || labels['ai:assisted'];
-    var label = (lang === 'en') ? labelCfg.en : labelCfg.vi;
-    return '<span class="ai-badge ai-badge-standard" data-ai-type="' + aiType + '" data-ai-variant="standard">' +
-      '<span class="ai-badge-icon">' + icon + '</span>' +
-      '<span class="ai-badge-label">' + label + '</span>' +
-    '</span>';
+    for (var i = 0; i < aiTypes.length; i++) {
+      var type = aiTypes[i];
+      var icon = icons[type] || '✨';
+      var labelCfg = labels[type] || labels['ai:assisted'];
+      var labelText = (lang === 'en') ? labelCfg.en : labelCfg.vi;
+      html += '<span class="ai-badge ai-badge-standard" data-ai-type="' + type + '" data-ai-variant="standard">' +
+        '<span class="ai-badge-icon">' + icon + '</span>' +
+        '<span class="ai-badge-label">' + labelText + '</span>' +
+      '</span>';
+    }
+    return html;
   }
 
   /** Tách chuỗi nhãn "A, B, C" thành mảng */
