@@ -1,12 +1,12 @@
-# ĐẶC TẢ KỸ THUẬT & THIẾT KẾ: CÂY DÒNG THỜI GIAN RẼ NHÁNH (BRANCHING TIMELINE ARCHIVE)
+# [BẢN THẢO CŨ - KHÔNG SỬ DỤNG] ĐẶC TẢ KỸ THUẬT: CÂY DÒNG THỜI GIAN RẼ NHÁNH (BRANCHING TIMELINE ARCHIVE)
 
-> **Mã tính năng**: `FEAT-BRANCHING-TIMELINE-V4`  
-> **Dự án**: Blogger Editorial Theme (Blogspot XML v3)  
-> **Phiên bản đặc tả**: `v4.0.0` (Nâng cấp và kế thừa từ `FEAT-TIMELINE-PAGE-V3`)  
-> **Trạng thái**: Bản thảo thiết kế chính thức (Official Design Specification)  
-> **Đường dẫn mục tiêu**: `/p/muc-luc.html` (hoặc `/p/archive.html`, `/p/dong-thoi-gian.html`)
-
----
+> ⚠️ **TRẠNG THÁI: KHÔNG SỬ DỤNG (DEPRECATED / ARCHIVED DRAFT)**  
+> **Lý do hủy bỏ**: Thiết kế chia 2 nhánh riêng biệt (Bài viết vs Ghi nhanh) đã được thay thế bằng thiết kế **Dòng thời gian đường tàu rẽ nhánh (Subway Metro Timeline)** hợp nhất trên một dòng thời gian với hệ thống Filter nâng cao trong ô Search.  
+> **Đặc tả chính thức mới**: Vui lòng tham khảo file [`specs/SUBWAY_TIMELINE_ARCHIVE_SPECIFICATION.md`](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/SUBWAY_TIMELINE_ARCHIVE_SPECIFICATION.md).
+>
+> ---
+> **Mã tính năng cũ**: `FEAT-BRANCHING-TIMELINE-V4-DRAFT`  
+> **Dự án**: Blogger Editorial Theme (Blogspot XML v3)
 
 ## 1. TỔNG QUAN & TRIẾT LÝ THIẾT KẾ
 
