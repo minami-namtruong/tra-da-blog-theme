@@ -499,23 +499,29 @@
 
     var html = '';
 
+    var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+
     // 1. "Tất cả" ở vị trí đầu tiên
     var isAllActive = curSelected === 'all';
-    html += '<button type="button" class="filter-tag-pill ' + (isAllActive ? 'is-active' : '') + '" data-val="all">Tất cả</button>';
+    var allRaw = 'Tất cả | All';
+    var allParsed = window.parseBilingualText ? window.parseBilingualText(allRaw, lang) : 'Tất cả';
+    html += '<button type="button" class="filter-tag-pill ' + (isAllActive ? 'is-active' : '') + '" data-val="all" data-bilingual="true" data-raw-label="' + allRaw + '">' + allParsed + '</button>';
 
     // 2. Toàn bộ regular labels / category trước
     labels.regular.forEach(function (reg) {
       var isActive = curSelected === reg.toLowerCase();
-      html += '<button type="button" class="filter-tag-pill ' + (isActive ? 'is-active' : '') + '" data-val="' + escapeAttr(reg) + '">';
-      html += escapeHtml(reg);
+      var parsedReg = window.parseBilingualText ? window.parseBilingualText(reg, lang) : reg.split('|')[0].trim();
+      html += '<button type="button" class="filter-tag-pill ' + (isActive ? 'is-active' : '') + '" data-val="' + escapeAttr(reg) + '" data-bilingual="true" data-raw-label="' + escapeAttr(reg) + '">';
+      html += escapeHtml(parsedReg);
       html += '</button>';
     });
 
     // 3. Toàn bộ feature labels (@...) sau, không icon, cùng màu chung
     labels.feature.forEach(function (feat) {
       var isActive = curSelected === feat.toLowerCase();
-      html += '<button type="button" class="filter-tag-pill ' + (isActive ? 'is-active' : '') + '" data-val="' + escapeAttr(feat) + '">';
-      html += escapeHtml(feat);
+      var parsedFeat = window.parseBilingualText ? window.parseBilingualText(feat, lang) : feat.split('|')[0].trim();
+      html += '<button type="button" class="filter-tag-pill ' + (isActive ? 'is-active' : '') + '" data-val="' + escapeAttr(feat) + '" data-bilingual="true" data-raw-label="' + escapeAttr(feat) + '">';
+      html += escapeHtml(parsedFeat);
       html += '</button>';
     });
 
@@ -899,12 +905,21 @@
       return; // Đã có cấu trúc đầy đủ
     }
 
+    var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+    var placeholderText = lang === 'en' ? 'Search articles...' : 'Tìm kiếm bài viết...';
+
+    var filterHeadingRaw = 'Lọc Theo Nhãn | Filter by Tags';
+    var filterHeadingText = window.parseBilingualText ? window.parseBilingualText(filterHeadingRaw, lang) : 'Lọc Theo Nhãn';
+
+    var resetBtnRaw = '↺ Xem tất cả | ↺ View all';
+    var resetBtnText = window.parseBilingualText ? window.parseBilingualText(resetBtnRaw, lang) : '↺ Xem tất cả';
+
     var html = [
       '<!-- Thanh Tìm Kiếm Tức Thì & Nút Bộ Lọc Nâng Cao (@) -->',
       '<div class="archive-search-wrap">',
       '  <span class="archive-search-icon" aria-hidden="true">🔍</span>',
       '  <input class="archive-search-input" id="archive-search-input" type="search"',
-      '         placeholder="Nhập từ khóa tìm tên bài, chủ đề, năm (VD: 2026, triết lý, quote)..."',
+      '         placeholder="' + placeholderText + '" data-i18n="searchPlaceholder"',
       '         autocomplete="off" aria-label="Tìm kiếm bài viết"/>',
       '  <button type="button" class="archive-search-clear" id="archive-search-clear" aria-label="Xóa tìm kiếm" style="display:none;">✕</button>',
       '  <button type="button" class="archive-filter-trigger-btn" id="archive-filter-trigger-btn" aria-label="Mở bộ lọc nâng cao" title="Bộ lọc tính năng nâng cao">',
@@ -921,7 +936,7 @@
       '    <div class="filter-popover-header">',
       '      <div class="filter-popover-title-row">',
       '        <span class="filter-popover-icon">🏷️</span>',
-      '        <h4 class="filter-popover-heading" id="archive-filter-heading">Lọc Theo Nhãn</h4>',
+      '        <h4 class="filter-popover-heading" id="archive-filter-heading" data-bilingual="true" data-raw-label="' + filterHeadingRaw + '">' + filterHeadingText + '</h4>',
       '      </div>',
       '      <button type="button" class="filter-popover-close-btn" id="archive-filter-close-btn" aria-label="Đóng bộ lọc">✕</button>',
       '    </div>',
@@ -934,7 +949,7 @@
       '',
       '    <!-- Chân trang Popover -->',
       '    <div class="filter-popover-footer">',
-      '      <button type="button" class="filter-popover-btn-reset" id="filter-popover-reset-btn">↺ Xem tất cả</button>',
+      '      <button type="button" class="filter-popover-btn-reset" id="filter-popover-reset-btn" data-bilingual="true" data-raw-label="' + resetBtnRaw + '">' + resetBtnText + '</button>',
       '    </div>',
       '  </div>',
       '</div>',
