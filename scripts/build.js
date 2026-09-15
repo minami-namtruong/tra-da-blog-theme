@@ -571,20 +571,50 @@ ${combinedCss}
                 <!-- ── SPECIAL VIEW: DEDICATED ARCHIVE / MỤC LỤC TOÀN THƯ PAGE ── -->
                 <b:if cond='data:view.isPage and (data:blog.url contains &quot;/p/muc-luc.html&quot; or data:blog.url contains &quot;/p/archive.html&quot; or data:blog.url contains &quot;/p/dong-thoi-gian.html&quot; or data:blog.pageName == &quot;Dòng Thời Gian&quot; or data:blog.pageName == &quot;Mục Lục&quot;)'>
                   <div class='editorial-archive-page' id='editorial-archive-app'>
-                    <!-- Thanh Tìm Kiếm Tức Thì -->
+                    <!-- Thanh Tìm Kiếm Tức Thì & Nút Bộ Lọc Nâng Cao (@) -->
                     <div class='archive-search-wrap'>
                       <span class='archive-search-icon' aria-hidden='true'>🔍</span>
                       <input class='archive-search-input' id='archive-search-input' type='search'
-                             placeholder='Nhập từ khóa tìm tên bài, chủ đề hoặc năm (VD: 2025, sách, thói quen)...'
+                             placeholder='Nhập từ khóa tìm tên bài, chủ đề, năm (VD: 2026, triết lý, quote)...'
                              autocomplete='off' aria-label='Tìm kiếm bài viết'/>
                       <button type='button' class='archive-search-clear' id='archive-search-clear' aria-label='Xóa tìm kiếm' style='display:none;'>✕</button>
+                      <button type='button' class='archive-filter-trigger-btn' id='archive-filter-trigger-btn' aria-label='Mở bộ lọc nâng cao' title='Bộ lọc tính năng nâng cao'>
+                        <svg class='icon-filter' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                          <polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'></polygon>
+                        </svg>
+                        <span class='filter-badge-dot' id='archive-filter-dot' style='display:none;'></span>
+                      </button>
+
+                      <!-- Backdrop & Popover / Bottom Sheet Bộ Lọc Nâng Cao -->
+                      <div class='archive-filter-backdrop' id='archive-filter-backdrop' style='display:none;'></div>
+                      <div class='archive-filter-popover' id='archive-filter-popover' style='display:none;' role='dialog' aria-modal='true' aria-labelledby='archive-filter-heading'>
+                        <div class='filter-popover-sheet-handle' aria-hidden='true'></div>
+                        <div class='filter-popover-header'>
+                          <div class='filter-popover-title-row'>
+                            <span class='filter-popover-icon'>🏷️</span>
+                            <h4 class='filter-popover-heading' id='archive-filter-heading'>Lọc Theo Nhãn</h4>
+                          </div>
+                          <button type='button' class='filter-popover-close-btn' id='archive-filter-close-btn' aria-label='Đóng bộ lọc'>✕</button>
+                        </div>
+
+                        <div class='filter-popover-body'>
+                          <div class='filter-popover-pills' id='filter-pills-list'>
+                            <!-- Dynamic Tag Pills: Tất cả, Regular Labels, Feature @ Labels -->
+                          </div>
+                        </div>
+
+                        <!-- Chân trang Popover -->
+                        <div class='filter-popover-footer'>
+                          <button type='button' class='filter-popover-btn-reset' id='filter-popover-reset-btn'>↺ Xem tất cả</button>
+                        </div>
+                      </div>
                     </div>
 
-                    <!-- Khung danh sách bài viết -->
-                    <div id='archive-app-body' class='archive-tree-container' aria-live='polite'>
+                    <!-- Khung cây Dòng Thời Gian Đường Tàu -->
+                    <div id='archive-app-body' class='subway-tree-container' aria-live='polite'>
                       <div class='archive-loading'>
                         <div class='archive-spinner'></div>
-                        <span>Đang đồng bộ danh mục bài viết...</span>
+                        <span>Đang đồng bộ tuyến đường thời gian...</span>
                       </div>
                     </div>
                   </div>

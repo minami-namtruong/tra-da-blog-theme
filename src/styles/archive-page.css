@@ -1,18 +1,20 @@
-/* ==========================================
-   ARCHIVE PAGE (MỤC LỤC TOÀN THƯ) — v3.0
-   Đặc tả: specs/TIMELINE_ARCHIVE_PAGE_SPECIFICATION.md
-   - Trang tĩnh độc lập (Dedicated Static Page) chuẩn Blogger
-   - Bố cục nhất quán với trang chủ và trang đọc bài viết
-   - Flat Post Cards + Dynamic Category Pills + Collapsible Year Accordions
-   - Hỗ trợ Dark Mode & Responsive toàn diện
-   ========================================== */
+/* ==========================================================================
+   SUBWAY METRO TIMELINE ARCHIVE — v5.0 CSS
+   Đặc tả: specs/SUBWAY_TIMELINE_ARCHIVE_SPECIFICATION.md (FEAT-SUBWAY-TIMELINE-ARCHIVE-V5)
+   - Hình tượng Bản đồ Tàu điện ngầm (Subway Metro Map)
+   - Root Node, Main Trunk Line, Year Stations, Year Sub-tracks, Post Nodes & Connectors
+   - Regular Editorial Cards + @Quote (Warm Serif Italic) + @Điểm Tin (Dashed) + @Tiêu Điểm (Gold)
+   - Popover Bộ Lọc Nâng Cao (Desktop Floating / Mobile Bottom Sheet)
+   - Hoàn toàn tương thích Dark Mode & Mobile Responsive
+   ========================================================================== */
 
 /* ── Container chính trang Mục Lục ── */
 .editorial-archive-page {
-  padding: 0 0 3rem;
+  padding: 0 0 3.5rem;
   min-height: 50vh;
 }
 
+/* Ẩn các khối cũ không còn dùng */
 .archive-breadcrumbs,
 .archive-hero-header,
 .archive-category-pills,
@@ -21,118 +23,28 @@
   display: none !important;
 }
 
-/* ── Breadcrumb ── */
-.archive-breadcrumbs {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-}
-
-.archive-breadcrumbs a {
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.archive-breadcrumbs a:hover {
-  color: var(--primary);
-}
-
-.archive-breadcrumbs .separator {
-  color: var(--text-light);
-  font-size: 0.8rem;
-}
-
-.archive-breadcrumbs .current {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-/* ── Hero Header ── */
-.archive-hero-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: var(--stroke-hairline) solid var(--border-color);
-}
-
-.archive-hero-title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 4vw, 2.85rem);
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-  margin: 0 0 0.85rem;
-}
-
-.archive-hero-title .dot {
-  color: var(--primary);
-}
-
-.archive-hero-desc {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--text-muted);
-  max-width: 720px;
-  margin: 0 0 1.25rem;
-}
-
-/* ── Stats Badges ── */
-.archive-stats-badges {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.archive-stat-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: var(--bg-surface);
-  border: var(--stroke-hairline) solid var(--border-color);
-  border-radius: var(--radius-full);
-  padding: 0.35rem 0.85rem;
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.15s ease;
-}
-
-.archive-stat-badge:hover {
-  border-color: var(--primary);
-}
-
-.archive-stat-badge strong {
-  color: var(--text-main);
-  font-weight: 700;
-}
-
-/* ── Thanh Tìm Kiếm Tức Thì (Instant Search Toolbar) ── */
+/* ── 1. Thanh Tìm Kiếm Tức Thì & Nút Bộ Lọc Nâng Cao ── */
 .archive-search-wrap {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  z-index: 20;
 }
 
 .archive-search-icon {
   position: absolute;
-  left: 1.1rem;
+  left: 1.15rem;
   font-size: 1.05rem;
   color: var(--text-muted);
   pointer-events: none;
   line-height: 1;
+  z-index: 2;
 }
 
 .archive-search-input {
   width: 100%;
-  padding: 0.85rem 2.8rem 0.85rem 2.85rem;
+  padding: 0.9rem 5.5rem 0.9rem 3rem;
   background: var(--bg-card);
   border: var(--stroke-medium) solid var(--border-color);
   border-radius: var(--radius-md);
@@ -156,7 +68,7 @@
 
 .archive-search-clear {
   position: absolute;
-  right: 0.9rem;
+  right: 3.35rem;
   top: 50%;
   transform: translateY(-50%);
   background: var(--bg-surface);
@@ -171,6 +83,7 @@
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.15s ease;
+  z-index: 2;
 }
 
 .archive-search-clear:hover {
@@ -179,326 +92,700 @@
   border-color: var(--primary);
 }
 
-/* ── Dynamic Category Filter Pills ── */
-.archive-category-pills {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.4rem;
-  margin-bottom: 1.25rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
-  -webkit-overflow-scrolling: touch;
-}
-
-.archive-category-pills::-webkit-scrollbar {
-  height: 4px;
-}
-
-.archive-category-pills::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: var(--radius-xs);
-}
-
-.archive-cat-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  background: var(--bg-card);
-  border: var(--stroke-hairline) solid var(--border-color);
-  border-radius: var(--radius-full);
-  padding: 0.38rem 0.9rem;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  white-space: nowrap;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.18s ease;
-  user-select: none;
-}
-
-.archive-cat-pill:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--bg-surface);
-}
-
-.archive-cat-pill.is-active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--text-inverse);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-}
-
-.archive-cat-pill .pill-count {
-  font-size: 0.75rem;
-  opacity: 0.85;
-}
-
-/* ── Thanh Điều Khiển Thu Gọn (Controls Row) ── */
-.archive-controls-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.4rem 0 0.85rem;
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  border-bottom: var(--stroke-hairline) dashed var(--border-color);
-  margin-bottom: 1.25rem;
-}
-
-.archive-controls-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.archive-btn-toggle {
-  background: none;
-  border: none;
-  padding: 0.2rem 0.4rem;
-  font-family: var(--font-main);
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-.archive-btn-toggle:hover {
-  color: var(--primary);
-  background: var(--bg-surface);
-}
-
-.archive-controls-divider {
-  color: var(--text-light);
-}
-
-.archive-results-info {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-
-/* ── Container Nhóm Năm (Year Groups) ── */
-.archive-tree-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.archive-year-group {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Node Năm — NO STICKY, trôi tự nhiên theo nhịp đọc */
-.archive-year-header {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem 0.25rem;
-  cursor: pointer;
-  user-select: none;
-  position: static;
-  background: transparent;
-  transition: opacity 0.15s ease;
-}
-
-.archive-year-header:hover {
-  opacity: 0.85;
-}
-
-.archive-year-title-wrap {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  flex-shrink: 0;
-}
-
-.archive-year-num {
-  font-size: 1.65rem;
-  font-weight: 800;
-  font-family: var(--font-main);
-  color: var(--text-main);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.archive-year-count {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-muted);
+/* Nút mở Popover Bộ Lọc Nâng Cao (@) */
+.archive-filter-trigger-btn {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
   background: var(--bg-surface);
   border: var(--stroke-hairline) solid var(--border-color);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  white-space: nowrap;
-}
-
-.archive-year-line {
-  flex: 1;
-  height: var(--stroke-hairline);
-  background: var(--border-color);
-  min-width: 20px;
-}
-
-.archive-year-chevron {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--bg-surface);
-  border: var(--stroke-hairline) solid var(--border-color);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition: transform 0.25s ease, background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
 }
 
-.archive-year-chevron svg {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-  transition: transform 0.25s ease;
+.archive-filter-trigger-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-card);
 }
 
-.archive-year-group.is-expanded .archive-year-chevron svg {
-  transform: rotate(180deg);
-}
-
-.archive-year-group.is-collapsed .archive-year-chevron svg {
-  transform: rotate(0deg);
-}
-
-.archive-year-header:hover .archive-year-chevron {
+.archive-filter-trigger-btn.is-active {
   background: var(--primary);
   color: var(--text-inverse);
   border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
 }
 
-/* Danh sách bài viết trong năm */
-.archive-year-posts {
-  display: flex;
+.archive-filter-trigger-btn .icon-filter {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.2s ease;
+}
+
+.archive-filter-trigger-btn:hover .icon-filter {
+  transform: rotate(15deg);
+}
+
+.filter-badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 1.5px solid var(--bg-card);
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.6);
+}
+
+.archive-filter-trigger-btn.is-active .filter-badge-dot {
+  background: #ffffff;
+  border-color: var(--primary);
+}
+
+/* ── 2. Popover & Bottom Sheet Bộ Lọc Nâng Cao ── */
+.archive-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 998;
+}
+
+.archive-filter-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 390px;
+  max-width: 92vw;
+  background: var(--bg-card);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), 0 12px 32px rgba(0, 0, 0, 0.12);
+  z-index: 999;
   flex-direction: column;
-  gap: 0.65rem;
-  padding-top: 0.75rem;
-  transition: opacity 0.2s ease;
+  overflow: hidden;
+  animation: popoverDrop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.archive-year-group.is-collapsed .archive-year-posts {
+@keyframes popoverDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.filter-popover-sheet-handle {
   display: none;
 }
 
-.archive-year-group.is-expanded .archive-year-posts {
-  display: flex;
-}
-
-/* ── Thẻ Bài Viết Dạng Phẳng (Flat Horizontal Post Cards) ── */
-.archive-post-card {
+.filter-popover-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
   padding: 0.95rem 1.25rem;
-  background: var(--bg-card);
-  border: var(--stroke-hairline) solid var(--border-color);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.18s ease,
-              box-shadow 0.18s ease;
+  border-bottom: var(--stroke-hairline) solid var(--border-color);
+  background: var(--bg-surface);
 }
 
-.archive-post-card:hover {
-  transform: translateY(-2px) translateX(3px);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
-}
-
-/* Cột 1: Chuyên mục */
-.archive-post-cat-pill {
-  flex-shrink: 0;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--primary);
-  background: var(--primary-light);
-  border: var(--stroke-hairline) solid transparent;
-  padding: 0.24rem 0.7rem;
-  border-radius: var(--radius-full);
-  white-space: nowrap;
-  transition: all 0.18s ease;
-  line-height: 1.3;
-}
-
-.archive-post-card:hover .archive-post-cat-pill {
-  background: var(--primary);
-  color: var(--text-inverse);
-}
-
-/* Cột 2: Tiêu đề bài viết */
-.archive-post-card-title {
-  flex: 1;
-  min-width: 0;
-  font-family: var(--font-main);
-  font-size: 0.975rem;
-  font-weight: 600;
-  color: var(--text-main);
-  line-height: 1.45;
-  transition: color 0.15s ease;
-}
-
-.archive-post-card:hover .archive-post-card-title {
-  color: var(--primary);
-}
-
-/* Cột 3: Ngày tháng + Mũi tên */
-.archive-post-meta {
+.filter-popover-title-row {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  flex-shrink: 0;
-  font-size: 0.82rem;
+  gap: 0.5rem;
+}
+
+.filter-popover-icon {
+  font-size: 1.1rem;
+}
+
+.filter-popover-heading {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.filter-popover-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-xs);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.filter-popover-close-btn:hover {
+  color: var(--text-main);
+  background: var(--bg-card);
+}
+
+.filter-popover-body {
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.filter-popover-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.filter-popover-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
 }
 
-.archive-post-date {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-variant-numeric: tabular-nums;
+.filter-popover-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
-.archive-post-arrow {
+.filter-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.16s ease;
+  user-select: none;
+}
+
+.filter-tag-pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-card);
+}
+
+.filter-tag-pill.is-active {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.filter-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-surface);
+  border-top: var(--stroke-hairline) solid var(--border-color);
+}
+
+.filter-popover-btn-reset {
+  background: none;
+  border: 1px dashed var(--border-color);
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.32rem 0.85rem;
+  border-radius: var(--radius-full);
+  transition: all 0.15s ease;
+}
+
+.filter-popover-btn-reset:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--bg-card);
+}
+
+/* ── 3. CÂY DÒNG THỜI GIAN ĐƯỜNG TÀU (SUBWAY METRO TREE) ── */
+.subway-tree-container {
+  position: relative;
+}
+
+.subway-tree {
+  position: relative;
+  padding: 0.25rem 0 2rem;
+}
+
+/* 3.1. Root Node (Node Gốc Trên Đỉnh) - Nối trực tiếp vào đường timeline */
+.subway-root-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  padding-left: 8px;
+  z-index: 3;
+}
+
+.subway-root-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.95rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--text-main);
+  user-select: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 4;
+}
+
+.subway-root-badge:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+}
+
+.subway-root-sparkle {
+  color: var(--primary);
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.subway-root-title {
+  letter-spacing: -0.01em;
+}
+
+/* 3.2. Cột ray chính (Main Track) */
+.subway-main-track {
+  position: relative;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+/* Đường ray chính chạy thẳng đứng từ Root Node qua các năm */
+.subway-main-line {
+  position: absolute;
+  top: -12px; /* Chạm trực tiếp vào đáy của Root Node Badge */
+  bottom: 20px;
+  left: 23px; /* Căn thẳng hàng với tâm Node Trạm 14px */
+  width: 2px;
+  background: var(--border-color);
+  border-radius: 1px;
+  z-index: 1;
+  transition: background 0.2s ease;
+}
+
+.subway-year-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+  z-index: 2;
+}
+
+/* 3.3. Hàng Trạm Năm (Station Row) */
+.subway-station-row {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+}
+
+/* Node Tròn Trạm Năm (Nhỏ gọn, mỏng manh thanh lịch) */
+.subway-station-node {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 17px; /* Căn tâm chính xác với line chính 23px + 1px */
+  flex-shrink: 0;
+  z-index: 3;
+  box-shadow: 0 0 0 2.5px var(--bg-body);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.subway-station-core {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: block;
+}
+
+.subway-station-row:hover .subway-station-node {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 2.5px var(--bg-body), 0 0 10px rgba(37, 99, 235, 0.45);
+}
+
+/* Đường ray rẽ nhánh ngang sang Lá Năm */
+.subway-branch-connector {
+  width: 24px;
+  height: 1.5px;
+  background: var(--border-color);
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.subway-station-row:hover .subway-branch-connector {
+  background: var(--primary);
+}
+
+/* 3.4. Lá Năm (Year Leaf Button - Gọn nhẹ, mỏng thanh, font nhỏ) */
+.subway-year-leaf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.26rem 0.65rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-main);
+  transition: all 0.18s ease;
+  text-align: left;
+}
+
+.subway-year-leaf:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.subway-year-num {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.subway-year-chevron {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-left: 0.1rem;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease;
+}
+
+.subway-year-chevron svg {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.subway-year-group.is-expanded .subway-year-chevron svg {
+  transform: rotate(180deg);
+}
+
+.subway-year-group.is-expanded .subway-year-chevron {
+  color: var(--primary);
+}
+
+.subway-year-group.is-collapsed .subway-year-chevron svg {
+  transform: rotate(0deg);
+}
+
+.subway-year-leaf:hover .subway-year-chevron {
+  color: var(--primary);
+}
+
+/* 3.5. Nhánh Năm (Year Branch Container) */
+.subway-year-branch {
+  position: relative;
+  padding-left: 68px; /* Thụt lề cân đối */
+  margin-top: 0.6rem;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.subway-year-group.is-collapsed .subway-year-branch {
+  display: none;
+}
+
+/* Đường ray năm (Year Sub-track line) thẳng đứng nét đứt thanh mảnh */
+.subway-year-line {
+  position: absolute;
+  top: 0;
+  bottom: 16px;
+  left: 68px;
+  width: 1.5px;
+  border-left: 1.5px dashed var(--border-color);
+  z-index: 1;
+}
+
+.subway-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-left: 16px;
+}
+
+/* 3.6. Phần tử bài viết (Post Item) */
+.subway-post-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Node Tròn Ga Bài Viết */
+.subway-post-node {
+  position: absolute;
+  left: -16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: 1.5px solid var(--bg-body);
+  transform: translateX(-3.5px);
+  z-index: 2;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Gạch nối ngang sang Lá Bài Viết */
+.subway-post-connector {
+  position: absolute;
+  left: -16px;
+  width: 16px;
+  height: 1.5px;
+  background: var(--border-color);
+  z-index: 1;
+  transition: background-color 0.2s ease;
+}
+
+.subway-post-item:hover .subway-post-node {
+  background: var(--primary);
+  transform: translateX(-3.5px) scale(1.35);
+}
+
+.subway-post-item:hover .subway-post-connector {
+  background: var(--primary);
+}
+
+/* ── 4. THẺ LÁ BÀI VIẾT (POST LEAF CARDS - THANH THOÁT, ĐỒNG BỘ CỘT) ── */
+.subway-post-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 0.72rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.16s ease,
+              box-shadow 0.16s ease,
+              background-color 0.16s ease;
+}
+
+.subway-post-card:hover {
+  transform: translateY(-1.5px) translateX(3px);
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Huy hiệu chuyên mục: CỐ ĐỊNH KÍCH THƯỚC ĐỂ MỌI TIÊU ĐỀ THẲNG HÀNG */
+.subway-cat-pill {
+  width: 135px;
+  min-width: 135px;
+  max-width: 135px;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--bg-surface);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+  text-align: center;
+  font-size: 0.735rem;
+  font-weight: 500;
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px solid transparent;
+  padding: 0.22rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.16s ease;
+  line-height: 1.3;
 }
 
-.archive-post-card:hover .archive-post-arrow {
+.subway-post-card:hover .subway-cat-pill {
   background: var(--primary);
   color: var(--text-inverse);
-  transform: translateX(3px);
 }
 
-/* ── Trạng Thái Rỗng / Loading (Empty / Loading States) ── */
+/* Tiêu đề bài viết: Thẳng hàng chuẩn mực, font weight nhẹ nhàng 450-500 */
+.subway-post-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 450;
+  color: var(--text-main);
+  line-height: 1.5;
+  word-break: break-word;
+  transition: color 0.15s ease;
+}
+
+.subway-post-card:hover .subway-post-title {
+  color: var(--primary);
+}
+
+/* Metadata ngày & mũi tên (Không dùng icon lịch cồng kềnh) */
+.subway-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.subway-post-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+.subway-date-icon {
+  color: var(--text-muted);
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+.subway-post-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  transition: transform 0.16s ease, color 0.16s ease;
+}
+
+.subway-post-card:hover .subway-post-arrow {
+  color: var(--primary);
+  transform: translateX(2.5px);
+}
+
+/* ── 4.1. Định dạng Thẻ @Quote (Trích Dẫn - Mảnh mai, trang nhã) ── */
+.subway-card--quote {
+  background: rgba(37, 99, 235, 0.02);
+  border-color: rgba(37, 99, 235, 0.16);
+}
+
+.subway-card--quote:hover {
+  background: rgba(37, 99, 235, 0.045);
+  border-color: var(--primary);
+}
+
+.subway-pill--quote {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.subway-post-card:hover .subway-pill--quote {
+  background: #d97706;
+  color: #ffffff;
+}
+
+.subway-title--quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.94rem;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+/* ── 4.2. Định dạng Thẻ @Điểm tin (Bản Tin Vắn - Nét Đứt Nhẹ Nhàng) ── */
+.subway-card--bulletin {
+  border-style: dashed;
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.015);
+}
+
+.subway-card--bulletin:hover {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.subway-pill--bulletin {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px dashed rgba(239, 68, 68, 0.3);
+}
+
+.subway-post-card:hover .subway-pill--bulletin {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* ── 4.3. Định dạng Thẻ @Tiêu điểm (Nổi Bật - Viền Hổ Phách Mảnh) ── */
+.subway-card--spotlight {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.02);
+  box-shadow: 0 1px 6px rgba(245, 158, 11, 0.06);
+}
+
+.subway-card--spotlight:hover {
+  border-color: #d97706;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.12);
+  background: rgba(245, 158, 11, 0.045);
+}
+
+.subway-pill--spotlight {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  border: none;
+}
+
+.subway-post-card:hover .subway-pill--spotlight {
+  background: #b45309;
+  color: #ffffff;
+}
+
+/* ── 5. Trạng thái rỗng / Loading ── */
 .archive-empty-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
   background: var(--bg-card);
   border: var(--stroke-hairline) dashed var(--border-color);
   border-radius: var(--radius-md);
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .archive-empty-icon {
@@ -528,103 +815,300 @@
   color: var(--text-inverse);
   border: none;
   border-radius: var(--radius-full);
-  padding: 0.5rem 1.25rem;
+  padding: 0.55rem 1.35rem;
+  font-family: var(--font-main);
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .archive-btn-reset:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
 }
 
 .archive-loading {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 3.5rem 1rem;
   color: var(--text-muted);
   font-size: 0.95rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .archive-spinner {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border: var(--stroke-thick) solid var(--border-color);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: archiveSpin 0.75s linear infinite;
+  animation: subwaySpin 0.75s linear infinite;
 }
 
-@keyframes archiveSpin {
+@keyframes subwaySpin {
   to { transform: rotate(360deg); }
 }
 
-/* ── Dark Mode Adaptations ── */
-[data-theme="dark"] .archive-stat-badge {
-  background: rgba(255, 255, 255, 0.04);
+/* ── 6. DARK MODE ADAPTATIONS ── */
+[data-theme="dark"] .archive-search-input {
+  background: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-[data-theme="dark"] .archive-post-card {
+[data-theme="dark"] .archive-search-input:focus {
+  border-color: var(--primary);
+}
+
+[data-theme="dark"] .archive-filter-trigger-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .archive-filter-trigger-btn.is-active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .archive-filter-popover {
+  background: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .filter-popover-header,
+[data-theme="dark"] .filter-popover-footer {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .filter-tag-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .subway-root-badge {
+  background: var(--bg-card);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .subway-main-line {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .subway-station-node {
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px var(--bg-body);
+}
+
+[data-theme="dark"] .subway-station-row:hover .subway-station-node {
+  box-shadow: 0 0 0 3px var(--bg-body), 0 0 16px rgba(96, 165, 250, 0.6);
+}
+
+[data-theme="dark"] .subway-branch-connector,
+[data-theme="dark"] .subway-year-line,
+[data-theme="dark"] .subway-post-connector {
+  border-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .subway-post-node {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--bg-body);
+}
+
+[data-theme="dark"] .subway-year-leaf {
+  background: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .subway-year-count,
+[data-theme="dark"] .subway-year-chevron,
+[data-theme="dark"] .subway-post-arrow {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .subway-post-card {
   background: var(--bg-card);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme="dark"] .archive-post-card:hover {
+[data-theme="dark"] .subway-post-card:hover {
   border-color: var(--primary);
   background: rgba(255, 255, 255, 0.03);
 }
 
-[data-theme="dark"] .archive-post-cat-pill {
-  background: rgba(37, 99, 235, 0.2);
-  color: #60a5fa;
+[data-theme="dark"] .subway-cat-pill {
+  background: rgba(37, 99, 235, 0.22);
+  color: #93c5fd;
 }
 
-[data-theme="dark"] .archive-year-count,
-[data-theme="dark"] .archive-year-chevron,
-[data-theme="dark"] .archive-post-arrow {
-  background: rgba(255, 255, 255, 0.05);
+[data-theme="dark"] .subway-card--quote {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.25);
 }
 
-/* ── Mobile Responsive (≤ 768px) ── */
+[data-theme="dark"] .subway-pill--quote {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+[data-theme="dark"] .subway-card--bulletin {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+[data-theme="dark"] .subway-pill--bulletin {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+[data-theme="dark"] .subway-card--spotlight {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 2px 14px rgba(245, 158, 11, 0.15);
+}
+
+/* ── 7. MOBILE RESPONSIVE (≤ 768px) ── */
 @media (max-width: 768px) {
   .editorial-archive-page {
-    padding: 1rem 0 2.5rem;
+    padding: 0.5rem 0 2.5rem;
   }
 
-  .archive-hero-title {
-    font-size: 1.85rem;
-  }
-
-  .archive-post-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.65rem;
-    padding: 0.9rem 1rem;
-  }
-
-  .archive-post-card-title {
-    font-size: 0.925rem;
-    width: 100%;
-  }
-
-  .archive-post-meta {
-    width: 100%;
-    justify-content: space-between;
-    padding-top: 0.35rem;
-    border-top: var(--stroke-hairline) dashed var(--border-color);
-    margin-top: 0.15rem;
+  .archive-search-wrap {
+    margin-bottom: 1.5rem;
   }
 
   .archive-search-input {
     font-size: 0.88rem;
-    padding: 0.75rem 2.5rem 0.75rem 2.6rem;
+    padding: 0.75rem 4.8rem 0.75rem 2.6rem;
   }
 
-  .archive-year-num {
-    font-size: 1.4rem;
+  .archive-search-clear {
+    right: 2.85rem;
+    width: 24px;
+    height: 24px;
+  }
+
+  .archive-filter-trigger-btn {
+    width: 34px;
+    height: 34px;
+    right: 0.5rem;
+  }
+
+  /* Popover chuyển thành Bottom Sheet trượt từ đáy màn hình */
+  .archive-filter-popover {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 80vh;
+    animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .filter-popover-sheet-handle {
+    display: block;
+    width: 42px;
+    height: 4.5px;
+    background: var(--border-color);
+    border-radius: 3px;
+    margin: 0.65rem auto 0.25rem;
+  }
+
+  /* Căn lùi đường ray trên di động */
+  .subway-main-line {
+    left: 17px;
+  }
+
+  .subway-root-node {
+    padding-left: 2px;
+  }
+
+  .subway-root-badge {
+    padding: 0.45rem 1rem;
+    font-size: 0.88rem;
+  }
+
+  .subway-station-node {
+    margin-left: 9.5px; /* Căn tâm line 17px */
+    width: 16px;
+    height: 16px;
+    border-width: 3px;
+  }
+
+  .subway-branch-connector {
+    width: 16px;
+  }
+
+  .subway-year-leaf {
+    padding: 0.28rem 0.7rem;
+  }
+
+  .subway-year-num {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .subway-year-branch {
+    padding-left: 50px;
+  }
+
+  .subway-year-line {
+    left: 50px;
+  }
+
+  .subway-post-list {
+    padding-left: 14px;
+    gap: 0.65rem;
+  }
+
+  .subway-post-node {
+    left: -14px;
+    transform: translateX(-3.5px);
+  }
+
+  .subway-post-connector {
+    left: -14px;
+    width: 14px;
+  }
+
+  /* Thẻ bài viết trên mobile: Tự động xếp chồng mềm mại */
+  .subway-post-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .subway-post-title {
+    font-size: 0.925rem;
+    width: 100%;
+  }
+
+  .subway-title--quote {
+    font-size: 0.96rem;
+  }
+
+  .subway-post-meta {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 0.4rem;
+    border-top: var(--stroke-hairline) dashed var(--border-color);
+    margin-top: 0.15rem;
   }
 }
