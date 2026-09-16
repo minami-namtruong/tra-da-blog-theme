@@ -469,7 +469,7 @@ ${combinedCss}
         <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
              Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
         <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='HTML10' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm Tuần'>
+          <b:widget id='HTML10' type='HTML' version='2' title='🌟 Tiêu Điểm | Spotlight'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>
                 <div class='special-posts-widget'
@@ -482,7 +482,7 @@ ${combinedCss}
                   <b:if cond='data:title'>
                     <b:attr name='data-title' expr:value='data:title'/>
                   <b:else/>
-                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                    <b:attr name='data-title' value='🌟 Tiêu Điểm | Spotlight'/>
                   </b:if>
                   <b:if cond='data:content'>
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
@@ -795,34 +795,51 @@ ${combinedCss}
                     </div>
 
                     <!-- Author Bio Box -->
-                    <div class='author-bio-box'>
-                      <b:if cond='data:post.author.authorPhoto.url'>
-                        <img class='author-bio-avatar'
-                             expr:src='data:post.author.authorPhoto.url'
-                             alt='Author' width='80' height='80'/>
-                      <b:else/>
-                        <img class='author-bio-avatar'
-                             alt='Author' width='80' height='80'/>
-                        <script>
-                          (function(){
-                            var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
-                            if (u) {
-                              var el = document.currentScript ? document.currentScript.previousElementSibling : null;
-                              if (el) el.src = u;
-                            }
-                          })();
-                        </script>
-                      </b:if>
-                      <div class='author-bio-content'>
-                        <div class='author-bio-label' data-i18n='aboutAuthor'>Về tác giả</div>
-                        <h3 class='author-bio-name'><data:post.author.name/></h3>
-                        <p class='author-bio-text' data-i18n='authorBioDesc'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống chân thực và những công cụ tư duy giúp tôi sống có ý nghĩa hơn mỗi ngày. Nếu bài viết này có ích với bạn, hãy mua tôi một ly cà phê nhé!</p>
-                        <div class='author-bio-actions'>
-                          <a class='btn-coffee' href='https://www.buymeacoffee.com/' target='_blank' rel='noopener noreferrer' data-i18n='buyMeACoffee'>☕ Mời tôi ly cà phê</a>
-                          <a class='btn-subscribe' href='#newsletter' data-i18n='subscribeNewsletter'>💌 Đăng ký bản tin</a>
-                        </div>
-                      </div>
+                    <div class='author-bio-box' id='post-author-bio-container'>
+                      <!-- Javascript will build this from HTML2 and HTML99 -->
                     </div>
+                    <script>
+                    //<![CDATA[
+                      document.addEventListener("DOMContentLoaded", function() {
+                        var container = document.getElementById('post-author-bio-container');
+                        var sidebarAbout = document.getElementById('HTML2');
+                        var globalConfig = document.getElementById('HTML88');
+                        
+                        if (container && sidebarAbout) {
+                          // Extract avatar URL
+                          var avatarUrl = "";
+                          var sidebarImg = sidebarAbout.querySelector('img.sidebar-about-avatar');
+                          if (sidebarImg) avatarUrl = sidebarImg.src;
+
+                          // Extract texts
+                          var viText = "";
+                          var enText = "";
+                          var viEl = sidebarAbout.querySelector('.lang-vi');
+                          var enEl = sidebarAbout.querySelector('.lang-en');
+                          if (viEl) viText = viEl.innerHTML;
+                          if (enEl) enText = enEl.innerHTML;
+
+                          // Extract actions from hidden config
+                          var actionsHtml = "";
+                          if (globalConfig) {
+                            var actionsEl = globalConfig.querySelector('.post-footer-actions-config');
+                            if (actionsEl) actionsHtml = actionsEl.innerHTML;
+                          }
+
+                          // Build HTML
+                          var html = "<img class='author-bio-avatar' alt='Author' width='80' height='80' src='" + avatarUrl + "'/>" +
+                                     "<div class='author-bio-content'>" +
+                                     "<div class='author-bio-label' data-bilingual='true'>Về tác giả | About author</div>" +
+                                     "<h3 class='author-bio-name'><data:post.author.name/></h3>" +
+                                     (viText ? "<div class='author-bio-text lang-vi'>" + viText + "</div>" : "") +
+                                     (enText ? "<div class='author-bio-text lang-en'>" + enText + "</div>" : "") +
+                                     (actionsHtml ? "<div class='author-bio-actions'>" + actionsHtml + "</div>" : "") +
+                                     "</div>";
+                          container.innerHTML = html;
+                        }
+                      });
+                    //]]>
+                    </script>
 
                     <!-- Next / Prev Post Navigation -->
                     <div class='post-nav-container'>
@@ -968,6 +985,43 @@ ${combinedCss}
       <aside class='sidebar' id='sidebar' aria-label='Cột bên'>
         <b:section id='sidebar-section' name='Cột Bên (Sidebar)' showaddelement='yes'>
 
+          <!-- Widget: About Me -->
+          <b:widget id='HTML2' type='HTML' version='2' title='👤 Về Tác Giả | About Author'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả | About Author&quot;'/></h3>
+                <b:if cond='data:content'>
+                  <div class='sidebar-about-custom-content'><data:content/></div>
+                <b:else/>
+                  <img class='sidebar-about-avatar' alt='Avatar tác giả' width='64' height='64' src=''/>
+                  <script>
+                    (function(){
+                      var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                      if (u) {
+                        var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                        if (el) el.src = u;
+                      }
+                    })();
+                  </script>
+                  
+                  <div class='sidebar-about-text lang-vi'>
+                    Chào bạn, đây là Trà Đá Blog — một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
+                  </div>
+                  <div class='sidebar-about-text lang-en'>
+                    Welcome to Trà Đá Blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
+                  </div>
+
+                  <div class='sidebar-socials'>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
+                  </div>
+
+                  </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
           <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
           <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
           <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
@@ -1041,7 +1095,7 @@ ${combinedCss}
 
           <!-- Widget: Bài Viết Tiêu Điểm — Sidebar (Pattern: spotlight, nhỏ gọn) -->
           <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
-          <b:widget id='HTML17' type='HTML' version='2' title='🌟 Bài Viết Tiêu Điểm'>
+          <b:widget id='HTML17' type='HTML' version='2' title='🌟 Tiêu Điểm | Spotlight'>
             <b:includable id='main'>
               <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
                 <div class='special-posts-widget'
@@ -1053,42 +1107,12 @@ ${combinedCss}
                   <b:if cond='data:title'>
                     <b:attr name='data-title' expr:value='data:title'/>
                   <b:else/>
-                    <b:attr name='data-title' value='🌟 Bài Viết Tiêu Điểm'/>
+                    <b:attr name='data-title' value='🌟 Tiêu Điểm | Spotlight'/>
                   </b:if>
                   <b:if cond='data:content'>
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-            </b:includable>
-          </b:widget>
-
-          <!-- Widget: About Me -->
-          <b:widget id='HTML2' type='HTML' version='2' title='👤 Về Tác Giả (Sidebar)'>
-            <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả&quot;'/></h3>
-                <b:if cond='data:content'>
-                  <div class='sidebar-about-custom-content'><data:content/></div>
-                <b:else/>
-                  <img class='sidebar-about-avatar'
-                       alt='Avatar tác giả' width='64' height='64'/>
-                  <script>
-                    (function(){
-                      var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
-                      if (u) {
-                        var el = document.currentScript ? document.currentScript.previousElementSibling : null;
-                        if (el) el.src = u;
-                      }
-                    })();
-                  </script>
-                  <p class='sidebar-about-text'>Tôi viết về hành trình khám phá bản thân, trải nghiệm sống và những công cụ hữu ích giúp sống tốt hơn mỗi ngày.</p>
-                  <div class='sidebar-socials'>
-                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
-                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
-                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
-                  </div>
-                </b:if>
-              </div>
             </b:includable>
           </b:widget>
 
@@ -1160,7 +1184,45 @@ ${combinedCss}
   <!-- ==========================================
        FOOTER — 3-TIER MODULAR (FEAT-MODULAR-FOOTER-V3)
        ========================================== -->
-  <footer class='site-footer' id='site-footer'>
+  
+  <!-- ==========================================
+       HIDDEN CONFIG SECTION (For Post Widgets)
+       ========================================== -->
+  
+
+    <!-- ==========================================
+       HIDDEN CONFIG SECTION
+       ========================================== -->
+  <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN'>
+    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting'>
+      <b:widget-settings>
+        <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
+
+<!-- 1. Tác Giả dưới bài viết (Các nút bấm) -->
+<div class="post-footer-actions-config">
+  <!-- Nút Buy Me A Coffee (Đổi display:none thành display:inline-flex để bật) -->
+  <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer" style="display:none;">
+    <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
+  </a>
+
+  <!-- Nút Đăng ký Bản tin (Đổi display:none để ẩn) -->
+  <a class="btn-subscribe" href="#newsletter" style="display:inline-flex;">
+    <span data-bilingual="true">💌 Đăng ký bản tin | 💌 Newsletter</span>
+  </a>
+</div>
+]]></b:widget-setting>
+      </b:widget-settings>
+      <b:includable id='main'>
+        <div class='widget-content' id='hidden-global-config'>
+          <b:if cond='data:content'>
+            <data:content/>
+          </b:if>
+        </div>
+      </b:includable>
+    </b:widget>
+  </b:section>
+
+<footer class='site-footer' id='site-footer'>
 
     <!-- ═══════════════════════════════════════════════════
          TẦNG 1: NỘI DUNG & TƯƠNG TÁC CHÍNH

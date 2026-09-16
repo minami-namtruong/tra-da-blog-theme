@@ -364,7 +364,7 @@
       return `
         <a href="${escapeHtml(post.url)}" class="sp-ranked-item"${aiType ? ` data-ai-type="${aiType}"` : ''}>
           <span class="sp-rank-number">${rankNum}</span>
-          ${thumb ? `<div class="sp-ranked-thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="52" height="52"/></div>` : ''}
+          ${opts.showThumb ? `<div class="sp-ranked-thumb ${!thumb ? 'sp-no-thumb' : ''}">${thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy"/>` : ''}</div>` : ''}
           <div class="sp-ranked-content">
             <h4 class="sp-ranked-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h4>
             <span class="sp-ranked-date">${escapeHtml(post.dateFormatted)}${aiHtml}</span>
@@ -381,7 +381,7 @@
     const post   = posts[0];
     const lang   = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const thumb  = (opts.showThumb && post.thumbnail)
-      ? optimizeThumbnail(post.thumbnail, 's600-c')
+      ? optimizeThumbnail(post.thumbnail, 'w1200')
       : '';
     const badge  = extractNormalCategory(post.labels || []);
     const aiType = extractAITypes(post.labels || []);
@@ -393,7 +393,7 @@
 
     return `
       <a href="${escapeHtml(post.url)}" class="sp-spotlight-card"${aiType ? ` data-ai-type="${aiType}"` : ''}>
-        ${thumb ? `<div class="sp-spotlight-cover"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/></div>` : ''}
+        ${opts.showThumb ? `<div class="sp-spotlight-cover ${!thumb ? 'sp-no-thumb' : ''}">${thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="600" height="338"/>` : ''}</div>` : ''}
         <div class="sp-spotlight-info">
           <div class="sp-spotlight-meta">
             ${badge ? `<span class="sp-spotlight-badge" data-bilingual="true" data-raw-label="${escapeHtml(badge)}">${escapeHtml(parsedBadge)}</span>` : ''}
@@ -617,7 +617,11 @@
 
       // Ảnh thumbnail
       let thumbnail = '';
-      if (entry.media$thumbnail) {
+      if (entry.content && entry.content.$t) {
+        const imgMatch = entry.content.$t.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (imgMatch) thumbnail = imgMatch[1];
+      }
+      if (!thumbnail && entry.media$thumbnail) {
         thumbnail = entry.media$thumbnail.url || '';
       }
 
@@ -745,8 +749,8 @@
   function optimizeThumbnail(url, size) {
     if (!url) return '';
     return url
-      .replace(/\/s[0-9]+(-c)?\//, '/' + size + '/')
-      .replace(/\/w[0-9]+-h[0-9]+(-c)?\//, '/' + size + '/');
+      .replace(/\/(s[0-9]+|w[0-9]+-h[0-9]+)(-c)?\//, '/' + size + '/')
+      .replace(/=(s[0-9]+|w[0-9]+-h[0-9]+)(-c)?([a-zA-Z0-9-]*)$/i, '=' + size);
   }
 
   /** Format ngày ISO thành DD/MM/YYYY */

@@ -471,3 +471,29 @@ Khi bạn muốn giới thiệu một cuốn sách hoặc sản phẩm tâm đ�
 | **Tạo menu song ngữ** | Nhập tên liên kết dạng `Tên Việt \| English Name`. |
 | **Đổi nhãn cho widget** | Mở widget trong Bố cục, gõ tên nhãn vào ô `Content` (VD: `Sách hay`). |
 | **Thêm widget mới** | Bấm `+ Thêm tiện ích` ➔ Chọn `HTML/JavaScript` ➔ Ô Content gõ `pattern: digest \| label: TênNhãn`. |
+
+---
+
+## CHƯƠNG 9: CẤU HÌNH TÁC GIẢ & COMPONENT ẨN
+
+Theme cung cấp một cơ chế vô cùng thông minh giúp bạn đồng bộ và cấu hình các thành phần ẩn (ví dụ như phần thông tin tác giả và các nút bấm dưới đáy bài viết). Mọi thứ đều được thiết kế theo nguyên tắc "Cấu hình 1 nơi, hiển thị nhiều nơi".
+
+### 9.1. Widget 👤 Về Tác Giả (Sidebar)
+* **Vị trí:** Nằm trong mục Bố cục (Layout) -> Cột Bên (Sidebar).
+* **Mục đích:** Đây là trung tâm quản lý (Nguồn phát) toàn bộ nội dung Giới thiệu tác giả.
+* **Cách hoạt động:** Khi bạn nhập các thẻ HTML chứa lời giới thiệu song ngữ (như `<div class="lang-vi">` và `<div class="lang-en">`) vào widget này, đoạn chữ sẽ hiển thị trên Sidebar, ĐỒNG THỜI tự động được Javascript nhân bản xuống mục Tác giả dưới cùng của mỗi bài viết! Bạn không bao giờ phải sửa lời giới thiệu ở 2 nơi.
+
+### 9.2. Widget ⚙️ Cấu hình component ẩn | Hide Component Setting
+* **Vị trí:** Nằm trong mục Bố cục (Layout) -> Phần cuối cùng dưới đáy trang (⚙️ CẤU HÌNH COMPONENT ẨN).
+* **Mục đích:** Quản lý cấu hình của các nút bấm hoặc các component không nằm trong một khu vực Widget cụ thể nào (VD: Nút Mua Cà Phê, Nút Đăng Ký Bản Tin dưới mỗi bài viết).
+* **Cách tuỳ biến:**
+   Khi bạn mở Widget này lên, nội dung HTML cấu hình đã được tạo sẵn bên trong ô Content.
+   * **Bật/Tắt một nút bấm:** Tìm đến nút bạn muốn điều chỉnh. Nếu muốn ẩn, sửa mã thành `style="display:none;"`. Nếu muốn bật lên, sửa thành `style="display:inline-flex;"`.
+   * **Đổi link:** Tìm thuộc tính `href="..."` và điền liên kết (Link Buymeacoffee, Facebook, Form bản tin, v.v.) của bạn vào.
+
+**Ví dụ một mẫu thiết lập bật nút Cà phê:**
+```html
+<a class="btn-coffee" href="https://www.buymeacoffee.com/your-id" target="_blank" rel="noopener noreferrer" style="display:inline-flex;">
+  <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
+</a>
+```

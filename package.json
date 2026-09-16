@@ -4,7 +4,7 @@
   "description": "A modern, minimalist, AdSense-ready, and bilingual Blogger XML Theme",
   "main": "scripts/build.js",
   "scripts": {
-    "dev": "npx live-server src --port=3000 --open=preview.html --entry-file=preview.html",
+    "dev": "npx live-server src --port=3001 --open=preview.html --entry-file=preview.html",
     "build": "node scripts/build.js"
   },
   "keywords": [

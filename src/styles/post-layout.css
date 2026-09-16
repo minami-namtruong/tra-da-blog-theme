@@ -1226,3 +1226,6 @@ body.view-not-homepage #main-above-feed {
   }
 }
 
+
+/* Hidden Config Section */
+#hidden-config-section { display: none !important; }
