@@ -147,8 +147,8 @@
     const sort           = container.dataset.sort     || 'latest';
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
-    const showSnippet    = container.dataset.showSnippet   !== 'false';
-    const viewAllText    = container.dataset.viewAllText   || 'Xem tất cả »';
+    const rawViewAll     = container.dataset.viewAllText;
+    const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
     const widgetTitle    = container.dataset.title         || '';
 
     // Thêm class pattern cho container queries
@@ -362,7 +362,7 @@
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header">
         <h3 class="sp-widget-title" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</h3>
-        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>
+        ${parsedViewAll ? `<a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>` : ''}
       </div>` : '';
 
     return `

@@ -180,8 +180,12 @@
           }
         });
       }
-      if (!activeFound && allPill) {
-        allPill.classList.add('active');
+      if (allPill) {
+        if (!activeFound && (currentPath === '/' || currentPath === '' || currentPath.indexOf('/search') === -1)) {
+          allPill.classList.add('active');
+        } else if (activeFound || currentPath.indexOf('/search') !== -1) {
+          if (!activeFound) allPill.classList.remove('active');
+        }
       }
     }
 

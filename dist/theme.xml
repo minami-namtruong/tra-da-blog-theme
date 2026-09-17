@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T09:07:17.130Z -->
+<!-- Compiled at: 2026-09-17T09:22:20.006Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6312,6 +6312,24 @@ body.view-not-homepage #main-above-feed {
                       <span>✕</span> <span>Xem tất cả bài viết | View all posts</span>
                     </a>
                   </div>
+                <b:elseif cond='data:view.isSearch and data:view.search.query'/>
+                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;'>
+                    <div>
+                      <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Kết quả tìm kiếm cho | Search results for:</span>
+                      <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);'><data:view.search.query/></h2>
+                    </div>
+                    <a href='/' style='font-size: 0.8rem; color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;' data-bilingual='true'>
+                      <span>✕</span> <span>Xem tất cả bài viết | View all posts</span>
+                    </a>
+                  </div>
+                </b:if>
+                <b:if cond='data:posts.empty'>
+                  <div class='feed-empty-state' style='padding: 3.5rem 1rem; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 2rem;'>
+                    <span style='font-size: 2.5rem; display: block; margin-bottom: 0.75rem;'>📭</span>
+                    <h3 style='font-size: 1.15rem; color: var(--text-main); margin: 0 0 0.5rem;' data-bilingual='true'>Không tìm thấy bài viết nào | No posts found</h3>
+                    <p style='font-size: 0.85rem; margin: 0 0 1.25rem;' data-bilingual='true'>Chưa có bài viết nào thuộc danh mục này hoặc bài viết đã được di chuyển. | There are no posts in this category or they have been moved.</p>
+                    <a href='/' style='display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; color: var(--primary); background: var(--primary-light); border-radius: var(--radius-full); text-decoration: none;' data-bilingual='true'>← Về trang chủ | Back to home</a>
+                  </div>
                 </b:if>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
@@ -6319,7 +6337,7 @@ body.view-not-homepage #main-above-feed {
                       <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;@&quot;)' var='featureLabels'>
                         <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
                           <b:with value='not data:featureLabels.empty and data:displayLabels.empty and data:seriesLabels.empty' var='isExclusiveFeaturePost'>
-                            <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
+                            <b:if cond='data:view.isSearch or not data:isExclusiveFeaturePost'>
                               <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
                                 <div class='post-card-body'>
                                   <div>
@@ -7658,8 +7676,12 @@ body.view-not-homepage #main-above-feed {
           }
         });
       }
-      if (!activeFound && allPill) {
-        allPill.classList.add('active');
+      if (allPill) {
+        if (!activeFound && (currentPath === '/' || currentPath === '' || currentPath.indexOf('/search') === -1)) {
+          allPill.classList.add('active');
+        } else if (activeFound || currentPath.indexOf('/search') !== -1) {
+          if (!activeFound) allPill.classList.remove('active');
+        }
       }
     }
 
@@ -10314,8 +10336,8 @@ body.view-not-homepage #main-above-feed {
     const sort           = container.dataset.sort     || 'latest';
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
-    const showSnippet    = container.dataset.showSnippet   !== 'false';
-    const viewAllText    = container.dataset.viewAllText   || 'Xem tất cả »';
+    const rawViewAll     = container.dataset.viewAllText;
+    const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
     const widgetTitle    = container.dataset.title         || '';
 
     // Thêm class pattern cho container queries
@@ -10529,7 +10551,7 @@ body.view-not-homepage #main-above-feed {
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header">
         <h3 class="sp-widget-title" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</h3>
-        <a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>
+        ${parsedViewAll ? `<a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>` : ''}
       </div>` : '';
 
     return `
@@ -11850,7 +11872,7 @@ body.view-not-homepage #main-above-feed {
           return;
         }
 
-        // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
+        // Đảm bảo huy hiệu chuyên mục hiển thị sạch sẽ
         var badge = card.querySelector('.post-badge');
         if (badge) {
           var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
@@ -11859,6 +11881,25 @@ body.view-not-homepage #main-above-feed {
             badge.setAttribute('data-bilingual', 'true');
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
+            badge.style.display = '';
+          } else if (!isHomepage) {
+            // Khi xem trên trang nhãn chuyên đề (VD: /search/label/@Tiêu điểm), hiển thị nhãn tính năng nếu có
+            var firstFeature = null;
+            rawLabels.forEach(function(lblEl) {
+              var n = lblEl.textContent.trim();
+              if (n.startsWith('@') && !firstFeature) {
+                firstFeature = { name: n, url: lblEl.getAttribute('data-url') };
+              }
+            });
+            if (firstFeature) {
+              badge.setAttribute('data-raw-label', firstFeature.name);
+              badge.setAttribute('data-bilingual', 'true');
+              badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstFeature.name, currentLang) : firstFeature.name.split('|')[0].trim();
+              if (firstFeature.url) badge.href = firstFeature.url;
+              badge.style.display = '';
+            } else {
+              badge.style.display = 'none';
+            }
           } else {
             badge.style.display = 'none';
           }

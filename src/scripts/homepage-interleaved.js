@@ -58,7 +58,7 @@
           return;
         }
 
-        // Đảm bảo huy hiệu chuyên mục chỉ hiển thị nhãn thường sạch sẽ (không lộ @ hay ai:)
+        // Đảm bảo huy hiệu chuyên mục hiển thị sạch sẽ
         var badge = card.querySelector('.post-badge');
         if (badge) {
           var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
@@ -67,6 +67,25 @@
             badge.setAttribute('data-bilingual', 'true');
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
+            badge.style.display = '';
+          } else if (!isHomepage) {
+            // Khi xem trên trang nhãn chuyên đề (VD: /search/label/@Tiêu điểm), hiển thị nhãn tính năng nếu có
+            var firstFeature = null;
+            rawLabels.forEach(function(lblEl) {
+              var n = lblEl.textContent.trim();
+              if (n.startsWith('@') && !firstFeature) {
+                firstFeature = { name: n, url: lblEl.getAttribute('data-url') };
+              }
+            });
+            if (firstFeature) {
+              badge.setAttribute('data-raw-label', firstFeature.name);
+              badge.setAttribute('data-bilingual', 'true');
+              badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstFeature.name, currentLang) : firstFeature.name.split('|')[0].trim();
+              if (firstFeature.url) badge.href = firstFeature.url;
+              badge.style.display = '';
+            } else {
+              badge.style.display = 'none';
+            }
           } else {
             badge.style.display = 'none';
           }
