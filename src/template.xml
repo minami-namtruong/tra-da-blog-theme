@@ -620,7 +620,7 @@
              Tác giả kéo thả widget trực tiếp trong Blogger Layout.
              JavaScript sẽ tự động chèn vào sau bài viết số 3 (hoặc số N) -->
         <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
-          <b:widget id='HTML11' type='HTML' version='2' title='☕ Trích Dẫn Chiêm Nghiệm (Xen Kẽ)'>
+          <b:widget id='HTML11' type='HTML' version='2' title='☕ Góc Suy Ngẫm'>
             <b:includable id='main'>
               <div class='special-posts-widget'
                    id='widget-infeed-quote'
@@ -632,7 +632,7 @@
                 <b:if cond='data:title'>
                   <b:attr name='data-title' expr:value='data:title'/>
                 <b:else/>
-                  <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                  <b:attr name='data-title' value='☕ Góc Suy Ngẫm | ☕ Contemplation Corner'/>
                 </b:if>
                 <b:if cond='data:content'>
                   <div class='sp-raw-user-content' style='display:none;'><data:content/></div>

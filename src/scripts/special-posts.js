@@ -197,11 +197,11 @@
       // NẾU LÀ KIỂU TRÍCH DẪN (QUOTE) MÀ VẪN CHƯA CÓ BÀI NÀO:
       if (pattern === 'quote' && (!posts || posts.length === 0)) {
         posts = [{
-          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế.",
+          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế. | Simplicity is not the end of shallowness, but the pinnacle of sophistication.",
           url: "#",
           dateFormatted: formatDate(new Date().toISOString()),
           author: "Trà Đá Triết Lý",
-          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn."
+          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn. | Happiness is not about having much, but knowing what is enough in a world that demands more."
         }];
       }
 
@@ -232,6 +232,23 @@
 
     } catch (err) {
       console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu, thử fallback về bài mới nhất:', err);
+      if (pattern === 'quote') {
+        const quoteFallback = [{
+          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế. | Simplicity is not the end of shallowness, but the pinnacle of sophistication.",
+          url: "#",
+          dateFormatted: formatDate(new Date().toISOString()),
+          author: "Trà Đá Triết Lý",
+          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn. | Happiness is not about having much, but knowing what is enough in a world that demands more."
+        }];
+        container.innerHTML = buildWidgetShell(
+          widgetTitle,
+          viewAllText,
+          rawLabels,
+          pattern,
+          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true })
+        );
+        return;
+      }
       try {
         const fallbackPosts = await fetchLatestPosts(limit);
         if (fallbackPosts && fallbackPosts.length > 0) {
@@ -408,15 +425,113 @@
   }
 
   /* ── 3. QUOTE ───────────────────────────────────────────────── */
+  function extractFirstSentences(text, maxChars = 150) {
+    if (!text) return '';
+    text = text.replace(/\s+/g, ' ').trim();
+    if (text.length <= maxChars) return text;
+    const match = text.slice(0, maxChars + 35).match(/[.!?](\s|$)/);
+    if (match && match.index && match.index >= 40) {
+      return text.slice(0, match.index + 1).trim();
+    }
+    const cut = text.lastIndexOf(' ', maxChars);
+    return text.substring(0, cut === -1 ? maxChars : cut).trim() + '...';
+  }
+
+  function extractQuoteData(post, opts) {
+    const rawContent = post.rawContent || '';
+
+    // Nếu không có nội dung HTML raw (hoặc bài mock/fallback)
+    if (!rawContent) {
+      return {
+        quoteText: post.title || '',
+        quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : ''
+      };
+    }
+
+    try {
+      // ── CẤP 1: Kiểm tra thẻ Jump Break (<a name='more'></a> hoặc <!--more-->) ──
+      const jumpBreakRegex = /(?:<a[^>]+name=['"]more['"][^>]*>.*?<\/a>|<a[^>]+name=['"]more['"][^>]*\/?>|<!--more-->)/i;
+      if (jumpBreakRegex.test(rawContent)) {
+        const parts = rawContent.split(jumpBreakRegex);
+        const beforeHtml = parts[0] || '';
+        const afterHtml = parts.slice(1).join('') || '';
+
+        const docBefore = new DOMParser().parseFromString(beforeHtml, 'text/html');
+        const docAfter = new DOMParser().parseFromString(afterHtml, 'text/html');
+
+        // Bóc tách câu quote (trước jumpbreak), hỗ trợ cấu trúc song ngữ
+        let quoteText = '';
+        const viBefore = docBefore.querySelector('[data-lang="vi"], .lang-vi');
+        const enBefore = docBefore.querySelector('[data-lang="en"], .lang-en');
+        if (viBefore && enBefore) {
+          quoteText = `${viBefore.textContent.trim()} | ${enBefore.textContent.trim()}`;
+        } else {
+          quoteText = (docBefore.body.textContent || '').replace(/\s+/g, ' ').trim();
+        }
+
+        // Bóc tách lời giải thích (sau jumpbreak), hỗ trợ cấu trúc song ngữ
+        let quoteSnippet = '';
+        if (opts.showSnippet) {
+          const viAfter = docAfter.querySelector('[data-lang="vi"], .lang-vi');
+          const enAfter = docAfter.querySelector('[data-lang="en"], .lang-en');
+          if (viAfter && enAfter) {
+            quoteSnippet = `${extractFirstSentences(viAfter.textContent)} | ${extractFirstSentences(enAfter.textContent)}`;
+          } else {
+            const rawAfterText = (docAfter.body.textContent || '').replace(/\s+/g, ' ').trim();
+            quoteSnippet = extractFirstSentences(rawAfterText, 150);
+          }
+        }
+
+        if (quoteText) {
+          return { quoteText, quoteSnippet };
+        }
+      }
+
+      // ── CẤP 2: Không có Jump Break -> Phân tách theo đoạn văn (Paragraphs) ──
+      const doc = new DOMParser().parseFromString(rawContent, 'text/html');
+      const rawBlocks = Array.from(doc.body.querySelectorAll('p, blockquote, div'))
+        .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+        .filter(t => t.length > 0);
+
+      // Lọc bỏ đoạn văn bị trùng lặp do cấu trúc lồng nhau
+      const uniqueBlocks = [];
+      for (const b of rawBlocks) {
+        if (!uniqueBlocks.some(u => u === b || u.includes(b))) {
+          uniqueBlocks.push(b);
+        }
+      }
+
+      if (uniqueBlocks.length >= 2) {
+        return {
+          quoteText: uniqueBlocks[0],
+          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[1], 150) : ''
+        };
+      }
+
+      // ── CẤP 3: Chỉ có 1 đoạn văn ngắn hoặc không phân tách -> Tiêu đề làm Quote, đoạn làm giải thích ──
+      if (uniqueBlocks.length === 1 && post.title && post.title.trim() !== uniqueBlocks[0]) {
+        return {
+          quoteText: post.title,
+          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[0], 150) : ''
+        };
+      }
+    } catch (_) {
+      // Fallback an toàn nếu lỗi DOM parsing
+    }
+
+    return {
+      quoteText: post.title || '',
+      quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : ''
+    };
+  }
+
   function renderQuotePattern(posts, opts) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
-      // Lấy tiêu đề bài làm câu trích dẫn, snippet làm lời bình
-      const quoteText = post.title;
-      const snippet   = (opts.showSnippet && post.snippet) ? post.snippet : '';
+      const { quoteText, quoteSnippet } = extractQuoteData(post, opts);
       
       const parsedQuote = window.parseBilingualText ? window.parseBilingualText(quoteText, lang) : quoteText.split('|')[0].trim();
-      const parsedSnippet = (snippet && window.parseBilingualText) ? window.parseBilingualText(snippet, lang) : snippet.split('|')[0].trim();
+      const parsedSnippet = (quoteSnippet && window.parseBilingualText) ? window.parseBilingualText(quoteSnippet, lang) : (quoteSnippet || '').split('|')[0].trim();
 
       return `
         <a href="${escapeHtml(post.url)}" class="sp-quote-card">
@@ -424,7 +539,7 @@
           <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(quoteText)}">${escapeHtml(parsedQuote)}</p>
           <span class="sp-quote-mark-close">\u201D</span>
           <div class="sp-quote-author">\u2014 ${escapeHtml(post.dateFormatted)}</div>
-          ${snippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
+          ${quoteSnippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(quoteSnippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
         </a>`;
     }).join('');
@@ -640,7 +755,9 @@
       // Labels
       const labels = (entry.category || []).map(c => c.term || '');
 
-      return { url, title, thumbnail, snippet, published, dateFormatted, labels };
+      const rawContent = entry.content ? (entry.content.$t || '') : '';
+
+      return { url, title, thumbnail, snippet, published, dateFormatted, labels, rawContent };
     } catch {
       return null;
     }
