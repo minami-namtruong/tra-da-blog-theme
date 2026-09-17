@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T09:31:56.936Z -->
+<!-- Compiled at: 2026-09-17T09:32:19.145Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -10205,7 +10205,7 @@ body.view-not-homepage #main-above-feed {
   'use strict';
 
   /* ─── Constants ─────────────────────────────────────────────── */
-  const CACHE_PREFIX = 'editorial_sp_';
+  const CACHE_PREFIX = 'editorial_sp_v3_';
   const CACHE_TTL    = 5 * 60 * 1000; // 5 phút
 
   /* ─── Pattern → Renderer map (Pluggable Strategy) ───────────── */

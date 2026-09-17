@@ -16,7 +16,7 @@
   'use strict';
 
   /* ─── Constants ─────────────────────────────────────────────── */
-  const CACHE_PREFIX = 'editorial_sp_';
+  const CACHE_PREFIX = 'editorial_sp_v3_';
   const CACHE_TTL    = 5 * 60 * 1000; // 5 phút
 
   /* ─── Pattern → Renderer map (Pluggable Strategy) ───────────── */
