@@ -1,0 +1,33 @@
+<!-- Search Modal -->
+  <div class='search-modal-overlay' id='search-modal-overlay' role='dialog' aria-modal='true' aria-label='Tìm kiếm'>
+    <div class='search-modal-box'>
+      <div class='search-modal-header'>
+        <span class='search-modal-title'>🔍 Tìm kiếm bài viết</span>
+        <button class='search-close-btn' id='search-close-btn' aria-label='Đóng tìm kiếm'>✕</button>
+      </div>
+      <form class='search-input-wrap' id='search-form' role='search'>
+        <input class='search-input' id='search-input' type='search' placeholder='Nhập từ khóa tìm kiếm...' autocomplete='off'/>
+        <button class='search-submit-btn' type='submit'>Tìm</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
+       ═══════════════════════════════════════════════════ -->
+  <div class='newsletter-modal-overlay' id='newsletter-modal' aria-hidden='true' style='display:none;'>
+    <div class='newsletter-modal-backdrop' id='newsletter-modal-backdrop'></div>
+    <div class='newsletter-modal-card' role='dialog' aria-modal='true' aria-labelledby='newsletter-modal-title'>
+      <button class='newsletter-modal-close' id='newsletter-modal-close' type='button' aria-label='Đóng'>✕</button>
+      <div class='newsletter-modal-icon'>💌</div>
+      <h3 class='newsletter-modal-title' id='newsletter-modal-title' data-i18n='newsletterTitle'>Nhận bài viết mới</h3>
+      <p class='newsletter-modal-desc' data-i18n='newsletterSubDesc'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+      <form class='newsletter-modal-form' id='newsletter-modal-form' onsubmit='return false;'>
+        <input class='newsletter-modal-input' id='newsletter-modal-email' type='email' placeholder='Nhập email của bạn...' aria-label='Email' required='required'/>
+        <button class='newsletter-modal-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
+      </form>
+      <div class='newsletter-modal-footer'>
+        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
+      </div>
+    </div>
+  </div>

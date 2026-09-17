@@ -1,0 +1,103 @@
+<!-- Nav Drawer Backdrop -->
+  <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'></div>
+
+  <!-- Mobile Navigation Drawer (auto-synced from LinkList1) -->
+  <nav class='nav-drawer' id='nav-drawer' aria-label='Menu điều hướng mobile'>
+    <div class='nav-drawer-header'>
+      <span class='brand-logo'><data:blog.title/><span class='dot'>.</span></span>
+      <button class='nav-drawer-close' id='nav-drawer-close' aria-label='Đóng menu'>✕</button>
+    </div>
+    <ul class='nav-drawer-menu' id='nav-drawer-menu'>
+      <!-- Auto-populated from Desktop Menu by mobile-nav.js -->
+    </ul>
+  </nav>
+
+  <!-- ==========================================
+       STICKY HEADER
+       ========================================== -->
+  <header class='site-header' id='site-header'>
+    <div class='site-wrapper'>
+      <div class='header-inner'>
+
+        <!-- Brand Logo (Configurable via Layout > Header1: Text or Image) -->
+        <b:section class='brand-logo-section' id='header-logo-section' maxwidgets='1' name='Tiêu Đề &amp; Logo Blog' showaddelement='no'>
+          <b:widget id='Header1' locked='true' title='Tiêu Đề &amp; Logo Blog' type='Header' version='2'>
+            <b:widget-settings>
+              <b:widget-setting name='displayUrl'/>
+              <b:widget-setting name='displayHeight'>0</b:widget-setting>
+              <b:widget-setting name='sectionWidth'>-1</b:widget-setting>
+              <b:widget-setting name='useImage'>false</b:widget-setting>
+              <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
+              <b:widget-setting name='imagePlacement'>REPLACE</b:widget-setting>
+              <b:widget-setting name='displayWidth'>0</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <div class='brand-logo'>
+                <a expr:href='data:blog.homepageUrl' expr:title='data:title ? data:title : data:blog.title'>
+                  <b:if cond='data:image'>
+                    <img class='brand-logo-img' expr:alt='data:title ? data:title : data:blog.title' expr:src='data:image'/>
+                  <b:else/>
+                    <b:if cond='data:title'>
+                      <data:title/><span class='dot'>.</span>
+                    <b:else/>
+                      <data:blog.title/><span class='dot'>.</span>
+                    </b:if>
+                  </b:if>
+                </a>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- Desktop Navigation (Configurable via Layout > LinkList1) -->
+        <b:section class='nav-menu-section' id='nav-menu-section' maxwidgets='1' name='Menu Điều Hướng Chính (Header)' showaddelement='yes'>
+          <b:widget id='LinkList1' type='LinkList' version='2' title='🧭 Menu Điều Hướng Chính'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>NONE</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <nav class='nav-menu-wrapper' id='nav-menu-wrapper' aria-label='Menu chính'>
+                <ul class='nav-menu' id='nav-desktop-menu'>
+                  <b:if cond='data:links and not data:links.empty'>
+                    <b:loop values='data:links' var='link'>
+                      <li>
+                        <a expr:href='data:link.target' data-bilingual='true'><data:link.name/></a>
+                      </li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a class='active' expr:href='data:blog.homepageUrl' id='nav-home-btn' data-bilingual='true'>Trang Chủ | Home</a></li>
+                    <li><a expr:href='data:blog.homepageUrl + "p/muc-luc.html"' id='nav-timeline-btn' data-bilingual='true'>Dòng Thời Gian | Timeline</a></li>
+                  </b:if>
+                </ul>
+              </nav>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- Header Actions -->
+        <div class='header-actions'>
+          <!-- Search -->
+          <button class='btn-icon' id='search-open-btn' aria-label='Tìm kiếm' title='Tìm kiếm'>🔍</button>
+          <!-- Dark Mode Toggle -->
+          <button class='btn-icon' id='theme-toggle-btn' onclick='toggleTheme()' aria-label='Đổi giao diện Sáng/Tối' title='Đổi giao diện'>🌙</button>
+          <!-- Multi-language Switcher -->
+          <div class='lang-dropdown-wrapper'>
+            <button class='lang-dropdown-toggle' id='lang-toggle-btn' aria-haspopup='true' aria-expanded='false' onclick='document.getElementById(&quot;lang-dropdown-menu&quot;).classList.toggle(&quot;show&quot;)'>
+              <span class='lang-flag' id='current-lang-flag'>🇻🇳</span> <span class='lang-text' id='current-lang-text'>VI</span> <span class='dropdown-arrow'>▼</span>
+            </button>
+            <ul class='lang-dropdown-menu' id='lang-dropdown-menu'>
+              <li><button class='lang-option' onclick='setLanguage(&quot;vi&quot;)'><span class='lang-flag'>🇻🇳</span> Tiếng Việt</button></li>
+              <li><button class='lang-option' onclick='setLanguage(&quot;en&quot;)'><span class='lang-flag'>🇬🇧</span> English</button></li>
+            </ul>
+          </div>
+          <!-- Hamburger (mobile) -->
+          <button class='hamburger-btn' id='hamburger-btn' aria-label='Mở menu' aria-expanded='false'>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>

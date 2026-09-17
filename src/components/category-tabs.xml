@@ -1,0 +1,25 @@
+<!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
+    <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
+      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
+        <b:widget-settings>
+          <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
+          <b:widget-setting name='display'>LIST</b:widget-setting>
+          <b:widget-setting name='selectedLabelsList'/>
+          <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'>
+          <nav class='category-tabs-bar' id='category-tabs-bar' aria-label='Lọc theo chủ đề'>
+            <a class='tab-pill active' expr:href='data:blog.homepageUrl' data-bilingual='true'>✦ Tất cả | All</a>
+            <b:if cond='data:labels and not data:labels.empty'>
+              <b:loop values='data:labels' var='label'>
+                <b:if cond='not (data:label.name contains &quot;@&quot; or data:label.name contains &quot;ai:&quot; or data:label.name contains &quot;AI-&quot; or data:label.name contains &quot;series:&quot; or data:label.name contains &quot;Series:&quot;)'>
+                  <a class='tab-pill' expr:href='data:label.url' expr:data-label='data:label.name' data-bilingual='true'>
+                    <data:label.name/>
+                  </a>
+                </b:if>
+              </b:loop>
+            </b:if>
+          </nav>
+        </b:includable>
+      </b:widget>
+    </b:section>

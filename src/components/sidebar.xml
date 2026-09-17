@@ -1,0 +1,198 @@
+<!-- ==========================================
+           SIDEBAR (30%)
+           ========================================== -->
+      <aside class='sidebar' id='sidebar' aria-label='Cột bên'>
+        <b:section id='sidebar-section' name='Cột Bên (Sidebar)' showaddelement='yes'>
+
+          <!-- Widget: About Me -->
+          <b:widget id='HTML2' type='HTML' version='2' title='👤 Về Tác Giả | About Author'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả | About Author&quot;'/></h3>
+                <b:if cond='data:content'>
+                  <div class='sidebar-about-custom-content'><data:content/></div>
+                <b:else/>
+                  <img class='sidebar-about-avatar' alt='Avatar tác giả' width='64' height='64' src=''/>
+                  <script>
+                    (function(){
+                      var u = window.__PROFILE_AVATAR || (function(){ try { return localStorage.getItem('cached_author_avatar'); }catch(e){ return null; } })();
+                      if (u) {
+                        var el = document.currentScript ? document.currentScript.previousElementSibling : null;
+                        if (el) el.src = u;
+                      }
+                    })();
+                  </script>
+                  
+                  <div class='sidebar-about-text lang-vi'>
+                    Chào bạn, đây là Trà Đá Blog — một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
+                  </div>
+                  <div class='sidebar-about-text lang-en'>
+                    Welcome to Trà Đá Blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
+                  </div>
+
+                  <div class='sidebar-socials'>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='Facebook'>f</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='X'>𝕏</a>
+                    <a class='social-icon-link' href='#' target='_blank' rel='noopener' aria-label='LinkedIn'>in</a>
+                  </div>
+
+                  </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
+          <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
+          <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
+            <b:includable id='main'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
+                <div class='special-posts-widget'
+                     id='widget-bai-viet-noi-bat'
+                     data-pattern='ranked'
+                     data-labels='@Nổi bật'
+                     data-sort='latest'
+                     data-limit='5'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🔥 Bài Viết Nổi Bật'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Chiêm Nghiệm Hôm Nay (Pattern: quote) -->
+          <!-- Bốc ngẫu nhiên 1 câu trích dẫn từ nhãn @Quote mỗi lần tải trang -->
+          <b:widget id='HTML15' type='HTML' version='2' title='☕ Chiêm Nghiệm Hôm Nay'>
+            <b:includable id='main'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
+                <div class='special-posts-widget'
+                     id='widget-chiem-nghiem'
+                     data-pattern='quote'
+                     data-labels='@Quote'
+                     data-sort='random'
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='☕ Chiêm Nghiệm Hôm Nay'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Điểm Tin Mỗi Ngày (Pattern: digest) -->
+          <!-- Lấy bài mới nhất từ nhãn @Điểm tin -->
+          <b:widget id='HTML16' type='HTML' version='2' title='⚡ Điểm Tin Mỗi Ngày'>
+            <b:includable id='main'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
+                <div class='special-posts-widget'
+                     id='widget-diem-tin'
+                     data-pattern='digest'
+                     data-labels='@Điểm tin'
+                     data-sort='latest'
+                     data-limit='4'
+                     data-view-all-text='Xem tất cả »'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='⚡ Điểm Tin Mỗi Ngày'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Bài Viết Tiêu Điểm — Sidebar (Pattern: spotlight, nhỏ gọn) -->
+          <!-- 1 bài tiêu điểm thu nhỏ, phù hợp sidebar -->
+          <b:widget id='HTML17' type='HTML' version='2' title='🌟 Tiêu Điểm | Spotlight'>
+            <b:includable id='main'>
+              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
+                <div class='special-posts-widget'
+                     id='widget-tieu-diem'
+                     data-pattern='spotlight'
+                     data-labels='@Tiêu điểm'
+                     data-sort='latest'
+                     data-limit='1'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🌟 Tiêu Điểm | Spotlight'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Popular Posts -->
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
+                <b:if cond='data:posts and not data:posts.empty'>
+                  <ul class='popular-posts-list'>
+                    <b:loop values='data:posts' var='ppPost' index='ppIdx'>
+                      <li>
+                        <a class='popular-post-item' expr:href='data:ppPost.url'>
+                          <span class='popular-post-num'><b:if cond='data:ppIdx &lt; 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
+                          <b:if cond='data:ppPost.featuredImage'>
+                            <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
+                                 expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
+                          </b:if>
+                          <div class='popular-post-info'>
+                            <div class='popular-post-title' data-bilingual='true' expr:data-raw-label='data:ppPost.title'><data:ppPost.title/></div>
+                            <div class='popular-post-date'>📅 <data:ppPost.date/></div>
+                          </div>
+                        </a>
+                      </li>
+                    </b:loop>
+                  </ul>
+                <b:else/>
+                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: Newsletter -->
+          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin (Sidebar)'>
+            <b:includable id='main'>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;📨 Nhận Bản Tin&quot;'/></h3>
+                <b:if cond='data:content'>
+                  <div class='sidebar-newsletter-custom'><data:content/></div>
+                <b:else/>
+                  <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+                  <div class='sidebar-newsletter-form'>
+                    <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
+                    <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
+                  </div>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
+          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng) -->
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)'>
+            <b:includable id='main'>
+              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
+                <b:if cond='data:content'>
+                  <data:content/>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
+        </b:section>
+      </aside>

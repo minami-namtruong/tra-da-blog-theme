@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-16T17:10:32.235Z -->
+<!-- Compiled at: 2026-09-17T06:48:59.559Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -5998,6 +5998,27 @@ body.view-not-homepage #main-above-feed {
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
+       ═══════════════════════════════════════════════════ -->
+  <div class='newsletter-modal-overlay' id='newsletter-modal' aria-hidden='true' style='display:none;'>
+    <div class='newsletter-modal-backdrop' id='newsletter-modal-backdrop'></div>
+    <div class='newsletter-modal-card' role='dialog' aria-modal='true' aria-labelledby='newsletter-modal-title'>
+      <button class='newsletter-modal-close' id='newsletter-modal-close' type='button' aria-label='Đóng'>✕</button>
+      <div class='newsletter-modal-icon'>💌</div>
+      <h3 class='newsletter-modal-title' id='newsletter-modal-title' data-i18n='newsletterTitle'>Nhận bài viết mới</h3>
+      <p class='newsletter-modal-desc' data-i18n='newsletterSubDesc'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+      <form class='newsletter-modal-form' id='newsletter-modal-form' onsubmit='return false;'>
+        <input class='newsletter-modal-input' id='newsletter-modal-email' type='email' placeholder='Nhập email của bạn...' aria-label='Email' required='required'/>
+        <button class='newsletter-modal-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
+      </form>
+      <div class='newsletter-modal-footer'>
+        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Nav Drawer Backdrop -->
   <div class='nav-drawer-backdrop' id='nav-drawer-backdrop'></div>
 
@@ -6102,10 +6123,11 @@ body.view-not-homepage #main-above-feed {
     </div>
   </header>
 
+
   <!-- ==========================================
        MAIN SITE WRAPPER
        ========================================== -->
-  <div class='site-wrapper'>
+  <div class="site-wrapper">
 
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
     <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='4' showaddelement='yes'>
@@ -6186,6 +6208,7 @@ body.view-not-homepage #main-above-feed {
       </b:widget>
     </b:section>
 
+
     <!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
       <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
@@ -6211,6 +6234,7 @@ body.view-not-homepage #main-above-feed {
         </b:includable>
       </b:widget>
     </b:section>
+
 
     <!-- ==========================================
          MAIN LAYOUT GRID (Posts + Sidebar)
@@ -6932,6 +6956,7 @@ body.view-not-homepage #main-above-feed {
         </b:section>
       </aside>
 
+
     </div><!-- /.layout-grid -->
   </div><!-- /.site-wrapper -->
 
@@ -7178,30 +7203,11 @@ body.view-not-homepage #main-above-feed {
 
   </footer>
 
-  <!-- ═══════════════════════════════════════════════════
-       NEWSLETTER SUBSCRIPTION MODAL (GLOBAL POPUP)
-       ═══════════════════════════════════════════════════ -->
-  <div class='newsletter-modal-overlay' id='newsletter-modal' aria-hidden='true' style='display:none;'>
-    <div class='newsletter-modal-backdrop' id='newsletter-modal-backdrop'></div>
-    <div class='newsletter-modal-card' role='dialog' aria-modal='true' aria-labelledby='newsletter-modal-title'>
-      <button class='newsletter-modal-close' id='newsletter-modal-close' type='button' aria-label='Đóng'>✕</button>
-      <div class='newsletter-modal-icon'>💌</div>
-      <h3 class='newsletter-modal-title' id='newsletter-modal-title' data-i18n='newsletterTitle'>Nhận bài viết mới</h3>
-      <p class='newsletter-modal-desc' data-i18n='newsletterSubDesc'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
-      <form class='newsletter-modal-form' id='newsletter-modal-form' onsubmit='return false;'>
-        <input class='newsletter-modal-input' id='newsletter-modal-email' type='email' placeholder='Nhập email của bạn...' aria-label='Email' required='required'/>
-        <button class='newsletter-modal-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
-      </form>
-      <div class='newsletter-modal-footer'>
-        <span>🔒 Cam kết bảo mật. Hủy đăng ký bất kỳ lúc nào chỉ với 1 click.</span>
-      </div>
-    </div>
-  </div>
 
   <!-- Body-end Scripts -->
   <script>
   //<![CDATA[
-/* ==========================================
+  /* ==========================================
    IN-POST & THEME BILINGUAL SWITCHER (UNIFIED ORCHESTRATOR)
    - Switches VI / EN content blocks
    - Parses "VI | EN" syntax in menus, widgets
