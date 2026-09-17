@@ -363,24 +363,7 @@
 }
 
 .sp-quote-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(37, 99, 235, 0.08);
-  color: var(--primary);
-  margin-bottom: 0.85rem;
-}
-[data-theme="dark"] .sp-quote-icon {
-  background: rgba(96, 165, 250, 0.12);
-  color: #60a5fa;
-}
-.sp-quote-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+  display: none !important;
 }
 
 .sp-quote-mark-open,
@@ -390,22 +373,45 @@
 
 .sp-quote-text {
   font-family: var(--font-serif);
-  font-size: 1.05rem;
+  font-size: 1.12rem;
   font-style: italic;
-  line-height: 1.75;
+  line-height: 1.7;
   color: var(--text-main);
   margin: 0;
   padding: 0;
+  position: relative;
+}
+
+.sp-quote-text::before {
+  content: "“";
+  font-family: var(--font-serif);
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-right: 0.2rem;
+  line-height: 0;
+  vertical-align: -0.06em;
+}
+
+.sp-quote-text::after {
+  content: "”";
+  font-family: var(--font-serif);
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-left: 0.2rem;
+  line-height: 0;
+  vertical-align: -0.16em;
 }
 
 .sp-quote-author {
   text-align: right;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-muted);
-  margin-top: 0.75rem;
+  margin-top: 0.65rem;
   font-style: normal;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .sp-quote-divider {

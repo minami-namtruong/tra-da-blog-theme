@@ -575,25 +575,24 @@
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
       const { quoteText, quoteSnippet, quoteAuthor } = extractQuoteData(post, opts);
-      
-      const parsedQuote = window.parseBilingualText ? window.parseBilingualText(quoteText, lang) : quoteText.split('|')[0].trim();
+
+      // Làm sạch dấu ngoặc kép thừa ở 2 đầu nếu có để cặp dấu CSS ::before/::after ôm trọn
+      const cleanQuoteText = quoteText.split('|').map(s => s.trim().replace(/^[“"«\s]+|[”"»\s]+$/g, '').trim()).join(' | ');
+      const rawParsedQuote = window.parseBilingualText ? window.parseBilingualText(cleanQuoteText, lang) : cleanQuoteText.split('|')[0].trim();
+      const parsedQuote = rawParsedQuote.replace(/^[“"«\s]+|[”"»\s]+$/g, '').trim();
+
       const parsedSnippet = (quoteSnippet && window.parseBilingualText) ? window.parseBilingualText(quoteSnippet, lang) : (quoteSnippet || '').split('|')[0].trim();
 
       let authorDisplay = '';
       if (quoteAuthor) {
-        const parsedAuthorName = window.parseBilingualText ? window.parseBilingualText(quoteAuthor, lang) : quoteAuthor.split('|')[0].trim();
-        authorDisplay = post.dateFormatted ? `${parsedAuthorName} \u2022 ${post.dateFormatted}` : parsedAuthorName;
-      } else {
-        authorDisplay = post.dateFormatted || '';
+        authorDisplay = window.parseBilingualText ? window.parseBilingualText(quoteAuthor, lang) : quoteAuthor.split('|')[0].trim();
+        authorDisplay = authorDisplay.replace(/^[—–~-\s]+/, '').trim();
       }
 
       return `
         <a href="${escapeHtml(post.url)}" class="sp-quote-card">
-          <div class="sp-quote-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-          </div>
-          <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(quoteText)}">${escapeHtml(parsedQuote)}</p>
-          <div class="sp-quote-author">\u2014 ${escapeHtml(authorDisplay)}</div>
+          <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(cleanQuoteText)}">${escapeHtml(parsedQuote)}</p>
+          ${authorDisplay ? `<div class="sp-quote-author" data-bilingual="true" data-raw-label="${escapeHtml(quoteAuthor)}">\u2014 ${escapeHtml(authorDisplay)}</div>` : ''}
           ${quoteSnippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(quoteSnippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
         </a>`;
