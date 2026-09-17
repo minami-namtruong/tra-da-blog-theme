@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T08:32:57.671Z -->
+<!-- Compiled at: 2026-09-17T09:07:17.130Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -5393,12 +5393,17 @@ body.view-not-homepage #main-above-feed {
 .sp-quote-text {
   font-family: var(--font-serif);
   font-size: 1.12rem;
-  font-style: italic;
+  font-style: italic !important;
   line-height: 1.7;
   color: var(--text-main);
   margin: 0;
   padding: 0;
   position: relative;
+  white-space: pre-line;
+}
+
+.sp-quote-text * {
+  font-style: italic !important;
 }
 
 .sp-quote-text::before {
@@ -6297,13 +6302,24 @@ body.view-not-homepage #main-above-feed {
 
               <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
               <b:if cond='data:view.isMultipleItems'>
+                <b:if cond='data:view.isLabelSearch'>
+                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;'>
+                    <div>
+                      <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Chuyên mục / Nhãn | Category / Label:</span>
+                      <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true'><data:view.search.label/></h2>
+                    </div>
+                    <a href='/' style='font-size: 0.8rem; color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;' data-bilingual='true'>
+                      <span>✕</span> <span>Xem tất cả bài viết | View all posts</span>
+                    </a>
+                  </div>
+                </b:if>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
                   <b:loop values='data:posts' var='post' index='idx'>
                     <b:with value='data:post.labels filter (l =&gt; not (l.name contains &quot;@&quot;) and not (l.name contains &quot;ai:&quot;) and not (l.name contains &quot;AI-&quot;) and not (l.name contains &quot;series:&quot;) and not (l.name contains &quot;Series:&quot;))' var='displayLabels'>
                       <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;@&quot;)' var='featureLabels'>
                         <b:with value='data:post.labels filter (l =&gt; l.name contains &quot;series:&quot; or l.name contains &quot;Series:&quot;)' var='seriesLabels'>
                           <b:with value='not data:featureLabels.empty and data:displayLabels.empty and data:seriesLabels.empty' var='isExclusiveFeaturePost'>
-                            <b:if cond='not data:isExclusiveFeaturePost'>
+                            <b:if cond='not (data:view.isHomepage and data:isExclusiveFeaturePost)'>
                               <article class='post-card' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
                                 <div class='post-card-body'>
                                   <div>
@@ -6315,6 +6331,8 @@ body.view-not-homepage #main-above-feed {
                                   </span>
                                   <b:if cond='data:displayLabels and not data:displayLabels.empty'>
                                     <a class='post-badge' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
+                                  <b:elseif cond='data:featureLabels and not data:featureLabels.empty'/>
+                                    <a class='post-badge' expr:href='data:featureLabels.first.url' data-bilingual='true'><data:featureLabels.first.name/></a>
                                   </b:if>
                                 </b:if>
                                 <h2 class='post-card-title' itemprop='headline'>
@@ -10377,7 +10395,8 @@ body.view-not-homepage #main-above-feed {
         viewAllText,
         rawLabels,
         pattern,
-        renderer(posts, { showThumb, showSnippet, limit })
+        renderer(posts, { showThumb, showSnippet, limit }),
+        posts
       );
 
     } catch (err) {
@@ -10395,7 +10414,8 @@ body.view-not-homepage #main-above-feed {
           viewAllText,
           rawLabels,
           pattern,
-          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true })
+          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true }),
+          quoteFallback
         );
         return;
       }
@@ -10408,7 +10428,8 @@ body.view-not-homepage #main-above-feed {
             viewAllText,
             rawLabels,
             pattern,
-            renderer(fallbackPosts, { showThumb, showSnippet, limit })
+            renderer(fallbackPosts, { showThumb, showSnippet, limit }),
+            fallbackPosts
           );
           return;
         }
@@ -10476,17 +10497,33 @@ body.view-not-homepage #main-above-feed {
     container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
   }
 
+  /* ── Helper: Tìm nhãn khớp chính xác từ bài viết thực tế trên blog ── */
+  function resolveActiveLabel(rawLabels, posts) {
+    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
+    if (labelsArr.length === 0) return '';
+    if (posts && posts.length > 0) {
+      for (const post of posts) {
+        if (post && post.labels && Array.isArray(post.labels)) {
+          for (const target of labelsArr) {
+            const matched = post.labels.find(l => l.toLowerCase() === target.toLowerCase());
+            if (matched) return matched;
+          }
+        }
+      }
+    }
+    return labelsArr[0];
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      WIDGET SHELL — Header + Body
      ═══════════════════════════════════════════════════════════════ */
-  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml) {
+  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const cleanTitle = title ? escapeHtml(title) : '';
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
-    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
-    const firstLabel = labelsArr.length > 0 ? labelsArr[0] : '';
-    const viewAllUrl = firstLabel ? buildLabelUrl(firstLabel) : '/search';
+    const activeLabel = resolveActiveLabel(rawLabels, posts);
+    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -10600,25 +10637,43 @@ body.view-not-homepage #main-above-feed {
     }
 
     try {
-      // Helper phân tích khối trích dẫn (trước jumpbreak): tách text câu nói và tên tác giả (nếu có)
+      // Helper phân tích khối trích dẫn (trước jumpbreak): tách text câu nói và tên tác giả (nếu có), hỗ trợ <br>
       const parseQuoteBlock = (containerEl) => {
         if (!containerEl) return { text: '', author: '' };
-        const ps = Array.from(containerEl.querySelectorAll('p, blockquote'))
-          .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+        const clone = containerEl.cloneNode(true);
+        clone.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+
+        const cleanTextWithNewlines = (str) => {
+          return (str || '')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/[ \t]*\n[ \t]*/g, '\n')
+            .trim();
+        };
+
+        const ps = Array.from(clone.querySelectorAll('p, blockquote'))
+          .map(el => cleanTextWithNewlines(el.textContent))
           .filter(Boolean);
 
+        let lines = [];
         if (ps.length === 0) {
-          const full = containerEl.textContent.replace(/\s+/g, ' ').trim();
-          return { text: full, author: '' };
+          const full = cleanTextWithNewlines(clone.textContent);
+          if (!full) return { text: '', author: '' };
+          lines = full.split('\n').map(s => s.trim()).filter(Boolean);
+        } else {
+          ps.forEach(p => {
+            p.split('\n').map(s => s.trim()).filter(Boolean).forEach(l => lines.push(l));
+          });
         }
 
-        const lastP = ps[ps.length - 1];
-        if (ps.length >= 2 && (/^[—–~-]\s*/.test(lastP) || lastP.length < 40)) {
-          const author = lastP.replace(/^[—–~-\s]+/, '').trim();
-          const text = ps.slice(0, -1).join(' ');
+        if (lines.length === 0) return { text: '', author: '' };
+
+        const lastLine = lines[lines.length - 1];
+        if (lines.length >= 2 && (/^[—–~-]\s*/.test(lastLine) || (lastLine.length < 45 && !/[.!?]$/.test(lastLine)))) {
+          const author = lastLine.replace(/^[—–~-\s]+/, '').trim();
+          const text = lines.slice(0, -1).join('\n');
           return { text, author };
         }
-        return { text: ps.join(' '), author: '' };
+        return { text: lines.join('\n'), author: '' };
       };
 
       // Helper phân tích khối giải thích (sau jumpbreak): lấy 1-2 câu đầu từ đoạn văn <p> có nghĩa
@@ -10681,8 +10736,9 @@ body.view-not-homepage #main-above-feed {
 
       // ── CẤP 2: Không có Jump Break -> Phân tách theo đoạn văn (Paragraphs) ──
       const doc = new DOMParser().parseFromString(rawContent, 'text/html');
+      doc.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
       const rawBlocks = Array.from(doc.body.querySelectorAll('p, blockquote, div'))
-        .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+        .map(el => el.textContent.replace(/[ \t]+/g, ' ').replace(/[ \t]*\n[ \t]*/g, '\n').trim())
         .filter(t => t.length > 0);
 
       // Lọc bỏ đoạn văn bị trùng lặp do cấu trúc lồng nhau

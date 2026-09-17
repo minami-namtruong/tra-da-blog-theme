@@ -374,12 +374,17 @@
 .sp-quote-text {
   font-family: var(--font-serif);
   font-size: 1.12rem;
-  font-style: italic;
+  font-style: italic !important;
   line-height: 1.7;
   color: var(--text-main);
   margin: 0;
   padding: 0;
   position: relative;
+  white-space: pre-line;
+}
+
+.sp-quote-text * {
+  font-style: italic !important;
 }
 
 .sp-quote-text::before {

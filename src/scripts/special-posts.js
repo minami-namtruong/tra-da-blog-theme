@@ -228,7 +228,8 @@
         viewAllText,
         rawLabels,
         pattern,
-        renderer(posts, { showThumb, showSnippet, limit })
+        renderer(posts, { showThumb, showSnippet, limit }),
+        posts
       );
 
     } catch (err) {
@@ -246,7 +247,8 @@
           viewAllText,
           rawLabels,
           pattern,
-          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true })
+          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true }),
+          quoteFallback
         );
         return;
       }
@@ -259,7 +261,8 @@
             viewAllText,
             rawLabels,
             pattern,
-            renderer(fallbackPosts, { showThumb, showSnippet, limit })
+            renderer(fallbackPosts, { showThumb, showSnippet, limit }),
+            fallbackPosts
           );
           return;
         }
@@ -327,17 +330,33 @@
     container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
   }
 
+  /* ── Helper: Tìm nhãn khớp chính xác từ bài viết thực tế trên blog ── */
+  function resolveActiveLabel(rawLabels, posts) {
+    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
+    if (labelsArr.length === 0) return '';
+    if (posts && posts.length > 0) {
+      for (const post of posts) {
+        if (post && post.labels && Array.isArray(post.labels)) {
+          for (const target of labelsArr) {
+            const matched = post.labels.find(l => l.toLowerCase() === target.toLowerCase());
+            if (matched) return matched;
+          }
+        }
+      }
+    }
+    return labelsArr[0];
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      WIDGET SHELL — Header + Body
      ═══════════════════════════════════════════════════════════════ */
-  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml) {
+  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const cleanTitle = title ? escapeHtml(title) : '';
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
-    const labelsArr = Array.isArray(rawLabels) ? rawLabels : splitLabels(rawLabels || '');
-    const firstLabel = labelsArr.length > 0 ? labelsArr[0] : '';
-    const viewAllUrl = firstLabel ? buildLabelUrl(firstLabel) : '/search';
+    const activeLabel = resolveActiveLabel(rawLabels, posts);
+    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -451,25 +470,43 @@
     }
 
     try {
-      // Helper phân tích khối trích dẫn (trước jumpbreak): tách text câu nói và tên tác giả (nếu có)
+      // Helper phân tích khối trích dẫn (trước jumpbreak): tách text câu nói và tên tác giả (nếu có), hỗ trợ <br>
       const parseQuoteBlock = (containerEl) => {
         if (!containerEl) return { text: '', author: '' };
-        const ps = Array.from(containerEl.querySelectorAll('p, blockquote'))
-          .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+        const clone = containerEl.cloneNode(true);
+        clone.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+
+        const cleanTextWithNewlines = (str) => {
+          return (str || '')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/[ \t]*\n[ \t]*/g, '\n')
+            .trim();
+        };
+
+        const ps = Array.from(clone.querySelectorAll('p, blockquote'))
+          .map(el => cleanTextWithNewlines(el.textContent))
           .filter(Boolean);
 
+        let lines = [];
         if (ps.length === 0) {
-          const full = containerEl.textContent.replace(/\s+/g, ' ').trim();
-          return { text: full, author: '' };
+          const full = cleanTextWithNewlines(clone.textContent);
+          if (!full) return { text: '', author: '' };
+          lines = full.split('\n').map(s => s.trim()).filter(Boolean);
+        } else {
+          ps.forEach(p => {
+            p.split('\n').map(s => s.trim()).filter(Boolean).forEach(l => lines.push(l));
+          });
         }
 
-        const lastP = ps[ps.length - 1];
-        if (ps.length >= 2 && (/^[—–~-]\s*/.test(lastP) || lastP.length < 40)) {
-          const author = lastP.replace(/^[—–~-\s]+/, '').trim();
-          const text = ps.slice(0, -1).join(' ');
+        if (lines.length === 0) return { text: '', author: '' };
+
+        const lastLine = lines[lines.length - 1];
+        if (lines.length >= 2 && (/^[—–~-]\s*/.test(lastLine) || (lastLine.length < 45 && !/[.!?]$/.test(lastLine)))) {
+          const author = lastLine.replace(/^[—–~-\s]+/, '').trim();
+          const text = lines.slice(0, -1).join('\n');
           return { text, author };
         }
-        return { text: ps.join(' '), author: '' };
+        return { text: lines.join('\n'), author: '' };
       };
 
       // Helper phân tích khối giải thích (sau jumpbreak): lấy 1-2 câu đầu từ đoạn văn <p> có nghĩa
@@ -532,8 +569,9 @@
 
       // ── CẤP 2: Không có Jump Break -> Phân tách theo đoạn văn (Paragraphs) ──
       const doc = new DOMParser().parseFromString(rawContent, 'text/html');
+      doc.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
       const rawBlocks = Array.from(doc.body.querySelectorAll('p, blockquote, div'))
-        .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+        .map(el => el.textContent.replace(/[ \t]+/g, ' ').replace(/[ \t]*\n[ \t]*/g, '\n').trim())
         .filter(t => t.length > 0);
 
       // Lọc bỏ đoạn văn bị trùng lặp do cấu trúc lồng nhau
