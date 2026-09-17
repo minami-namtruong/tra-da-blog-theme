@@ -919,9 +919,10 @@
               <div class="sp-widget-body">
                 <div class="sp-quote-list">
                   <a href="#" class="sp-quote-card view-post-link">
-                    <span class="sp-quote-mark-open">“</span>
+                    <div class="sp-quote-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    </div>
                     <p class="sp-quote-text">Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của sự tinh tế sau khi đã thấu suốt mọi điều phức tạp.</p>
-                    <span class="sp-quote-mark-close">”</span>
                     <div class="sp-quote-author">— Leonardo da Vinci</div>
                     <div class="sp-quote-divider"></div>
                     <p class="sp-quote-snippet">Vài suy nghĩ về sự tinh giản trong lối sống hiện đại và cách chúng ta tìm lại sự thuần khiết...</p>
@@ -1838,9 +1839,8 @@
             ? '<div class="sp-quote-divider"></div><p class="sp-quote-snippet">' + escapeHtml(p.snippet) + '</p>'
             : '';
           return '<a href="#" class="sp-quote-card view-post-link">' +
-                 '  <span class="sp-quote-mark-open">“</span>' +
+                 '  <div class="sp-quote-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg></div>' +
                  '  <p class="sp-quote-text">' + escapeHtml(p.title) + '</p>' +
-                 '  <span class="sp-quote-mark-close">”</span>' +
                  '  <div class="sp-quote-author">— ' + escapeHtml(p.dateFormatted) + '</div>' +
                  snipHtml +
                  '  <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>' +
