@@ -147,6 +147,7 @@
     const sort           = container.dataset.sort     || 'latest';
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
+    const showSnippet    = container.dataset.showSnippet   !== 'false';
     const rawViewAll     = container.dataset.viewAllText;
     const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
     const widgetTitle    = container.dataset.title         || '';
@@ -195,18 +196,6 @@
         posts = await fetchLatestPosts(limit, feedType);
       }
 
-      // NẾU LÀ KIỂU TRÍCH DẪN (QUOTE) MÀ VẪN CHƯA CÓ BÀI NÀO:
-      if (pattern === 'quote' && (!posts || posts.length === 0)) {
-        posts = [{
-          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế. | Simplicity is not the end of shallowness, but the pinnacle of sophistication.",
-          url: "#",
-          dateFormatted: formatDate(new Date().toISOString()),
-          author: "Trà Đá Triết Lý",
-          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn. | Happiness is not about having much, but knowing what is enough in a world that demands more."
-        }];
-      }
-
-      // NẾU BLOG HOÀN TOÀN TRỐNG (Chưa có bài đăng nào trên cả blog)
       if (!posts || posts.length === 0) {
         container.innerHTML = buildWidgetShell(
           widgetTitle,
@@ -234,24 +223,6 @@
 
     } catch (err) {
       console.warn('[SpecialPostsWidget] Lỗi nạp dữ liệu, thử fallback về bài mới nhất:', err);
-      if (pattern === 'quote') {
-        const quoteFallback = [{
-          title: "Sự đơn giản không phải là cái kết của sự nông cạn, mà là đỉnh cao của tinh tế. | Simplicity is not the end of shallowness, but the pinnacle of sophistication.",
-          url: "#",
-          dateFormatted: formatDate(new Date().toISOString()),
-          author: "Trà Đá Triết Lý",
-          snippet: "Hạnh phúc không nằm ở việc sở hữu thật nhiều, mà ở việc biết đủ giữa một thế giới không ngừng đòi hỏi nhiều hơn. | Happiness is not about having much, but knowing what is enough in a world that demands more."
-        }];
-        container.innerHTML = buildWidgetShell(
-          widgetTitle,
-          viewAllText,
-          rawLabels,
-          pattern,
-          renderQuotePattern(quoteFallback, { showThumb: false, showSnippet: true }),
-          quoteFallback
-        );
-        return;
-      }
       try {
         const fallbackPosts = await fetchLatestPosts(limit);
         if (fallbackPosts && fallbackPosts.length > 0) {
