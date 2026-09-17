@@ -159,6 +159,7 @@
 
     try {
       let posts = [];
+      const feedType = pattern === 'quote' ? 'default' : 'summary';
 
       if (handpickedRaw.trim()) {
         // Chế độ Handpicked URLs
@@ -167,19 +168,19 @@
         // Chế độ Popular Posts (số lượt xem)
         const timeRange = container.dataset.timeRange || 'all_time';
         try {
-          posts = await fetchPopularPosts(limit, timeRange, rawLabels);
+          posts = await fetchPopularPosts(limit, timeRange, rawLabels, feedType);
         } catch (e) {
           posts = [];
         }
         // Fallback về bài mới nhất nếu chưa có đủ dữ liệu lượt xem
         if (!posts || posts.length === 0) {
-          posts = await fetchLatestPosts(limit);
+          posts = await fetchLatestPosts(limit, feedType);
         }
       } else if (rawLabels) {
         // Chế độ Multi-label
         const labelList = splitLabels(rawLabels);
         try {
-          posts = await fetchMultiLabelPosts(labelList, limit, sort);
+          posts = await fetchMultiLabelPosts(labelList, limit, sort, feedType);
         } catch (e) {
           posts = [];
         }
@@ -187,11 +188,11 @@
         // Nếu nhãn yêu cầu chưa có bài nào (VD blog mới cài chưa gắn nhãn @Tiêu điểm, @Quote, @Điểm tin...)
         // Tự động lấy các bài viết mới nhất để lấp đầy widget, đảm bảo blog luôn sống động và không báo lỗi!
         if (!posts || posts.length === 0) {
-          posts = await fetchLatestPosts(limit);
+          posts = await fetchLatestPosts(limit, feedType);
         }
       } else {
         // Không chỉ định nhãn -> Lấy bài viết mới nhất
-        posts = await fetchLatestPosts(limit);
+        posts = await fetchLatestPosts(limit, feedType);
       }
 
       // NẾU LÀ KIỂU TRÍCH DẪN (QUOTE) MÀ VẪN CHƯA CÓ BÀI NÀO:
@@ -444,11 +445,47 @@
     if (!rawContent) {
       return {
         quoteText: post.title || '',
-        quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : ''
+        quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : '',
+        quoteAuthor: post.author || ''
       };
     }
 
     try {
+      // Helper phân tích khối trích dẫn (trước jumpbreak): tách text câu nói và tên tác giả (nếu có)
+      const parseQuoteBlock = (containerEl) => {
+        if (!containerEl) return { text: '', author: '' };
+        const ps = Array.from(containerEl.querySelectorAll('p, blockquote'))
+          .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+          .filter(Boolean);
+
+        if (ps.length === 0) {
+          const full = containerEl.textContent.replace(/\s+/g, ' ').trim();
+          return { text: full, author: '' };
+        }
+
+        const lastP = ps[ps.length - 1];
+        if (ps.length >= 2 && (/^[—–~-]\s*/.test(lastP) || lastP.length < 40)) {
+          const author = lastP.replace(/^[—–~-\s]+/, '').trim();
+          const text = ps.slice(0, -1).join(' ');
+          return { text, author };
+        }
+        return { text: ps.join(' '), author: '' };
+      };
+
+      // Helper phân tích khối giải thích (sau jumpbreak): lấy 1-2 câu đầu từ đoạn văn <p> có nghĩa
+      const parseSnippetBlock = (containerEl) => {
+        if (!containerEl) return '';
+        const ps = Array.from(containerEl.querySelectorAll('p'))
+          .map(el => el.textContent.replace(/\s+/g, ' ').trim())
+          .filter(t => t.length > 20);
+
+        if (ps.length > 0) {
+          return extractFirstSentences(ps[0], 160);
+        }
+        const rawText = containerEl.textContent.replace(/\s+/g, ' ').trim();
+        return extractFirstSentences(rawText, 160);
+      };
+
       // ── CẤP 1: Kiểm tra thẻ Jump Break (<a name='more'></a> hoặc <!--more-->) ──
       const jumpBreakRegex = /(?:<a[^>]+name=['"]more['"][^>]*>.*?<\/a>|<a[^>]+name=['"]more['"][^>]*\/?>|<!--more-->)/i;
       if (jumpBreakRegex.test(rawContent)) {
@@ -461,12 +498,19 @@
 
         // Bóc tách câu quote (trước jumpbreak), hỗ trợ cấu trúc song ngữ
         let quoteText = '';
+        let quoteAuthor = '';
         const viBefore = docBefore.querySelector('[data-lang="vi"], .lang-vi');
         const enBefore = docBefore.querySelector('[data-lang="en"], .lang-en');
+
         if (viBefore && enBefore) {
-          quoteText = `${viBefore.textContent.trim()} | ${enBefore.textContent.trim()}`;
+          const viQ = parseQuoteBlock(viBefore);
+          const enQ = parseQuoteBlock(enBefore);
+          quoteText = `${viQ.text} | ${enQ.text}`;
+          quoteAuthor = (viQ.author === enQ.author) ? viQ.author : (viQ.author && enQ.author ? `${viQ.author} | ${enQ.author}` : (viQ.author || enQ.author));
         } else {
-          quoteText = (docBefore.body.textContent || '').replace(/\s+/g, ' ').trim();
+          const parsed = parseQuoteBlock(docBefore.body);
+          quoteText = parsed.text;
+          quoteAuthor = parsed.author;
         }
 
         // Bóc tách lời giải thích (sau jumpbreak), hỗ trợ cấu trúc song ngữ
@@ -475,15 +519,14 @@
           const viAfter = docAfter.querySelector('[data-lang="vi"], .lang-vi');
           const enAfter = docAfter.querySelector('[data-lang="en"], .lang-en');
           if (viAfter && enAfter) {
-            quoteSnippet = `${extractFirstSentences(viAfter.textContent)} | ${extractFirstSentences(enAfter.textContent)}`;
+            quoteSnippet = `${parseSnippetBlock(viAfter)} | ${parseSnippetBlock(enAfter)}`;
           } else {
-            const rawAfterText = (docAfter.body.textContent || '').replace(/\s+/g, ' ').trim();
-            quoteSnippet = extractFirstSentences(rawAfterText, 150);
+            quoteSnippet = parseSnippetBlock(docAfter.body);
           }
         }
 
         if (quoteText) {
-          return { quoteText, quoteSnippet };
+          return { quoteText, quoteSnippet, quoteAuthor };
         }
       }
 
@@ -504,7 +547,8 @@
       if (uniqueBlocks.length >= 2) {
         return {
           quoteText: uniqueBlocks[0],
-          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[1], 150) : ''
+          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[1], 150) : '',
+          quoteAuthor: ''
         };
       }
 
@@ -512,7 +556,8 @@
       if (uniqueBlocks.length === 1 && post.title && post.title.trim() !== uniqueBlocks[0]) {
         return {
           quoteText: post.title,
-          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[0], 150) : ''
+          quoteSnippet: opts.showSnippet ? extractFirstSentences(uniqueBlocks[0], 150) : '',
+          quoteAuthor: ''
         };
       }
     } catch (_) {
@@ -521,17 +566,26 @@
 
     return {
       quoteText: post.title || '',
-      quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : ''
+      quoteSnippet: (opts.showSnippet && post.snippet) ? post.snippet : '',
+      quoteAuthor: ''
     };
   }
 
   function renderQuotePattern(posts, opts) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const itemsHtml = posts.map(post => {
-      const { quoteText, quoteSnippet } = extractQuoteData(post, opts);
+      const { quoteText, quoteSnippet, quoteAuthor } = extractQuoteData(post, opts);
       
       const parsedQuote = window.parseBilingualText ? window.parseBilingualText(quoteText, lang) : quoteText.split('|')[0].trim();
       const parsedSnippet = (quoteSnippet && window.parseBilingualText) ? window.parseBilingualText(quoteSnippet, lang) : (quoteSnippet || '').split('|')[0].trim();
+
+      let authorDisplay = '';
+      if (quoteAuthor) {
+        const parsedAuthorName = window.parseBilingualText ? window.parseBilingualText(quoteAuthor, lang) : quoteAuthor.split('|')[0].trim();
+        authorDisplay = post.dateFormatted ? `${parsedAuthorName} \u2022 ${post.dateFormatted}` : parsedAuthorName;
+      } else {
+        authorDisplay = post.dateFormatted || '';
+      }
 
       return `
         <a href="${escapeHtml(post.url)}" class="sp-quote-card">
@@ -539,7 +593,7 @@
             <svg viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
           </div>
           <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(quoteText)}">${escapeHtml(parsedQuote)}</p>
-          <div class="sp-quote-author">\u2014 ${escapeHtml(post.dateFormatted)}</div>
+          <div class="sp-quote-author">\u2014 ${escapeHtml(authorDisplay)}</div>
           ${quoteSnippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(quoteSnippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
           <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
         </a>`;
@@ -578,9 +632,9 @@
      ═══════════════════════════════════════════════════════════════ */
 
   /* ── Fetch nhiều nhãn song song + deduplication ─────────────── */
-  async function fetchMultiLabelPosts(labels, limit, sort) {
+  async function fetchMultiLabelPosts(labels, limit, sort, feedType = 'summary') {
     // Nạp song song tất cả nhãn
-    const promises = labels.map(label => fetchSingleLabelFeed(label, limit + 5));
+    const promises = labels.map(label => fetchSingleLabelFeed(label, limit + 5, feedType));
     const results  = await Promise.all(promises);
 
     // Gộp
@@ -605,37 +659,53 @@
   }
 
   /* ── Fetch 1 nhãn qua Blogger JSON Feed API ─────────────────── */
-  async function fetchSingleLabelFeed(label, count) {
-    const cacheKey = CACHE_PREFIX + 'label_' + encodeURIComponent(label) + '_' + count;
+  async function fetchSingleLabelFeed(label, count, feedType = 'summary') {
+    const cacheKey = CACHE_PREFIX + 'label_' + encodeURIComponent(label) + '_' + count + '_' + feedType;
     const cached   = readCache(cacheKey);
     if (cached) return cached;
 
     try {
       const encodedLabel = encodeURIComponent(label);
       const blogUrl      = getBlogBaseUrl();
-      const url          = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=${count}&orderby=published`;
+      const url          = `${blogUrl}/feeds/posts/${feedType}/-/${encodedLabel}?alt=json&max-results=${count}&orderby=published`;
 
       const res  = await fetch(url);
-      if (!res.ok) return [];
+      if (!res.ok) {
+        if (label !== label.toLowerCase()) {
+          return await fetchSingleLabelFeed(label.toLowerCase(), count, feedType);
+        }
+        return [];
+      }
       const json = await res.json();
 
-      const posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+      let posts = parseFeedEntries(json.feed ? json.feed.entry : []);
+      // Nếu không có bài nào và tên nhãn chứa chữ hoa, thử tìm biến thể chữ thường
+      if (posts.length === 0 && label !== label.toLowerCase()) {
+        const lowerPosts = await fetchSingleLabelFeed(label.toLowerCase(), count, feedType);
+        if (lowerPosts && lowerPosts.length > 0) return lowerPosts;
+      }
+
       writeCache(cacheKey, posts);
       return posts;
     } catch (e) {
+      if (label !== label.toLowerCase()) {
+        try {
+          return await fetchSingleLabelFeed(label.toLowerCase(), count, feedType);
+        } catch (_) {}
+      }
       return [];
     }
   }
 
   /* ── Fetch bài viết mới nhất toàn blog (Fallback tự động) ─────── */
-  async function fetchLatestPosts(count) {
-    const cacheKey = CACHE_PREFIX + 'latest_' + count;
+  async function fetchLatestPosts(count, feedType = 'summary') {
+    const cacheKey = CACHE_PREFIX + 'latest_' + count + '_' + feedType;
     const cached   = readCache(cacheKey);
     if (cached) return cached;
 
     try {
       const blogUrl = getBlogBaseUrl();
-      const url     = `${blogUrl}/feeds/posts/summary?alt=json&max-results=${count}&orderby=published`;
+      const url     = `${blogUrl}/feeds/posts/${feedType}?alt=json&max-results=${count}&orderby=published`;
       const res     = await fetch(url);
       if (!res.ok) return [];
       const json    = await res.json();
@@ -648,8 +718,8 @@
   }
 
   /* ── Fetch Popular Posts (lượt xem nhiều nhất) ──────────────── */
-  async function fetchPopularPosts(limit, timeRange, labelFilter) {
-    const cacheKey = CACHE_PREFIX + 'popular_' + timeRange + '_' + limit;
+  async function fetchPopularPosts(limit, timeRange, labelFilter, feedType = 'summary') {
+    const cacheKey = CACHE_PREFIX + 'popular_' + timeRange + '_' + limit + '_' + feedType;
     const cached   = readCache(cacheKey);
     if (cached) {
       return filterByLabels(cached, labelFilter, limit);
@@ -661,9 +731,9 @@
       if (labelFilter) {
         const labelList    = splitLabels(labelFilter);
         const encodedLabel = encodeURIComponent(labelList[0]);
-        url = `${blogUrl}/feeds/posts/summary/-/${encodedLabel}?alt=json&max-results=20&orderby=updated`;
+        url = `${blogUrl}/feeds/posts/${feedType}/-/${encodedLabel}?alt=json&max-results=20&orderby=updated`;
       } else {
-        url = `${blogUrl}/feeds/posts/summary?alt=json&max-results=20&orderby=updated`;
+        url = `${blogUrl}/feeds/posts/${feedType}?alt=json&max-results=20&orderby=updated`;
       }
 
       const res  = await fetch(url);
