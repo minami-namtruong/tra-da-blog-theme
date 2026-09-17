@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T09:32:19.145Z -->
+<!-- Compiled at: 2026-09-17T09:39:11.488Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6740,7 +6740,7 @@ body.view-not-homepage #main-above-feed {
               <div class='special-posts-widget'
                    id='widget-infeed-quote'
                    data-pattern='quote'
-                   data-labels='@Quote, @quote'
+                   data-labels='@quote, @Quote'
                    data-sort='random'
                    data-limit='1'
                    data-insert-after='3'>
@@ -6887,7 +6887,7 @@ body.view-not-homepage #main-above-feed {
                 <div class='special-posts-widget'
                      id='widget-chiem-nghiem'
                      data-pattern='quote'
-                     data-labels='@Quote'
+                     data-labels='@quote, @Quote'
                      data-sort='random'
                      data-limit='1'>
                   <b:if cond='data:title'>

@@ -656,7 +656,7 @@
               <div class='special-posts-widget'
                    id='widget-infeed-quote'
                    data-pattern='quote'
-                   data-labels='@Quote, @quote'
+                   data-labels='@quote, @Quote'
                    data-sort='random'
                    data-limit='1'
                    data-insert-after='3'>

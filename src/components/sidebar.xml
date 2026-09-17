@@ -73,7 +73,7 @@
                 <div class='special-posts-widget'
                      id='widget-chiem-nghiem'
                      data-pattern='quote'
-                     data-labels='@Quote'
+                     data-labels='@quote, @Quote'
                      data-sort='random'
                      data-limit='1'>
                   <b:if cond='data:title'>
