@@ -58,6 +58,12 @@
       }
     });
 
+    // Dọn dẹp các widget sidebar cũ đã loại bỏ (phòng khi Blogger tự động khôi phục từ database)
+    ['HTML14', 'HTML15', 'HTML16', 'HTML17'].forEach(function(id) {
+      var orphaned = document.getElementById(id);
+      if (orphaned) orphaned.remove();
+    });
+
     const widgets = document.querySelectorAll('.special-posts-widget');
     widgets.forEach(renderWidgetInstance);
   }

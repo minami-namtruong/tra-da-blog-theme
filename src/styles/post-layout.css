@@ -837,6 +837,11 @@
   background: transparent !important;
 }
 
+/* Ẩn triệt để các widget sidebar đã loại bỏ khỏi thiết kế (phòng khi Blogger tự khôi phục từ database) */
+#HTML14, #HTML15, #HTML16, #HTML17 {
+  display: none !important;
+}
+
 .sidebar-widget {
   background: var(--bg-card);
   border: var(--stroke-hairline) solid var(--border-color);
