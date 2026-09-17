@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T09:54:06.187Z -->
+<!-- Compiled at: 2026-09-17T10:13:34.928Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6842,27 +6842,33 @@ body.view-not-homepage #main-above-feed {
             </b:includable>
           </b:widget>
 
-          <!-- Widget: Bài Viết Nổi Bật (Pattern: ranked) -->
-          <!-- Hiển thị Top 5 bài mới nhất có nhãn @Nổi bật hoặc bài đọc nhiều nhất -->
-          <b:widget id='HTML14' type='HTML' version='2' title='🔥 Bài Viết Nổi Bật'>
+          <!-- Widget: Popular Posts (Bài Viết Nổi Bật - Tự động theo lượt xem) -->
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
             <b:includable id='main'>
-              <!-- Special Posts Widget uses its own sp-widget-card wrapper -->
-                <div class='special-posts-widget'
-                     id='widget-bai-viet-noi-bat'
-                     data-pattern='ranked'
-                     data-labels='@Nổi bật'
-                     data-sort='latest'
-                     data-limit='5'
-                     data-view-all-text='Xem tất cả »'>
-                  <b:if cond='data:title'>
-                    <b:attr name='data-title' expr:value='data:title'/>
-                  <b:else/>
-                    <b:attr name='data-title' value='🔥 Bài Viết Nổi Bật'/>
-                  </b:if>
-                  <b:if cond='data:content'>
-                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
-                  </b:if>
-                </div>
+              <div class='sidebar-widget'>
+                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
+                <b:if cond='data:posts and not data:posts.empty'>
+                  <ul class='popular-posts-list'>
+                    <b:loop values='data:posts' var='ppPost' index='ppIdx'>
+                      <li>
+                        <a class='popular-post-item' expr:href='data:ppPost.url'>
+                          <span class='popular-post-num'><b:if cond='data:ppIdx &lt; 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
+                          <b:if cond='data:ppPost.featuredImage'>
+                            <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
+                                 expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
+                          </b:if>
+                          <div class='popular-post-info'>
+                            <div class='popular-post-title' data-bilingual='true' expr:data-raw-label='data:ppPost.title'><data:ppPost.title/></div>
+                            <div class='popular-post-date'>📅 <data:ppPost.date/></div>
+                          </div>
+                        </a>
+                      </li>
+                    </b:loop>
+                  </ul>
+                <b:else/>
+                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
+                </b:if>
+              </div>
             </b:includable>
           </b:widget>
 
@@ -6933,36 +6939,6 @@ body.view-not-homepage #main-above-feed {
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
                   </b:if>
                 </div>
-            </b:includable>
-          </b:widget>
-
-          <!-- Widget: Popular Posts -->
-          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
-            <b:includable id='main'>
-              <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
-                <b:if cond='data:posts and not data:posts.empty'>
-                  <ul class='popular-posts-list'>
-                    <b:loop values='data:posts' var='ppPost' index='ppIdx'>
-                      <li>
-                        <a class='popular-post-item' expr:href='data:ppPost.url'>
-                          <span class='popular-post-num'><b:if cond='data:ppIdx &lt; 9'>0</b:if><b:eval expr='data:ppIdx + 1'/></span>
-                          <b:if cond='data:ppPost.featuredImage'>
-                            <img class='popular-post-thumb' expr:src='data:ppPost.featuredImage'
-                                 expr:alt='data:ppPost.title' loading='lazy' width='60' height='60'/>
-                          </b:if>
-                          <div class='popular-post-info'>
-                            <div class='popular-post-title' data-bilingual='true' expr:data-raw-label='data:ppPost.title'><data:ppPost.title/></div>
-                            <div class='popular-post-date'>📅 <data:ppPost.date/></div>
-                          </div>
-                        </a>
-                      </li>
-                    </b:loop>
-                  </ul>
-                <b:else/>
-                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
-                </b:if>
-              </div>
             </b:includable>
           </b:widget>
 
