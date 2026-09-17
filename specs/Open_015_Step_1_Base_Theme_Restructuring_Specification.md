@@ -45,9 +45,9 @@ blogspot-editorial-theme/
 ├── package.json                    <-- Định nghĩa build scripts
 ├── README.md                       <-- Tài liệu hướng dẫn sử dụng & thương mại
 ├── specs/                          <-- Thư mục chứa các tài liệu đặc tả kỹ thuật
-│   ├── [Done]_001_Theme_Specification.md
-│   ├── [Open]_015_Step_1_Base_Theme_Restructuring_Specification.md
-│   └── [Open]_016_Step_2_Apps_And_Extensions_Architecture_Specification.md
+│   ├── Done_001_Theme_Specification.md
+│   ├── Open_015_Step_1_Base_Theme_Restructuring_Specification.md
+│   └── Open_016_Step_2_Apps_And_Extensions_Architecture_Specification.md
 │
 ├── scripts/
 │   └── build.js                    <-- Compiler (~60 dòng, ghép components & inject CSS/JS)
