@@ -327,7 +327,7 @@
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
     const activeLabel = resolveActiveLabel(rawLabels, posts);
-    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel) : '/search';
+    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel, title) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -966,11 +966,15 @@
     return window.location.protocol + '//' + window.location.host;
   }
 
-  /** Build URL trang nhãn (lọc @ cho URL) */
-  function buildLabelUrl(label) {
+  /** Build URL trang nhãn (lọc @ cho URL, kèm tiêu đề hiển thị nếu có) */
+  function buildLabelUrl(label, title) {
     if (!label) return '/';
     const blogBase = getBlogBaseUrl();
-    return `${blogBase}/search/label/${encodeURIComponent(label)}`;
+    let url = `${blogBase}/search/label/${encodeURIComponent(label)}`;
+    if (title) {
+      url += `?title=${encodeURIComponent(title)}`;
+    }
+    return url;
   }
 
   /** Lọc bài viết theo danh sách nhãn (OR logic) */

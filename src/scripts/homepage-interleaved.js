@@ -68,25 +68,8 @@
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
             badge.style.display = '';
-          } else if (!isHomepage) {
-            // Khi xem trên trang nhãn chuyên đề (VD: /search/label/@Tiêu điểm), hiển thị nhãn tính năng nếu có
-            var firstFeature = null;
-            rawLabels.forEach(function(lblEl) {
-              var n = lblEl.textContent.trim();
-              if (n.startsWith('@') && !firstFeature) {
-                firstFeature = { name: n, url: lblEl.getAttribute('data-url') };
-              }
-            });
-            if (firstFeature) {
-              badge.setAttribute('data-raw-label', firstFeature.name);
-              badge.setAttribute('data-bilingual', 'true');
-              badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstFeature.name, currentLang) : firstFeature.name.split('|')[0].trim();
-              if (firstFeature.url) badge.href = firstFeature.url;
-              badge.style.display = '';
-            } else {
-              badge.style.display = 'none';
-            }
           } else {
+            // Không có nhãn chuyên mục thường (chỉ có nhãn @ hoặc hệ thống) -> Ẩn badge để giao diện sạch sẽ
             badge.style.display = 'none';
           }
         }
@@ -539,8 +522,55 @@
     });
   }
 
+  /**
+   * Đồng bộ tiêu đề trang Tìm kiếm / Nhãn:
+   * 1. Đọc query param ?title= (truyền từ liên kết 'Xem tất cả' của widget)
+   * 2. Fallback bảng tra cứu cho các nhãn kỹ thuật hệ thống (@quote, @tiêu điểm, @nổi bật, @điểm tin)
+   * 3. Tự động áp dụng song ngữ VI/EN
+   */
+  function initSearchPageHeader() {
+    var titleEl = document.getElementById('search-page-title');
+    if (!titleEl) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var customTitle = params.get('title');
+
+    var rawLabel = (titleEl.getAttribute('data-raw-label') || titleEl.textContent || '').trim();
+    var FEATURE_MAP = {
+      '@quote': '☕ Góc Suy Ngẫm | ☕ Contemplation Corner',
+      '@tiêu điểm': '🌟 Tiêu Điểm | Spotlight',
+      '@tieu diem': '🌟 Tiêu Điểm | Spotlight',
+      '@nổi bật': '🔥 Bài Viết Nổi Bật | Trending Posts',
+      '@noi bat': '🔥 Bài Viết Nổi Bật | Trending Posts',
+      '@điểm tin': '⚡ Điểm Tin Mỗi Ngày | Daily Digest',
+      '@diem tin': '⚡ Điểm Tin Mỗi Ngày | Daily Digest'
+    };
+
+    var resolvedTitle = customTitle;
+    if (!resolvedTitle && rawLabel) {
+      var lower = rawLabel.toLowerCase();
+      if (FEATURE_MAP[lower]) {
+        resolvedTitle = FEATURE_MAP[lower];
+      }
+    }
+
+    if (resolvedTitle) {
+      var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+      titleEl.setAttribute('data-raw-label', resolvedTitle);
+      titleEl.setAttribute('data-bilingual', 'true');
+      titleEl.textContent = window.parseBilingualText ? window.parseBilingualText(resolvedTitle, currentLang) : resolvedTitle.split('|')[0].trim();
+
+      try {
+        var baseBlogTitle = document.title.split(/[-:|]/)[0].trim();
+        var pageTitleText = resolvedTitle.split('|')[0].trim();
+        document.title = pageTitleText + ' — ' + baseBlogTitle;
+      } catch (e) {}
+    }
+  }
+
   function initHomepageInterleavedWidgets() {
     initPostCardsProcessing();
+    initSearchPageHeader();
     initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();

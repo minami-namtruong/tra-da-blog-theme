@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-17T09:39:11.488Z -->
+<!-- Compiled at: 2026-09-17T09:49:58.931Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6305,8 +6305,7 @@ body.view-not-homepage #main-above-feed {
                 <b:if cond='data:view.isLabelSearch'>
                   <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;'>
                     <div>
-                      <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Chuyên mục / Nhãn | Category / Label:</span>
-                      <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true'><data:view.search.label/></h2>
+                      <h2 id='search-page-title' style='margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
                     </div>
                     <a href='/' style='font-size: 0.8rem; color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;' data-bilingual='true'>
                       <span>✕</span> <span>Xem tất cả bài viết | View all posts</span>
@@ -6349,8 +6348,6 @@ body.view-not-homepage #main-above-feed {
                                   </span>
                                   <b:if cond='data:displayLabels and not data:displayLabels.empty'>
                                     <a class='post-badge' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
-                                  <b:elseif cond='data:featureLabels and not data:featureLabels.empty'/>
-                                    <a class='post-badge' expr:href='data:featureLabels.first.url' data-bilingual='true'><data:featureLabels.first.name/></a>
                                   </b:if>
                                 </b:if>
                                 <h2 class='post-card-title' itemprop='headline'>
@@ -10516,7 +10513,7 @@ body.view-not-homepage #main-above-feed {
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
     const activeLabel = resolveActiveLabel(rawLabels, posts);
-    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel) : '/search';
+    const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel, title) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
     const headerHtml = cleanTitle ? `
@@ -11155,11 +11152,15 @@ body.view-not-homepage #main-above-feed {
     return window.location.protocol + '//' + window.location.host;
   }
 
-  /** Build URL trang nhãn (lọc @ cho URL) */
-  function buildLabelUrl(label) {
+  /** Build URL trang nhãn (lọc @ cho URL, kèm tiêu đề hiển thị nếu có) */
+  function buildLabelUrl(label, title) {
     if (!label) return '/';
     const blogBase = getBlogBaseUrl();
-    return `${blogBase}/search/label/${encodeURIComponent(label)}`;
+    let url = `${blogBase}/search/label/${encodeURIComponent(label)}`;
+    if (title) {
+      url += `?title=${encodeURIComponent(title)}`;
+    }
+    return url;
   }
 
   /** Lọc bài viết theo danh sách nhãn (OR logic) */
@@ -11853,25 +11854,8 @@ body.view-not-homepage #main-above-feed {
             badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstNormalLabel.name, currentLang) : firstNormalLabel.name.split('|')[0].trim();
             badge.href = firstNormalLabel.url;
             badge.style.display = '';
-          } else if (!isHomepage) {
-            // Khi xem trên trang nhãn chuyên đề (VD: /search/label/@Tiêu điểm), hiển thị nhãn tính năng nếu có
-            var firstFeature = null;
-            rawLabels.forEach(function(lblEl) {
-              var n = lblEl.textContent.trim();
-              if (n.startsWith('@') && !firstFeature) {
-                firstFeature = { name: n, url: lblEl.getAttribute('data-url') };
-              }
-            });
-            if (firstFeature) {
-              badge.setAttribute('data-raw-label', firstFeature.name);
-              badge.setAttribute('data-bilingual', 'true');
-              badge.textContent = window.parseBilingualText ? window.parseBilingualText(firstFeature.name, currentLang) : firstFeature.name.split('|')[0].trim();
-              if (firstFeature.url) badge.href = firstFeature.url;
-              badge.style.display = '';
-            } else {
-              badge.style.display = 'none';
-            }
           } else {
+            // Không có nhãn chuyên mục thường (chỉ có nhãn @ hoặc hệ thống) -> Ẩn badge để giao diện sạch sẽ
             badge.style.display = 'none';
           }
         }
@@ -12324,8 +12308,55 @@ body.view-not-homepage #main-above-feed {
     });
   }
 
+  /**
+   * Đồng bộ tiêu đề trang Tìm kiếm / Nhãn:
+   * 1. Đọc query param ?title= (truyền từ liên kết 'Xem tất cả' của widget)
+   * 2. Fallback bảng tra cứu cho các nhãn kỹ thuật hệ thống (@quote, @tiêu điểm, @nổi bật, @điểm tin)
+   * 3. Tự động áp dụng song ngữ VI/EN
+   */
+  function initSearchPageHeader() {
+    var titleEl = document.getElementById('search-page-title');
+    if (!titleEl) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var customTitle = params.get('title');
+
+    var rawLabel = (titleEl.getAttribute('data-raw-label') || titleEl.textContent || '').trim();
+    var FEATURE_MAP = {
+      '@quote': '☕ Góc Suy Ngẫm | ☕ Contemplation Corner',
+      '@tiêu điểm': '🌟 Tiêu Điểm | Spotlight',
+      '@tieu diem': '🌟 Tiêu Điểm | Spotlight',
+      '@nổi bật': '🔥 Bài Viết Nổi Bật | Trending Posts',
+      '@noi bat': '🔥 Bài Viết Nổi Bật | Trending Posts',
+      '@điểm tin': '⚡ Điểm Tin Mỗi Ngày | Daily Digest',
+      '@diem tin': '⚡ Điểm Tin Mỗi Ngày | Daily Digest'
+    };
+
+    var resolvedTitle = customTitle;
+    if (!resolvedTitle && rawLabel) {
+      var lower = rawLabel.toLowerCase();
+      if (FEATURE_MAP[lower]) {
+        resolvedTitle = FEATURE_MAP[lower];
+      }
+    }
+
+    if (resolvedTitle) {
+      var currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+      titleEl.setAttribute('data-raw-label', resolvedTitle);
+      titleEl.setAttribute('data-bilingual', 'true');
+      titleEl.textContent = window.parseBilingualText ? window.parseBilingualText(resolvedTitle, currentLang) : resolvedTitle.split('|')[0].trim();
+
+      try {
+        var baseBlogTitle = document.title.split(/[-:|]/)[0].trim();
+        var pageTitleText = resolvedTitle.split('|')[0].trim();
+        document.title = pageTitleText + ' — ' + baseBlogTitle;
+      } catch (e) {}
+    }
+  }
+
   function initHomepageInterleavedWidgets() {
     initPostCardsProcessing();
+    initSearchPageHeader();
     initProfileCoverSection();
     initAboveFeedSection();
     initInFeedInterleaving();

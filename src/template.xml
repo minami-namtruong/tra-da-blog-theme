@@ -221,8 +221,7 @@
                 <b:if cond='data:view.isLabelSearch'>
                   <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;'>
                     <div>
-                      <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Chuyên mục / Nhãn | Category / Label:</span>
-                      <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true'><data:view.search.label/></h2>
+                      <h2 id='search-page-title' style='margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
                     </div>
                     <a href='/' style='font-size: 0.8rem; color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;' data-bilingual='true'>
                       <span>✕</span> <span>Xem tất cả bài viết | View all posts</span>
@@ -265,8 +264,6 @@
                                   </span>
                                   <b:if cond='data:displayLabels and not data:displayLabels.empty'>
                                     <a class='post-badge' expr:href='data:displayLabels.first.url' data-bilingual='true'><data:displayLabels.first.name/></a>
-                                  <b:elseif cond='data:featureLabels and not data:featureLabels.empty'/>
-                                    <a class='post-badge' expr:href='data:featureLabels.first.url' data-bilingual='true'><data:featureLabels.first.name/></a>
                                   </b:if>
                                 </b:if>
                                 <h2 class='post-card-title' itemprop='headline'>
