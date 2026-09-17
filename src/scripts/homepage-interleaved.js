@@ -208,6 +208,10 @@
     const inFeedSection = document.getElementById('main-in-feed-section');
     if (!inFeedSection) return;
 
+    // Loại bỏ widget thừa HTML99 / About Author nếu Blogger tự chèn vào inFeedSection
+    const unwantedBio = inFeedSection.querySelectorAll('#HTML99, #hidden-author-bio-config');
+    unwantedBio.forEach(el => el.remove());
+
     // 1. Kiểm tra xem có widget hoặc nội dung không
     const hasWidgets = inFeedSection.querySelectorAll('.widget, .special-posts-widget, .infeed-custom-content').length > 0 ||
                        (inFeedSection.children.length > 0 && inFeedSection.textContent.trim().length > 0);

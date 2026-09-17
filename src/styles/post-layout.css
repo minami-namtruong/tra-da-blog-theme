@@ -837,8 +837,8 @@
   background: transparent !important;
 }
 
-/* Ẩn triệt để các widget sidebar đã loại bỏ khỏi thiết kế (phòng khi Blogger tự khôi phục từ database) */
-#HTML14, #HTML15, #HTML16, #HTML17 {
+/* Ẩn triệt để các widget đã loại bỏ khỏi thiết kế (phòng khi Blogger tự khôi phục từ database) */
+#HTML14, #HTML15, #HTML16, #HTML17, #HTML99, #hidden-author-bio-config {
   display: none !important;
 }
 
