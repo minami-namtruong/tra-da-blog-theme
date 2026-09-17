@@ -46,7 +46,7 @@ blogspot-editorial-theme/
 ├── README.md                       <-- Tài liệu hướng dẫn sử dụng & thương mại
 ├── specs/                          <-- Thư mục chứa các tài liệu đặc tả kỹ thuật
 │   ├── Done_001_Theme_Specification.md
-│   ├── Open_015_Step_1_Base_Theme_Restructuring_Specification.md
+│   ├── Doing_015_Step_1_Base_Theme_Restructuring_Specification.md
 │   └── Open_016_Step_2_Apps_And_Extensions_Architecture_Specification.md
 │
 ├── scripts/
