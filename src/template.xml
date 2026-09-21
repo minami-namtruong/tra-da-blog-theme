@@ -662,24 +662,19 @@
 
         <!-- ── VỊ TRÍ 3: KẾT LUỒNG BÀI VIẾT (Trên Nút Phân Trang) ──
              Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
-             Thích hợp đặt Khung Newsletter hoặc Banner Quảng Cáo AdSense -->
-        <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo / Newsletter)' showaddelement='yes'>
-          <b:widget id='HTML12' type='HTML' version='2' title='Khung Đăng Ký Bản Tin (Kết Luồng)'>
+             Thích hợp đặt Banner Quảng Cáo AdSense hoặc Tiện Ích Bên Thứ 3 -->
+        <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)' showaddelement='yes'>
+          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)'>
             <b:includable id='main'>
-              <b:if cond='data:content'>
-                <data:content/>
-              <b:else/>
-                <div class='pre-pagination-newsletter' id='newsletter'>
-                  <div class='pre-pagination-newsletter-content'>
-                    <div class='pre-pagination-newsletter-title'>💌 Nhận Bản Tin Chọn Lọc Mỗi Tuần</div>
-                    <p class='pre-pagination-newsletter-desc'>Những bài viết sâu sắc về tư duy, phong cách sống và tri thức chọn lọc gửi thẳng vào hộp thư của bạn vào mỗi sáng Chủ nhật.</p>
+              <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
+                <b:if cond='data:content'>
+                  <data:content/>
+                <b:else/>
+                  <div class='adsense-placeholder' style='padding: 2rem 1rem; text-align: center;'>
+                    📣 Vị Trí Quảng Cáo Kết Luồng (AdSense / Banner)
                   </div>
-                  <form class='pre-pagination-newsletter-form' onsubmit='return false;'>
-                    <input class='pre-pagination-newsletter-input' type='email' placeholder='Nhập email của bạn...' aria-label='Email đăng ký' required='required'/>
-                    <button class='pre-pagination-newsletter-btn' type='submit'>Đăng Ký Miễn Phí</button>
-                  </form>
-                </div>
-              </b:if>
+                </b:if>
+              </div>
             </b:includable>
           </b:widget>
         </b:section>
