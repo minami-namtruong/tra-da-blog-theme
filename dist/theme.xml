@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T10:19:07.155Z -->
+<!-- Compiled at: 2026-09-21T10:27:53.059Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6206,32 +6206,31 @@ body.view-not-homepage #main-above-feed {
    ────────────────────────────────────────────────────────────── */
 
 #editorial-contact-app {
-  max-width: 1100px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 4rem;
 }
 
 .contact-split-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 @media (max-width: 860px) {
   .contact-split-layout {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 }
 
 /* ──────────────────────────────────────────────────────────────
-   2. CỘT TRÁI — EDITORIAL MANIFESTO
+   2. TRÊN CÙNG — EDITORIAL MANIFESTO
    ────────────────────────────────────────────────────────────── */
 
 .contact-manifesto {
-  position: sticky;
-  top: 80px;
+  position: relative;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .contact-eyebrow {
@@ -8021,6 +8020,15 @@ body.view-not-homepage #main-above-feed {
     <a class="sidebar-cta-btn" href="/p/lien-he.html">Gửi bài ngay | Submit</a>
   </div>
 </div>
+
+<!-- 4. Cấu hình Trang Liên Hệ (Email, Adapter) -->
+<script>
+  window.__CONTACT_CONFIG = {
+    adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
+    adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
+    gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
+  };
+</script>
 ]]></b:widget-setting>
       </b:widget-settings>
       <b:includable id='main'>
@@ -14073,6 +14081,16 @@ body.view-not-homepage #main-above-feed {
   });
 
   function initContactPage(app) {
+    var cfg = window.__CONTACT_CONFIG || {};
+
+    // ── 0. Thay thế email hiển thị động ─────────────────────────────────
+    var adminEmail = cfg.adminEmail || 'tradabanthesu@gmail.com';
+    var emailLink = app.querySelector('.contact-direct-link');
+    if (emailLink) {
+      emailLink.href = 'mailto:' + adminEmail;
+      emailLink.textContent = '✉️ ' + adminEmail;
+    }
+
     // ── 1. Tab Toggle ───────────────────────────────────────────────────
     var tabBtns   = app.querySelectorAll('.contact-tab-btn');
     var formGuest = app.querySelector('#contact-form-guest');

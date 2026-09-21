@@ -58,6 +58,15 @@
     <a class="sidebar-cta-btn" href="/p/lien-he.html">Gửi bài ngay | Submit</a>
   </div>
 </div>
+
+<!-- 4. Cấu hình Trang Liên Hệ (Email, Adapter) -->
+<script>
+  window.__CONTACT_CONFIG = {
+    adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
+    adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
+    gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
+  };
+</script>
 ]]></b:widget-setting>
       </b:widget-settings>
       <b:includable id='main'>

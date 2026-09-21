@@ -20,6 +20,16 @@
   });
 
   function initContactPage(app) {
+    var cfg = window.__CONTACT_CONFIG || {};
+
+    // ── 0. Thay thế email hiển thị động ─────────────────────────────────
+    var adminEmail = cfg.adminEmail || 'tradabanthesu@gmail.com';
+    var emailLink = app.querySelector('.contact-direct-link');
+    if (emailLink) {
+      emailLink.href = 'mailto:' + adminEmail;
+      emailLink.textContent = '✉️ ' + adminEmail;
+    }
+
     // ── 1. Tab Toggle ───────────────────────────────────────────────────
     var tabBtns   = app.querySelectorAll('.contact-tab-btn');
     var formGuest = app.querySelector('#contact-form-guest');
