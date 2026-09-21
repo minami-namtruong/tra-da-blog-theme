@@ -227,7 +227,7 @@
 
   // ── Adapter C: FormSubmit ──────────────────────────────────────
   function _submitFormSubmit(adminEmail, data, form) {
-    var url = 'https://formsubmit.co/' + encodeURIComponent(adminEmail);
+    var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(adminEmail);
     var params = new URLSearchParams();
     params.append('_subject', data.type === 'guest_post'
       ? '[Gửi Bài] ' + (data.post_title || data.author_name)

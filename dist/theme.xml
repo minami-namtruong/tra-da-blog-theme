@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T10:27:53.059Z -->
+<!-- Compiled at: 2026-09-21T10:36:21.762Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -8024,7 +8024,7 @@ body.view-not-homepage #main-above-feed {
 <!-- 4. Cấu hình Trang Liên Hệ (Email, Adapter) -->
 <script>
   window.__CONTACT_CONFIG = {
-    adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
+    adapter: 'formsubmit', // Chọn adapter: blogger | formsubmit | gas
     adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
     gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
   };
@@ -14288,7 +14288,7 @@ body.view-not-homepage #main-above-feed {
 
   // ── Adapter C: FormSubmit ──────────────────────────────────────
   function _submitFormSubmit(adminEmail, data, form) {
-    var url = 'https://formsubmit.co/' + encodeURIComponent(adminEmail);
+    var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(adminEmail);
     var params = new URLSearchParams();
     params.append('_subject', data.type === 'guest_post'
       ? '[Gửi Bài] ' + (data.post_title || data.author_name)

@@ -62,7 +62,7 @@
 <!-- 4. Cấu hình Trang Liên Hệ (Email, Adapter) -->
 <script>
   window.__CONTACT_CONFIG = {
-    adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
+    adapter: 'formsubmit', // Chọn adapter: blogger | formsubmit | gas
     adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
     gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
   };
