@@ -247,14 +247,25 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         _setLoading(form, false);
-        if (res && res.success === 'true') {
-          _showToast('success', form);
-          form.reset();
+        console.log('FormSubmit response:', res);
+        if (res && (res.success === 'true' || res.success === true || res.success === 'false' /* some edge cases? no wait */)) {
+          // Note: sometimes formsubmit returns success=false if not activated?
+          if (res.success === 'false' && res.message && res.message.includes('activate')) {
+             alert('FormSubmit yêu cầu kích hoạt. Vui lòng kiểm tra email của bạn để kích hoạt form trước!');
+             return;
+          }
+          if (res.success === 'true' || res.success === true) {
+            _showToast('success', form);
+            form.reset();
+          } else {
+            _showToast('error', form);
+          }
         } else {
           _showToast('error', form);
         }
       })
-      .catch(function () {
+      .catch(function (err) {
+        console.error('FormSubmit error:', err);
         _setLoading(form, false);
         _showToast('error', form);
       });
