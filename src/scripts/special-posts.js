@@ -6,7 +6,7 @@
  * Features:
  *  - Multi-label fetch (parallel) với deduplication
  *  - SessionStorage cache 5 phút
- *  - 4 renderers: ranked, spotlight, quote, digest
+ *  - 5 renderers: ranked, spotlight, quote, digest, series
  *  - Skeleton shimmer (CLS = 0)
  *  - Anchor scroll highlight pulse
  *  - Label sanitization (lọc @ # _ ~)
@@ -25,6 +25,7 @@
     spotlight: renderSpotlightPattern,
     quote:     renderQuotePattern,
     digest:    renderDigestPattern,
+    series:    renderSeriesPattern,
     // Mở rộng tương lai: video, slideshow
   };
 
@@ -42,7 +43,7 @@
       if (el.querySelector('.special-posts-widget')) return;
       const targetHost = el.querySelector('.widget-content') || el;
       const directContent = targetHost.textContent.trim();
-      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)/i);
+      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series)/i);
       if (match) {
         const pattern = match[1].toLowerCase();
         const wrapper = document.createElement('div');
@@ -51,7 +52,7 @@
         const configDiv = document.createElement('div');
         configDiv.className = 'sp-raw-user-content';
         configDiv.style.display = 'none';
-        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest)\s*\|?/i, '').trim();
+        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series)\s*\|?/i, '').trim();
         wrapper.appendChild(configDiv);
         targetHost.innerHTML = '';
         targetHost.appendChild(wrapper);
@@ -149,20 +150,35 @@
 
     const pattern        = container.dataset.pattern  || 'digest';
     const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
-    const limit          = Math.min(parseInt(container.dataset.limit, 10) || 4, 10);
-    const sort           = container.dataset.sort     || 'latest';
+    const defaultLimit   = pattern === 'series' ? 5 : 4;
+    const limit          = Math.min(parseInt(container.dataset.limit, 10) || defaultLimit, 10);
+    const sort           = container.dataset.sort     || (pattern === 'series' ? 'random' : 'latest');
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
     const showSnippet    = container.dataset.showSnippet   !== 'false';
     const rawViewAll     = container.dataset.viewAllText;
     const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
-    const widgetTitle    = container.dataset.title         || '';
+    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
 
     // Skeleton loading trước — CLS = 0
     renderSkeleton(container, pattern, limit, widgetTitle, viewAllText, rawLabels);
+
+    if (pattern === 'series') {
+      try {
+        await renderSeriesWidget(container, {
+          widgetTitle,
+          limit,
+          specifiedLabel: rawLabels,
+          sort
+        });
+        return;
+      } catch (seriesErr) {
+        console.warn('[SpecialPostsWidget] Series render error:', seriesErr);
+      }
+    }
 
     try {
       let posts = [];
@@ -289,6 +305,26 @@
           <div class="sp-skeleton-quote-line sp-skeleton-line-40" style="margin-left:auto;margin-top:0.75rem;"></div>
         </div>`;
 
+    } else if (pattern === 'series') {
+      const items = Array.from({ length: limit }).map(() => `
+        <div class="popular-post-item sp-skeleton-item" style="border-bottom:none;padding:0.4rem 0;">
+          <div class="popular-post-num sp-skeleton-num" style="min-width:32px;height:24px;border-radius:var(--radius-sm);"></div>
+          <div class="popular-post-thumb sp-skeleton-thumb" style="width:60px;height:60px;border-radius:var(--radius-sm);flex-shrink:0;"></div>
+          <div class="popular-post-info sp-skeleton-content" style="flex:1;">
+            <div class="sp-skeleton-line sp-skeleton-line-full" style="height:14px;margin-bottom:0.45rem;"></div>
+            <div class="sp-skeleton-line sp-skeleton-line-80" style="height:14px;margin-bottom:0.45rem;"></div>
+            <div class="sp-skeleton-line sp-skeleton-line-40" style="height:10px;"></div>
+          </div>
+        </div>`).join('');
+      skeletonBody = `
+        <div class="sp-skeleton" style="padding:0.25rem 0;">
+          <div style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:0.75rem 0.95rem;margin-bottom:1.1rem;">
+            <div class="sp-skeleton-line sp-skeleton-line-55" style="height:14px;margin-bottom:0.4rem;"></div>
+            <div class="sp-skeleton-line sp-skeleton-line-40" style="height:10px;"></div>
+          </div>
+          <div class="popular-posts-list">${items}</div>
+        </div>`;
+
     } else {
       // ranked & digest — dạng danh sách
       const items = Array.from({ length: limit }).map(() => `
@@ -327,25 +363,36 @@
   /* ═══════════════════════════════════════════════════════════════
      WIDGET SHELL — Header + Body
      ═══════════════════════════════════════════════════════════════ */
-  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts) {
+  function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts, extraHeaderHtml) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
-    const cleanTitle = title ? escapeHtml(title) : '';
+    const cleanTitle = title ? escapeHtml(title) : (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
     const activeLabel = resolveActiveLabel(rawLabels, posts);
     const viewAllUrl = activeLabel ? buildLabelUrl(activeLabel, title) : '/search';
     const parsedViewAll = window.parseBilingualText ? window.parseBilingualText(viewAllText, lang) : (viewAllText || '').split('|')[0].trim();
 
+    let headerActionsHtml = '';
+    if (extraHeaderHtml) {
+      headerActionsHtml = extraHeaderHtml;
+    } else if (parsedViewAll) {
+      headerActionsHtml = `<a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>`;
+    }
+
+    const isSeries = pattern === 'series';
     const headerHtml = cleanTitle ? `
-      <div class="sp-widget-header">
-        <h3 class="sp-widget-title" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</h3>
-        ${parsedViewAll ? `<a href="${escapeHtml(viewAllUrl)}" class="sp-view-all-link" data-bilingual="true" data-raw-label="${escapeHtml(viewAllText)}">${escapeHtml(parsedViewAll)}</a>` : ''}
+      <div class="sp-widget-header ${isSeries ? 'series-widget-header' : ''}">
+        <h3 class="${isSeries ? 'sidebar-widget-title series-main-title' : 'sp-widget-title'}" data-bilingual="true" data-raw-label="${cleanTitle}">
+          <span class="${isSeries ? 'series-title-text' : ''}">${parsedTitle}</span>
+          ${isSeries ? headerActionsHtml : ''}
+        </h3>
+        ${!isSeries ? headerActionsHtml : ''}
       </div>` : '';
 
     return `
       <div class="sp-widget-card pattern-${escapeHtml(pattern)}">
         ${headerHtml}
-        <div class="sp-widget-body">
+        <div class="sp-widget-body ${isSeries ? 'series-widget-body' : ''}">
           ${bodyHtml}
         </div>
       </div>`;
@@ -639,6 +686,336 @@
     }).join('');
 
     return `<div class="sp-digest-list">${itemsHtml}</div>`;
+  }
+
+  /* ── 5. SERIES SHOWCASE ─────────────────────────────────────── */
+  const MOCK_SERIES_CATALOG = {
+    'series:The-Law-Of-Union': {
+      title: "The Law of 'Union and Separation'",
+      posts: [
+        {
+          title: "The Law of 'Union and Separation' - P1: Khởi nguồn của sự gắn kết",
+          url: "#post-series-union-p1",
+          thumbnail: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=160&auto=format&fit=crop&q=80",
+          published: "2026-09-13T08:00:00Z",
+          dateFormatted: "13/09/2026",
+          labels: ["Triết học", "series:The-Law-Of-Union"]
+        },
+        {
+          title: "The Law of 'Union and Separation' - P2: Ranh giới tự do và cô độc",
+          url: "#post-series-union-p2",
+          thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=160&auto=format&fit=crop&q=80",
+          published: "2026-09-14T09:00:00Z",
+          dateFormatted: "14/09/2026",
+          labels: ["Triết học", "series:The-Law-Of-Union"]
+        },
+        {
+          title: "The Law of 'Union and Separation' - P3: Bản hòa ca của sự dung hợp",
+          url: "#post-series-union-p3",
+          thumbnail: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=160&auto=format&fit=crop&q=80",
+          published: "2026-09-15T10:00:00Z",
+          dateFormatted: "15/09/2026",
+          labels: ["Triết học", "series:The-Law-Of-Union"]
+        }
+      ]
+    },
+    'series:Tu-Do-Tai-Chinh': {
+      title: "Hành Trình Tự Do Tài Chính",
+      posts: [
+        {
+          title: "Tự Do Tài Chính - Phần 1: Định nghĩa lại đồng tiền và giá trị bản thân",
+          url: "#post-series-finance-p1",
+          thumbnail: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=160&auto=format&fit=crop&q=80",
+          published: "2026-08-01T08:00:00Z",
+          dateFormatted: "01/08/2026",
+          labels: ["Tài chính", "series:Tu-Do-Tai-Chinh"]
+        },
+        {
+          title: "Tự Do Tài Chính - Phần 2: Kiểm soát chi tiêu và tư duy tích lũy",
+          url: "#post-series-finance-p2",
+          thumbnail: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=160&auto=format&fit=crop&q=80",
+          published: "2026-08-10T09:00:00Z",
+          dateFormatted: "10/08/2026",
+          labels: ["Tài chính", "series:Tu-Do-Tai-Chinh"]
+        },
+        {
+          title: "Tự Do Tài Chính - Phần 3: Danh mục đầu tư dài hạn an nhiên",
+          url: "#post-series-finance-p3",
+          thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=160&auto=format&fit=crop&q=80",
+          published: "2026-08-20T10:00:00Z",
+          dateFormatted: "20/08/2026",
+          labels: ["Tài chính", "series:Tu-Do-Tai-Chinh"]
+        },
+        {
+          title: "Tự Do Tài Chính - Phần 4: Vượt qua cạm bẫy tâm lý và FOMO",
+          url: "#post-series-finance-p4",
+          thumbnail: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=160&auto=format&fit=crop&q=80",
+          published: "2026-08-28T11:00:00Z",
+          dateFormatted: "28/08/2026",
+          labels: ["Tài chính", "series:Tu-Do-Tai-Chinh"]
+        }
+      ]
+    },
+    'series:Song-Toi-Gian': {
+      title: "Nghệ Thuật Sống Tối Giản",
+      posts: [
+        {
+          title: "Sống Tối Giản - Kỳ 1: Dọn dẹp không gian vật lý xung quanh",
+          url: "#post-series-minimal-p1",
+          thumbnail: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=160&auto=format&fit=crop&q=80",
+          published: "2026-07-05T08:00:00Z",
+          dateFormatted: "05/07/2026",
+          labels: ["Lối sống", "series:Song-Toi-Gian"]
+        },
+        {
+          title: "Sống Tối Giản - Kỳ 2: Tối giản các mối quan hệ độc hại",
+          url: "#post-series-minimal-p2",
+          thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=160&auto=format&fit=crop&q=80",
+          published: "2026-07-15T09:00:00Z",
+          dateFormatted: "15/07/2026",
+          labels: ["Lối sống", "series:Song-Toi-Gian"]
+        },
+        {
+          title: "Sống Tối Giản - Kỳ 3: Tìm thấy sự đủ đầy trong tâm tưởng",
+          url: "#post-series-minimal-p3",
+          thumbnail: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=160&auto=format&fit=crop&q=80",
+          published: "2026-07-25T10:00:00Z",
+          dateFormatted: "25/07/2026",
+          labels: ["Lối sống", "series:Song-Toi-Gian"]
+        }
+      ]
+    }
+  };
+
+  function formatSeriesTitle(rawLabel) {
+    if (!rawLabel) return '';
+    let name = rawLabel.replace(/^series:\s*/i, '').trim();
+    if (name.indexOf('-') > -1 && name.indexOf(' ') === -1) {
+      name = name.split('-').map(word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(' ');
+    }
+    return name;
+  }
+
+  async function fetchAvailableSeriesLabels() {
+    const cacheKey = CACHE_PREFIX + 'series_catalog_v2';
+    const cached = readCache(cacheKey);
+    if (cached && Array.isArray(cached) && cached.length > 0) {
+      return cached;
+    }
+
+    let foundLabels = [];
+    try {
+      const blogUrl = getBlogBaseUrl();
+      const res = await fetch(`${blogUrl}/feeds/posts/summary?alt=json&max-results=150`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.feed) {
+          if (data.feed.category && Array.isArray(data.feed.category)) {
+            data.feed.category.forEach(c => {
+              if (c && c.term && /^series:/i.test(c.term)) foundLabels.push(c.term);
+            });
+          }
+          if (data.feed.entry && Array.isArray(data.feed.entry)) {
+            data.feed.entry.forEach(entry => {
+              if (entry.category && Array.isArray(entry.category)) {
+                entry.category.forEach(c => {
+                  if (c && c.term && /^series:/i.test(c.term)) foundLabels.push(c.term);
+                });
+              }
+            });
+          }
+        }
+      }
+    } catch (_) {}
+
+    const labelMap = new Map();
+    foundLabels.forEach(lbl => {
+      const norm = lbl.trim().toLowerCase();
+      if (!labelMap.has(norm)) labelMap.set(norm, lbl.trim());
+    });
+
+    let seriesLabels = Array.from(labelMap.values());
+    if (seriesLabels.length === 0) {
+      seriesLabels = Object.keys(MOCK_SERIES_CATALOG);
+    }
+
+    writeCache(cacheKey, seriesLabels);
+    return seriesLabels;
+  }
+
+  async function fetchSeriesPosts(seriesLabel) {
+    let posts = [];
+    try {
+      posts = await fetchSingleLabelFeed(seriesLabel, 50, 'summary');
+    } catch (_) {
+      posts = [];
+    }
+
+    if (!posts || posts.length === 0) {
+      const mock = MOCK_SERIES_CATALOG[seriesLabel] || Object.values(MOCK_SERIES_CATALOG)[0];
+      if (mock && mock.posts) {
+        posts = mock.posts.map(p => Object.assign({}, p));
+      }
+    }
+
+    // Sắp xếp theo trình tự thời gian (Tập 1 -> Tập N)
+    posts.sort((a, b) => new Date(a.published) - new Date(b.published));
+    return posts;
+  }
+
+  function renderSeriesPattern(posts, opts = {}) {
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
+    const limit = opts.limit || 5;
+    const seriesLabel = opts.seriesLabel || (posts[0] && (posts[0].labels || []).find(l => /^series:/i.test(l))) || '';
+    const seriesTitle = opts.seriesTitle || formatSeriesTitle(seriesLabel);
+    const totalParts = posts.length;
+    const displayedPosts = posts.slice(0, limit);
+
+    // Compact count text: e.g. "3/10 bài viết | 3/10 topics"
+    const rawCountBadge = `${displayedPosts.length}/${totalParts} bài viết | ${displayedPosts.length}/${totalParts} topics`;
+    const parsedCountBadge = window.parseBilingualText ? window.parseBilingualText(rawCountBadge, lang) : `${displayedPosts.length}/${totalParts} bài viết`;
+
+    // Tooltip text for extension icon button
+    const rawTooltip = `Xem tất cả | View all`;
+    const parsedTooltip = window.parseBilingualText ? window.parseBilingualText(rawTooltip, lang) : `Xem tất cả`;
+    const seriesSearchUrl = buildLabelUrl(seriesLabel, seriesTitle);
+
+    const itemsHtml = displayedPosts.map((post, index) => {
+      const numStr = String(index + 1).padStart(2, '0');
+      const thumb = (opts.showThumb !== false && post.thumbnail)
+        ? optimizeThumbnail(post.thumbnail, 's160-c')
+        : '';
+      const parsedPostTitle = window.parseBilingualText ? window.parseBilingualText(post.title, lang) : post.title.split('|')[0].trim();
+      const aiType = extractAITypes(post.labels || []);
+      const aiHtml = aiType ? (' • ' + renderAIInlineBadge(aiType)) : '';
+
+      return `
+        <li>
+          <a class="popular-post-item" href="${escapeHtml(post.url)}"${aiType ? ` data-ai-type="${aiType}"` : ''}>
+            <span class="popular-post-num">${numStr}</span>
+            ${thumb ? `<img class="popular-post-thumb" src="${escapeHtml(thumb)}" alt="${escapeHtml(post.title)}" loading="lazy" width="60" height="60"/>` : '<div class="popular-post-thumb sp-no-thumb"></div>'}
+            <div class="popular-post-info">
+              <div class="popular-post-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedPostTitle)}</div>
+              <div class="popular-post-date">📅 ${escapeHtml(post.dateFormatted)}${aiHtml}</div>
+            </div>
+          </a>
+        </li>`;
+    }).join('');
+
+    return `
+      <div class="series-showcase-summary">
+        <div class="series-showcase-name-group" title="${escapeHtml(seriesTitle)}">
+          <span class="series-showcase-book-icon" aria-hidden="true">📖</span>
+          <strong class="series-showcase-name" data-bilingual="true" data-raw-label="${escapeHtml(seriesTitle)}">${escapeHtml(seriesTitle)}</strong>
+        </div>
+        <div class="series-showcase-meta-right">
+          <span class="series-showcase-count-pill" data-bilingual="true" data-raw-label="${escapeHtml(rawCountBadge)}">${escapeHtml(parsedCountBadge)}</span>
+        </div>
+      </div>
+      <ul class="popular-posts-list series-showcase-list">
+        ${itemsHtml}
+      </ul>
+      <div class="series-showcase-footer">
+        <a href="${escapeHtml(seriesSearchUrl)}" class="series-showcase-ext-btn" title="${escapeHtml(parsedTooltip)}" aria-label="${escapeHtml(parsedTooltip)}">
+          <span class="series-ext-label" data-bilingual="true" data-raw-label="${escapeHtml(rawTooltip)}">${escapeHtml(parsedTooltip)}</span>
+          <svg class="series-ext-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="13 17 18 12 13 7"></polyline>
+            <polyline points="6 17 11 12 6 7"></polyline>
+          </svg>
+        </a>
+      </div>
+    `;
+  }
+
+  async function renderSeriesWidget(container, opts) {
+    const { widgetTitle, limit, specifiedLabel } = opts;
+
+    let availableSeries = await fetchAvailableSeriesLabels();
+    container._availableSeries = availableSeries;
+
+    let targetLabel = specifiedLabel;
+    if (!targetLabel || !/^series:/i.test(targetLabel)) {
+      const randIdx = Math.floor(Math.random() * availableSeries.length);
+      targetLabel = availableSeries[randIdx];
+      container._currentSeriesIndex = randIdx;
+    } else {
+      container._currentSeriesIndex = availableSeries.indexOf(targetLabel);
+      if (container._currentSeriesIndex === -1) container._currentSeriesIndex = 0;
+    }
+
+    await renderSeriesContainerView(container, targetLabel, limit, widgetTitle);
+  }
+
+  async function renderSeriesContainerView(container, seriesLabel, limit, widgetTitle) {
+    const posts = await fetchSeriesPosts(seriesLabel);
+    const seriesTitle = formatSeriesTitle(seriesLabel);
+    const available = container._availableSeries || [];
+    const shuffleBtnHtml = available.length > 1 ? `
+      <button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">
+        <span class="shuffle-icon" aria-hidden="true">🔀</span>
+      </button>
+    ` : '';
+
+    const bodyHtml = renderSeriesPattern(posts, {
+      limit,
+      seriesLabel,
+      seriesTitle,
+      showThumb: container.dataset.showThumbnail !== 'false'
+    });
+
+    container.innerHTML = buildWidgetShell(
+      widgetTitle || '📚 Chuỗi chuyên đề | 📚 Series topic',
+      '',
+      seriesLabel,
+      'series',
+      bodyHtml,
+      posts,
+      shuffleBtnHtml
+    );
+
+    // Gắn sự kiện cho nút Shuffle
+    const shuffleBtn = container.querySelector('.series-shuffle-btn');
+    if (shuffleBtn) {
+      shuffleBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        shuffleBtn.classList.add('is-spinning');
+        const available = container._availableSeries || [];
+        if (available.length > 1) {
+          let nextIdx = ((container._currentSeriesIndex || 0) + 1) % available.length;
+          container._currentSeriesIndex = nextIdx;
+          const nextLabel = available[nextIdx];
+
+          const bodyEl = container.querySelector('.series-widget-body, .sp-widget-body');
+          if (bodyEl) {
+            bodyEl.style.opacity = '0.35';
+            bodyEl.style.transition = 'opacity 0.25s ease';
+          }
+
+          await renderSeriesContainerView(container, nextLabel, limit, widgetTitle);
+
+          const newBody = container.querySelector('.series-widget-body, .sp-widget-body');
+          if (newBody) {
+            newBody.style.opacity = '1';
+          }
+        }
+        setTimeout(function () {
+          const btn = container.querySelector('.series-shuffle-btn');
+          if (btn) btn.classList.remove('is-spinning');
+        }, 500);
+
+        if (window.applyBilingualElements) {
+          window.applyBilingualElements();
+        }
+      });
+    }
+
+    if (window.applyBilingualElements) {
+      window.applyBilingualElements();
+    }
   }
 
   /* ═══════════════════════════════════════════════════════════════

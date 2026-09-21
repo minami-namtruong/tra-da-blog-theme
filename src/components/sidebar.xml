@@ -71,6 +71,26 @@
             </b:includable>
           </b:widget>
 
+          <!-- Widget: Standalone Series Showcase (📚 Chuỗi chuyên đề | 📚 Series topic) -->
+          <b:widget id='HTML18' type='HTML' version='2' title='📚 Chuỗi chuyên đề | 📚 Series topic'>
+            <b:includable id='main'>
+              <div class='sidebar-widget special-posts-widget'
+                   id='widget-series-showcase'
+                   data-pattern='series'
+                   data-limit='3'
+                   data-sort='random'>
+                <b:if cond='data:title'>
+                  <b:attr name='data-title' expr:value='data:title'/>
+                <b:else/>
+                  <b:attr name='data-title' value='📚 Chuỗi chuyên đề | 📚 Series topic'/>
+                </b:if>
+                <b:if cond='data:content'>
+                  <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
           <!-- Widget: Newsletter -->
           <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin (Sidebar)'>
             <b:includable id='main'>

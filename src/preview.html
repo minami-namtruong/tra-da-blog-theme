@@ -837,6 +837,16 @@
           </ul>
         </div>
 
+        <!-- DEMO 5: Standalone Series Showcase Widget (OPEN_018) -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget"
+               id="widget-series-showcase-sidebar"
+               data-pattern="series"
+               data-limit="5"
+               data-sort="random"
+               data-title="📚 Chuỗi chuyên đề | 📚 Series topic">
+          </div>
+        </div>
 
         <!-- ═══════════════════════════════════════════════════
              SPECIAL POSTS WIDGET DEMO — FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2
@@ -1571,6 +1581,7 @@
           <label style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">⚡ Chọn mẫu cấu hình nhanh (Presets):</label>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 0.5rem;">
             <button type="button" class="tester-preset-btn" data-preset="ranked" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">🔥 Top Nổi Bật</button>
+            <button type="button" class="tester-preset-btn" data-preset="series" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">📚 Tuyến Bài Series</button>
             <button type="button" class="tester-preset-btn" data-preset="quote" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">☕ Chiêm Nghiệm</button>
             <button type="button" class="tester-preset-btn" data-preset="digest" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">⚡ Điểm Tin Vắn</button>
             <button type="button" class="tester-preset-btn" data-preset="spotlight" style="padding: 0.5rem 0.65rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.2s;">🌟 Bài Tiêu Điểm</button>
@@ -1586,6 +1597,13 @@
               <div>
                 <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Ranked (01, 02...)</strong>
                 <span style="font-size: 0.74rem; color: var(--text-muted);">Đánh số thứ hạng, ảnh thumbnail vuông nhỏ</span>
+              </div>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card">
+              <input type="radio" name="tester_pattern" value="series" style="margin-top: 3px; accent-color: var(--primary);"/>
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--text-main);">Series (Tuyến bài)</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Chuỗi bài theo tập kèm nút đổi tuyến</span>
               </div>
             </label>
             <label style="display: flex; align-items: flex-start; gap: 8px; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); cursor: pointer; transition: all 0.2s;" class="tester-pattern-card">
@@ -1939,6 +1957,35 @@
         var bodyHtml = '';
         if (pattern === 'ranked') {
           bodyHtml = renderRanked(posts, limit, showThumb);
+        } else if (pattern === 'series') {
+          var seriesPosts = [
+            { title: "The Law of 'Union and Separation' - P1: Khởi nguồn của sự gắn kết", dateFormatted: "13/09/2026", thumb: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=160&auto=format&fit=crop&q=80" },
+            { title: "The Law of 'Union and Separation' - P2: Ranh giới tự do và cô độc", dateFormatted: "14/09/2026", thumb: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=160&auto=format&fit=crop&q=80" },
+            { title: "The Law of 'Union and Separation' - P3: Bản hòa ca của sự dung hợp", dateFormatted: "15/09/2026", thumb: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=160&auto=format&fit=crop&q=80" },
+            { title: "The Law of 'Union and Separation' - P4: Đối thoại với bóng tối", dateFormatted: "16/09/2026", thumb: "https://images.unsplash.com/photo-1494548162494-384bba4ab999?w=160&auto=format&fit=crop&q=80" },
+            { title: "The Law of 'Union and Separation' - P5: Chu kỳ bất tận", dateFormatted: "17/09/2026", thumb: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=160&auto=format&fit=crop&q=80" }
+          ].slice(0, limit);
+
+          var sItems = seriesPosts.map(function(p, i) {
+            var n = String(i + 1).padStart(2, '0');
+            return '<li><a class="popular-post-item" href="#">' +
+                   '<span class="popular-post-num">' + n + '</span>' +
+                   (showThumb ? '<img class="popular-post-thumb" src="' + p.thumb + '" width="60" height="60" style="border-radius:var(--radius-sm);object-fit:cover;"/>' : '') +
+                   '<div class="popular-post-info"><div class="popular-post-title">' + p.title + '</div><div class="popular-post-date">📅 ' + p.dateFormatted + '</div></div>' +
+                   '</a></li>';
+          }).join('');
+
+          bodyHtml = '<div class="series-showcase-summary">' +
+                     '<div class="series-showcase-name-group" title="The Law of \'Union and Separation\'">' +
+                     '<span class="series-showcase-book-icon">📖</span><strong class="series-showcase-name">The Law of \'Union and Separation\'</strong></div>' +
+                     '<div class="series-showcase-meta-right"><span class="series-showcase-count-pill">' + limit + '/5 bài viết</span></div>' +
+                     '</div>' +
+                     '<ul class="popular-posts-list series-showcase-list">' + sItems + '</ul>' +
+                     '<div class="series-showcase-footer">' +
+                     '<a href="#" class="series-showcase-ext-btn" title="Xem tất cả" aria-label="Xem tất cả">' +
+                     '<span class="series-ext-label" data-bilingual="true" data-raw-label="Xem tất cả | View all">Xem tất cả</span>' +
+                     '<svg class="series-ext-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>' +
+                     '</a></div>';
         } else if (pattern === 'quote') {
           bodyHtml = renderQuote(posts, limit, showSnippet);
         } else if (pattern === 'digest') {
@@ -1948,12 +1995,21 @@
         }
 
         // Header widget
+        var isSeries = pattern === 'series';
         var headerHtml = '';
-        if (title || viewAll) {
-          headerHtml = '<div class="sp-widget-header">' +
-                       (title ? '<h3 class="sp-widget-title">' + escapeHtml(title) + '</h3>' : '') +
-                       (viewAll ? '<a href="#" class="sp-view-all-link">' + escapeHtml(viewAll) + '</a>' : '') +
-                       '</div>';
+        if (title || viewAll || isSeries) {
+          if (isSeries) {
+            headerHtml = '<div class="sp-widget-header series-widget-header">' +
+                         '<h3 class="sidebar-widget-title series-main-title">' +
+                         '<span class="series-title-text">' + escapeHtml(title || '📚 Chuỗi chuyên đề | 📚 Series topic') + '</span>' +
+                         '<button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">🔀</button>' +
+                         '</h3></div>';
+          } else {
+            headerHtml = '<div class="sp-widget-header">' +
+                         (title ? '<h3 class="sp-widget-title">' + escapeHtml(title) + '</h3>' : '') +
+                         (viewAll ? '<a href="#" class="sp-view-all-link">' + escapeHtml(viewAll) + '</a>' : '') +
+                         '</div>';
+          }
         }
 
         // Dựng Widget HTML vào sandbox
@@ -1993,6 +2049,16 @@
           showThumb: true,
           showSnippet: false,
           viewAll: 'Xem tất cả »'
+        },
+        series: {
+          pattern: 'series',
+          title: '📚 Chuỗi chuyên đề | 📚 Series topic',
+          labels: 'series:The-Law-Of-Union',
+          limit: 3,
+          sort: 'random',
+          showThumb: true,
+          showSnippet: false,
+          viewAll: ''
         },
         quote: {
           pattern: 'quote',
