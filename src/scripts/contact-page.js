@@ -176,9 +176,8 @@
       });
   }
 
-  // ── Adapter B: Blogger Native ContactForm ────────────────────────
+  // ── Adapter B: Blogger Native ContactForm (Proxy Method) ─────────
   function _submitBlogger(data, form) {
-    // Tạo message có cấu trúc gửi vào trường message của contact-form.do
     var isGuest = data.type === 'guest_post';
     var lines = [];
     if (isGuest) {
@@ -194,35 +193,59 @@
       if (data.message) lines.push('✔ Nội dung:\n' + data.message);
     }
     var messageStr = lines.join('\n');
-    var nameStr  = data.author_name || data.name || '';
-    var emailStr = data.author_email || data.email || '';
+    var nameStr  = data.author_name || data.name || 'Anonymous';
+    var emailStr = data.author_email || data.email || 'no-reply@blogger.com';
 
-    // Định vị blogger blog ID từ meta tag hoặc window
-    var blogId = (window.__BLOGGER_BLOG_ID) ||
-      (document.querySelector('meta[name="blog-id"]') || {}).content || '';
+    // Tìm các trường ẩn của ContactForm1
+    var nativeName = document.getElementById('ContactForm1_contact-form-name');
+    var nativeEmail = document.getElementById('ContactForm1_contact-form-email');
+    var nativeMessage = document.getElementById('ContactForm1_contact-form-email-message');
+    var nativeSubmit = document.getElementById('ContactForm1_contact-form-submit');
+    var nativeSuccess = document.getElementById('ContactForm1_contact-form-success-message');
+    var nativeError = document.getElementById('ContactForm1_contact-form-error-message');
 
-    var body = new URLSearchParams({
-      name:    nameStr,
-      email:   emailStr,
-      message: messageStr,
-    });
-    if (blogId) body.append('blogID', blogId);
+    if (!nativeName || !nativeSubmit) {
+      alert('Không tìm thấy tiện ích ContactForm gốc của Blogger. Hãy đảm bảo bạn đã cài đặt mã mới nhất.');
+      _setLoading(form, false);
+      return;
+    }
 
-    fetch('https://www.blogger.com/contact-form.do', {
-      method: 'POST',
-      mode:   'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString(),
-    })
-      .then(function () {
-        _setLoading(form, false);
-        _showToast('success', form);
-        form.reset();
-      })
-      .catch(function () {
-        _setLoading(form, false);
-        _showToast('error', form);
+    // Gán dữ liệu
+    nativeName.value = nameStr;
+    nativeEmail.value = emailStr;
+    nativeMessage.value = messageStr;
+
+    // Reset thông báo cũ
+    if (nativeSuccess) nativeSuccess.innerHTML = '';
+    if (nativeError) nativeError.innerHTML = '';
+
+    // Bấm nút gửi ảo
+    nativeSubmit.click();
+
+    // Dùng MutationObserver để theo dõi phản hồi từ server Blogger
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.target.innerHTML.trim() !== '') {
+          observer.disconnect();
+          _setLoading(form, false);
+          if (mutation.target === nativeSuccess) {
+            _showToast('success', form);
+            form.reset();
+          } else {
+            _showToast('error', form);
+          }
+        }
       });
+    });
+
+    if (nativeSuccess) observer.observe(nativeSuccess, { childList: true, characterData: true, subtree: true });
+    if (nativeError) observer.observe(nativeError, { childList: true, characterData: true, subtree: true });
+    
+    // Timeout phòng hờ (10s)
+    setTimeout(function() {
+      observer.disconnect();
+      _setLoading(form, false);
+    }, 10000);
   }
 
   // ── Adapter C: FormSubmit ──────────────────────────────────────

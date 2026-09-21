@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T10:44:40.972Z -->
+<!-- Compiled at: 2026-09-21T10:47:35.688Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -7973,6 +7973,27 @@ body.view-not-homepage #main-above-feed {
        HIDDEN CONFIG SECTION
        ========================================== -->
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
+    <!-- WIDGET GỐC CỦA BLOGGER ĐỂ XỬ LÝ GỬI MAIL (KHÔNG THỂ THIẾU) -->
+    <b:widget id='ContactForm1' type='ContactForm' version='2' title='Hệ thống gửi thư tự động (Không xóa)' visible='true'>
+      <b:includable id='main'>
+        <b:if cond='data:title != &quot;&quot;'>
+          <h2 class='title'><data:title/></h2>
+        </b:if>
+        <div class='contact-form-widget'>
+          <div class='form'>
+            <form name='contact-form'>
+              <input class='contact-form-name' expr:id='data:widget.instanceId + &quot;_contact-form-name&quot;' name='name' size='30' type='text' value=''/>
+              <input class='contact-form-email' expr:id='data:widget.instanceId + &quot;_contact-form-email&quot;' name='email' size='30' type='text' value=''/>
+              <textarea class='contact-form-email-message' cols='25' expr:id='data:widget.instanceId + &quot;_contact-form-email-message&quot;' name='email-message' rows='5'/>
+              <input class='contact-form-button contact-form-button-submit' expr:id='data:widget.instanceId + &quot;_contact-form-submit&quot;' type='button' value='Send'/>
+              <div class='contact-form-error-message' expr:id='data:widget.instanceId + &quot;_contact-form-error-message&quot;'/>
+              <div class='contact-form-success-message' expr:id='data:widget.instanceId + &quot;_contact-form-success-message&quot;'/>
+            </form>
+          </div>
+        </div>
+      </b:includable>
+    </b:widget>
+
     <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='true'>
       <b:widget-settings>
 <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
@@ -8024,7 +8045,7 @@ body.view-not-homepage #main-above-feed {
 <!-- 4. Cấu hình Trang Liên Hệ (Email, Adapter) -->
 <script>
   window.__CONTACT_CONFIG = {
-    adapter: 'formsubmit', // Chọn adapter: blogger | formsubmit | gas
+    adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
     adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
     gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
   };
@@ -14237,9 +14258,8 @@ body.view-not-homepage #main-above-feed {
       });
   }
 
-  // ── Adapter B: Blogger Native ContactForm ────────────────────────
+  // ── Adapter B: Blogger Native ContactForm (Proxy Method) ─────────
   function _submitBlogger(data, form) {
-    // Tạo message có cấu trúc gửi vào trường message của contact-form.do
     var isGuest = data.type === 'guest_post';
     var lines = [];
     if (isGuest) {
@@ -14255,35 +14275,59 @@ body.view-not-homepage #main-above-feed {
       if (data.message) lines.push('✔ Nội dung:\n' + data.message);
     }
     var messageStr = lines.join('\n');
-    var nameStr  = data.author_name || data.name || '';
-    var emailStr = data.author_email || data.email || '';
+    var nameStr  = data.author_name || data.name || 'Anonymous';
+    var emailStr = data.author_email || data.email || 'no-reply@blogger.com';
 
-    // Định vị blogger blog ID từ meta tag hoặc window
-    var blogId = (window.__BLOGGER_BLOG_ID) ||
-      (document.querySelector('meta[name="blog-id"]') || {}).content || '';
+    // Tìm các trường ẩn của ContactForm1
+    var nativeName = document.getElementById('ContactForm1_contact-form-name');
+    var nativeEmail = document.getElementById('ContactForm1_contact-form-email');
+    var nativeMessage = document.getElementById('ContactForm1_contact-form-email-message');
+    var nativeSubmit = document.getElementById('ContactForm1_contact-form-submit');
+    var nativeSuccess = document.getElementById('ContactForm1_contact-form-success-message');
+    var nativeError = document.getElementById('ContactForm1_contact-form-error-message');
 
-    var body = new URLSearchParams({
-      name:    nameStr,
-      email:   emailStr,
-      message: messageStr,
-    });
-    if (blogId) body.append('blogID', blogId);
+    if (!nativeName || !nativeSubmit) {
+      alert('Không tìm thấy tiện ích ContactForm gốc của Blogger. Hãy đảm bảo bạn đã cài đặt mã mới nhất.');
+      _setLoading(form, false);
+      return;
+    }
 
-    fetch('https://www.blogger.com/contact-form.do', {
-      method: 'POST',
-      mode:   'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString(),
-    })
-      .then(function () {
-        _setLoading(form, false);
-        _showToast('success', form);
-        form.reset();
-      })
-      .catch(function () {
-        _setLoading(form, false);
-        _showToast('error', form);
+    // Gán dữ liệu
+    nativeName.value = nameStr;
+    nativeEmail.value = emailStr;
+    nativeMessage.value = messageStr;
+
+    // Reset thông báo cũ
+    if (nativeSuccess) nativeSuccess.innerHTML = '';
+    if (nativeError) nativeError.innerHTML = '';
+
+    // Bấm nút gửi ảo
+    nativeSubmit.click();
+
+    // Dùng MutationObserver để theo dõi phản hồi từ server Blogger
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.target.innerHTML.trim() !== '') {
+          observer.disconnect();
+          _setLoading(form, false);
+          if (mutation.target === nativeSuccess) {
+            _showToast('success', form);
+            form.reset();
+          } else {
+            _showToast('error', form);
+          }
+        }
       });
+    });
+
+    if (nativeSuccess) observer.observe(nativeSuccess, { childList: true, characterData: true, subtree: true });
+    if (nativeError) observer.observe(nativeError, { childList: true, characterData: true, subtree: true });
+    
+    // Timeout phòng hờ (10s)
+    setTimeout(function() {
+      observer.disconnect();
+      _setLoading(form, false);
+    }, 10000);
   }
 
   // ── Adapter C: FormSubmit ──────────────────────────────────────
