@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T10:13:27.286Z -->
+<!-- Compiled at: 2026-09-21T10:19:07.155Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -13858,14 +13858,14 @@ body.view-not-homepage #main-above-feed {
 (function () {
   'use strict';
 
-  // Chỉ chạy trên trang bài viết đơn
-  var body = document.body;
-  var isPostView = body.classList.contains('view-item') ||
-    body.classList.contains('item-view') ||
-    !!document.querySelector('.single-post-container');
-  if (!isPostView) return;
-
   document.addEventListener('DOMContentLoaded', function () {
+    // Chỉ chạy logic thay thế tác giả trên trang bài viết đơn
+    var body = document.body;
+    var isPostView = body.classList.contains('view-item') ||
+      body.classList.contains('item-view') ||
+      !!document.querySelector('.single-post-container');
+    if (!isPostView) return;
+
     var metaEl = document.querySelector('.post-body .guest-author-meta');
     if (!metaEl) return; // Không có guest author → fallback (logic hiện tại chạy)
 

@@ -8,14 +8,14 @@
 (function () {
   'use strict';
 
-  // Chỉ chạy trên trang bài viết đơn
-  var body = document.body;
-  var isPostView = body.classList.contains('view-item') ||
-    body.classList.contains('item-view') ||
-    !!document.querySelector('.single-post-container');
-  if (!isPostView) return;
-
   document.addEventListener('DOMContentLoaded', function () {
+    // Chỉ chạy logic thay thế tác giả trên trang bài viết đơn
+    var body = document.body;
+    var isPostView = body.classList.contains('view-item') ||
+      body.classList.contains('item-view') ||
+      !!document.querySelector('.single-post-container');
+    if (!isPostView) return;
+
     var metaEl = document.querySelector('.post-body .guest-author-meta');
     if (!metaEl) return; // Không có guest author → fallback (logic hiện tại chạy)
 
