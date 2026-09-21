@@ -228,17 +228,21 @@
   // ── Adapter C: FormSubmit ──────────────────────────────────────
   function _submitFormSubmit(adminEmail, data, form) {
     var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(adminEmail);
-    var params = new URLSearchParams();
-    params.append('_subject', data.type === 'guest_post'
-      ? '[Gửi Bài] ' + (data.post_title || data.author_name)
-      : '[Liên Hệ] ' + (data.name || data.author_name));
-    params.append('_captcha', 'false');
-    Object.keys(data).forEach(function (k) { params.append(k, data[k]); });
+    var payload = {
+      _subject: data.type === 'guest_post'
+        ? '[Gửi Bài] ' + (data.post_title || data.author_name)
+        : '[Liên Hệ] ' + (data.name || data.author_name),
+      _captcha: 'false'
+    };
+    Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
 
     fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-      body: params.toString(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload),
     })
       .then(function (r) { return r.json(); })
       .then(function (res) {
