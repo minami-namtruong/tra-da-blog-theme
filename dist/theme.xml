@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T09:57:33.079Z -->
+<!-- Compiled at: 2026-09-21T10:13:27.286Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -7974,7 +7974,7 @@ body.view-not-homepage #main-above-feed {
        HIDDEN CONFIG SECTION
        ========================================== -->
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
-    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
+    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='true'>
       <b:widget-settings>
 <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 

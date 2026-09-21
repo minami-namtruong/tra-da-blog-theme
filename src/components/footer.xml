@@ -11,7 +11,7 @@
        HIDDEN CONFIG SECTION
        ========================================== -->
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
-    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
+    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='true'>
       <b:widget-settings>
 <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 
