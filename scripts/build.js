@@ -16,7 +16,7 @@ const startTime = Date.now();
 const cssFiles = [
   "variables.css", "typography.css", "header-banner.css", "post-layout.css",
   "post-series.css", "affiliate-ui.css", "footer.css", "archive-page.css",
-  "special-posts.css", "ai-transparency.css",
+  "special-posts.css", "ai-transparency.css", "contact-page.css",
 ];
 const combinedCss = cssFiles
   .map(f => fs.readFileSync(path.join(srcDir, "styles", f), "utf8"))
@@ -26,6 +26,7 @@ const jsFiles = [
   "bilingual.js", "mobile-nav.js", "search-modal.js", "archive-page.js",
   "auto-toc.js", "reading-time.js", "post-series.js", "footer.js",
   "special-posts.js", "ai-transparency.js", "homepage-interleaved.js",
+  "guest-author.js", "contact-page.js",
 ];
 const combinedJs = jsFiles
   .map(f => fs.readFileSync(path.join(srcDir, "scripts", f), "utf8"))

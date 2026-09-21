@@ -1,6 +1,6 @@
 # ĐẶC TẢ KỸ THUẬT: CƠ CHẾ TÁC GIẢ KHÁCH & TRANG LIÊN HỆ GỬI BÀI VIẾT (DYNAMIC GUEST AUTHOR & CONTACT SUBMISSION PAGE)
 
-- **Mã spec:** OPEN_020 | **Phiên bản:** 1.0.0 | **Trạng thái:** Open | **Ngày:** 21/09/2026
+- **Mã spec:** DOING_020 | **Phiên bản:** 1.0.0 | **Trạng thái:** Doing | **Ngày:** 21/09/2026
 - **Dự án:** Trà Đá Blog (Blogger Editorial Theme - Blogspot XML v3)
 - **Tài liệu tham chiếu:** [01_Done_001_Theme_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/01_Done_001_Theme_Specification.md), [01_Done_014_Subway_Timeline_Archive_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/01_Done_014_Subway_Timeline_Archive_Specification.md), [04_Idea_017_Editorial_Theme_Backlog_And_Widget_Enhancements_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/04_Idea_017_Editorial_Theme_Backlog_And_Widget_Enhancements_Specification.md)
 

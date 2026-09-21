@@ -13,7 +13,7 @@
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
     <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
       <b:widget-settings>
-        <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
+<b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 
 <!-- 1. Tác Giả dưới bài viết (Các nút bấm) -->
 <div class="post-footer-actions-config" style="display:none;">
@@ -32,6 +32,31 @@
 <div class="in-post-ads-config" style="display:none;">
   <div class="ad-top-code"><!-- Mã quảng cáo đầu bài viết --></div>
   <div class="ad-bottom-code"><!-- Mã quảng cáo cuối bài viết --></div>
+</div>
+
+<!-- 3. Widget Mời Cộng Tác / Gửi Bài Viết -->
+<div class="guest-cta-config">
+  <!-- Nút trên Banner Hero (MẶC ĐỊNH HIỆN: display:inline-flex, đổi thành display:none nếu muốn tắt) -->
+  <a class="btn-guest-hero-config" href="/p/lien-he.html" style="display:inline-flex;">
+    <span data-bilingual="true">✍️ Viết cùng Trà Đá | ✍️ Write with us</span>
+  </a>
+
+  <!-- Callout chân bài viết (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
+  <div class="post-guest-callout-config" style="display:none;">
+    <span class="callout-text" data-bilingual="true">
+      Bạn muốn chia sẻ câu chuyện của mình trên Trà Đá Blog? | Want to share your thoughts on Trà Đá Blog?
+    </span>
+    <a class="callout-btn" href="/p/lien-he.html">
+      <span data-bilingual="true">Gửi bài viết ➔ | Submit article ➔</span>
+    </a>
+  </div>
+
+  <!-- Widget Sidebar (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
+  <div class="sidebar-guest-card-config" style="display:none;">
+    <h3 class="sidebar-widget-title" data-bilingual="true">✍️ Viết Cùng Chúng Mình | Write With Us</h3>
+    <p data-bilingual="true">Chia sẻ góc nhìn chân thực và lan tỏa tri thức tới cộng đồng bạn đọc. | Share your genuine perspectives with our readers.</p>
+    <a class="sidebar-cta-btn" href="/p/lien-he.html">Gửi bài ngay | Submit</a>
+  </div>
 </div>
 ]]></b:widget-setting>
       </b:widget-settings>

@@ -354,6 +354,176 @@
                       </div>
                     </div>
                   </div>
+                <b:elseif cond='data:view.isPage and (data:blog.url contains &quot;/p/lien-he.html&quot; or data:blog.url contains &quot;/p/contact.html&quot; or data:blog.pageName == &quot;Liên Hệ&quot; or data:blog.pageName == &quot;Contact&quot;)'/>
+                  <!-- ── SPECIAL VIEW: TRANG LIÊN HỆ & GỬI BÀI VIẾT ── -->
+                  <div class='editorial-contact-page' id='editorial-contact-app'>
+                    <!-- Toast thông báo (JS render) -->
+
+                    <!-- Layout 2 cột -->
+                    <div class='contact-split-layout'>
+
+                      <!-- ── CỘT TRÁI: TÔN CHỈ & HƯỚNG DẪN ── -->
+                      <div class='contact-manifesto'>
+                        <span class='contact-eyebrow' data-bilingual='true'>Cộng Tác Cùng Chúng Mình | Write With Us</span>
+                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
+                        <p class='contact-description' data-bilingual='true'>
+                          Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
+                          phong cách sống, kiến trúc phần mềm và những chiêm nghiệm đời thường.
+                          | Trà Đá Blog welcomes genuine, insightful perspectives on technology,
+                          lifestyle, software architecture and everyday reflections.
+                        </p>
+
+                        <!-- Checklist quy chuẩn -->
+                        <ul class='contact-checklist'>
+                          <li data-bilingual='true'>Nội dung nguyên bản, chưa từng đăng tải độc quyền ở nơi khác. | Original content, not published exclusively elsewhere.</li>
+                          <li data-bilingual='true'>Khuyến khích kèm liên kết Google Docs (chế độ nhận xét) để biên tập nhanh. | Prefer Google Docs link (comment mode) for quick editing.</li>
+                          <li data-bilingual='true'>Tôn trọng bản quyền hình ảnh, trích dẫn nguồn minh bạch. | Respect image copyrights and cite sources transparently.</li>
+                          <li data-bilingual='true'>Tác giả được giữ tên tuổi, gắn link bio và quảng bá tới độc giả. | Authors keep full credit with bio link and audience exposure.</li>
+                        </ul>
+
+                        <!-- Kênh liên hệ trực tiếp -->
+                        <div class='contact-direct-row'>
+                          <span class='contact-direct-label' data-bilingual='true'>Liên hệ trực tiếp | Direct contact:</span>
+                          <a class='contact-direct-link' href='mailto:namtruong.contact@gmail.com'>
+                            ✉️ namtruong.contact@gmail.com
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- ── CỘT PHẢI: FORM GỬI BÀI ── -->
+                      <div class='contact-form-panel'>
+
+                        <!-- Tab Switcher -->
+                        <div class='contact-tabs' role='tablist'>
+                          <button class='contact-tab-btn active' role='tab' aria-selected='true' data-tab='guest'
+                                  id='tab-guest' aria-controls='contact-form-guest'>
+                            ✍️ Gửi bài viết đóng góp
+                          </button>
+                          <button class='contact-tab-btn' role='tab' aria-selected='false' data-tab='general'
+                                  id='tab-general' aria-controls='contact-form-general'>
+                            ✉️ Liên hệ / Góp ý
+                          </button>
+                        </div>
+
+                        <!-- Form 1: Guest Post -->
+                        <form id='contact-form-guest' novalidate='novalidate'>
+                          <!-- Honeypot -->
+                          <div class='contact-honeypot' aria-hidden='true'>
+                            <input type='text' name='_honey' tabindex='-1' autocomplete='off'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-name'>
+                              Họ tên / Bút danh <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-name' name='author_name'
+                                   type='text' required='required' autocomplete='name'
+                                   placeholder='Nguyễn Văn A / Bút danh của bạn'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-email'>
+                              Email liên hệ <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-email' name='author_email'
+                                   type='email' required='required' autocomplete='email'
+                                   placeholder='email@của-bạn.com'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-title'>
+                              Tiêu đề bài viết dự kiến <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-title' name='post_title'
+                                   type='text' required='required'
+                                   placeholder='VD: Kiến trúc microservices cho người mới'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-content'>
+                              Link Google Docs hoặc Nội dung bản thảo <span class='req'>*</span>
+                            </label>
+                            <textarea class='contact-form-textarea contact-form-textarea--tall'
+                                      id='guest-content' name='content' required='required'
+                                      placeholder='Dán link Google Docs (chế độ nhận xét) hoặc tóm tắt nội dung bài viết của bạn...'></textarea>
+                            <span class='contact-field-hint' data-bilingual='true'>
+                              Khuyến khích dùng Google Docs để biên tập nhanh hơn. |
+                              Google Docs link preferred for faster editing.
+                            </span>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-bio'>Giới thiệu ngắn về bạn (Bio 1–2 câu)</label>
+                            <textarea class='contact-form-textarea' id='guest-bio' name='author_bio'
+                                      placeholder='Kỹ sư phần mềm, yêu thích viết lách và khám phá công nghệ...'></textarea>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-avatar'>Link ảnh chân dung / Avatar (Tùy chọn)</label>
+                            <input class='contact-form-input' id='guest-avatar' name='author_avatar'
+                                   type='url' placeholder='https://...'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-social'>Website hoặc Link Mạng Xã Hội (Tùy chọn)</label>
+                            <input class='contact-form-input' id='guest-social' name='author_social'
+                                   type='url' placeholder='https://your-site.com hoặc facebook.com/...'/>
+                          </div>
+
+                          <button class='contact-submit-btn' type='submit'>
+                            📨 Gửi bản thảo bài viết
+                          </button>
+                        </form>
+
+                        <!-- Form 2: General Contact -->
+                        <form id='contact-form-general' novalidate='novalidate' style='display:none;'>
+                          <!-- Honeypot -->
+                          <div class='contact-honeypot' aria-hidden='true'>
+                            <input type='text' name='_honey' tabindex='-1' autocomplete='off'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-name'>
+                              Họ tên <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='general-name' name='name'
+                                   type='text' required='required' autocomplete='name'
+                                   placeholder='Tên của bạn'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-email'>
+                              Email <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='general-email' name='email'
+                                   type='email' required='required' autocomplete='email'
+                                   placeholder='email@của-bạn.com'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-subject'>Chủ đề</label>
+                            <input class='contact-form-input' id='general-subject' name='subject'
+                                   type='text' placeholder='Hợp tác, góp ý, hay chỉ muốn chào hỏi...'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-message'>
+                              Nội dung <span class='req'>*</span>
+                            </label>
+                            <textarea class='contact-form-textarea contact-form-textarea--tall'
+                                      id='general-message' name='message' required='required'
+                                      placeholder='Viết tin nhắn của bạn tại đây...'></textarea>
+                          </div>
+
+                          <button class='contact-submit-btn' type='submit'>
+                            ✉️ Gửi tin nhắn
+                          </button>
+                        </form>
+
+                      </div><!-- /.contact-form-panel -->
+                    </div><!-- /.contact-split-layout -->
+                  </div><!-- /#editorial-contact-app -->
+
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
@@ -528,8 +698,12 @@
 
                     <!-- Author Bio Box -->
                     <div class='author-bio-box' id='post-author-bio-container'>
-                      <!-- Javascript will build this from HTML2 and HTML99 -->
+                      <!-- Javascript will build this from HTML2 and HTML99 (fallback)
+                           or from .guest-author-meta in post body (guest author override) -->
                     </div>
+
+                    <!-- Guest Post Callout (hidden by default, enabled via #HTML88 config) -->
+                    <div class='post-guest-callout' style='display:none;'></div>
                     <script>
                     //<![CDATA[
                       document.addEventListener("DOMContentLoaded", function() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T09:02:20.546Z -->
+<!-- Compiled at: 2026-09-21T09:57:33.079Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6195,6 +6195,581 @@ body.view-not-homepage #main-above-feed {
   }
 }
 
+
+/* ============================================================
+   CONTACT PAGE — OPEN_020
+   Trang Liên Hệ & Gửi Bài: Layout 2 cột Editorial, Responsive, Dark Mode
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. LAYOUT CONTAINER
+   ────────────────────────────────────────────────────────────── */
+
+#editorial-contact-app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.contact-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .contact-split-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. CỘT TRÁI — EDITORIAL MANIFESTO
+   ────────────────────────────────────────────────────────────── */
+
+.contact-manifesto {
+  position: sticky;
+  top: 80px;
+}
+
+.contact-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.contact-headline {
+  font-family: var(--font-heading, 'Lora', serif);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-heading, var(--text-main));
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .contact-headline { font-size: 1.55rem; }
+}
+
+.contact-description {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Checklist */
+.contact-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.contact-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.contact-checklist li::before {
+  content: '✔';
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+
+/* Direct contact row */
+.contact-direct-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding-top: 1.25rem;
+  border-top: var(--stroke-hairline, 1px) solid var(--border-color);
+}
+
+.contact-direct-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.contact-direct-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.contact-direct-link:hover { opacity: 0.75; }
+
+/* ──────────────────────────────────────────────────────────────
+   3. CỘT PHẢI — FORM PANEL
+   ────────────────────────────────────────────────────────────── */
+
+.contact-form-panel {
+  background: var(--bg-card, #fff);
+  border: var(--stroke-hairline, 1px) solid var(--border-color);
+  border-radius: var(--radius-lg, 16px);
+  padding: 2rem 1.75rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  transition: box-shadow 0.3s;
+}
+
+.contact-form-panel:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+[data-theme='dark'] .contact-form-panel {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+/* Tab selector */
+.contact-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+  background: var(--bg-surface, #f5f5f5);
+  border-radius: var(--radius-full, 100px);
+  padding: 0.3rem;
+}
+
+.contact-tab-btn {
+  flex: 1;
+  padding: 0.55rem 0.85rem;
+  border: none;
+  border-radius: var(--radius-full, 100px);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
+  white-space: nowrap;
+}
+
+.contact-tab-btn.active {
+  background: var(--bg-card, #fff);
+  color: var(--text-main);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+}
+
+[data-theme='dark'] .contact-tab-btn.active {
+  background: var(--bg-elevated, #2a2a2a);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+
+/* Form group */
+.contact-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.contact-form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.contact-form-label .req {
+  color: var(--error, #e53e3e);
+  margin-left: 0.2em;
+}
+
+.contact-form-input,
+.contact-form-textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: var(--stroke-hairline, 1px) solid var(--border-color);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-input, var(--bg-surface));
+  color: var(--text-main);
+  font-size: 0.93rem;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.contact-form-input:focus,
+.contact-form-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 79, 124, 172), 0.15);
+}
+
+.contact-form-input.is-invalid,
+.contact-form-textarea.is-invalid {
+  border-color: var(--error, #e53e3e);
+  box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.12);
+}
+
+.contact-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form-textarea--tall {
+  min-height: 180px;
+}
+
+.contact-field-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: -0.1rem;
+}
+
+.contact-field-error {
+  font-size: 0.8rem;
+  color: var(--error, #e53e3e);
+  font-weight: 500;
+}
+
+/* Honeypot — visually hidden */
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Submit button */
+.contact-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  margin-top: 0.5rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.97rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 2px 10px rgba(var(--primary-rgb, 79, 124, 172), 0.35);
+}
+
+.contact-submit-btn:hover:not(:disabled) {
+  background: var(--primary-hover, var(--primary));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb, 79, 124, 172), 0.45);
+}
+
+.contact-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.contact-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spinner */
+.contact-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: contact-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes contact-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. TOAST NOTIFICATION
+   ────────────────────────────────────────────────────────────── */
+
+.contact-toast {
+  display: none;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid currentColor;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.contact-toast--visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-toast--success {
+  background: color-mix(in srgb, var(--success, #38a169) 12%, transparent);
+  color: var(--success, #2f855a);
+  border-color: var(--success, #38a169);
+}
+
+.contact-toast--error {
+  background: color-mix(in srgb, var(--error, #e53e3e) 10%, transparent);
+  color: var(--error, #c53030);
+  border-color: var(--error, #e53e3e);
+}
+
+[data-theme='dark'] .contact-toast--success {
+  background: rgba(56, 161, 105, 0.15);
+  color: #68d391;
+}
+
+[data-theme='dark'] .contact-toast--error {
+  background: rgba(229, 62, 62, 0.15);
+  color: #fc8181;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. GUEST AUTHOR ENGINE STYLES
+   ────────────────────────────────────────────────────────────── */
+
+/* Badge khách mời truyền đạt cạnh tên */
+.author-badge-guest {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: var(--radius-full, 100px);
+  padding: 0.15em 0.6em;
+  vertical-align: middle;
+  margin-bottom: 0.2rem;
+  line-height: 1.8;
+}
+
+[data-theme='dark'] .author-badge-guest {
+  background: rgba(var(--primary-rgb, 79, 124, 172), 0.2);
+}
+
+/* Author Bio Box — guest variant */
+.author-bio-box.is-guest-author .author-bio-label.guest-label {
+  color: var(--primary);
+  font-style: normal;
+}
+
+.author-bio-name-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.author-bio-role {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Social links trong bio box */
+.author-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.author-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full, 100px);
+  background: var(--bg-surface, #f5f5f5);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: var(--stroke-hairline, 1px) solid var(--border-color);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.author-social-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.social-icon-emoji {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. POST GUEST CALLOUT (cuối bài viết)
+   ────────────────────────────────────────────────────────────── */
+
+.post-guest-callout {
+  display: none; /* mặc định ẩn, JS bật khi config cho phép */
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+[data-theme='dark'] .post-guest-callout {
+  background: rgba(var(--primary-rgb, 79, 124, 172), 0.1);
+  border-color: rgba(var(--primary-rgb, 79, 124, 172), 0.25);
+}
+
+.callout-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  flex: 1;
+  min-width: 200px;
+}
+
+.callout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-full, 100px);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.callout-btn:hover {
+  background: var(--primary-hover, var(--primary));
+  transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. BTN GUEST HERO (Banner Hero)
+   ────────────────────────────────────────────────────────────── */
+
+.btn-guest-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-full, 100px);
+  background: transparent;
+  color: var(--text-main);
+  border: var(--stroke-hairline, 1.5px) solid var(--border-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.22s, color 0.22s, border-color 0.22s, transform 0.15s, box-shadow 0.22s;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+
+.btn-guest-hero:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb, 79, 124, 172), 0.35);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   8. SIDEBAR GUEST CARD
+   ────────────────────────────────────────────────────────────── */
+
+.sidebar-guest-card {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  text-align: center;
+}
+
+.sidebar-guest-card .sidebar-widget-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-heading, var(--text-main));
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-guest-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 1rem;
+}
+
+.sidebar-cta-btn {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-full, 100px);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.sidebar-cta-btn:hover {
+  background: var(--primary-hover, var(--primary));
+  transform: translateY(-1px);
+}
+
   /*]]>*/
   </style>
 
@@ -6493,6 +7068,7 @@ body.view-not-homepage #main-above-feed {
               </div>
               <div class='profile-cta-area'>
                 <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>
+                <!-- Nút Write With Us — được inject bởi guest-author.js từ #HTML88 .btn-guest-hero-config -->
               </div>
             </div>
             <b:if cond='data:content'>
@@ -6709,6 +7285,176 @@ body.view-not-homepage #main-above-feed {
                       </div>
                     </div>
                   </div>
+                <b:elseif cond='data:view.isPage and (data:blog.url contains &quot;/p/lien-he.html&quot; or data:blog.url contains &quot;/p/contact.html&quot; or data:blog.pageName == &quot;Liên Hệ&quot; or data:blog.pageName == &quot;Contact&quot;)'/>
+                  <!-- ── SPECIAL VIEW: TRANG LIÊN HỆ & GỬI BÀI VIẾT ── -->
+                  <div class='editorial-contact-page' id='editorial-contact-app'>
+                    <!-- Toast thông báo (JS render) -->
+
+                    <!-- Layout 2 cột -->
+                    <div class='contact-split-layout'>
+
+                      <!-- ── CỘT TRÁI: TÔN CHỈ & HƯỚNG DẪN ── -->
+                      <div class='contact-manifesto'>
+                        <span class='contact-eyebrow' data-bilingual='true'>Cộng Tác Cùng Chúng Mình | Write With Us</span>
+                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
+                        <p class='contact-description' data-bilingual='true'>
+                          Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
+                          phong cách sống, kiến trúc phần mềm và những chiêm nghiệm đời thường.
+                          | Trà Đá Blog welcomes genuine, insightful perspectives on technology,
+                          lifestyle, software architecture and everyday reflections.
+                        </p>
+
+                        <!-- Checklist quy chuẩn -->
+                        <ul class='contact-checklist'>
+                          <li data-bilingual='true'>Nội dung nguyên bản, chưa từng đăng tải độc quyền ở nơi khác. | Original content, not published exclusively elsewhere.</li>
+                          <li data-bilingual='true'>Khuyến khích kèm liên kết Google Docs (chế độ nhận xét) để biên tập nhanh. | Prefer Google Docs link (comment mode) for quick editing.</li>
+                          <li data-bilingual='true'>Tôn trọng bản quyền hình ảnh, trích dẫn nguồn minh bạch. | Respect image copyrights and cite sources transparently.</li>
+                          <li data-bilingual='true'>Tác giả được giữ tên tuổi, gắn link bio và quảng bá tới độc giả. | Authors keep full credit with bio link and audience exposure.</li>
+                        </ul>
+
+                        <!-- Kênh liên hệ trực tiếp -->
+                        <div class='contact-direct-row'>
+                          <span class='contact-direct-label' data-bilingual='true'>Liên hệ trực tiếp | Direct contact:</span>
+                          <a class='contact-direct-link' href='mailto:namtruong.contact@gmail.com'>
+                            ✉️ namtruong.contact@gmail.com
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- ── CỘT PHẢI: FORM GỬI BÀI ── -->
+                      <div class='contact-form-panel'>
+
+                        <!-- Tab Switcher -->
+                        <div class='contact-tabs' role='tablist'>
+                          <button class='contact-tab-btn active' role='tab' aria-selected='true' data-tab='guest'
+                                  id='tab-guest' aria-controls='contact-form-guest'>
+                            ✍️ Gửi bài viết đóng góp
+                          </button>
+                          <button class='contact-tab-btn' role='tab' aria-selected='false' data-tab='general'
+                                  id='tab-general' aria-controls='contact-form-general'>
+                            ✉️ Liên hệ / Góp ý
+                          </button>
+                        </div>
+
+                        <!-- Form 1: Guest Post -->
+                        <form id='contact-form-guest' novalidate='novalidate'>
+                          <!-- Honeypot -->
+                          <div class='contact-honeypot' aria-hidden='true'>
+                            <input type='text' name='_honey' tabindex='-1' autocomplete='off'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-name'>
+                              Họ tên / Bút danh <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-name' name='author_name'
+                                   type='text' required='required' autocomplete='name'
+                                   placeholder='Nguyễn Văn A / Bút danh của bạn'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-email'>
+                              Email liên hệ <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-email' name='author_email'
+                                   type='email' required='required' autocomplete='email'
+                                   placeholder='email@của-bạn.com'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-title'>
+                              Tiêu đề bài viết dự kiến <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='guest-title' name='post_title'
+                                   type='text' required='required'
+                                   placeholder='VD: Kiến trúc microservices cho người mới'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-content'>
+                              Link Google Docs hoặc Nội dung bản thảo <span class='req'>*</span>
+                            </label>
+                            <textarea class='contact-form-textarea contact-form-textarea--tall'
+                                      id='guest-content' name='content' required='required'
+                                      placeholder='Dán link Google Docs (chế độ nhận xét) hoặc tóm tắt nội dung bài viết của bạn...'></textarea>
+                            <span class='contact-field-hint' data-bilingual='true'>
+                              Khuyến khích dùng Google Docs để biên tập nhanh hơn. |
+                              Google Docs link preferred for faster editing.
+                            </span>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-bio'>Giới thiệu ngắn về bạn (Bio 1–2 câu)</label>
+                            <textarea class='contact-form-textarea' id='guest-bio' name='author_bio'
+                                      placeholder='Kỹ sư phần mềm, yêu thích viết lách và khám phá công nghệ...'></textarea>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-avatar'>Link ảnh chân dung / Avatar (Tùy chọn)</label>
+                            <input class='contact-form-input' id='guest-avatar' name='author_avatar'
+                                   type='url' placeholder='https://...'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='guest-social'>Website hoặc Link Mạng Xã Hội (Tùy chọn)</label>
+                            <input class='contact-form-input' id='guest-social' name='author_social'
+                                   type='url' placeholder='https://your-site.com hoặc facebook.com/...'/>
+                          </div>
+
+                          <button class='contact-submit-btn' type='submit'>
+                            📨 Gửi bản thảo bài viết
+                          </button>
+                        </form>
+
+                        <!-- Form 2: General Contact -->
+                        <form id='contact-form-general' novalidate='novalidate' style='display:none;'>
+                          <!-- Honeypot -->
+                          <div class='contact-honeypot' aria-hidden='true'>
+                            <input type='text' name='_honey' tabindex='-1' autocomplete='off'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-name'>
+                              Họ tên <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='general-name' name='name'
+                                   type='text' required='required' autocomplete='name'
+                                   placeholder='Tên của bạn'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-email'>
+                              Email <span class='req'>*</span>
+                            </label>
+                            <input class='contact-form-input' id='general-email' name='email'
+                                   type='email' required='required' autocomplete='email'
+                                   placeholder='email@của-bạn.com'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-subject'>Chủ đề</label>
+                            <input class='contact-form-input' id='general-subject' name='subject'
+                                   type='text' placeholder='Hợp tác, góp ý, hay chỉ muốn chào hỏi...'/>
+                          </div>
+
+                          <div class='contact-form-group'>
+                            <label class='contact-form-label' for='general-message'>
+                              Nội dung <span class='req'>*</span>
+                            </label>
+                            <textarea class='contact-form-textarea contact-form-textarea--tall'
+                                      id='general-message' name='message' required='required'
+                                      placeholder='Viết tin nhắn của bạn tại đây...'></textarea>
+                          </div>
+
+                          <button class='contact-submit-btn' type='submit'>
+                            ✉️ Gửi tin nhắn
+                          </button>
+                        </form>
+
+                      </div><!-- /.contact-form-panel -->
+                    </div><!-- /.contact-split-layout -->
+                  </div><!-- /#editorial-contact-app -->
+
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
                   <article class='single-post-container' itemscope='itemscope' itemtype='https://schema.org/BlogPosting'>
@@ -6883,8 +7629,12 @@ body.view-not-homepage #main-above-feed {
 
                     <!-- Author Bio Box -->
                     <div class='author-bio-box' id='post-author-bio-container'>
-                      <!-- Javascript will build this from HTML2 and HTML99 -->
+                      <!-- Javascript will build this from HTML2 and HTML99 (fallback)
+                           or from .guest-author-meta in post body (guest author override) -->
                     </div>
+
+                    <!-- Guest Post Callout (hidden by default, enabled via #HTML88 config) -->
+                    <div class='post-guest-callout' style='display:none;'></div>
                     <script>
                     //<![CDATA[
                       document.addEventListener("DOMContentLoaded", function() {
@@ -7226,7 +7976,7 @@ body.view-not-homepage #main-above-feed {
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
     <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
       <b:widget-settings>
-        <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
+<b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 
 <!-- 1. Tác Giả dưới bài viết (Các nút bấm) -->
 <div class="post-footer-actions-config" style="display:none;">
@@ -7245,6 +7995,31 @@ body.view-not-homepage #main-above-feed {
 <div class="in-post-ads-config" style="display:none;">
   <div class="ad-top-code"><!-- Mã quảng cáo đầu bài viết --></div>
   <div class="ad-bottom-code"><!-- Mã quảng cáo cuối bài viết --></div>
+</div>
+
+<!-- 3. Widget Mời Cộng Tác / Gửi Bài Viết -->
+<div class="guest-cta-config">
+  <!-- Nút trên Banner Hero (MẶC ĐỊNH HIỆN: display:inline-flex, đổi thành display:none nếu muốn tắt) -->
+  <a class="btn-guest-hero-config" href="/p/lien-he.html" style="display:inline-flex;">
+    <span data-bilingual="true">✍️ Viết cùng Trà Đá | ✍️ Write with us</span>
+  </a>
+
+  <!-- Callout chân bài viết (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
+  <div class="post-guest-callout-config" style="display:none;">
+    <span class="callout-text" data-bilingual="true">
+      Bạn muốn chia sẻ câu chuyện của mình trên Trà Đá Blog? | Want to share your thoughts on Trà Đá Blog?
+    </span>
+    <a class="callout-btn" href="/p/lien-he.html">
+      <span data-bilingual="true">Gửi bài viết ➔ | Submit article ➔</span>
+    </a>
+  </div>
+
+  <!-- Widget Sidebar (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
+  <div class="sidebar-guest-card-config" style="display:none;">
+    <h3 class="sidebar-widget-title" data-bilingual="true">✍️ Viết Cùng Chúng Mình | Write With Us</h3>
+    <p data-bilingual="true">Chia sẻ góc nhìn chân thực và lan tỏa tri thức tới cộng đồng bạn đọc. | Share your genuine perspectives with our readers.</p>
+    <a class="sidebar-cta-btn" href="/p/lien-he.html">Gửi bài ngay | Submit</a>
+  </div>
 </div>
 ]]></b:widget-setting>
       </b:widget-settings>
@@ -13070,6 +13845,499 @@ body.view-not-homepage #main-above-feed {
 
   // Expose ra window để các module khác hoặc preview sandbox có thể kích hoạt lại khi chuyển view
   window.initHomepageInterleavedWidgets = initHomepageInterleavedWidgets;
+})();
+
+
+/**
+ * GUEST AUTHOR ENGINE — OPEN_020
+ * Phát hiện thẻ ẩn .guest-author-meta trong bài viết để override
+ * author avatar/tên/bio/social links. Fallback về profile chủ blog.
+ *
+ * @spec 07_Doing_020_Guest_Author_And_Contact_Submission_Specification.md
+ */
+(function () {
+  'use strict';
+
+  // Chỉ chạy trên trang bài viết đơn
+  var body = document.body;
+  var isPostView = body.classList.contains('view-item') ||
+    body.classList.contains('item-view') ||
+    !!document.querySelector('.single-post-container');
+  if (!isPostView) return;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var metaEl = document.querySelector('.post-body .guest-author-meta');
+    if (!metaEl) return; // Không có guest author → fallback (logic hiện tại chạy)
+
+    var d = metaEl.dataset;
+    var name     = d.authorName     || '';
+    var role     = d.authorRole     || '';
+    var avatar   = d.authorAvatar   || '';
+    var bioVi    = d.authorBioVi    || '';
+    var bioEn    = d.authorBioEn    || '';
+    var website  = d.authorWebsite  || '';
+    var facebook = d.authorFacebook || '';
+    var twitter  = d.authorTwitter  || '';
+    var linkedin = d.authorLinkedin || '';
+    var email    = d.authorEmail    || '';
+
+    if (!name) return; // Tên bắt buộc
+
+    // ── 1. Tạo initials avatar fallback ──────────────────────────────
+    function makeInitialsAvatar(nameStr) {
+      var parts = nameStr.trim().split(/\s+/);
+      var initials = parts.length >= 2
+        ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+        : nameStr.slice(0, 2).toUpperCase();
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">' +
+        '<rect width="80" height="80" rx="40" fill="#4f7cac"/>' +
+        '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" ' +
+        'font-family="Be Vietnam Pro,sans-serif" font-size="28" font-weight="700" fill="#fff">' +
+        initials + '</text></svg>'
+      );
+    }
+    var avatarSrc = avatar || makeInitialsAvatar(name);
+
+    // ── 2. Override Post Header (.author-meta-inline) ─────────────────
+    var inlineEl = document.querySelector('.author-meta-inline');
+    if (inlineEl) {
+      var smImg = inlineEl.querySelector('.author-avatar-sm');
+      if (smImg) { smImg.src = avatarSrc; smImg.alt = name; }
+      var nameEl = inlineEl.querySelector('[itemprop="name"]');
+      if (nameEl) nameEl.textContent = name;
+      if (!inlineEl.querySelector('.author-badge-guest')) {
+        var metaText = inlineEl.querySelector('.author-meta-text');
+        if (metaText) {
+          var badge = document.createElement('span');
+          badge.className = 'author-badge-guest';
+          badge.setAttribute('data-bilingual', 'true');
+          badge.textContent = 'Khách mời | Guest';
+          metaText.insertBefore(badge, metaText.firstChild);
+        }
+      }
+    }
+
+    // ── 3. Override Author Bio Box (#post-author-bio-container) ────────
+    var container = document.getElementById('post-author-bio-container');
+    if (container) {
+      var socialLinks = [
+        { url: website,  icon: '🌐', label: 'Website'      },
+        { url: facebook, icon: '📘', label: 'Facebook'     },
+        { url: twitter,  icon: '✖',  label: 'X (Twitter)'  },
+        { url: linkedin, icon: '💼', label: 'LinkedIn'      },
+        { url: email,    icon: '✉️', label: 'Email'        },
+      ];
+      var socialHtml = socialLinks
+        .filter(function (s) { return s.url; })
+        .map(function (s) {
+          return '<a class="author-social-btn" href="' + _esc(s.url) + '" ' +
+            'target="_blank" rel="noopener noreferrer" ' +
+            'title="' + _esc(s.label) + '" aria-label="' + _esc(s.label) + '">' +
+            '<span class="social-icon-emoji">' + s.icon + '</span>' +
+            '<span class="social-label">' + _esc(s.label) + '</span></a>';
+        }).join('');
+
+      container.innerHTML =
+        '<img class="author-bio-avatar" alt="' + _esc(name) + '" ' +
+             'width="80" height="80" src="' + _esc(avatarSrc) + '"/>' +
+        '<div class="author-bio-content">' +
+          '<div class="author-bio-label guest-label" data-bilingual="true">' +
+            'Về tác giả khách mời | About guest author' +
+          '</div>' +
+          '<div class="author-bio-name-wrap">' +
+            '<h3 class="author-bio-name">' + _esc(name) + '</h3>' +
+            (role ? '<span class="author-bio-role">' + _esc(role) + '</span>' : '') +
+          '</div>' +
+          (bioVi ? '<div class="author-bio-text lang-vi">' + bioVi + '</div>' : '') +
+          (bioEn ? '<div class="author-bio-text lang-en">' + bioEn + '</div>' : '') +
+          (socialHtml ? '<div class="author-bio-actions author-social-links">' + socialHtml + '</div>' : '') +
+        '</div>';
+
+      container.classList.add('is-guest-author');
+    }
+
+    // ── 4. Schema.org JSON-LD Person ──────────────────────────────────
+    _updateJsonLdPerson({
+      name: name, url: website, image: avatar,
+      description: bioEn || bioVi,
+      sameAs: [facebook, twitter, linkedin].filter(Boolean),
+    });
+
+    // ── 5. Guest Post Callout cuối bài ────────────────────────────────
+    var globalConfig = document.getElementById('HTML88');
+    if (globalConfig) {
+      var calloutConfig = globalConfig.querySelector('.post-guest-callout-config');
+      var calloutEl     = document.querySelector('.post-guest-callout');
+      if (calloutConfig && calloutEl) {
+        var show = calloutConfig.style.display && calloutConfig.style.display !== 'none';
+        if (show) {
+          calloutEl.style.display = 'block';
+          if (!calloutEl.children.length) calloutEl.innerHTML = calloutConfig.innerHTML;
+        }
+      }
+    }
+  }); // END DOMContentLoaded guest author
+
+  // ── 6. Render CTA buttons từ #HTML88 config (mọi trang) ──────────────
+  document.addEventListener('DOMContentLoaded', function () {
+    var globalConfig = document.getElementById('HTML88');
+    if (!globalConfig) return;
+
+    // Nút btn-guest-hero trên Banner Hero
+    var configBtn = globalConfig.querySelector('.btn-guest-hero-config');
+    if (configBtn && configBtn.style.display !== 'none') {
+      var ctaArea = document.querySelector('.profile-cta-area');
+      if (ctaArea && !ctaArea.querySelector('.btn-guest-hero')) {
+        var btn = document.createElement('a');
+        btn.className = 'btn-guest-hero';
+        btn.href = configBtn.getAttribute('href') || '/p/lien-he.html';
+        btn.setAttribute('data-bilingual', 'true');
+        var span = configBtn.querySelector('[data-bilingual]');
+        btn.textContent = span ? span.textContent.trim() : '✍️ Viết Cùng Trà Đá | Write With Us';
+        ctaArea.appendChild(btn);
+      }
+    }
+
+    // Sidebar Guest Card
+    var cardConfig = globalConfig.querySelector('.sidebar-guest-card-config');
+    if (cardConfig && cardConfig.style.display !== 'none') {
+      var sidebarWrapper = document.querySelector('.sidebar-wrapper');
+      if (sidebarWrapper && !sidebarWrapper.querySelector('.sidebar-guest-card')) {
+        var card = document.createElement('div');
+        card.className = 'sidebar-guest-card';
+        card.innerHTML = cardConfig.innerHTML;
+        sidebarWrapper.appendChild(card);
+      }
+    }
+  });
+
+  // ── Utils ─────────────────────────────────────────────────────────────
+  function _esc(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function _updateJsonLdPerson(p) {
+    try {
+      var node = { '@context': 'https://schema.org', '@type': 'Person', 'name': p.name };
+      if (p.url)         node['url']         = p.url;
+      if (p.image)       node['image']       = p.image;
+      if (p.description) node['description'] = p.description;
+      if (p.sameAs && p.sameAs.length) node['sameAs'] = p.sameAs;
+
+      var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+      var target  = null;
+      for (var i = 0; i < scripts.length; i++) {
+        try {
+          var parsed = JSON.parse(scripts[i].textContent);
+          if (parsed['@type'] === 'BlogPosting') {
+            parsed.author = node;
+            scripts[i].textContent = JSON.stringify(parsed);
+            return;
+          }
+          if (parsed['@type'] === 'Person') { target = scripts[i]; }
+        } catch (_) {}
+      }
+      if (target) { target.textContent = JSON.stringify(node); return; }
+      var s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.textContent = JSON.stringify(node);
+      document.head.appendChild(s);
+    } catch (_) {}
+  }
+
+})();
+
+
+/**
+ * CONTACT PAGE MODULE — OPEN_020
+ * Logic tương tác trang Liên Hệ & Gửi Bài Viết (/p/lien-he.html)
+ * - Tab toggle (Guest Post / General Contact)
+ * - Client-side validation
+ * - Honeypot anti-spam
+ * - Multi-adapter submit (blogger / gas / formsubmit)
+ * - UX: spinner, toast, auto-reset
+ *
+ * @spec 07_Doing_020_Guest_Author_And_Contact_Submission_Specification.md
+ */
+(function () {
+  'use strict';
+
+  // Chỉ khởi động khi có #editorial-contact-app
+  document.addEventListener('DOMContentLoaded', function () {
+    var app = document.getElementById('editorial-contact-app');
+    if (!app) return;
+    initContactPage(app);
+  });
+
+  function initContactPage(app) {
+    // ── 1. Tab Toggle ───────────────────────────────────────────────────
+    var tabBtns   = app.querySelectorAll('.contact-tab-btn');
+    var formGuest = app.querySelector('#contact-form-guest');
+    var formGeneral = app.querySelector('#contact-form-general');
+
+    tabBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tabBtns.forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        var target = btn.dataset.tab;
+        if (formGuest)   formGuest.style.display   = (target === 'guest')   ? 'block' : 'none';
+        if (formGeneral) formGeneral.style.display  = (target === 'general') ? 'block' : 'none';
+      });
+    });
+
+    // ── 2. Submit handler của form Guest Post ──────────────────────────
+    if (formGuest) {
+      formGuest.addEventListener('submit', function (e) {
+        e.preventDefault();
+        _handleSubmit(formGuest, 'guest_post');
+      });
+    }
+
+    // ── 3. Submit handler của form General Contact ───────────────────
+    if (formGeneral) {
+      formGeneral.addEventListener('submit', function (e) {
+        e.preventDefault();
+        _handleSubmit(formGeneral, 'general');
+      });
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────
+  function _handleSubmit(form, type) {
+    // Honeypot check
+    var honey = form.querySelector('input[name="_honey"]');
+    if (honey && honey.value) {
+      // Bot detected — giả vờ thành công
+      _showToast('success', form);
+      form.reset();
+      return;
+    }
+
+    // Validation
+    if (!_validate(form)) return;
+
+    // Thu thập dữ liệu
+    var data = _collectData(form, type);
+
+    // Chọn adapter
+    var cfg = window.__CONTACT_CONFIG || {};
+    var adapter = cfg.adapter || 'blogger';
+
+    _setLoading(form, true);
+
+    if (adapter === 'gas' && cfg.gasWebhookUrl) {
+      _submitGAS(cfg.gasWebhookUrl, data, form);
+    } else if (adapter === 'formsubmit' && cfg.adminEmail) {
+      _submitFormSubmit(cfg.adminEmail, data, form);
+    } else {
+      // Mặc định: Blogger native
+      _submitBlogger(data, form);
+    }
+  }
+
+  // ── Validation ──────────────────────────────────────────────────
+  function _validate(form) {
+    var valid = true;
+    var required = form.querySelectorAll('[required]');
+    required.forEach(function (field) {
+      _clearError(field);
+      var val = field.value.trim();
+      if (!val) {
+        _showError(field, 'Trường này không được để trống.');
+        valid = false;
+      } else if (field.type === 'email' && !_isValidEmail(val)) {
+        _showError(field, 'Địa chỉ email không hợp lệ.');
+        valid = false;
+      }
+    });
+    if (!valid) {
+      // Scroll đến lỗi đầu tiên
+      var firstErr = form.querySelector('.contact-field-error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return valid;
+  }
+
+  function _isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function _showError(field, msg) {
+    field.classList.add('is-invalid');
+    var err = field.parentNode.querySelector('.contact-field-error');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'contact-field-error';
+      field.parentNode.appendChild(err);
+    }
+    err.textContent = msg;
+  }
+
+  function _clearError(field) {
+    field.classList.remove('is-invalid');
+    var err = field.parentNode.querySelector('.contact-field-error');
+    if (err) err.remove();
+  }
+
+  // ── Thu thập dữ liệu từ form ────────────────────────────────────
+  function _collectData(form, type) {
+    var data = { type: type };
+    var fields = form.querySelectorAll('input:not([type=hidden]):not([name=_honey]), textarea, select');
+    fields.forEach(function (f) {
+      if (f.name) data[f.name] = f.value.trim();
+    });
+    return data;
+  }
+
+  // ── Adapter A: Google Apps Script Webhook ────────────────────────
+  function _submitGAS(url, data, form) {
+    var params = new URLSearchParams();
+    Object.keys(data).forEach(function (k) { params.append(k, data[k]); });
+
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors', // GAS yêu cầu no-cors khi gọi từ domain khác
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    })
+      .then(function () {
+        _setLoading(form, false);
+        _showToast('success', form);
+        form.reset();
+      })
+      .catch(function () {
+        _setLoading(form, false);
+        _showToast('error', form);
+      });
+  }
+
+  // ── Adapter B: Blogger Native ContactForm ────────────────────────
+  function _submitBlogger(data, form) {
+    // Tạo message có cấu trúc gửi vào trường message của contact-form.do
+    var isGuest = data.type === 'guest_post';
+    var lines = [];
+    if (isGuest) {
+      lines.push('[Gửi Bài Viết]');
+      if (data.post_title)   lines.push('✔ Tiêu đề: '    + data.post_title);
+      if (data.content)      lines.push('✔ Bản thảo/Link:\n' + data.content);
+      if (data.author_bio)   lines.push('✔ Bio: '           + data.author_bio);
+      if (data.author_avatar) lines.push('✔ Avatar URL: '   + data.author_avatar);
+      if (data.author_social) lines.push('✔ Social/Web: '   + data.author_social);
+    } else {
+      lines.push('[Liên Hệ Thông Thường]');
+      if (data.subject) lines.push('✔ Chủ đề: ' + data.subject);
+      if (data.message) lines.push('✔ Nội dung:\n' + data.message);
+    }
+    var messageStr = lines.join('\n');
+    var nameStr  = data.author_name || data.name || '';
+    var emailStr = data.author_email || data.email || '';
+
+    // Định vị blogger blog ID từ meta tag hoặc window
+    var blogId = (window.__BLOGGER_BLOG_ID) ||
+      (document.querySelector('meta[name="blog-id"]') || {}).content || '';
+
+    var body = new URLSearchParams({
+      name:    nameStr,
+      email:   emailStr,
+      message: messageStr,
+    });
+    if (blogId) body.append('blogID', blogId);
+
+    fetch('https://www.blogger.com/contact-form.do', {
+      method: 'POST',
+      mode:   'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    })
+      .then(function () {
+        _setLoading(form, false);
+        _showToast('success', form);
+        form.reset();
+      })
+      .catch(function () {
+        _setLoading(form, false);
+        _showToast('error', form);
+      });
+  }
+
+  // ── Adapter C: FormSubmit ──────────────────────────────────────
+  function _submitFormSubmit(adminEmail, data, form) {
+    var url = 'https://formsubmit.co/' + encodeURIComponent(adminEmail);
+    var params = new URLSearchParams();
+    params.append('_subject', data.type === 'guest_post'
+      ? '[Gửi Bài] ' + (data.post_title || data.author_name)
+      : '[Liên Hệ] ' + (data.name || data.author_name));
+    params.append('_captcha', 'false');
+    Object.keys(data).forEach(function (k) { params.append(k, data[k]); });
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+      body: params.toString(),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        _setLoading(form, false);
+        if (res && res.success === 'true') {
+          _showToast('success', form);
+          form.reset();
+        } else {
+          _showToast('error', form);
+        }
+      })
+      .catch(function () {
+        _setLoading(form, false);
+        _showToast('error', form);
+      });
+  }
+
+  // ── UX Helpers ──────────────────────────────────────────────────
+  function _setLoading(form, isLoading) {
+    var submitBtn = form.querySelector('[type="submit"]');
+    if (!submitBtn) return;
+    submitBtn.disabled = isLoading;
+    if (isLoading) {
+      submitBtn.dataset.originalText = submitBtn.textContent;
+      submitBtn.innerHTML = '<span class="contact-spinner"></span> Đang gửi...';
+    } else {
+      submitBtn.textContent = submitBtn.dataset.originalText || 'Gửi';
+    }
+  }
+
+  function _showToast(type, form) {
+    // Tìm hoặc tạo toast container
+    var app = document.getElementById('editorial-contact-app');
+    var toast = (app || document).querySelector('.contact-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'contact-toast';
+      if (app) app.insertBefore(toast, app.firstChild);
+      else document.body.appendChild(toast);
+    }
+
+    toast.className = 'contact-toast contact-toast--' + type + ' contact-toast--visible';
+    toast.textContent = type === 'success'
+      ? 'Cảm ơn bạn! Bài viết đã được gửi tới hòm thư ban biên tập. Chúng mình sẽ phản hồi qua email trong vòng 24–48 giờ.'
+      : 'Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ trực tiếp qua email.';
+
+    // Scroll lên đầu form
+    toast.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Tự ẩn sau 8 giây
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(function () {
+      toast.classList.remove('contact-toast--visible');
+    }, 8000);
+  }
+
 })();
 
   //]]>

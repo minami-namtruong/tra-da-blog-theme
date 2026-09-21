@@ -67,6 +67,7 @@
               </div>
               <div class='profile-cta-area'>
                 <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>
+                <!-- Nút Write With Us — được inject bởi guest-author.js từ #HTML88 .btn-guest-hero-config -->
               </div>
             </div>
             <b:if cond='data:content'>
