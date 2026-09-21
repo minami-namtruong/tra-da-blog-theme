@@ -411,7 +411,7 @@
       // Nếu chỉ dán mỗi link ảnh http... (ưu tiên làm Banner)
       if (/^https?:\/\/[^\s]+$/i.test(textOnly)) {
         coverWrapper.style.backgroundImage = `url("${textOnly}")`;
-      } else if (textOnly.includes('|') || /(?:banner|avatar|bio|name)\s*:/i.test(textOnly)) {
+      } else if (/(?:banner|avatar|bio|name)\s*:/i.test(textOnly)) {
         // Cú pháp tham số: banner: https://... | avatar: https://... | bio: ... | name: ...
         const parts = textOnly.split('|').map(s => s.trim());
         parts.forEach(part => {
@@ -437,12 +437,25 @@
         // Người dùng gõ văn bản tự nhiên (lời giới thiệu)
         // Nếu có nhiều dòng: dòng 1 < 40 ký tự và không có dấu chấm phẩy thì là Tên, phần sau là Bio
         const lines = textOnly.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        if (lines.length > 1 && lines[0].length < 40 && !/[.,;!?]$/.test(lines[0])) {
-          if (nameEl) nameEl.textContent = lines[0];
-          if (bioEl) bioEl.innerHTML = lines.slice(1).join('<br/>');
+        const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        const parseFn = window.parseBilingualText || (t => t);
+
+        if (lines.length > 1 && lines[0].length < 40 && !/[.,;!?]$/.test(lines[0]) && !lines[0].includes('|')) {
+          if (nameEl) {
+            nameEl.setAttribute('data-raw-label', lines[0]);
+            nameEl.textContent = parseFn(lines[0], lang);
+          }
+          if (bioEl) {
+            const bioText = lines.slice(1).join('\n');
+            bioEl.setAttribute('data-raw-label', bioText);
+            bioEl.innerHTML = parseFn(bioText, lang).replace(/\n/g, '<br/>');
+          }
         } else {
           // Toàn bộ là lời giới thiệu Bio
-          if (bioEl) bioEl.textContent = textOnly;
+          if (bioEl) {
+            bioEl.setAttribute('data-raw-label', textOnly);
+            bioEl.innerHTML = parseFn(textOnly, lang).replace(/\n/g, '<br/>');
+          }
         }
       }
     }

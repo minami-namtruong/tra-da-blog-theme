@@ -322,7 +322,7 @@
       timelineBody.innerHTML =
         '<div class="timeline-empty-state">' +
           '<span class="timeline-empty-icon">🔍</span>' +
-          '<p>Không tìm thấy bài viết phù hợp.<br>Thử tìm kiếm với từ khóa khác.</p>' +
+          '<p data-bilingual="true" data-raw-label="Không tìm thấy bài viết phù hợp.<br>Thử tìm kiếm với từ khóa khác. | No matching posts found.<br>Try searching with different keywords.">' + (window.parseBilingualText ? window.parseBilingualText('Không tìm thấy bài viết phù hợp.<br>Thử tìm kiếm với từ khóa khác. | No matching posts found.<br>Try searching with different keywords.', window.currentLang || 'vi') : 'Không tìm thấy bài viết phù hợp.<br>Thử tìm kiếm với từ khóa khác. | No matching posts found.<br>Try searching with different keywords.') + '</p>' +
         '</div>';
       updateStatsBadge(0, 0);
       return;

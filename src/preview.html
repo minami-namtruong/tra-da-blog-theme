@@ -70,12 +70,12 @@
   <div class="search-modal-overlay" id="search-modal-overlay">
     <div class="search-modal-box">
       <div class="search-modal-header">
-        <span class="search-modal-title">🔍 Tìm kiếm bài viết</span>
+        <span class="search-modal-title" data-bilingual="true">🔍 Tìm kiếm bài viết | 🔍 Search articles</span>
         <button class="search-close-btn" id="search-close-btn">✕</button>
       </div>
       <form class="search-input-wrap" id="search-form">
-        <input class="search-input" id="search-input" type="search" placeholder="Nhập từ khóa tìm kiếm..." autocomplete="off"/>
-        <button class="search-submit-btn" type="submit">Tìm</button>
+        <input class="search-input" id="search-input" type="search" placeholder="Nhập từ khóa tìm kiếm..." data-i18n="searchPlaceholder" autocomplete="off"/>
+        <button class="search-submit-btn" type="submit"><span data-bilingual="true">Tìm | Search</span></button>
       </form>
     </div>
   </div>
@@ -148,8 +148,8 @@
                alt="Nam Trương" width="120" height="120"/>
         </div>
         <div class="profile-meta">
-          <h1 class="profile-name">Nam Trương</h1>
-          <p class="profile-bio">Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+          <h1 class="profile-name" data-bilingual="true">Nam Trương</h1>
+          <p class="profile-bio" data-bilingual="true">Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
         </div>
         <div class="profile-cta-area">
           <a class="btn-subscribe" href="#newsletter" data-bilingual="true">💌 Nhận Bản Tin | Subscribe</a>
@@ -339,6 +339,7 @@
 
           <!-- Pagination -->
           <nav class="blog-pager">
+            <a class="blog-pager-newer-link" href="#" data-i18n="newerPosts">« Mới hơn</a>
             <span class="page-num active" data-page="1">1</span>
             <a class="page-num" href="#" data-page="2">2</a>
             <a class="page-num" href="#" data-page="3">3</a>
@@ -733,7 +734,7 @@
 
                 <!-- Chân trang Popover -->
                 <div class="filter-popover-footer">
-                  <button type="button" class="filter-popover-btn-reset" id="filter-popover-reset-btn">↺ Xem tất cả</button>
+                  <button type="button" class="filter-popover-btn-reset" id="filter-popover-reset-btn"><span data-bilingual="true">↺ Xem tất cả | ↺ View all</span></button>
                 </div>
               </div>
             </div>
@@ -755,8 +756,7 @@
             <div class="contact-split-layout">
               <!-- Cột trái: Tôn chỉ -->
               <div class="contact-manifesto">
-                <span class="contact-eyebrow">Cộng Tác Cùng Chúng Mình | Write With Us</span>
-                <h1 class="contact-headline">Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
+                <h1 class="contact-headline" data-bilingual="true">Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
                 <p class="contact-description">
                   Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
                   phong cách sống, kiến trúc phần mềm và những chiêm nghiệm đời thường.
@@ -777,11 +777,11 @@
                 <div class="contact-tabs" role="tablist">
                   <button class="contact-tab-btn active" role="tab" aria-selected="true" data-tab="guest"
                           id="tab-guest" aria-controls="contact-form-guest">
-                    ✍️ Gửi bài viết đóng góp
+                    <span data-bilingual="true">✍️ Gửi bài viết đóng góp | ✍️ Submit Guest Post</span>
                   </button>
                   <button class="contact-tab-btn" role="tab" aria-selected="false" data-tab="general"
                           id="tab-general" aria-controls="contact-form-general">
-                    ✉️ Liên hệ / Góp ý
+                    <span data-bilingual="true">✉️ Liên hệ / Góp ý | ✉️ Contact / Feedback</span>
                   </button>
                 </div>
 
@@ -791,35 +791,35 @@
                     <input type="text" name="_honey" tabindex="-1" autocomplete="off"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-name-prev">Họ tên / Bút danh <span class="req">*</span></label>
-                    <input class="contact-form-input" id="guest-name-prev" name="author_name" type="text" required="required" autocomplete="name" placeholder="Nguyễn Văn A / Bút danh của bạn"/>
+                    <label class="contact-form-label" for="guest-name-prev"><span data-bilingual="true">Họ tên / Bút danh | Name / Pen name</span> <span class="req">*</span></label>
+                    <input class="contact-form-input" id="guest-name-prev" name="author_name" type="text" required="required" autocomplete="name" data-bilingual-placeholder="Nguyễn Văn A / Bút danh của bạn | John Doe / Your pen name" placeholder="Nguyễn Văn A / Bút danh của bạn"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-email-prev">Email liên hệ <span class="req">*</span></label>
-                    <input class="contact-form-input" id="guest-email-prev" name="author_email" type="email" required="required" autocomplete="email" placeholder="email@của-bạn.com"/>
+                    <label class="contact-form-label" for="guest-email-prev"><span data-bilingual="true">Email liên hệ | Contact Email</span> <span class="req">*</span></label>
+                    <input class="contact-form-input" id="guest-email-prev" name="author_email" type="email" required="required" autocomplete="email" data-bilingual-placeholder="email@của-bạn.com | your-email@example.com" placeholder="email@của-bạn.com"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-title-prev">Tiêu đề bài viết dự kiến <span class="req">*</span></label>
-                    <input class="contact-form-input" id="guest-title-prev" name="post_title" type="text" required="required" placeholder="VD: Kiến trúc microservices cho người mới"/>
+                    <label class="contact-form-label" for="guest-title-prev"><span data-bilingual="true">Tiêu đề bài viết dự kiến | Expected Post Title</span> <span class="req">*</span></label>
+                    <input class="contact-form-input" id="guest-title-prev" name="post_title" type="text" required="required" data-bilingual-placeholder="VD: Kiến trúc microservices cho người mới | Ex: Microservices architecture for beginners" placeholder="VD: Kiến trúc microservices cho người mới"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-content-prev">Link Google Docs hoặc Nội dung bản thảo <span class="req">*</span></label>
-                    <textarea class="contact-form-textarea contact-form-textarea--tall" id="guest-content-prev" name="content" required="required" placeholder="Dán link Google Docs hoặc tóm tắt nội dung bài viết..."></textarea>
-                    <span class="contact-field-hint">Khuyến khích dùng Google Docs để biên tập nhanh hơn.</span>
+                    <label class="contact-form-label" for="guest-content-prev"><span data-bilingual="true">Link Google Docs hoặc Nội dung bản thảo | Google Docs Link or Manuscript Content</span> <span class="req">*</span></label>
+                    <textarea class="contact-form-textarea contact-form-textarea--tall" id="guest-content-prev" name="content" required="required" data-bilingual-placeholder="Dán link Google Docs hoặc tóm tắt nội dung bài viết... | Paste Google Docs link or summarize your post content..." placeholder="Dán link Google Docs hoặc tóm tắt nội dung bài viết..."></textarea>
+                    <span class="contact-field-hint" data-bilingual="true">Khuyến khích dùng Google Docs để biên tập nhanh hơn. | Google Docs link preferred for faster editing.</span>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-bio-prev">Giới thiệu ngắn về bạn (Bio 1–2 câu)</label>
-                    <textarea class="contact-form-textarea" id="guest-bio-prev" name="author_bio" placeholder="Kỹ sư phần mềm, yêu thích viết lách..."></textarea>
+                    <label class="contact-form-label" for="guest-bio-prev"><span data-bilingual="true">Giới thiệu ngắn về bạn (Bio 1–2 câu) | Short Bio (1-2 sentences)</span></label>
+                    <textarea class="contact-form-textarea" id="guest-bio-prev" name="author_bio" data-bilingual-placeholder="Kỹ sư phần mềm, yêu thích viết lách... | Software engineer, passionate about writing..." placeholder="Kỹ sư phần mềm, yêu thích viết lách..."></textarea>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-avatar-prev">Link ảnh chân dung / Avatar (Tùy chọn)</label>
+                    <label class="contact-form-label" for="guest-avatar-prev"><span data-bilingual="true">Link ảnh chân dung / Avatar (Tùy chọn) | Portrait / Avatar Link (Optional)</span></label>
                     <input class="contact-form-input" id="guest-avatar-prev" name="author_avatar" type="url" placeholder="https://..."/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="guest-social-prev">Website hoặc Link Mạng Xã Hội (Tùy chọn)</label>
-                    <input class="contact-form-input" id="guest-social-prev" name="author_social" type="url" placeholder="https://your-site.com"/>
+                    <label class="contact-form-label" for="guest-social-prev"><span data-bilingual="true">Website hoặc Link Mạng Xã Hội (Tùy chọn) | Website or Social Media Link (Optional)</span></label>
+                    <input class="contact-form-input" id="guest-social-prev" name="author_social" type="url" data-bilingual-placeholder="https://your-site.com | https://your-site.com" placeholder="https://your-site.com"/>
                   </div>
-                  <button class="contact-submit-btn" type="submit">📨 Gửi bản thảo bài viết</button>
+                  <button class="contact-submit-btn" type="submit"><span data-bilingual="true">📨 Gửi bản thảo bài viết | 📨 Submit Guest Post</span></button>
                 </form>
 
                 <!-- Form General -->
@@ -828,22 +828,22 @@
                     <input type="text" name="_honey" tabindex="-1" autocomplete="off"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="general-name-prev">Họ tên <span class="req">*</span></label>
-                    <input class="contact-form-input" id="general-name-prev" name="name" type="text" required="required" autocomplete="name" placeholder="Tên của bạn"/>
+                    <label class="contact-form-label" for="general-name-prev"><span data-bilingual="true">Họ tên | Name</span> <span class="req">*</span></label>
+                    <input class="contact-form-input" id="general-name-prev" name="name" type="text" required="required" autocomplete="name" data-bilingual-placeholder="Tên của bạn | Your name" placeholder="Tên của bạn"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="general-email-prev">Email <span class="req">*</span></label>
-                    <input class="contact-form-input" id="general-email-prev" name="email" type="email" required="required" autocomplete="email" placeholder="email@của-bạn.com"/>
+                    <label class="contact-form-label" for="general-email-prev"><span data-bilingual="true">Email | Email</span> <span class="req">*</span></label>
+                    <input class="contact-form-input" id="general-email-prev" name="email" type="email" required="required" autocomplete="email" data-bilingual-placeholder="email@của-bạn.com | your-email@example.com" placeholder="email@của-bạn.com"/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="general-subject-prev">Chủ đề</label>
-                    <input class="contact-form-input" id="general-subject-prev" name="subject" type="text" placeholder="Hợp tác, góp ý..."/>
+                    <label class="contact-form-label" for="general-subject-prev"><span data-bilingual="true">Chủ đề | Subject</span></label>
+                    <input class="contact-form-input" id="general-subject-prev" name="subject" type="text" data-bilingual-placeholder="Hợp tác, góp ý... | Collaboration, feedback..." placeholder="Hợp tác, góp ý..."/>
                   </div>
                   <div class="contact-form-group">
-                    <label class="contact-form-label" for="general-message-prev">Nội dung <span class="req">*</span></label>
-                    <textarea class="contact-form-textarea contact-form-textarea--tall" id="general-message-prev" name="message" required="required" placeholder="Viết tin nhắn của bạn tại đây..."></textarea>
+                    <label class="contact-form-label" for="general-message-prev"><span data-bilingual="true">Nội dung | Message</span> <span class="req">*</span></label>
+                    <textarea class="contact-form-textarea contact-form-textarea--tall" id="general-message-prev" name="message" required="required" data-bilingual-placeholder="Viết tin nhắn của bạn tại đây... | Write your message here..." placeholder="Viết tin nhắn của bạn tại đây..."></textarea>
                   </div>
-                  <button class="contact-submit-btn" type="submit">✉️ Gửi tin nhắn</button>
+                  <button class="contact-submit-btn" type="submit"><span data-bilingual="true">✉️ Gửi tin nhắn | ✉️ Send Message</span></button>
                 </form>
               </div><!-- /.contact-form-panel -->
             </div><!-- /.contact-split-layout -->
@@ -952,7 +952,7 @@
             <div class="sp-widget-card pattern-ranked">
               <div class="sp-widget-header">
                 <h3 class="sp-widget-title">🔥 Bài Viết Nổi Bật</h3>
-                <a href="#" class="sp-view-all-link">Xem tất cả »</a>
+                <a href="#" class="sp-view-all-link" data-bilingual="true" data-raw-label="Xem tất cả » | View all »">Xem tất cả »</a>
               </div>
               <div class="sp-widget-body">
                 <div class="special-posts-ranked-list">
@@ -1029,7 +1029,7 @@
                     <div class="sp-quote-author">— Leonardo da Vinci</div>
                     <div class="sp-quote-divider"></div>
                     <p class="sp-quote-snippet">Vài suy nghĩ về sự tinh giản trong lối sống hiện đại và cách chúng ta tìm lại sự thuần khiết...</p>
-                    <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
+                    <span class="sp-quote-cta" data-bilingual="true" data-raw-label="Xem lời bình &amp; phân tích → | View commentary &amp; analysis →">Xem lời bình &amp; phân tích →</span>
                   </a>
                 </div>
               </div>
@@ -1043,7 +1043,7 @@
             <div class="sp-widget-card pattern-digest">
               <div class="sp-widget-header">
                 <h3 class="sp-widget-title">⚡ Điểm Tin Mỗi Ngày</h3>
-                <a href="#" class="sp-view-all-link">Xem tất cả »</a>
+                <a href="#" class="sp-view-all-link" data-bilingual="true" data-raw-label="Xem tất cả » | View all »">Xem tất cả »</a>
               </div>
               <div class="sp-widget-body">
                 <div class="sp-digest-list">
@@ -1109,7 +1109,7 @@
                     </div>
                     <h3 class="sp-spotlight-title">Sự Suy Tàn Của Khả Năng Tập Trung Trong Kỷ Nguyên Số</h3>
                     <p class="sp-spotlight-snippet">Tại sao chúng ta ngày càng khó đọc trọn một cuốn sách hay ngồi yên một mình trong 15 phút? Bài viết này mổ xẻ cơ chế dopamin của mạng xã hội...</p>
-                    <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
+                    <span class="sp-spotlight-cta" data-bilingual="true" data-raw-label="Đọc tiếp bài viết → | Read more →">Đọc tiếp bài viết →</span>
                   </div>
                 </a>
               </div>
@@ -1119,11 +1119,11 @@
 
         <!-- Widget 4: Newsletter -->
         <div class="sidebar-widget" id="newsletter">
-          <h3 class="sidebar-widget-title" data-i18n="newsletterTitle">📨 Nhận Bài Viết Mới</h3>
-          <p class="sidebar-newsletter-text">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+          <h3 class="sidebar-widget-title" data-bilingual="true">📨 Nhận Bản Tin | 📨 Newsletter</h3>
+          <p class="sidebar-newsletter-text" data-bilingual="true">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng. | Subscribe to get notified of new articles. No spam, only quality content.</p>
           <div class="sidebar-newsletter-form">
-            <input class="sidebar-email-input" type="email" placeholder="Email của bạn..." aria-label="Địa chỉ email"/>
-            <button class="sidebar-submit-btn" type="button">💌 <span data-i18n="subscribeBtn">Đăng Ký</span></button>
+            <input class="sidebar-email-input" type="email" data-bilingual-placeholder="Email của bạn... | Your email..." placeholder="Email của bạn..." aria-label="Địa chỉ email"/>
+            <button class="sidebar-submit-btn" type="button"><span data-bilingual="true">💌 Đăng Ký | 💌 Subscribe</span></button>
           </div>
         </div>
 
@@ -1148,7 +1148,7 @@
           <div class="widget">
             <div class="footer-col-brand">
               <a class="footer-brand-logo" href="/">Nam Trương<span class="dot">.</span></a>
-              <p class="footer-tagline">Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+              <p class="footer-tagline" data-bilingual="true">Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân. | Thank you most sincerely for taking the time to visit my blog. It is my earnest hope that the insights shared here afford you inspiration, valuable knowledge, or a sense of resonance along your personal journey of self-discovery and growth.</p>
             </div>
           </div>
           <!-- Widget: Mời Cà Phê (Tạm ẩn) -->
@@ -1184,7 +1184,7 @@
               <h4 class="footer-col-title" data-i18n="newsletterTitle">📬 Nhận Bài Viết Mới</h4>
               <p class="footer-newsletter-desc" data-i18n="newsletterSubDesc">Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
               <form class="newsletter-form" onsubmit="return false;">
-                <input class="input-email" id="footer-email-input" type="email" placeholder="email@của-bạn.com" aria-label="Email đăng ký bản tin"/>
+                <input class="input-email" id="footer-email-input" type="email" data-bilingual-placeholder="email@của-bạn.com | your-email@example.com" placeholder="email@của-bạn.com" aria-label="Email đăng ký bản tin"/>
                 <button class="btn-submit" id="footer-subscribe-btn" type="submit" data-i18n="subscribeBtn">Đăng Ký</button>
               </form>
             </div>

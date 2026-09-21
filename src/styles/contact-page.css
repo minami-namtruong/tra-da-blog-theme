@@ -47,15 +47,20 @@
 
 .contact-headline {
   font-family: var(--font-heading, 'Lora', serif);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--text-heading, var(--text-main));
-  margin-bottom: 1rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-heading, #111) 0%, var(--primary, #3b82f6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 @media (max-width: 600px) {
-  .contact-headline { font-size: 1.55rem; }
+  .contact-headline { font-size: 1.75rem; }
 }
 
 .contact-description {

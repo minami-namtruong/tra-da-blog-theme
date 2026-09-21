@@ -667,9 +667,9 @@
       body.innerHTML = [
         '<div class="archive-empty-state">',
         '  <div class="archive-empty-icon">🔍</div>',
-        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào phù hợp</h3>',
-        '  <p class="archive-empty-desc">Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao.</p>',
-        '  <button type="button" class="archive-btn-reset" id="archive-empty-reset-btn">↺ Xem tất cả bài viết</button>',
+        '  <h3 class="archive-empty-title" data-bilingual="true" data-raw-label="Không tìm thấy bài viết nào phù hợp | No matching posts found">' + (window.parseBilingualText ? window.parseBilingualText('Không tìm thấy bài viết nào phù hợp | No matching posts found', window.currentLang || 'vi') : 'Không tìm thấy bài viết nào phù hợp | No matching posts found') + '</h3>',
+        '  <p class="archive-empty-desc" data-bilingual="true" data-raw-label="Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.">' + (window.parseBilingualText ? window.parseBilingualText('Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.', window.currentLang || 'vi') : 'Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.') + '</p>',
+        '  <button type="button" class="archive-btn-reset" id="archive-empty-reset-btn" data-bilingual="true" data-raw-label="↺ Xem tất cả bài viết | ↺ View all posts">' + (window.parseBilingualText ? window.parseBilingualText('↺ Xem tất cả bài viết | ↺ View all posts', window.currentLang || 'vi') : '↺ Xem tất cả bài viết | ↺ View all posts') + '</button>',
         '</div>'
       ].join('');
 

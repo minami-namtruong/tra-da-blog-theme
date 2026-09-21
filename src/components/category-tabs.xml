@@ -1,6 +1,6 @@
 <!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
+      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề | 🏷️ Topics (Labels)'>
         <b:widget-settings>
           <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
           <b:widget-setting name='display'>LIST</b:widget-setting>

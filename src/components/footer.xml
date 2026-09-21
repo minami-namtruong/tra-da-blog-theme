@@ -12,7 +12,7 @@
        ========================================== -->
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
     <!-- WIDGET GỐC CỦA BLOGGER ĐỂ XỬ LÝ GỬI MAIL (KHÔNG THỂ THIẾU) -->
-    <b:widget id='ContactForm1' type='ContactForm' version='2' title='Hệ thống gửi thư tự động (Không xóa)' visible='true'>
+    <b:widget id='ContactForm1' type='ContactForm' version='2' title='Hệ thống gửi thư (Không xóa) | Mail System (Do not delete)' visible='true'>
       <b:includable id='main'>
         <b:if cond='data:title != &quot;&quot;'>
           <h2 class='title'><data:title/></h2>
@@ -110,19 +110,19 @@
 
         <!-- ── CỘT 1: THƯƠNG HIỆU, CẢM ƠN & MỜI CÀ PHÊ ── -->
         <b:section id='footer-brand-section' class='footer-section-col' name='Footer: Cột 1 (Thương Hiệu &amp; Cà Phê)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML8' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
+          <b:widget id='HTML8' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn | Brand &amp; Acknowledgments'>
             <b:includable id='main'>
               <div class='footer-col-brand'>
                 <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
                 <b:if cond='data:content'>
-                  <div class='footer-tagline'><data:content/></div>
+                  <div class='footer-tagline' data-bilingual='true'><data:content/></div>
                 <b:else/>
-                  <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+                  <p class='footer-tagline' data-bilingual='true'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân. | Thank you most sincerely for taking the time to visit my blog. It is my earnest hope that the insights shared here afford you inspiration, valuable knowledge, or a sense of resonance along your personal journey of self-discovery and growth.</p>
                 </b:if>
               </div>
             </b:includable>
           </b:widget>
-          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕' visible='false'>
+          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕ | Buy Me a Coffee Mini ☕' visible='false'>
             <b:includable id='main'>
               <!-- Tạm thời ẩn: Chỉ hiển thị khi có link cấu hình trong tiện ích Bố Cục và bật hiển thị -->
               <b:if cond='data:content and not data:content.empty and data:content != &quot;&quot;'>
@@ -143,14 +143,16 @@
 
         <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ (Cấu hình qua Bố cục > LinkList3) ── -->
         <b:section id='footer-legal-section' class='footer-section-col' name='Footer: Cột 2 (Chính Sách &amp; Minh Bạch)' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
+          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency'>
             <b:widget-settings>
               <b:widget-setting name='sorting'>NONE</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
               <div class='footer-col-legal'>
                 <h4 class='footer-col-title' data-bilingual='true'>
-                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>⚖️ Chính Sách &amp; Minh Bạch | Policies &amp; Transparency</b:if>
+                  <b:if cond='data:title and not data:title.empty'>
+                    <b:eval expr='data:title == &quot;⚖️ Chính Sách &amp; Minh Bạch&quot; ? &quot;⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency&quot; : data:title'/>
+                  <b:else/>⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency</b:if>
                 </h4>
                 <ul class='footer-links'>
                   <b:if cond='data:links and not data:links.empty'>
@@ -171,18 +173,20 @@
 
         <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI (Cấu hình qua Bố cục) ── -->
         <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng Xã Hội)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer)'>
+          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer) | 📬 Subscribe (Footer)'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
                 <h4 class='footer-col-title' data-i18n='newsletterTitle'>
-                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>📬 Nhận Bài Viết Mới</b:if>
+                  <b:if cond='data:title and not data:title.empty'>
+                    <b:eval expr='data:title == &quot;📬 Nhận Bài Viết Mới (Footer)&quot; ? &quot;📬 Nhận Bài Viết Mới | 📬 Subscribe&quot; : data:title'/>
+                  <b:else/>📬 Nhận Bài Viết Mới | 📬 Subscribe</b:if>
                 </h4>
                 <b:if cond='data:content'>
-                  <div class='footer-newsletter-custom'><data:content/></div>
+                  <div class='footer-newsletter-custom' data-bilingual='true'><data:content/></div>
                 <b:else/>
                   <p class='footer-newsletter-desc' data-i18n='newsletterDesc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
                   <form class='newsletter-form' onsubmit='return false;'>
-                    <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
+                    <input class='input-email' id='footer-email-input' type='email' data-bilingual-placeholder='email@của-bạn.com | your-email@example.com' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
                     <button class='btn-submit' id='footer-subscribe-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
                   </form>
                 </b:if>
@@ -190,7 +194,7 @@
             </b:includable>
           </b:widget>
 
-          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối Mạng Xã Hội'>
+          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối Mạng Xã Hội | 🌐 Social Connect'>
             <b:widget-settings>
               <b:widget-setting name='sorting'>NONE</b:widget-setting>
             </b:widget-settings>
@@ -229,7 +233,7 @@
 
           <!-- Bên trái: Bản quyền -->
           <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
+            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền | Copyright Notice'>
               <b:includable id='main'>
                 <span class='footer-copyright'>
                   <b:if cond='data:content'>
@@ -244,7 +248,7 @@
 
           <!-- Ở giữa: Bottom Navigation Menu (Cấu hình qua Bố cục > LinkList5) -->
           <b:section id='footer-bottom-menu-section' name='Footer Tầng 2: Menu Đáy Trang' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='LinkList5' type='LinkList' version='2' title='🔗 Menu Đáy Trang'>
+            <b:widget id='LinkList5' type='LinkList' version='2' title='🔗 Menu Đáy Trang | 🔗 Footer Menu'>
               <b:widget-settings>
                 <b:widget-setting name='sorting'>NONE</b:widget-setting>
               </b:widget-settings>
@@ -280,7 +284,7 @@
          ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
       <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
-        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang' visible='false'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang | Footer Ad Banner' visible='false'>
           <b:includable id='main'>
             <b:if cond='data:content and data:content != &quot;&quot;'>
               <div class='footer-ads-tier'>

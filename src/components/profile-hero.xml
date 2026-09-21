@@ -1,7 +1,7 @@
 <!-- Profile Cover Hero Section (Persists Across Subpages) -->
     <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='4' showaddelement='yes'>
       <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
-      <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
+      <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner | 🖼️ 1. Upload Banner Image'>
         <b:includable id='main'>
           <b:if cond='data:imageUrl'>
             <style>#cover-image-wrapper { background-image: url(&quot;<data:imageUrl/>&quot;) !important; }</style>
@@ -19,7 +19,7 @@
       </b:widget>
 
       <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
-      <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
+      <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả | 👤 2. Upload Author Avatar'>
         <b:includable id='main'>
           <b:if cond='data:imageUrl or data:sourceUrl or data:displayUrl or data:image'>
             <script>
@@ -39,7 +39,7 @@
       </b:widget>
 
       <!-- Widget 3: Tên & Lời Giới Thiệu Tác Giả -->
-      <b:widget id='HTML1' type='HTML' version='2' title='✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả'>
+      <b:widget id='HTML1' type='HTML' version='2' title='✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả | ✍️ 3. Author Name &amp; Bio'>
         <b:includable id='main'>
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
@@ -62,8 +62,8 @@
                 </script>
               </div>
               <div class='profile-meta'>
-                <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
-                <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+                <h1 class='profile-name' id='profile-author-name' data-bilingual='true'><data:blog.title/></h1>
+                <p class='profile-bio' id='profile-author-bio' data-bilingual='true'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
               <div class='profile-cta-area'>
                 <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>

@@ -156,9 +156,10 @@
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
     const showSnippet    = container.dataset.showSnippet   !== 'false';
+    const lang           = window.currentLang || document.documentElement.lang || 'vi';
     const rawViewAll     = container.dataset.viewAllText;
-    const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
-    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
+    let viewAllText      = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả » | View All »');
+    let widgetTitle      = container.dataset.title || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
@@ -463,7 +464,7 @@
           </div>
           <h3 class="sp-spotlight-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h3>
           ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet" data-bilingual="true" data-raw-label="${escapeHtml(post.snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
-          <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
+          <span class="sp-spotlight-cta" data-bilingual="true" data-raw-label="Đọc tiếp bài viết → | Read more →">${window.parseBilingualText ? window.parseBilingualText('Đọc tiếp bài viết → | Read more →', lang) : 'Đọc tiếp bài viết → | Read more →'}</span>
         </div>
       </a>`;
   }
@@ -656,7 +657,7 @@
           <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(cleanQuoteText)}">${escapeHtml(parsedQuote)}</p>
           ${authorDisplay ? `<div class="sp-quote-author" data-bilingual="true" data-raw-label="${escapeHtml(quoteAuthor)}">\u2014 ${escapeHtml(authorDisplay)}</div>` : ''}
           ${quoteSnippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(quoteSnippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
-          <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
+          <span class="sp-quote-cta" data-bilingual="true" data-raw-label="Xem lời bình & phân tích → | View commentary & analysis →">${window.parseBilingualText ? window.parseBilingualText('Xem lời bình & phân tích → | View commentary & analysis →', lang) : 'Xem lời bình & phân tích → | View commentary & analysis →'}</span>
         </a>`;
     }).join('');
 

@@ -144,7 +144,11 @@
         btn.href = configBtn.getAttribute('href') || '/p/lien-he.html';
         btn.setAttribute('data-bilingual', 'true');
         var span = configBtn.querySelector('[data-bilingual]');
-        btn.textContent = span ? span.textContent.trim() : '✍️ Viết Cùng Trà Đá | Write With Us';
+      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng Trà Đá | ✍️ Write with us';
+      var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+      btn.setAttribute('data-bilingual', 'true');
+      btn.setAttribute('data-raw-label', rawLabel);
+      btn.textContent = window.parseBilingualText ? window.parseBilingualText(rawLabel, lang) : rawLabel;
         ctaArea.appendChild(btn);
       }
     }

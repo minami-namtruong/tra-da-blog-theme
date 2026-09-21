@@ -10,7 +10,7 @@
               <div class='sidebar-widget'>
                 <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả | About Author&quot;'/></h3>
                 <b:if cond='data:content'>
-                  <div class='sidebar-about-custom-content'><data:content/></div>
+                  <div class='sidebar-about-custom-content' data-bilingual='true'><data:content/></div>
                 <b:else/>
                   <img class='sidebar-about-avatar' alt='Avatar tác giả' width='64' height='64' src=''/>
                   <script>
@@ -42,10 +42,10 @@
           </b:widget>
 
           <!-- Widget: Popular Posts (Bài Viết Nổi Bật - Tự động theo lượt xem) -->
-          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật | 🔥 Popular Posts'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title == &quot;🔥 Bài Viết Nổi Bật&quot; ? &quot;🔥 Bài Viết Nổi Bật | 🔥 Popular Posts&quot; : (data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật | 🔥 Popular Posts&quot;)'/></h3>
                 <b:if cond='data:posts and not data:posts.empty'>
                   <ul class='popular-posts-list'>
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
@@ -92,17 +92,17 @@
           </b:widget>
 
           <!-- Widget: Newsletter -->
-          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin (Sidebar)'>
+          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin | 📨 Newsletter'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;📨 Nhận Bản Tin&quot;'/></h3>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title == &quot;📨 Nhận Bản Tin&quot; ? &quot;📨 Nhận Bản Tin | 📨 Newsletter&quot; : (data:title ? data:title : &quot;📨 Nhận Bản Tin | 📨 Newsletter&quot;)'/></h3>
                 <b:if cond='data:content'>
-                  <div class='sidebar-newsletter-custom'><data:content/></div>
+                  <div class='sidebar-newsletter-custom' data-bilingual='true'><data:content/></div>
                 <b:else/>
-                  <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+                  <p class='sidebar-newsletter-text' data-bilingual='true'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng. | Subscribe to get notified of new articles. No spam, only quality content.</p>
                   <div class='sidebar-newsletter-form'>
-                    <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
-                    <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
+                    <input class='sidebar-email-input' type='email' data-bilingual-placeholder='Email của bạn... | Your email...' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
+                    <button class='sidebar-submit-btn' type='button'><span data-bilingual='true'>💌 Đăng Ký | 💌 Subscribe</span></button>
                   </div>
                 </b:if>
               </div>
@@ -110,7 +110,7 @@
           </b:widget>
 
           <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng - Mặc định ẩn, bật trong Bố cục khi cần) -->
-          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)' visible='false'>
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar | Sidebar Ads (Sticky)' visible='false'>
             <b:includable id='main'>
               <b:if cond='data:content and data:content != &quot;&quot;'>
                 <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>

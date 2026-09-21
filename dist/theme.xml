@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T10:47:35.688Z -->
+<!-- Compiled at: 2026-09-21T15:34:12.132Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -6245,15 +6245,20 @@ body.view-not-homepage #main-above-feed {
 
 .contact-headline {
   font-family: var(--font-heading, 'Lora', serif);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--text-heading, var(--text-main));
-  margin-bottom: 1rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-heading, #111) 0%, var(--primary, #3b82f6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 @media (max-width: 600px) {
-  .contact-headline { font-size: 1.55rem; }
+  .contact-headline { font-size: 1.75rem; }
 }
 
 .contact-description {
@@ -6857,12 +6862,12 @@ body.view-not-homepage #main-above-feed {
   <div class='search-modal-overlay' id='search-modal-overlay' role='dialog' aria-modal='true' aria-label='Tìm kiếm'>
     <div class='search-modal-box'>
       <div class='search-modal-header'>
-        <span class='search-modal-title'>🔍 Tìm kiếm bài viết</span>
+        <span class='search-modal-title' data-bilingual='true'>🔍 Tìm kiếm bài viết | 🔍 Search articles</span>
         <button class='search-close-btn' id='search-close-btn' aria-label='Đóng tìm kiếm'>✕</button>
       </div>
       <form class='search-input-wrap' id='search-form' role='search'>
-        <input class='search-input' id='search-input' type='search' placeholder='Nhập từ khóa tìm kiếm...' autocomplete='off'/>
-        <button class='search-submit-btn' type='submit'>Tìm</button>
+        <input class='search-input' id='search-input' type='search' placeholder='Nhập từ khóa tìm kiếm...' data-i18n='searchPlaceholder' autocomplete='off'/>
+        <button class='search-submit-btn' type='submit'><span data-bilingual='true'>Tìm | Search</span></button>
       </form>
     </div>
   </div>
@@ -6911,7 +6916,7 @@ body.view-not-homepage #main-above-feed {
 
         <!-- Brand Logo (Configurable via Layout > Header1: Text or Image) -->
         <b:section class='brand-logo-section' id='header-logo-section' maxwidgets='1' name='Tiêu Đề &amp; Logo Blog' showaddelement='no'>
-          <b:widget id='Header1' locked='true' title='Tiêu Đề &amp; Logo Blog' type='Header' version='2'>
+          <b:widget id='Header1' locked='true' title='Tiêu Đề &amp; Logo Blog | Blog Title &amp; Logo' type='Header' version='2'>
             <b:widget-settings>
               <b:widget-setting name='displayUrl'/>
               <b:widget-setting name='displayHeight'>0</b:widget-setting>
@@ -6941,7 +6946,7 @@ body.view-not-homepage #main-above-feed {
 
         <!-- Desktop Navigation (Configurable via Layout > LinkList1) -->
         <b:section class='nav-menu-section' id='nav-menu-section' maxwidgets='1' name='Menu Điều Hướng Chính (Header)' showaddelement='yes'>
-          <b:widget id='LinkList1' type='LinkList' version='2' title='🧭 Menu Điều Hướng Chính'>
+          <b:widget id='LinkList1' type='LinkList' version='2' title='🧭 Menu Điều Hướng Chính | 🧭 Main Navigation'>
             <b:widget-settings>
               <b:widget-setting name='sorting'>NONE</b:widget-setting>
             </b:widget-settings>
@@ -7001,7 +7006,7 @@ body.view-not-homepage #main-above-feed {
     <!-- Profile Cover Hero Section (Persists Across Subpages) -->
     <b:section id='profile-hero-section' name='Ảnh Bìa &amp; Tác Giả' maxwidgets='4' showaddelement='yes'>
       <!-- Widget 1: Tải Ảnh Bìa Banner Trực Tiếp Từ Máy Tính -->
-      <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)'>
+      <b:widget id='Image1' type='Image' version='2' title='🖼️ 1. Tải Lên Ảnh Bìa Banner | 🖼️ 1. Upload Banner Image'>
         <b:includable id='main'>
           <b:if cond='data:imageUrl'>
             <style>#cover-image-wrapper { background-image: url(&quot;<data:imageUrl/>&quot;) !important; }</style>
@@ -7019,7 +7024,7 @@ body.view-not-homepage #main-above-feed {
       </b:widget>
 
       <!-- Widget 2: Tải Avatar Tròn Trực Tiếp Từ Máy Tính -->
-      <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)'>
+      <b:widget id='Image2' type='Image' version='2' title='👤 2. Tải Lên Avatar Tác Giả | 👤 2. Upload Author Avatar'>
         <b:includable id='main'>
           <b:if cond='data:imageUrl or data:sourceUrl or data:displayUrl or data:image'>
             <script>
@@ -7039,7 +7044,7 @@ body.view-not-homepage #main-above-feed {
       </b:widget>
 
       <!-- Widget 3: Tên & Lời Giới Thiệu Tác Giả -->
-      <b:widget id='HTML1' type='HTML' version='2' title='✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả'>
+      <b:widget id='HTML1' type='HTML' version='2' title='✍️ 3. Tên &amp; Lời Giới Thiệu Tác Giả | ✍️ 3. Author Name &amp; Bio'>
         <b:includable id='main'>
           <!-- Profile Cover Header Section -->
           <div class='profile-cover-section' id='profile-cover-section'>
@@ -7062,8 +7067,8 @@ body.view-not-homepage #main-above-feed {
                 </script>
               </div>
               <div class='profile-meta'>
-                <h1 class='profile-name' id='profile-author-name'><data:blog.title/></h1>
-                <p class='profile-bio' id='profile-author-bio'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
+                <h1 class='profile-name' id='profile-author-name' data-bilingual='true'><data:blog.title/></h1>
+                <p class='profile-bio' id='profile-author-bio' data-bilingual='true'>Chia sẻ về trải nghiệm sống, góc nhìn cá nhân và những bài học trên hành trình khám phá bản thân.</p>
               </div>
               <div class='profile-cta-area'>
                 <a class='btn-subscribe' href='#newsletter' data-bilingual='true'>💌 Nhận Bản Tin | Subscribe</a>
@@ -7081,7 +7086,7 @@ body.view-not-homepage #main-above-feed {
 
     <!-- Dynamic Category Tabs (Powered by Blogger Label1 Widget) -->
     <b:section id='category-tabs-section' name='Thanh Chủ Đề (Category Tabs)' maxwidgets='1' showaddelement='yes'>
-      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề (Labels)'>
+      <b:widget id='Label1' type='Label' version='2' title='🏷️ Thanh Chủ Đề | 🏷️ Topics (Labels)'>
         <b:widget-settings>
           <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
           <b:widget-setting name='display'>LIST</b:widget-setting>
@@ -7126,7 +7131,7 @@ body.view-not-homepage #main-above-feed {
                      data-labels='@Tiêu điểm'
                      data-sort='latest'
                      data-limit='1'
-                     data-view-all-text='Xem tất cả »'>
+                     data-view-all-text='Xem tất cả » | View all »'>
                   <b:if cond='data:title'>
                     <b:attr name='data-title' expr:value='data:title'/>
                   <b:else/>
@@ -7225,10 +7230,10 @@ body.view-not-homepage #main-above-feed {
                 <!-- Numbered Pagination -->
                 <div class='blog-pager' role='navigation' aria-label='Phân trang'>
                   <b:if cond='data:newerPageUrl'>
-                    <a class='blog-pager-newer-link' expr:href='data:newerPageUrl'>« Mới hơn</a>
+                    <a class='blog-pager-newer-link' expr:href='data:newerPageUrl' data-i18n='newerPosts'>« Mới hơn</a>
                   </b:if>
                   <b:if cond='data:olderPageUrl'>
-                    <a class='blog-pager-older-link' expr:href='data:olderPageUrl'>Cũ hơn »</a>
+                    <a class='blog-pager-older-link' expr:href='data:olderPageUrl' data-i18n='olderPosts'>Cũ hơn »</a>
                   </b:if>
                 </div>
 
@@ -7240,8 +7245,8 @@ body.view-not-homepage #main-above-feed {
                     <!-- Thanh Tìm Kiếm Tức Thì & Nút Bộ Lọc Nâng Cao (@) -->
                     <div class='archive-search-wrap'>
                       <span class='archive-search-icon' aria-hidden='true'>🔍</span>
-                      <input class='archive-search-input' id='archive-search-input' type='search'
-                             placeholder='Nhập từ khóa tìm tên bài, chủ đề, năm (VD: 2026, triết lý, quote)...'
+                      <input type='text' id='archive-search-input' class='archive-search-input'
+                             placeholder='Tìm kiếm bài viết...' data-i18n='searchPlaceholder'
                              autocomplete='off' aria-label='Tìm kiếm bài viết'/>
                       <button type='button' class='archive-search-clear' id='archive-search-clear' aria-label='Xóa tìm kiếm' style='display:none;'>✕</button>
                       <button type='button' class='archive-filter-trigger-btn' id='archive-filter-trigger-btn' aria-label='Mở bộ lọc nâng cao' title='Bộ lọc tính năng nâng cao'>
@@ -7271,7 +7276,7 @@ body.view-not-homepage #main-above-feed {
 
                         <!-- Chân trang Popover -->
                         <div class='filter-popover-footer'>
-                          <button type='button' class='filter-popover-btn-reset' id='filter-popover-reset-btn'>↺ Xem tất cả</button>
+                          <button type='button' class='filter-popover-btn-reset' id='filter-popover-reset-btn'><span data-bilingual='true'>↺ Xem tất cả | ↺ View all</span></button>
                         </div>
                       </div>
                     </div>
@@ -7294,7 +7299,6 @@ body.view-not-homepage #main-above-feed {
 
                       <!-- ── CỘT TRÁI: TÔN CHỈ & HƯỚNG DẪN ── -->
                       <div class='contact-manifesto'>
-                        <span class='contact-eyebrow' data-bilingual='true'>Cộng Tác Cùng Chúng Mình | Write With Us</span>
                         <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
                         <p class='contact-description' data-bilingual='true'>
                           Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
@@ -7327,11 +7331,11 @@ body.view-not-homepage #main-above-feed {
                         <div class='contact-tabs' role='tablist'>
                           <button class='contact-tab-btn active' role='tab' aria-selected='true' data-tab='guest'
                                   id='tab-guest' aria-controls='contact-form-guest'>
-                            ✍️ Gửi bài viết đóng góp
+                            <span data-bilingual='true'>✍️ Gửi bài viết đóng góp | ✍️ Submit Guest Post</span>
                           </button>
                           <button class='contact-tab-btn' role='tab' aria-selected='false' data-tab='general'
                                   id='tab-general' aria-controls='contact-form-general'>
-                            ✉️ Liên hệ / Góp ý
+                            <span data-bilingual='true'>✉️ Liên hệ / Góp ý | ✉️ Contact / Feedback</span>
                           </button>
                         </div>
 
@@ -7344,37 +7348,41 @@ body.view-not-homepage #main-above-feed {
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='guest-name'>
-                              Họ tên / Bút danh <span class='req'>*</span>
+                              <span data-bilingual='true'>Họ tên / Bút danh | Name / Pen name</span> <span class='req'>*</span>
                             </label>
                             <input class='contact-form-input' id='guest-name' name='author_name'
                                    type='text' required='required' autocomplete='name'
+                                   data-bilingual-placeholder='Nguyễn Văn A / Bút danh của bạn | John Doe / Your pen name'
                                    placeholder='Nguyễn Văn A / Bút danh của bạn'/>
                           </div>
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='guest-email'>
-                              Email liên hệ <span class='req'>*</span>
+                              <span data-bilingual='true'>Email liên hệ | Contact Email</span> <span class='req'>*</span>
                             </label>
                             <input class='contact-form-input' id='guest-email' name='author_email'
                                    type='email' required='required' autocomplete='email'
+                                   data-bilingual-placeholder='email@của-bạn.com | your-email@example.com'
                                    placeholder='email@của-bạn.com'/>
                           </div>
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='guest-title'>
-                              Tiêu đề bài viết dự kiến <span class='req'>*</span>
+                              <span data-bilingual='true'>Tiêu đề bài viết dự kiến | Expected Post Title</span> <span class='req'>*</span>
                             </label>
                             <input class='contact-form-input' id='guest-title' name='post_title'
                                    type='text' required='required'
+                                   data-bilingual-placeholder='VD: Kiến trúc microservices cho người mới | Ex: Microservices architecture for beginners'
                                    placeholder='VD: Kiến trúc microservices cho người mới'/>
                           </div>
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='guest-content'>
-                              Link Google Docs hoặc Nội dung bản thảo <span class='req'>*</span>
+                              <span data-bilingual='true'>Link Google Docs hoặc Nội dung bản thảo | Google Docs Link or Manuscript Content</span> <span class='req'>*</span>
                             </label>
                             <textarea class='contact-form-textarea contact-form-textarea--tall'
                                       id='guest-content' name='content' required='required'
+                                      data-bilingual-placeholder='Dán link Google Docs (chế độ nhận xét) hoặc tóm tắt nội dung bài viết của bạn... | Paste Google Docs link (comment mode) or summarize your post content...'
                                       placeholder='Dán link Google Docs (chế độ nhận xét) hoặc tóm tắt nội dung bài viết của bạn...'></textarea>
                             <span class='contact-field-hint' data-bilingual='true'>
                               Khuyến khích dùng Google Docs để biên tập nhanh hơn. |
@@ -7383,25 +7391,28 @@ body.view-not-homepage #main-above-feed {
                           </div>
 
                           <div class='contact-form-group'>
-                            <label class='contact-form-label' for='guest-bio'>Giới thiệu ngắn về bạn (Bio 1–2 câu)</label>
+                            <label class='contact-form-label' for='guest-bio'><span data-bilingual='true'>Giới thiệu ngắn về bạn (Bio 1–2 câu) | Short Bio (1-2 sentences)</span></label>
                             <textarea class='contact-form-textarea' id='guest-bio' name='author_bio'
+                                      data-bilingual-placeholder='Kỹ sư phần mềm, yêu thích viết lách và khám phá công nghệ... | Software engineer, passionate about writing and exploring technology...'
                                       placeholder='Kỹ sư phần mềm, yêu thích viết lách và khám phá công nghệ...'></textarea>
                           </div>
 
                           <div class='contact-form-group'>
-                            <label class='contact-form-label' for='guest-avatar'>Link ảnh chân dung / Avatar (Tùy chọn)</label>
+                            <label class='contact-form-label' for='guest-avatar'><span data-bilingual='true'>Link ảnh chân dung / Avatar (Tùy chọn) | Portrait / Avatar Link (Optional)</span></label>
                             <input class='contact-form-input' id='guest-avatar' name='author_avatar'
                                    type='url' placeholder='https://...'/>
                           </div>
 
                           <div class='contact-form-group'>
-                            <label class='contact-form-label' for='guest-social'>Website hoặc Link Mạng Xã Hội (Tùy chọn)</label>
+                            <label class='contact-form-label' for='guest-social'><span data-bilingual='true'>Website hoặc Link Mạng Xã Hội (Tùy chọn) | Website or Social Media Link (Optional)</span></label>
                             <input class='contact-form-input' id='guest-social' name='author_social'
-                                   type='url' placeholder='https://your-site.com hoặc facebook.com/...'/>
+                                   type='url'
+                                   data-bilingual-placeholder='https://your-site.com hoặc facebook.com/... | https://your-site.com or facebook.com/...'
+                                   placeholder='https://your-site.com hoặc facebook.com/...'/>
                           </div>
 
                           <button class='contact-submit-btn' type='submit'>
-                            📨 Gửi bản thảo bài viết
+                            <span data-bilingual='true'>📨 Gửi bản thảo bài viết | 📨 Submit Guest Post</span>
                           </button>
                         </form>
 
@@ -7414,39 +7425,44 @@ body.view-not-homepage #main-above-feed {
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='general-name'>
-                              Họ tên <span class='req'>*</span>
+                              <span data-bilingual='true'>Họ tên | Name</span> <span class='req'>*</span>
                             </label>
                             <input class='contact-form-input' id='general-name' name='name'
                                    type='text' required='required' autocomplete='name'
+                                   data-bilingual-placeholder='Tên của bạn | Your name'
                                    placeholder='Tên của bạn'/>
                           </div>
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='general-email'>
-                              Email <span class='req'>*</span>
+                              <span data-bilingual='true'>Email | Email</span> <span class='req'>*</span>
                             </label>
                             <input class='contact-form-input' id='general-email' name='email'
                                    type='email' required='required' autocomplete='email'
+                                   data-bilingual-placeholder='email@của-bạn.com | your-email@example.com'
                                    placeholder='email@của-bạn.com'/>
                           </div>
 
                           <div class='contact-form-group'>
-                            <label class='contact-form-label' for='general-subject'>Chủ đề</label>
+                            <label class='contact-form-label' for='general-subject'><span data-bilingual='true'>Chủ đề | Subject</span></label>
                             <input class='contact-form-input' id='general-subject' name='subject'
-                                   type='text' placeholder='Hợp tác, góp ý, hay chỉ muốn chào hỏi...'/>
+                                   type='text'
+                                   data-bilingual-placeholder='Hợp tác, góp ý, hay chỉ muốn chào hỏi... | Collaboration, feedback, or just saying hi...'
+                                   placeholder='Hợp tác, góp ý, hay chỉ muốn chào hỏi...'/>
                           </div>
 
                           <div class='contact-form-group'>
                             <label class='contact-form-label' for='general-message'>
-                              Nội dung <span class='req'>*</span>
+                              <span data-bilingual='true'>Nội dung | Message</span> <span class='req'>*</span>
                             </label>
                             <textarea class='contact-form-textarea contact-form-textarea--tall'
                                       id='general-message' name='message' required='required'
+                                      data-bilingual-placeholder='Viết tin nhắn của bạn tại đây... | Write your message here...'
                                       placeholder='Viết tin nhắn của bạn tại đây...'></textarea>
                           </div>
 
                           <button class='contact-submit-btn' type='submit'>
-                            ✉️ Gửi tin nhắn
+                            <span data-bilingual='true'>✉️ Gửi tin nhắn | ✉️ Send Message</span>
                           </button>
                         </form>
 
@@ -7738,7 +7754,7 @@ body.view-not-homepage #main-above-feed {
              Tác giả kéo thả widget trực tiếp trong Blogger Layout.
              JavaScript sẽ tự động chèn vào sau bài viết số 3 (hoặc số N) -->
         <b:section id='main-in-feed-section' name='Xen Kẽ Giữa Các Bài (In-Feed)' showaddelement='yes'>
-          <b:widget id='HTML11' type='HTML' version='2' title='☕ Góc Suy Ngẫm'>
+          <b:widget id='HTML11' type='HTML' version='2' title='☕ Góc Suy Ngẫm | ☕ Reflections'>
             <b:includable id='main'>
               <div class='special-posts-widget'
                    id='widget-infeed-quote'
@@ -7750,7 +7766,7 @@ body.view-not-homepage #main-above-feed {
                 <b:if cond='data:title'>
                   <b:attr name='data-title' expr:value='data:title'/>
                 <b:else/>
-                  <b:attr name='data-title' value='☕ Góc Suy Ngẫm | ☕ Contemplation Corner'/>
+                  <b:attr name='data-title' value='☕ Góc Suy Ngẫm | ☕ Reflections'/>
                 </b:if>
                 <b:if cond='data:content'>
                   <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
@@ -7764,7 +7780,7 @@ body.view-not-homepage #main-above-feed {
              Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
              Thích hợp đặt Banner Quảng Cáo AdSense hoặc Tiện Ích Bên Thứ 3 -->
         <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)' showaddelement='yes'>
-          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)' visible='false'>
+          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng | Post-Feed Ads' visible='false'>
             <b:includable id='main'>
               <b:if cond='data:content and data:content != &quot;&quot;'>
                 <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
@@ -7777,7 +7793,7 @@ body.view-not-homepage #main-above-feed {
 
         <!-- ── TIỆN ÍCH QUẢNG CÁO TRONG NỘI DUNG BÀI VIẾT (Mặc định ẩn, kích hoạt qua Bố cục) ── -->
         <b:section id='post-ads-top-section' name='Quảng Cáo Đầu Bài Viết (In-Post Top)' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='HTML21' type='HTML' version='2' title='Quảng Cáo Đầu Bài Viết (In-Post Top)' visible='false'>
+          <b:widget id='HTML21' type='HTML' version='2' title='Quảng Cáo Đầu Bài Viết | In-Post Top Ads' visible='false'>
             <b:includable id='main'>
               <b:if cond='data:content and data:content != &quot;&quot;'>
                 <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
@@ -7789,7 +7805,7 @@ body.view-not-homepage #main-above-feed {
         </b:section>
 
         <b:section id='post-ads-bottom-section' name='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='HTML22' type='HTML' version='2' title='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' visible='false'>
+          <b:widget id='HTML22' type='HTML' version='2' title='Quảng Cáo Cuối Bài Viết | In-Post Bottom Ads' visible='false'>
             <b:includable id='main'>
               <b:if cond='data:content and data:content != &quot;&quot;'>
                 <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
@@ -7806,7 +7822,7 @@ body.view-not-homepage #main-above-feed {
         <!-- Special Posts Widget — Bên dưới danh sách bài (Main Content) -->
         <!-- Hiển thị trong Main Content, tự động chuyển sang grid 2-3 cột nhờ Container Queries -->
         <b:section id='main-special-posts-section' name='Tiện Ích Bài Đặc Biệt (Main Content)' showaddelement='yes'>
-          <b:widget id='HTML13' type='HTML' version='2' title='📊 Top Bài Đọc Nhiều (Main Content)'>
+          <b:widget id='HTML13' type='HTML' version='2' title='📊 Bài Viết Được Đọc Nhiều | 📊 Top Stories'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage or data:view.isMultipleItems'>
                 <!-- Widget Ranked rộng trong Main — tự động dàn 2-3 cột khi đủ chỗ -->
@@ -7815,11 +7831,11 @@ body.view-not-homepage #main-above-feed {
                      data-pattern='ranked'
                      data-sort='views'
                      data-limit='6'
-                     data-view-all-text='Xem tất cả »'>
+                     data-view-all-text='Xem tất cả » | View all »'>
                   <b:if cond='data:title'>
                     <b:attr name='data-title' expr:value='data:title'/>
                   <b:else/>
-                    <b:attr name='data-title' value='📊 Bài Viết Được Đọc Nhiều'/>
+                    <b:attr name='data-title' value='📊 Bài Viết Được Đọc Nhiều | 📊 Top Stories'/>
                   </b:if>
                   <b:if cond='data:content'>
                     <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
@@ -7843,7 +7859,7 @@ body.view-not-homepage #main-above-feed {
               <div class='sidebar-widget'>
                 <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title ? data:title : &quot;👤 Về Tác Giả | About Author&quot;'/></h3>
                 <b:if cond='data:content'>
-                  <div class='sidebar-about-custom-content'><data:content/></div>
+                  <div class='sidebar-about-custom-content' data-bilingual='true'><data:content/></div>
                 <b:else/>
                   <img class='sidebar-about-avatar' alt='Avatar tác giả' width='64' height='64' src=''/>
                   <script>
@@ -7875,10 +7891,10 @@ body.view-not-homepage #main-above-feed {
           </b:widget>
 
           <!-- Widget: Popular Posts (Bài Viết Nổi Bật - Tự động theo lượt xem) -->
-          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật'>
+          <b:widget id='PopularPosts1' type='PopularPosts' version='2' title='🔥 Bài Viết Nổi Bật | 🔥 Popular Posts'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật&quot;'/></h3>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title == &quot;🔥 Bài Viết Nổi Bật&quot; ? &quot;🔥 Bài Viết Nổi Bật | 🔥 Popular Posts&quot; : (data:title ? data:title : &quot;🔥 Bài Viết Nổi Bật | 🔥 Popular Posts&quot;)'/></h3>
                 <b:if cond='data:posts and not data:posts.empty'>
                   <ul class='popular-posts-list'>
                     <b:loop values='data:posts' var='ppPost' index='ppIdx'>
@@ -7925,17 +7941,17 @@ body.view-not-homepage #main-above-feed {
           </b:widget>
 
           <!-- Widget: Newsletter -->
-          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin (Sidebar)'>
+          <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin | 📨 Newsletter'>
             <b:includable id='main'>
               <div class='sidebar-widget'>
-                <h3 class='sidebar-widget-title'><b:eval expr='data:title ? data:title : &quot;📨 Nhận Bản Tin&quot;'/></h3>
+                <h3 class='sidebar-widget-title' data-bilingual='true'><b:eval expr='data:title == &quot;📨 Nhận Bản Tin&quot; ? &quot;📨 Nhận Bản Tin | 📨 Newsletter&quot; : (data:title ? data:title : &quot;📨 Nhận Bản Tin | 📨 Newsletter&quot;)'/></h3>
                 <b:if cond='data:content'>
-                  <div class='sidebar-newsletter-custom'><data:content/></div>
+                  <div class='sidebar-newsletter-custom' data-bilingual='true'><data:content/></div>
                 <b:else/>
-                  <p class='sidebar-newsletter-text'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.</p>
+                  <p class='sidebar-newsletter-text' data-bilingual='true'>Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng. | Subscribe to get notified of new articles. No spam, only quality content.</p>
                   <div class='sidebar-newsletter-form'>
-                    <input class='sidebar-email-input' type='email' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
-                    <button class='sidebar-submit-btn' type='button'>💌 Đăng Ký</button>
+                    <input class='sidebar-email-input' type='email' data-bilingual-placeholder='Email của bạn... | Your email...' placeholder='Email của bạn...' aria-label='Địa chỉ email'/>
+                    <button class='sidebar-submit-btn' type='button'><span data-bilingual='true'>💌 Đăng Ký | 💌 Subscribe</span></button>
                   </div>
                 </b:if>
               </div>
@@ -7943,7 +7959,7 @@ body.view-not-homepage #main-above-feed {
           </b:widget>
 
           <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng - Mặc định ẩn, bật trong Bố cục khi cần) -->
-          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)' visible='false'>
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar | Sidebar Ads (Sticky)' visible='false'>
             <b:includable id='main'>
               <b:if cond='data:content and data:content != &quot;&quot;'>
                 <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
@@ -7974,7 +7990,7 @@ body.view-not-homepage #main-above-feed {
        ========================================== -->
   <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
     <!-- WIDGET GỐC CỦA BLOGGER ĐỂ XỬ LÝ GỬI MAIL (KHÔNG THỂ THIẾU) -->
-    <b:widget id='ContactForm1' type='ContactForm' version='2' title='Hệ thống gửi thư tự động (Không xóa)' visible='true'>
+    <b:widget id='ContactForm1' type='ContactForm' version='2' title='Hệ thống gửi thư (Không xóa) | Mail System (Do not delete)' visible='true'>
       <b:includable id='main'>
         <b:if cond='data:title != &quot;&quot;'>
           <h2 class='title'><data:title/></h2>
@@ -8072,19 +8088,19 @@ body.view-not-homepage #main-above-feed {
 
         <!-- ── CỘT 1: THƯƠNG HIỆU, CẢM ƠN & MỜI CÀ PHÊ ── -->
         <b:section id='footer-brand-section' class='footer-section-col' name='Footer: Cột 1 (Thương Hiệu &amp; Cà Phê)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML8' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn'>
+          <b:widget id='HTML8' type='HTML' version='2' title='Thương Hiệu &amp; Lời Cảm Ơn | Brand &amp; Acknowledgments'>
             <b:includable id='main'>
               <div class='footer-col-brand'>
                 <a class='footer-brand-logo' expr:href='data:blog.homepageUrl'><data:blog.title/><span class='dot'>.</span></a>
                 <b:if cond='data:content'>
-                  <div class='footer-tagline'><data:content/></div>
+                  <div class='footer-tagline' data-bilingual='true'><data:content/></div>
                 <b:else/>
-                  <p class='footer-tagline'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân.</p>
+                  <p class='footer-tagline' data-bilingual='true'>Cảm ơn bạn đã dành thời gian ghé thăm blog. Hy vọng những chia sẻ tại đây mang lại cho bạn chút cảm hứng, tri thức hữu ích hoặc sự đồng điệu trên hành trình khám phá và phát triển bản thân. | Thank you most sincerely for taking the time to visit my blog. It is my earnest hope that the insights shared here afford you inspiration, valuable knowledge, or a sense of resonance along your personal journey of self-discovery and growth.</p>
                 </b:if>
               </div>
             </b:includable>
           </b:widget>
-          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕' visible='false'>
+          <b:widget id='HTML7' type='HTML' version='2' title='Mời Cà Phê Mini ☕ | Buy Me a Coffee Mini ☕' visible='false'>
             <b:includable id='main'>
               <!-- Tạm thời ẩn: Chỉ hiển thị khi có link cấu hình trong tiện ích Bố Cục và bật hiển thị -->
               <b:if cond='data:content and not data:content.empty and data:content != &quot;&quot;'>
@@ -8105,14 +8121,16 @@ body.view-not-homepage #main-above-feed {
 
         <!-- ── CỘT 2: CHÍNH SÁCH & PHÁP LÝ (Cấu hình qua Bố cục > LinkList3) ── -->
         <b:section id='footer-legal-section' class='footer-section-col' name='Footer: Cột 2 (Chính Sách &amp; Minh Bạch)' maxwidgets='1' showaddelement='yes'>
-          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch'>
+          <b:widget id='LinkList3' type='LinkList' version='2' title='⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency'>
             <b:widget-settings>
               <b:widget-setting name='sorting'>NONE</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
               <div class='footer-col-legal'>
                 <h4 class='footer-col-title' data-bilingual='true'>
-                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>⚖️ Chính Sách &amp; Minh Bạch | Policies &amp; Transparency</b:if>
+                  <b:if cond='data:title and not data:title.empty'>
+                    <b:eval expr='data:title == &quot;⚖️ Chính Sách &amp; Minh Bạch&quot; ? &quot;⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency&quot; : data:title'/>
+                  <b:else/>⚖️ Chính Sách &amp; Minh Bạch | ⚖️ Policies &amp; Transparency</b:if>
                 </h4>
                 <ul class='footer-links'>
                   <b:if cond='data:links and not data:links.empty'>
@@ -8133,18 +8151,20 @@ body.view-not-homepage #main-above-feed {
 
         <!-- ── CỘT 3: NHẬN BẢN TIN & MẠNG XÃ HỘI (Cấu hình qua Bố cục) ── -->
         <b:section id='footer-newsletter-section' class='footer-section-col' name='Footer: Cột 3 (Bản Tin &amp; Mạng Xã Hội)' maxwidgets='2' showaddelement='yes'>
-          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer)'>
+          <b:widget id='HTML9' type='HTML' version='2' title='📬 Nhận Bài Viết Mới (Footer) | 📬 Subscribe (Footer)'>
             <b:includable id='main'>
               <div class='footer-col-newsletter'>
                 <h4 class='footer-col-title' data-i18n='newsletterTitle'>
-                  <b:if cond='data:title and not data:title.empty'><data:title/><b:else/>📬 Nhận Bài Viết Mới</b:if>
+                  <b:if cond='data:title and not data:title.empty'>
+                    <b:eval expr='data:title == &quot;📬 Nhận Bài Viết Mới (Footer)&quot; ? &quot;📬 Nhận Bài Viết Mới | 📬 Subscribe&quot; : data:title'/>
+                  <b:else/>📬 Nhận Bài Viết Mới | 📬 Subscribe</b:if>
                 </h4>
                 <b:if cond='data:content'>
-                  <div class='footer-newsletter-custom'><data:content/></div>
+                  <div class='footer-newsletter-custom' data-bilingual='true'><data:content/></div>
                 <b:else/>
                   <p class='footer-newsletter-desc' data-i18n='newsletterDesc'>Nhận bài viết mới và các chiêm nghiệm giá trị qua email. Không spam.</p>
                   <form class='newsletter-form' onsubmit='return false;'>
-                    <input class='input-email' id='footer-email-input' type='email' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
+                    <input class='input-email' id='footer-email-input' type='email' data-bilingual-placeholder='email@của-bạn.com | your-email@example.com' placeholder='email@của-bạn.com' aria-label='Email đăng ký bản tin' required='required'/>
                     <button class='btn-submit' id='footer-subscribe-btn' type='submit' data-i18n='subscribeBtn'>Đăng Ký</button>
                   </form>
                 </b:if>
@@ -8152,7 +8172,7 @@ body.view-not-homepage #main-above-feed {
             </b:includable>
           </b:widget>
 
-          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối Mạng Xã Hội'>
+          <b:widget id='LinkList4' type='LinkList' version='2' title='🌐 Kết Nối Mạng Xã Hội | 🌐 Social Connect'>
             <b:widget-settings>
               <b:widget-setting name='sorting'>NONE</b:widget-setting>
             </b:widget-settings>
@@ -8191,7 +8211,7 @@ body.view-not-homepage #main-above-feed {
 
           <!-- Bên trái: Bản quyền -->
           <b:section id='footer-copyright-section' name='Footer Tầng 2: Bản Quyền' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền'>
+            <b:widget id='HTML5' type='HTML' version='2' title='Dòng Bản Quyền | Copyright Notice'>
               <b:includable id='main'>
                 <span class='footer-copyright'>
                   <b:if cond='data:content'>
@@ -8206,7 +8226,7 @@ body.view-not-homepage #main-above-feed {
 
           <!-- Ở giữa: Bottom Navigation Menu (Cấu hình qua Bố cục > LinkList5) -->
           <b:section id='footer-bottom-menu-section' name='Footer Tầng 2: Menu Đáy Trang' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='LinkList5' type='LinkList' version='2' title='🔗 Menu Đáy Trang'>
+            <b:widget id='LinkList5' type='LinkList' version='2' title='🔗 Menu Đáy Trang | 🔗 Footer Menu'>
               <b:widget-settings>
                 <b:widget-setting name='sorting'>NONE</b:widget-setting>
               </b:widget-settings>
@@ -8242,7 +8262,7 @@ body.view-not-homepage #main-above-feed {
          ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
       <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
-        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang' visible='false'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang | Footer Ad Banner' visible='false'>
           <b:includable id='main'>
             <b:if cond='data:content and data:content != &quot;&quot;'>
               <div class='footer-ads-tier'>
@@ -8300,6 +8320,7 @@ body.view-not-homepage #main-above-feed {
       newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
       subscribeBtn: 'Đăng Ký',
       olderPosts: 'Cũ hơn »',
+      newerPosts: '« Mới hơn',
       newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
       backToTop: '↑ Lên đầu trang',
       copyrightSuffix: 'Tất cả quyền được bảo lưu.',
@@ -8331,6 +8352,7 @@ body.view-not-homepage #main-above-feed {
       newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
       subscribeBtn: 'Subscribe',
       olderPosts: 'Older Posts »',
+      newerPosts: '« Newer Posts',
       newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
       backToTop: '↑ Back to top',
       copyrightSuffix: 'All rights reserved.',
@@ -8401,6 +8423,11 @@ body.view-not-homepage #main-above-feed {
       // 1. Lấy nội dung gốc chứa cú pháp VI | EN
       var raw = el.getAttribute('data-raw-label') || el.dataset.rawText;
       if (!raw) {
+        // BẢO VỆ: Khước từ tự động parse nếu bên trong có chứa thẻ <script> 
+        // (tránh lỗi hiển thị source code JS nếu người dùng dán mã vào data:content)
+        if (el.querySelector('script, img, iframe')) {
+          return;
+        }
         var currentTxt = el.textContent.trim();
         if (currentTxt.includes('|')) {
           raw = currentTxt;
@@ -8412,6 +8439,15 @@ body.view-not-homepage #main-above-feed {
       // 2. Nếu có nội dung gốc chứa dấu phân cách "|"
       if (raw && raw.includes('|')) {
         el.textContent = parseBilingualText(raw, lang);
+      }
+    });
+
+    // 3. Xử lý placeholder song ngữ cho input/textarea
+    var placeholders = document.querySelectorAll('[data-bilingual-placeholder]');
+    placeholders.forEach(function(el) {
+      var raw = el.getAttribute('data-bilingual-placeholder');
+      if (raw && raw.includes('|')) {
+        el.placeholder = parseBilingualText(raw, lang);
       }
     });
   }
@@ -9602,9 +9638,9 @@ body.view-not-homepage #main-above-feed {
       body.innerHTML = [
         '<div class="archive-empty-state">',
         '  <div class="archive-empty-icon">🔍</div>',
-        '  <h3 class="archive-empty-title">Không tìm thấy bài viết nào phù hợp</h3>',
-        '  <p class="archive-empty-desc">Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao.</p>',
-        '  <button type="button" class="archive-btn-reset" id="archive-empty-reset-btn">↺ Xem tất cả bài viết</button>',
+        '  <h3 class="archive-empty-title" data-bilingual="true" data-raw-label="Không tìm thấy bài viết nào phù hợp | No matching posts found">' + (window.parseBilingualText ? window.parseBilingualText('Không tìm thấy bài viết nào phù hợp | No matching posts found', window.currentLang || 'vi') : 'Không tìm thấy bài viết nào phù hợp | No matching posts found') + '</h3>',
+        '  <p class="archive-empty-desc" data-bilingual="true" data-raw-label="Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.">' + (window.parseBilingualText ? window.parseBilingualText('Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.', window.currentLang || 'vi') : 'Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại các bộ lọc nâng cao. | Try adjusting your search keywords or resetting the filters.') + '</p>',
+        '  <button type="button" class="archive-btn-reset" id="archive-empty-reset-btn" data-bilingual="true" data-raw-label="↺ Xem tất cả bài viết | ↺ View all posts">' + (window.parseBilingualText ? window.parseBilingualText('↺ Xem tất cả bài viết | ↺ View all posts', window.currentLang || 'vi') : '↺ Xem tất cả bài viết | ↺ View all posts') + '</button>',
         '</div>'
       ].join('');
 
@@ -11355,9 +11391,10 @@ body.view-not-homepage #main-above-feed {
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
     const showSnippet    = container.dataset.showSnippet   !== 'false';
+    const lang           = window.currentLang || document.documentElement.lang || 'vi';
     const rawViewAll     = container.dataset.viewAllText;
-    const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
-    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
+    let viewAllText      = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả » | View All »');
+    let widgetTitle      = container.dataset.title || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
@@ -11662,7 +11699,7 @@ body.view-not-homepage #main-above-feed {
           </div>
           <h3 class="sp-spotlight-title" data-bilingual="true" data-raw-label="${escapeHtml(post.title)}">${escapeHtml(parsedTitle)}</h3>
           ${(opts.showSnippet && post.snippet) ? `<p class="sp-spotlight-snippet" data-bilingual="true" data-raw-label="${escapeHtml(post.snippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
-          <span class="sp-spotlight-cta">Đọc tiếp bài viết <span aria-hidden="true">→</span></span>
+          <span class="sp-spotlight-cta" data-bilingual="true" data-raw-label="Đọc tiếp bài viết → | Read more →">${window.parseBilingualText ? window.parseBilingualText('Đọc tiếp bài viết → | Read more →', lang) : 'Đọc tiếp bài viết → | Read more →'}</span>
         </div>
       </a>`;
   }
@@ -11855,7 +11892,7 @@ body.view-not-homepage #main-above-feed {
           <p class="sp-quote-text" data-bilingual="true" data-raw-label="${escapeHtml(cleanQuoteText)}">${escapeHtml(parsedQuote)}</p>
           ${authorDisplay ? `<div class="sp-quote-author" data-bilingual="true" data-raw-label="${escapeHtml(quoteAuthor)}">\u2014 ${escapeHtml(authorDisplay)}</div>` : ''}
           ${quoteSnippet ? `<div class="sp-quote-divider"></div><p class="sp-quote-snippet" data-bilingual="true" data-raw-label="${escapeHtml(quoteSnippet)}">${escapeHtml(parsedSnippet)}</p>` : ''}
-          <span class="sp-quote-cta">Xem lời bình &amp; phân tích <span aria-hidden="true">→</span></span>
+          <span class="sp-quote-cta" data-bilingual="true" data-raw-label="Xem lời bình & phân tích → | View commentary & analysis →">${window.parseBilingualText ? window.parseBilingualText('Xem lời bình & phân tích → | View commentary & analysis →', lang) : 'Xem lời bình & phân tích → | View commentary & analysis →'}</span>
         </a>`;
     }).join('');
 
@@ -13630,7 +13667,7 @@ body.view-not-homepage #main-above-feed {
       // Nếu chỉ dán mỗi link ảnh http... (ưu tiên làm Banner)
       if (/^https?:\/\/[^\s]+$/i.test(textOnly)) {
         coverWrapper.style.backgroundImage = `url("${textOnly}")`;
-      } else if (textOnly.includes('|') || /(?:banner|avatar|bio|name)\s*:/i.test(textOnly)) {
+      } else if (/(?:banner|avatar|bio|name)\s*:/i.test(textOnly)) {
         // Cú pháp tham số: banner: https://... | avatar: https://... | bio: ... | name: ...
         const parts = textOnly.split('|').map(s => s.trim());
         parts.forEach(part => {
@@ -13656,12 +13693,25 @@ body.view-not-homepage #main-above-feed {
         // Người dùng gõ văn bản tự nhiên (lời giới thiệu)
         // Nếu có nhiều dòng: dòng 1 < 40 ký tự và không có dấu chấm phẩy thì là Tên, phần sau là Bio
         const lines = textOnly.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        if (lines.length > 1 && lines[0].length < 40 && !/[.,;!?]$/.test(lines[0])) {
-          if (nameEl) nameEl.textContent = lines[0];
-          if (bioEl) bioEl.innerHTML = lines.slice(1).join('<br/>');
+        const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+        const parseFn = window.parseBilingualText || (t => t);
+
+        if (lines.length > 1 && lines[0].length < 40 && !/[.,;!?]$/.test(lines[0]) && !lines[0].includes('|')) {
+          if (nameEl) {
+            nameEl.setAttribute('data-raw-label', lines[0]);
+            nameEl.textContent = parseFn(lines[0], lang);
+          }
+          if (bioEl) {
+            const bioText = lines.slice(1).join('\n');
+            bioEl.setAttribute('data-raw-label', bioText);
+            bioEl.innerHTML = parseFn(bioText, lang).replace(/\n/g, '<br/>');
+          }
         } else {
           // Toàn bộ là lời giới thiệu Bio
-          if (bioEl) bioEl.textContent = textOnly;
+          if (bioEl) {
+            bioEl.setAttribute('data-raw-label', textOnly);
+            bioEl.innerHTML = parseFn(textOnly, lang).replace(/\n/g, '<br/>');
+          }
         }
       }
     }
@@ -14023,7 +14073,11 @@ body.view-not-homepage #main-above-feed {
         btn.href = configBtn.getAttribute('href') || '/p/lien-he.html';
         btn.setAttribute('data-bilingual', 'true');
         var span = configBtn.querySelector('[data-bilingual]');
-        btn.textContent = span ? span.textContent.trim() : '✍️ Viết Cùng Trà Đá | Write With Us';
+      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng Trà Đá | ✍️ Write with us';
+      var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
+      btn.setAttribute('data-bilingual', 'true');
+      btn.setAttribute('data-raw-label', rawLabel);
+      btn.textContent = window.parseBilingualText ? window.parseBilingualText(rawLabel, lang) : rawLabel;
         ctaArea.appendChild(btn);
       }
     }

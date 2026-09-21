@@ -38,6 +38,7 @@
       newsletterDesc: 'Nhận thông báo khi có bài viết mới qua email.',
       subscribeBtn: 'Đăng Ký',
       olderPosts: 'Cũ hơn »',
+      newerPosts: '« Mới hơn',
       newsletterSubDesc: 'Đăng ký để nhận thông báo khi có bài viết mới. Không spam, chỉ nội dung chất lượng.',
       backToTop: '↑ Lên đầu trang',
       copyrightSuffix: 'Tất cả quyền được bảo lưu.',
@@ -69,6 +70,7 @@
       newsletterDesc: 'Get thoughtful articles delivered to your inbox.',
       subscribeBtn: 'Subscribe',
       olderPosts: 'Older Posts »',
+      newerPosts: '« Newer Posts',
       newsletterSubDesc: 'Subscribe to get notified of new articles. No spam, only quality content.',
       backToTop: '↑ Back to top',
       copyrightSuffix: 'All rights reserved.',
@@ -139,6 +141,11 @@
       // 1. Lấy nội dung gốc chứa cú pháp VI | EN
       var raw = el.getAttribute('data-raw-label') || el.dataset.rawText;
       if (!raw) {
+        // BẢO VỆ: Khước từ tự động parse nếu bên trong có chứa thẻ <script> 
+        // (tránh lỗi hiển thị source code JS nếu người dùng dán mã vào data:content)
+        if (el.querySelector('script, img, iframe')) {
+          return;
+        }
         var currentTxt = el.textContent.trim();
         if (currentTxt.includes('|')) {
           raw = currentTxt;
@@ -150,6 +157,15 @@
       // 2. Nếu có nội dung gốc chứa dấu phân cách "|"
       if (raw && raw.includes('|')) {
         el.textContent = parseBilingualText(raw, lang);
+      }
+    });
+
+    // 3. Xử lý placeholder song ngữ cho input/textarea
+    var placeholders = document.querySelectorAll('[data-bilingual-placeholder]');
+    placeholders.forEach(function(el) {
+      var raw = el.getAttribute('data-bilingual-placeholder');
+      if (raw && raw.includes('|')) {
+        el.placeholder = parseBilingualText(raw, lang);
       }
     });
   }
