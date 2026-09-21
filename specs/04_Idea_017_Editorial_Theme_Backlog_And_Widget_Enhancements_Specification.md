@@ -30,7 +30,8 @@ Tài liệu này lưu trữ kết quả phân tích khoảng trống (Gap Analys
 | **5** | **Khả năng tiếp cận (Accessibility)** | Cỡ chữ cố định theo theme tokens | ⚠️ Cơ bản | Nút điều chỉnh cỡ chữ nhanh (Font Resizer A- / A+) |
 | **6** | **Tủ sách / Vật dụng (Affiliate Gear)** | Đã có CSS Callout/Review trong bài | ⚠️ Chưa có widget | Thêm widget chuyên dụng ở Sidebar giới thiệu Sách/Vật dụng khuyên dùng |
 | **7** | **Đám mây từ khóa (Tag Cloud)** | Đã có thanh Category Tabs chính | ⚠️ Chỉ có tab lớn | Thêm khối Hashtags / Tags đám mây chi tiết ở Sidebar hoặc Footer |
-| **8** | **Đa tác giả (Multi-Author)** | Thiết kế cố định cho 1 tác giả | ℹ️ Chủ đích | Tùy chọn override Bio theo thẻ tác giả nếu có bài Guest Post |
+| **8** | **Đa tác giả (Multi-Author)** | Thiết kế cố định cho 1 tác giả | ℹ️ Chủ đích | Tùy chọn override Bio theo thẻ tác giả (Đã có spec: [06_Open_020](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/06_Open_020_Guest_Author_And_Contact_Submission_Specification.md)) |
+| **9** | **Trang Liên hệ & Gửi bài (Contact / Submission)** | Chưa có | ❌ Thiếu | Trang /p/lien-he.html gửi mail bản thảo (Đã có spec: [06_Open_020](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/06_Open_020_Guest_Author_And_Contact_Submission_Specification.md)) |
 
 ---
 

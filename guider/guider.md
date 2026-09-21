@@ -12,6 +12,8 @@
 6. [Chương 6: Hệ Thống Nhãn Minh Bạch AI (AI Transparency)](#chương-6-hệ-thống-nhãn-minh-bạch-ai-ai-transparency)
 7. [Chương 7: Tạo Trang Mục Lục Toàn Thư (Archive / Timeline Page)](#chương-7-tạo-trang-mục-lục-toàn-thư-archive--timeline-page)
 8. [Chương 8: Gợi Ý Tiếp Thị Liên Kết Minh Bạch (Affiliate Box)](#chương-8-gợi-ý-tiếp-thị-liên-kết-minh-bạch-affiliate-box)
+9. [Chương 9: Cấu Hình Tác Giả & Component Ẩn](#chương-9-cấu-hình-tác-giả--component-ẩn)
+10. [Chương 10: Quản Lý & Bật/Tắt Vị Trí Quảng Cáo (AdSense & Banners)](#chương-10-quản-lý--bậttắt-vị-trí-quảng-cáo-adsense--banners)
 
 ---
 
@@ -471,6 +473,7 @@ Khi bạn muốn giới thiệu một cuốn sách hoặc sản phẩm tâm đ�
 | **Tạo menu song ngữ** | Nhập tên liên kết dạng `Tên Việt \| English Name`. |
 | **Đổi nhãn cho widget** | Mở widget trong Bố cục, gõ tên nhãn vào ô `Content` (VD: `Sách hay`). |
 | **Thêm widget mới** | Bấm `+ Thêm tiện ích` ➔ Chọn `HTML/JavaScript` ➔ Ô Content gõ `pattern: digest \| label: TênNhãn`. |
+| **Bật quảng cáo Trang chủ / Sidebar / Footer / Bài viết** | Vào **Bố cục (Layout)** ➔ Sửa widget quảng cáo tương ứng ➔ Tích chọn **"Hiển thị"** và dán mã AdSense/Banner vào ô Content. |
 
 ---
 
@@ -497,3 +500,52 @@ Theme cung cấp một cơ chế vô cùng thông minh giúp bạn đồng bộ 
   <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
 </a>
 ```
+
+---
+
+## CHƯƠNG 10: QUẢN LÝ & BẬT/TẮT VỊ TRÍ QUẢNG CÁO (ADSENSE & BANNERS)
+
+Để mang lại giao diện tinh gọn, thanh lịch và tôn trọng độc giả tối đa, theme **thiết lập mặc định ẨN (Hide)** toàn bộ các widget và khung quảng cáo trên blog. Khi blog của bạn đạt chuẩn tham gia Google AdSense hoặc có các đối tác tài trợ banner, bạn có thể **chủ động bật từng vị trí** lên bất cứ lúc nào trực tiếp từ giao diện quản trị Blogger mà không cần chỉnh sửa code template XML.
+
+### 10.1. Danh Sách 4 Vị Trí Quảng Cáo Sẵn Có
+Theme đã tính toán sẵn 4 vị trí vàng (chuẩn kích thước IAB, chống giật layout CLS=0 tuyệt đối):
+
+| STT | Vị Trí Quảng Cáo | Tên Widget Trong Bố Cục | Kích Thước Khuyến Nghị |
+| :--- | :--- | :--- | :--- |
+| 1 | **Trang Chủ (Kết luồng)** | `Quảng Cáo Kết Luồng (Trên Nút Phân Trang)` (`HTML14`) | 728x90, 970x250, hoặc Responsive Banner |
+| 2 | **Cột Bên (Sidebar Sticky)** | `Quảng Cáo Sidebar (Sticky)` (`HTML3`) | 300x250 hoặc 300x600 (Trượt theo khi cuộn) |
+| 3 | **Chân Trang (Footer Tầng 3)** | `Banner Quảng Cáo Đáy Trang` (`HTML6`) | 728x90 hoặc 970x90 Leaderboard |
+| 4 | **Trong Bài Viết (Đầu & Cuối)**| `Quảng Cáo Đầu Bài Viết` (`HTML21`) & `Quảng Cáo Cuối Bài Viết` (`HTML22`) | Responsive In-Article Ads |
+
+---
+
+### 10.2. Cách Bật (Show/Enable) Widget Qua Giao Diện Bố Cục (Layout)
+Đây là cách đơn giản và khuyến nghị nhất:
+1. Vào **Blogger Dashboard -> Bố cục (Layout)**.
+2. Tìm đến ô chứa vị trí quảng cáo bạn muốn hiển thị:
+   - **Trang chủ:** Ô `Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)` -> Bấm vào cây bút chì sửa `Quảng Cáo Kết Luồng (Trên Nút Phân Trang)`.
+   - **Sidebar:** Ô `Cột Bên (Sidebar)` -> Bấm vào cây bút chì sửa `Quảng Cáo Sidebar (Sticky)`.
+   - **Footer:** Ô `Footer Tầng 3: Quảng Cáo Đáy Trang` -> Bấm vào cây bút chì sửa `Banner Quảng Cáo Đáy Trang`.
+   - **Trong bài viết:** Ô `Quảng Cáo Đầu Bài Viết (In-Post Top)` hoặc `Quảng Cáo Cuối Bài Viết (In-Post Bottom)` -> Bấm vào cây bút chì sửa.
+3. Tích chọn **"Hiển thị HTML/JavaScript"** (Show this widget).
+4. Dán mã nhúng của Google AdSense hoặc mã HTML banner vào ô **Nội dung (Content)**.
+5. Bấm **Lưu (Save)**. Widget sẽ lập tức xuất hiện trên blog!
+
+> **Mẹo tắt đi:** Nếu bất kỳ lúc nào bạn muốn tạm dừng quảng cáo, chỉ cần bấm sửa widget và bỏ tích "Hiển thị HTML/JavaScript" -> Khung quảng cáo sẽ biến mất sạch sẽ, không để lại bất kỳ khoảng trống thừa nào.
+
+---
+
+### 10.3. Cách Bật Nhanh Bằng Tiện Ích Cấu Hình Ẩn (`HTML88`)
+Nếu bạn không muốn quản lý qua nhiều ô widget riêng lẻ mà muốn dán mã AdSense dùng chung cho bài viết:
+1. Vào **Bố cục -> Ô ⚙️ CẤU HÌNH COMPONENT ẨN** -> Mở widget `⚙️ Cấu hình component ẩn | Hide Component Setting` (`HTML88`).
+2. Tìm đến đoạn:
+   ```html
+   <!-- 2. Quảng cáo trong nội dung bài viết -->
+   <div class="in-post-ads-config" style="display:none;">
+     <div class="ad-top-code"><!-- Dán mã quảng cáo đầu bài tại đây --></div>
+     <div class="ad-bottom-code"><!-- Dán mã quảng cáo cuối bài tại đây --></div>
+   </div>
+   ```
+3. Dán mã quảng cáo vào giữa 2 thẻ trên và đổi `style="display:none;"` thành `style="display:block;"`.
+4. Nhấn **Lưu**. Mã quảng cáo sẽ tự động được inject vào các bài viết đơn trên blog.
+

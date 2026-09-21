@@ -259,9 +259,13 @@
     const prePagination = document.getElementById('main-pre-pagination-section');
     if (!prePagination) return;
 
-    // Kiểm tra widget / nội dung
-    const hasWidgets = prePagination.querySelectorAll('.widget, .special-posts-widget, .newsletter-card, .adsense-slot, .ads-banner, .pre-pagination-card').length > 0 ||
-                       (prePagination.children.length > 0 && prePagination.textContent.trim().length > 0);
+    // Kiểm tra widget / nội dung thực sự (loại trừ trường hợp widget rỗng hoặc chỉ có khoảng trắng / placeholder)
+    const adSlot = prePagination.querySelector('.adsense-slot');
+    const hasActiveAds = adSlot && adSlot.textContent.trim().length > 0 && !adSlot.textContent.includes('📣');
+    const hasOtherWidgets = prePagination.querySelector('ins.adsbygoogle, iframe, script, img, form, .special-posts-widget, .newsletter-card, .pre-pagination-card');
+    const hasTextContent = !adSlot && prePagination.children.length > 0 && prePagination.textContent.trim().length > 0;
+
+    const hasWidgets = hasActiveAds || hasOtherWidgets || hasTextContent;
 
     if (!hasWidgets) {
       prePagination.style.display = 'none';
@@ -572,6 +576,62 @@
     }
   }
 
+  function initInPostAds() {
+    // 1. Kiểm tra vị trí đầu bài (In-Post Top)
+    const topSlot = document.getElementById('post-ad-top-slot');
+    if (topSlot) {
+      const topSection = document.getElementById('post-ads-top-section');
+      const globalConfig = document.getElementById('hidden-global-config');
+      let customTopHtml = '';
+
+      if (globalConfig) {
+        const adTopEl = globalConfig.querySelector('.in-post-ads-config .ad-top-code');
+        if (adTopEl && adTopEl.innerHTML.trim() && !adTopEl.innerHTML.includes('<!-- Mã quảng cáo đầu bài')) {
+          customTopHtml = adTopEl.innerHTML.trim();
+        }
+      }
+
+      if (customTopHtml) {
+        topSlot.innerHTML = '<div class="adsense-slot adsense-top" aria-label="Quảng cáo">' + customTopHtml + '</div>';
+      } else if (topSection) {
+        const topWidget = topSection.querySelector('.widget, .adsense-slot');
+        if (topWidget && (topWidget.textContent.trim().length > 0 || topWidget.children.length > 0)) {
+          topSlot.appendChild(topWidget);
+        }
+      }
+    }
+
+    // 2. Kiểm tra vị trí cuối bài (In-Post Bottom)
+    const bottomSlot = document.getElementById('post-ad-bottom-slot');
+    if (bottomSlot) {
+      const bottomSection = document.getElementById('post-ads-bottom-section');
+      const globalConfig = document.getElementById('hidden-global-config');
+      let customBottomHtml = '';
+
+      if (globalConfig) {
+        const adBottomEl = globalConfig.querySelector('.in-post-ads-config .ad-bottom-code');
+        if (adBottomEl && adBottomEl.innerHTML.trim() && !adBottomEl.innerHTML.includes('<!-- Mã quảng cáo cuối bài')) {
+          customBottomHtml = adBottomEl.innerHTML.trim();
+        }
+      }
+
+      if (customBottomHtml) {
+        topSlot && (bottomSlot.innerHTML = '<div class="adsense-slot adsense-bottom" aria-label="Quảng cáo">' + customBottomHtml + '</div>');
+      } else if (bottomSection) {
+        const bottomWidget = bottomSection.querySelector('.widget, .adsense-slot');
+        if (bottomWidget && (bottomWidget.textContent.trim().length > 0 || bottomWidget.children.length > 0)) {
+          bottomSlot.appendChild(bottomWidget);
+        }
+      }
+    }
+
+    // Luôn ẩn các section gốc nếu còn
+    const topSection = document.getElementById('post-ads-top-section');
+    if (topSection) topSection.style.display = 'none';
+    const bottomSection = document.getElementById('post-ads-bottom-section');
+    if (bottomSection) bottomSection.style.display = 'none';
+  }
+
   function initHomepageInterleavedWidgets() {
     initPostCardsProcessing();
     initSearchPageHeader();
@@ -579,6 +639,7 @@
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();
+    initInPostAds();
     initNewsletterActions();
     if (window.AITransparency && typeof window.AITransparency.reinject === 'function') {
       window.AITransparency.reinject();

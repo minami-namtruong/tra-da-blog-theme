@@ -50,7 +50,7 @@ Hiện tại, hệ thống đã có tính năng **Post Series Navigator (Lộ tr
 1. **Khung chứa Widget (`.sidebar-widget`):**
    - Nền `var(--bg-card)`, bo góc `var(--radius-lg)`, viền `var(--border-color)`, padding `1.5rem`.
 2. **Tiêu đề Widget (`.sidebar-widget-title`):**
-   - Tiêu đề mặc định: `📚 Chuỗi chuyên đề | 📚 Series topic`.
+   - Tiêu đề mặc định: `📚 Chuyên Đề | 📚 Series Topic`.
    - Bên phải: Nút Shuffle `🔀` (button tròn nhỏ, hover xoay nhẹ và đổi màu primary).
    - Dưới chân tiêu đề: Đường kẻ `border-bottom: var(--stroke-thick) solid var(--border-color)` nằm gọn bên trong phạm vi padding của widget.
 3. **Khối tóm tắt Series (`.series-showcase-summary`):**

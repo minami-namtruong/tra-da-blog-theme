@@ -10,27 +10,33 @@
     <!-- ==========================================
        HIDDEN CONFIG SECTION
        ========================================== -->
-  <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN'>
-    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting'>
+  <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
+    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
       <b:widget-settings>
         <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 
 <!-- 1. Tác Giả dưới bài viết (Các nút bấm) -->
-<div class="post-footer-actions-config">
+<div class="post-footer-actions-config" style="display:none;">
   <!-- Nút Buy Me A Coffee (Đổi display:none thành display:inline-flex để bật) -->
   <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer" style="display:none;">
     <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
   </a>
 
   <!-- Nút Đăng ký Bản tin (Đổi display:none để ẩn) -->
-  <a class="btn-subscribe" href="#newsletter" style="display:inline-flex;">
+  <a class="btn-subscribe" href="#newsletter" style="display:none;">
     <span data-bilingual="true">💌 Đăng ký bản tin | 💌 Newsletter</span>
   </a>
+</div>
+
+<!-- 2. Quảng cáo trong nội dung bài viết (Mặc định ẩn. Bạn có thể bật qua tiện ích Bố Cục hoặc dán mã vào đây và đổi style="display:none;" thành "display:block;") -->
+<div class="in-post-ads-config" style="display:none;">
+  <div class="ad-top-code"><!-- Mã quảng cáo đầu bài viết --></div>
+  <div class="ad-bottom-code"><!-- Mã quảng cáo cuối bài viết --></div>
 </div>
 ]]></b:widget-setting>
       </b:widget-settings>
       <b:includable id='main'>
-        <div class='widget-content' id='hidden-global-config'>
+        <div class='widget-content' id='hidden-global-config' style='display:none !important;'>
           <b:if cond='data:content'>
             <data:content/>
           </b:if>
@@ -223,17 +229,13 @@
          ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
       <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
-        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang' visible='false'>
           <b:includable id='main'>
-            <div class='footer-ads-tier'>
-              <b:if cond='data:content'>
+            <b:if cond='data:content and data:content != &quot;&quot;'>
+              <div class='footer-ads-tier'>
                 <data:content/>
-              <b:else/>
-                <div class='footer-ads-slot'>
-                  📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
-                </div>
-              </b:if>
-            </div>
+              </div>
+            </b:if>
           </b:includable>
         </b:widget>
       </b:section>

@@ -838,7 +838,7 @@
 }
 
 /* Ẩn triệt để các widget đã loại bỏ khỏi thiết kế (phòng khi Blogger tự khôi phục từ database) */
-#HTML14, #HTML15, #HTML16, #HTML17, #HTML99, #hidden-author-bio-config {
+#HTML15, #HTML16, #HTML17, #HTML99, #hidden-author-bio-config {
   display: none !important;
 }
 
@@ -990,6 +990,14 @@
   margin-left: 0.5rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.series-shuffle-svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
 .series-shuffle-btn:hover {
   background: var(--primary);
   color: #ffffff;
@@ -1000,6 +1008,15 @@
 .series-shuffle-btn.is-spinning {
   transform: rotate(360deg);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] .series-shuffle-btn {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: var(--primary);
+}
+[data-theme="dark"] .series-shuffle-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
 }
 /* Series Showcase Compact Header Line (Tên bên trái, số bài bên phải) */
 .series-showcase-summary {
@@ -1449,5 +1466,18 @@ body.view-not-homepage #main-above-feed {
 }
 
 
-/* Hidden Config Section */
-#hidden-config-section { display: none !important; }
+/* Hidden Config Section (Lưu trữ cấu hình ngầm, tuyệt đối không hiển thị ra giao diện) */
+#global-settings-section,
+.hidden-config-section,
+#hidden-global-config,
+#hidden-config-section,
+#HTML88,
+.post-footer-actions-config,
+.in-post-ads-config {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}

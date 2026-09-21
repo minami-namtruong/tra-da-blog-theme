@@ -191,6 +191,17 @@
 /* ==========================================
    ANTI-CLS ADSENSE SLOTS
    ========================================== */
+.post-ad-slot-container {
+  margin: 0;
+  padding: 0;
+}
+.post-ad-slot-container:empty,
+.adsense-slot:empty,
+#main-pre-pagination-section:empty,
+.adsense-placeholder {
+  display: none !important;
+}
+
 .adsense-slot {
   background: var(--bg-surface);
   border: var(--stroke-hairline) dashed var(--border-color);
@@ -215,6 +226,9 @@
   color: var(--text-light);
   text-transform: uppercase;
   font-weight: 600;
+}
+.adsense-slot:empty::before {
+  display: none !important;
 }
 .adsense-top    { min-height: 100px; }
 .adsense-infeed { min-height: 250px; }

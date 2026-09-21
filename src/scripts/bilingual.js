@@ -124,6 +124,18 @@
         return;
       }
 
+      // Bỏ qua thẻ cha nếu bên trong có chứa nút bấm tương tác (tránh xoá mất nút Shuffle)
+      if (el.querySelector('button, .series-shuffle-btn')) {
+        var textTarget = el.querySelector('.series-title-text, .sp-title-text');
+        if (textTarget) {
+          var tRaw = textTarget.getAttribute('data-raw-label') || textTarget.dataset.rawText;
+          if (tRaw && tRaw.includes('|')) {
+            textTarget.textContent = parseBilingualText(tRaw, lang);
+          }
+        }
+        return;
+      }
+
       // 1. Lấy nội dung gốc chứa cú pháp VI | EN
       var raw = el.getAttribute('data-raw-label') || el.dataset.rawText;
       if (!raw) {

@@ -453,10 +453,8 @@
                       </b:with>
                     </b:if>
 
-                    <!-- AdSense Slot 1: Above the fold -->
-                    <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
-                      <!-- Google AdSense code here -->
-                    </div>
+                    <!-- AdSense Slot 1: Above the fold (Mặc định ẩn, tự động hiển thị khi bật widget Bố cục hoặc dán mã) -->
+                    <div id='post-ad-top-slot' class='post-ad-slot-container'></div>
 
                     <!-- Auto Table of Contents -->
                     <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'></div>
@@ -475,10 +473,8 @@
                       </b:with>
                     </b:if>
 
-                    <!-- AdSense Slot 2: Bottom of post -->
-                    <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
-                      <!-- Google AdSense code here -->
-                    </div>
+                    <!-- AdSense Slot 2: Bottom of post (Mặc định ẩn, tự động hiển thị khi bật widget Bố cục hoặc dán mã) -->
+                    <div id='post-ad-bottom-slot' class='post-ad-slot-container'></div>
 
                     <!-- Post Bottom Share Area -->
                     <div class='post-bottom-share' role='group' aria-label='Chia sẻ bài viết'>
@@ -664,17 +660,38 @@
              Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
              Thích hợp đặt Banner Quảng Cáo AdSense hoặc Tiện Ích Bên Thứ 3 -->
         <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)' showaddelement='yes'>
-          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)'>
+          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)' visible='false'>
             <b:includable id='main'>
-              <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
-                <b:if cond='data:content'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
                   <data:content/>
-                <b:else/>
-                  <div class='adsense-placeholder' style='padding: 2rem 1rem; text-align: center;'>
-                    📣 Vị Trí Quảng Cáo Kết Luồng (AdSense / Banner)
-                  </div>
-                </b:if>
-              </div>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── TIỆN ÍCH QUẢNG CÁO TRONG NỘI DUNG BÀI VIẾT (Mặc định ẩn, kích hoạt qua Bố cục) ── -->
+        <b:section id='post-ads-top-section' name='Quảng Cáo Đầu Bài Viết (In-Post Top)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='HTML21' type='HTML' version='2' title='Quảng Cáo Đầu Bài Viết (In-Post Top)' visible='false'>
+            <b:includable id='main'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
+                  <data:content/>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <b:section id='post-ads-bottom-section' name='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='HTML22' type='HTML' version='2' title='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' visible='false'>
+            <b:includable id='main'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
+                  <data:content/>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>

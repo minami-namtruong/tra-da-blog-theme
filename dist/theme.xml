@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-21T03:58:06.149Z -->
+<!-- Compiled at: 2026-09-21T08:54:49.035Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -2127,7 +2127,7 @@ a:hover {
 }
 
 /* Ẩn triệt để các widget đã loại bỏ khỏi thiết kế (phòng khi Blogger tự khôi phục từ database) */
-#HTML14, #HTML15, #HTML16, #HTML17, #HTML99, #hidden-author-bio-config {
+#HTML15, #HTML16, #HTML17, #HTML99, #hidden-author-bio-config {
   display: none !important;
 }
 
@@ -2279,6 +2279,14 @@ a:hover {
   margin-left: 0.5rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.series-shuffle-svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
 .series-shuffle-btn:hover {
   background: var(--primary);
   color: #ffffff;
@@ -2289,6 +2297,15 @@ a:hover {
 .series-shuffle-btn.is-spinning {
   transform: rotate(360deg);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] .series-shuffle-btn {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: var(--primary);
+}
+[data-theme="dark"] .series-shuffle-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
 }
 /* Series Showcase Compact Header Line (Tên bên trái, số bài bên phải) */
 .series-showcase-summary {
@@ -2738,8 +2755,21 @@ body.view-not-homepage #main-above-feed {
 }
 
 
-/* Hidden Config Section */
-#hidden-config-section { display: none !important; }
+/* Hidden Config Section (Lưu trữ cấu hình ngầm, tuyệt đối không hiển thị ra giao diện) */
+#global-settings-section,
+.hidden-config-section,
+#hidden-global-config,
+#hidden-config-section,
+#HTML88,
+.post-footer-actions-config,
+.in-post-ads-config {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
 
 /* ==========================================================================
@@ -3600,6 +3630,17 @@ body.view-not-homepage #main-above-feed {
 /* ==========================================
    ANTI-CLS ADSENSE SLOTS
    ========================================== */
+.post-ad-slot-container {
+  margin: 0;
+  padding: 0;
+}
+.post-ad-slot-container:empty,
+.adsense-slot:empty,
+#main-pre-pagination-section:empty,
+.adsense-placeholder {
+  display: none !important;
+}
+
 .adsense-slot {
   background: var(--bg-surface);
   border: var(--stroke-hairline) dashed var(--border-color);
@@ -3624,6 +3665,9 @@ body.view-not-homepage #main-above-feed {
   color: var(--text-light);
   text-transform: uppercase;
   font-weight: 600;
+}
+.adsense-slot:empty::before {
+  display: none !important;
 }
 .adsense-top    { min-height: 100px; }
 .adsense-infeed { min-height: 250px; }
@@ -4043,6 +4087,11 @@ body.view-not-homepage #main-above-feed {
 /* ══════════════════════════════════════════
    TẦNG 3: QUẢNG CÁO CHÂN TRANG (ADS SLOT)
    ══════════════════════════════════════════ */
+#footer-ads-section:empty,
+.site-footer .site-wrapper:has(#footer-ads-section:empty) {
+  display: none !important;
+}
+
 .footer-ads-tier {
   padding: 1.5rem 0;
   display: flex;
@@ -6759,10 +6808,8 @@ body.view-not-homepage #main-above-feed {
                       </b:with>
                     </b:if>
 
-                    <!-- AdSense Slot 1: Above the fold -->
-                    <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
-                      <!-- Google AdSense code here -->
-                    </div>
+                    <!-- AdSense Slot 1: Above the fold (Mặc định ẩn, tự động hiển thị khi bật widget Bố cục hoặc dán mã) -->
+                    <div id='post-ad-top-slot' class='post-ad-slot-container'></div>
 
                     <!-- Auto Table of Contents -->
                     <div class='table-of-contents' id='auto-toc' aria-label='Mục lục bài viết'></div>
@@ -6781,10 +6828,8 @@ body.view-not-homepage #main-above-feed {
                       </b:with>
                     </b:if>
 
-                    <!-- AdSense Slot 2: Bottom of post -->
-                    <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
-                      <!-- Google AdSense code here -->
-                    </div>
+                    <!-- AdSense Slot 2: Bottom of post (Mặc định ẩn, tự động hiển thị khi bật widget Bố cục hoặc dán mã) -->
+                    <div id='post-ad-bottom-slot' class='post-ad-slot-container'></div>
 
                     <!-- Post Bottom Share Area -->
                     <div class='post-bottom-share' role='group' aria-label='Chia sẻ bài viết'>
@@ -6970,17 +7015,38 @@ body.view-not-homepage #main-above-feed {
              Nằm ngay sau bài viết cuối cùng và nằm trên nút phân trang.
              Thích hợp đặt Banner Quảng Cáo AdSense hoặc Tiện Ích Bên Thứ 3 -->
         <b:section id='main-pre-pagination-section' name='Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)' showaddelement='yes'>
-          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)'>
+          <b:widget id='HTML14' type='HTML' version='2' title='Quảng Cáo Kết Luồng (Trên Nút Phân Trang)' visible='false'>
             <b:includable id='main'>
-              <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
-                <b:if cond='data:content'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-infeed' aria-label='Quảng cáo'>
                   <data:content/>
-                <b:else/>
-                  <div class='adsense-placeholder' style='padding: 2rem 1rem; text-align: center;'>
-                    📣 Vị Trí Quảng Cáo Kết Luồng (AdSense / Banner)
-                  </div>
-                </b:if>
-              </div>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <!-- ── TIỆN ÍCH QUẢNG CÁO TRONG NỘI DUNG BÀI VIẾT (Mặc định ẩn, kích hoạt qua Bố cục) ── -->
+        <b:section id='post-ads-top-section' name='Quảng Cáo Đầu Bài Viết (In-Post Top)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='HTML21' type='HTML' version='2' title='Quảng Cáo Đầu Bài Viết (In-Post Top)' visible='false'>
+            <b:includable id='main'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-top' aria-label='Quảng cáo'>
+                  <data:content/>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+
+        <b:section id='post-ads-bottom-section' name='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' maxwidgets='1' showaddelement='yes'>
+          <b:widget id='HTML22' type='HTML' version='2' title='Quảng Cáo Cuối Bài Viết (In-Post Bottom)' visible='false'>
+            <b:includable id='main'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-bottom' aria-label='Quảng cáo'>
+                  <data:content/>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
         </b:section>
@@ -7089,8 +7155,8 @@ body.view-not-homepage #main-above-feed {
             </b:includable>
           </b:widget>
 
-          <!-- Widget: Standalone Series Showcase (📚 Chuỗi chuyên đề | 📚 Series topic) -->
-          <b:widget id='HTML18' type='HTML' version='2' title='📚 Chuỗi chuyên đề | 📚 Series topic'>
+          <!-- Widget: Standalone Series Showcase (📚 Chuyên Đề | 📚 Series Topic) -->
+          <b:widget id='HTML18' type='HTML' version='2' title='📚 Chuyên Đề | 📚 Series Topic'>
             <b:includable id='main'>
               <div class='sidebar-widget special-posts-widget'
                    id='widget-series-showcase'
@@ -7100,7 +7166,7 @@ body.view-not-homepage #main-above-feed {
                 <b:if cond='data:title'>
                   <b:attr name='data-title' expr:value='data:title'/>
                 <b:else/>
-                  <b:attr name='data-title' value='📚 Chuỗi chuyên đề | 📚 Series topic'/>
+                  <b:attr name='data-title' value='📚 Chuyên Đề | 📚 Series Topic'/>
                 </b:if>
                 <b:if cond='data:content'>
                   <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
@@ -7127,14 +7193,14 @@ body.view-not-homepage #main-above-feed {
             </b:includable>
           </b:widget>
 
-          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng) -->
-          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)'>
+          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng - Mặc định ẩn, bật trong Bố cục khi cần) -->
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)' visible='false'>
             <b:includable id='main'>
-              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
-                <b:if cond='data:content'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
                   <data:content/>
-                </b:if>
-              </div>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
 
@@ -7157,27 +7223,33 @@ body.view-not-homepage #main-above-feed {
     <!-- ==========================================
        HIDDEN CONFIG SECTION
        ========================================== -->
-  <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN'>
-    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting'>
+  <b:section id='global-settings-section' class='hidden-config-section' showaddelement='yes' name='⚙️ CẤU HÌNH COMPONENT ẨN' style='display:none !important;'>
+    <b:widget id='HTML88' type='HTML' version='2' title='⚙️ Cấu hình component ẩn | Hide Component Setting' visible='false'>
       <b:widget-settings>
         <b:widget-setting name='content'><![CDATA[<!-- Các cấu hình cho tính năng ẩn trong Blog -->
 
 <!-- 1. Tác Giả dưới bài viết (Các nút bấm) -->
-<div class="post-footer-actions-config">
+<div class="post-footer-actions-config" style="display:none;">
   <!-- Nút Buy Me A Coffee (Đổi display:none thành display:inline-flex để bật) -->
   <a class="btn-coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer" style="display:none;">
     <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
   </a>
 
   <!-- Nút Đăng ký Bản tin (Đổi display:none để ẩn) -->
-  <a class="btn-subscribe" href="#newsletter" style="display:inline-flex;">
+  <a class="btn-subscribe" href="#newsletter" style="display:none;">
     <span data-bilingual="true">💌 Đăng ký bản tin | 💌 Newsletter</span>
   </a>
+</div>
+
+<!-- 2. Quảng cáo trong nội dung bài viết (Mặc định ẩn. Bạn có thể bật qua tiện ích Bố Cục hoặc dán mã vào đây và đổi style="display:none;" thành "display:block;") -->
+<div class="in-post-ads-config" style="display:none;">
+  <div class="ad-top-code"><!-- Mã quảng cáo đầu bài viết --></div>
+  <div class="ad-bottom-code"><!-- Mã quảng cáo cuối bài viết --></div>
 </div>
 ]]></b:widget-setting>
       </b:widget-settings>
       <b:includable id='main'>
-        <div class='widget-content' id='hidden-global-config'>
+        <div class='widget-content' id='hidden-global-config' style='display:none !important;'>
           <b:if cond='data:content'>
             <data:content/>
           </b:if>
@@ -7370,17 +7442,13 @@ body.view-not-homepage #main-above-feed {
          ═══════════════════════════════════════════════════ -->
     <div class='site-wrapper'>
       <b:section id='footer-ads-section' name='Footer Tầng 3: Quảng Cáo Đáy Trang' maxwidgets='1' showaddelement='yes'>
-        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang'>
+        <b:widget id='HTML6' type='HTML' version='2' title='Banner Quảng Cáo Đáy Trang' visible='false'>
           <b:includable id='main'>
-            <div class='footer-ads-tier'>
-              <b:if cond='data:content'>
+            <b:if cond='data:content and data:content != &quot;&quot;'>
+              <div class='footer-ads-tier'>
                 <data:content/>
-              <b:else/>
-                <div class='footer-ads-slot'>
-                  📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
-                </div>
-              </b:if>
-            </div>
+              </div>
+            </b:if>
           </b:includable>
         </b:widget>
       </b:section>
@@ -7515,6 +7583,18 @@ body.view-not-homepage #main-above-feed {
     targets.forEach(function(el) {
       // Bỏ qua thẻ cha .footer-copyright nếu bên trong đã có thẻ link <a> để không xoá mất link
       if (el.classList.contains('footer-copyright') && el.querySelector('a')) {
+        return;
+      }
+
+      // Bỏ qua thẻ cha nếu bên trong có chứa nút bấm tương tác (tránh xoá mất nút Shuffle)
+      if (el.querySelector('button, .series-shuffle-btn')) {
+        var textTarget = el.querySelector('.series-title-text, .sp-title-text');
+        if (textTarget) {
+          var tRaw = textTarget.getAttribute('data-raw-label') || textTarget.dataset.rawText;
+          if (tRaw && tRaw.includes('|')) {
+            textTarget.textContent = parseBilingualText(tRaw, lang);
+          }
+        }
         return;
       }
 
@@ -10379,7 +10459,7 @@ body.view-not-homepage #main-above-feed {
     });
 
     // Dọn dẹp các widget sidebar cũ đã loại bỏ (phòng khi Blogger tự động khôi phục từ database)
-    ['HTML14', 'HTML15', 'HTML16', 'HTML17'].forEach(function(id) {
+    ['HTML15', 'HTML16', 'HTML17'].forEach(function(id) {
       var orphaned = document.getElementById(id);
       if (orphaned) orphaned.remove();
     });
@@ -10477,7 +10557,7 @@ body.view-not-homepage #main-above-feed {
     const showSnippet    = container.dataset.showSnippet   !== 'false';
     const rawViewAll     = container.dataset.viewAllText;
     const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
-    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
+    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
@@ -10684,7 +10764,7 @@ body.view-not-homepage #main-above-feed {
      ═══════════════════════════════════════════════════════════════ */
   function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts, extraHeaderHtml) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
-    const cleanTitle = title ? escapeHtml(title) : (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
+    const cleanTitle = title ? escapeHtml(title) : (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
     const activeLabel = resolveActiveLabel(rawLabels, posts);
@@ -10701,8 +10781,8 @@ body.view-not-homepage #main-above-feed {
     const isSeries = pattern === 'series';
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header ${isSeries ? 'series-widget-header' : ''}">
-        <h3 class="${isSeries ? 'sidebar-widget-title series-main-title' : 'sp-widget-title'}" data-bilingual="true" data-raw-label="${cleanTitle}">
-          <span class="${isSeries ? 'series-title-text' : ''}">${parsedTitle}</span>
+        <h3 class="${isSeries ? 'sidebar-widget-title series-main-title' : 'sp-widget-title'}">
+          <span class="${isSeries ? 'series-title-text' : 'sp-title-text'}" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</span>
           ${isSeries ? headerActionsHtml : ''}
         </h3>
         ${!isSeries ? headerActionsHtml : ''}
@@ -11117,17 +11197,20 @@ body.view-not-homepage #main-above-feed {
     return name;
   }
 
-  async function fetchAvailableSeriesLabels() {
+  async function fetchAvailableSeriesLabels(forceRefresh = false) {
     const cacheKey = CACHE_PREFIX + 'series_catalog_v2';
-    const cached = readCache(cacheKey);
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return cached;
+    if (!forceRefresh) {
+      const cached = readCache(cacheKey);
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        return cached;
+      }
     }
 
     let foundLabels = [];
     try {
       const blogUrl = getBlogBaseUrl();
-      const res = await fetch(`${blogUrl}/feeds/posts/summary?alt=json&max-results=150`);
+      const cbParam = forceRefresh ? `&_cb=${Date.now()}` : '';
+      const res = await fetch(`${blogUrl}/feeds/posts/summary?alt=json&max-results=500${cbParam}`);
       if (res.ok) {
         const data = await res.json();
         if (data && data.feed) {
@@ -11270,12 +11353,23 @@ body.view-not-homepage #main-above-feed {
   async function renderSeriesContainerView(container, seriesLabel, limit, widgetTitle) {
     const posts = await fetchSeriesPosts(seriesLabel);
     const seriesTitle = formatSeriesTitle(seriesLabel);
-    const available = container._availableSeries || [];
-    const shuffleBtnHtml = available.length > 1 ? `
-      <button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">
-        <span class="shuffle-icon" aria-hidden="true">🔀</span>
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
+    const shuffleRawLabel = 'Đổi tuyến bài | Switch series';
+    const shuffleRawTitle = 'Khám phá chuyên đề khác | Discover another series';
+    const shuffleParsedLabel = window.parseBilingualText ? window.parseBilingualText(shuffleRawLabel, lang) : 'Đổi tuyến bài';
+    const shuffleParsedTitle = window.parseBilingualText ? window.parseBilingualText(shuffleRawTitle, lang) : 'Khám phá chuyên đề khác';
+
+    const shuffleBtnHtml = `
+      <button type="button" class="series-shuffle-btn" aria-label="${escapeHtml(shuffleParsedLabel)}" title="${escapeHtml(shuffleParsedTitle)}">
+        <svg class="series-shuffle-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="16 3 21 3 21 8"></polyline>
+          <line x1="4" y1="20" x2="21" y2="3"></line>
+          <polyline points="21 16 21 21 16 21"></polyline>
+          <line x1="15" y1="15" x2="21" y2="21"></line>
+          <line x1="4" y1="4" x2="9" y2="9"></line>
+        </svg>
       </button>
-    ` : '';
+    `;
 
     const bodyHtml = renderSeriesPattern(posts, {
       limit,
@@ -11285,7 +11379,7 @@ body.view-not-homepage #main-above-feed {
     });
 
     container.innerHTML = buildWidgetShell(
-      widgetTitle || '📚 Chuỗi chuyên đề | 📚 Series topic',
+      widgetTitle || '📚 Chuyên Đề | 📚 Series Topic',
       '',
       seriesLabel,
       'series',
@@ -11302,9 +11396,21 @@ body.view-not-homepage #main-above-feed {
         e.stopPropagation();
 
         shuffleBtn.classList.add('is-spinning');
-        const available = container._availableSeries || [];
+        let available = container._availableSeries || [];
+
+        // Nếu chỉ có 1 series hoặc rỗng, thử quét lại feed (forceRefresh) để cập nhật nếu có series mới
+        if (available.length <= 1) {
+          try {
+            available = await fetchAvailableSeriesLabels(true);
+            container._availableSeries = available;
+          } catch (_) {}
+        }
+
         if (available.length > 1) {
           let nextIdx = ((container._currentSeriesIndex || 0) + 1) % available.length;
+          if (available[nextIdx] === seriesLabel) {
+            nextIdx = (nextIdx + 1) % available.length;
+          }
           container._currentSeriesIndex = nextIdx;
           const nextLabel = available[nextIdx];
 
@@ -11320,7 +11426,18 @@ body.view-not-homepage #main-above-feed {
           if (newBody) {
             newBody.style.opacity = '1';
           }
+        } else {
+          // Blog chỉ có 1 series: tạo hiệu ứng reload nhẹ và dừng xoay
+          const bodyEl = container.querySelector('.series-widget-body, .sp-widget-body');
+          if (bodyEl) {
+            bodyEl.style.opacity = '0.4';
+            bodyEl.style.transition = 'opacity 0.2s ease';
+            setTimeout(() => {
+              bodyEl.style.opacity = '1';
+            }, 300);
+          }
         }
+
         setTimeout(function () {
           const btn = container.querySelector('.series-shuffle-btn');
           if (btn) btn.classList.remove('is-spinning');
@@ -12561,9 +12678,13 @@ body.view-not-homepage #main-above-feed {
     const prePagination = document.getElementById('main-pre-pagination-section');
     if (!prePagination) return;
 
-    // Kiểm tra widget / nội dung
-    const hasWidgets = prePagination.querySelectorAll('.widget, .special-posts-widget, .newsletter-card, .adsense-slot, .ads-banner, .pre-pagination-card').length > 0 ||
-                       (prePagination.children.length > 0 && prePagination.textContent.trim().length > 0);
+    // Kiểm tra widget / nội dung thực sự (loại trừ trường hợp widget rỗng hoặc chỉ có khoảng trắng / placeholder)
+    const adSlot = prePagination.querySelector('.adsense-slot');
+    const hasActiveAds = adSlot && adSlot.textContent.trim().length > 0 && !adSlot.textContent.includes('📣');
+    const hasOtherWidgets = prePagination.querySelector('ins.adsbygoogle, iframe, script, img, form, .special-posts-widget, .newsletter-card, .pre-pagination-card');
+    const hasTextContent = !adSlot && prePagination.children.length > 0 && prePagination.textContent.trim().length > 0;
+
+    const hasWidgets = hasActiveAds || hasOtherWidgets || hasTextContent;
 
     if (!hasWidgets) {
       prePagination.style.display = 'none';
@@ -12874,6 +12995,62 @@ body.view-not-homepage #main-above-feed {
     }
   }
 
+  function initInPostAds() {
+    // 1. Kiểm tra vị trí đầu bài (In-Post Top)
+    const topSlot = document.getElementById('post-ad-top-slot');
+    if (topSlot) {
+      const topSection = document.getElementById('post-ads-top-section');
+      const globalConfig = document.getElementById('hidden-global-config');
+      let customTopHtml = '';
+
+      if (globalConfig) {
+        const adTopEl = globalConfig.querySelector('.in-post-ads-config .ad-top-code');
+        if (adTopEl && adTopEl.innerHTML.trim() && !adTopEl.innerHTML.includes('<!-- Mã quảng cáo đầu bài')) {
+          customTopHtml = adTopEl.innerHTML.trim();
+        }
+      }
+
+      if (customTopHtml) {
+        topSlot.innerHTML = '<div class="adsense-slot adsense-top" aria-label="Quảng cáo">' + customTopHtml + '</div>';
+      } else if (topSection) {
+        const topWidget = topSection.querySelector('.widget, .adsense-slot');
+        if (topWidget && (topWidget.textContent.trim().length > 0 || topWidget.children.length > 0)) {
+          topSlot.appendChild(topWidget);
+        }
+      }
+    }
+
+    // 2. Kiểm tra vị trí cuối bài (In-Post Bottom)
+    const bottomSlot = document.getElementById('post-ad-bottom-slot');
+    if (bottomSlot) {
+      const bottomSection = document.getElementById('post-ads-bottom-section');
+      const globalConfig = document.getElementById('hidden-global-config');
+      let customBottomHtml = '';
+
+      if (globalConfig) {
+        const adBottomEl = globalConfig.querySelector('.in-post-ads-config .ad-bottom-code');
+        if (adBottomEl && adBottomEl.innerHTML.trim() && !adBottomEl.innerHTML.includes('<!-- Mã quảng cáo cuối bài')) {
+          customBottomHtml = adBottomEl.innerHTML.trim();
+        }
+      }
+
+      if (customBottomHtml) {
+        topSlot && (bottomSlot.innerHTML = '<div class="adsense-slot adsense-bottom" aria-label="Quảng cáo">' + customBottomHtml + '</div>');
+      } else if (bottomSection) {
+        const bottomWidget = bottomSection.querySelector('.widget, .adsense-slot');
+        if (bottomWidget && (bottomWidget.textContent.trim().length > 0 || bottomWidget.children.length > 0)) {
+          bottomSlot.appendChild(bottomWidget);
+        }
+      }
+    }
+
+    // Luôn ẩn các section gốc nếu còn
+    const topSection = document.getElementById('post-ads-top-section');
+    if (topSection) topSection.style.display = 'none';
+    const bottomSection = document.getElementById('post-ads-bottom-section');
+    if (bottomSection) bottomSection.style.display = 'none';
+  }
+
   function initHomepageInterleavedWidgets() {
     initPostCardsProcessing();
     initSearchPageHeader();
@@ -12881,6 +13058,7 @@ body.view-not-homepage #main-above-feed {
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();
+    initInPostAds();
     initNewsletterActions();
     if (window.AITransparency && typeof window.AITransparency.reinject === 'function') {
       window.AITransparency.reinject();

@@ -5,20 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
   <title>Nam Trương — Preview Theme</title>
   <meta name="description" content="Preview giao diện Editorial Profile Blogger Theme v1.0.0"/>
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Non-blocking render) -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;1,400&display=swap" media="print" onload="this.media='all'"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;1,400&display=swap"/></noscript>
 
   <!-- Zero-FOUC Dark Mode Script -->
   <script>
     (function() {
-      var t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      var t = 'light';
+      try {
+        t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      } catch(e) {}
       document.documentElement.setAttribute("data-theme", t);
       window.toggleTheme = function() {
         var a = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
         document.documentElement.setAttribute("data-theme", a);
-        localStorage.setItem("theme", a);
+        try { localStorage.setItem("theme", a); } catch(e) {}
         var btn = document.getElementById("theme-toggle-btn");
         if (btn) btn.innerHTML = a === "dark" ? "☀️" : "🌙";
       };
@@ -328,12 +332,8 @@
 
           </div>
 
-          <!-- ── TẦNG 3: KẾT LUỒNG BÀI VIẾT (TRÊN NÚT PHÂN TRANG) ── -->
-          <div id="main-pre-pagination-section">
-            <div class="adsense-slot adsense-infeed" style="display: flex; align-items: center; justify-content: center;">
-              <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Kết Luồng / Trên Phân Trang (min-height: 250px) — Chống giật layout CLS=0</span>
-            </div>
-          </div>
+          <!-- ── TẦNG 3: KẾT LUỒNG BÀI VIẾT (TRÊN NÚT PHÂN TRANG - MẶC ĐỊNH ẨN) ── -->
+          <div id="main-pre-pagination-section" style="display: none;"></div>
 
           <!-- Pagination -->
           <nav class="blog-pager">
@@ -433,10 +433,8 @@
               </div>
             </div>
 
-            <!-- AdSense Top -->
-            <div class="adsense-slot adsense-top" style="display:flex; align-items:center; justify-content:center;">
-              <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Đầu Bài (min-height: 100px) — Chống giật layout CLS=0</span>
-            </div>
+            <!-- AdSense Top (Mặc định ẩn) -->
+            <div id="post-ad-top-slot" class="post-ad-slot-container" style="display: none;"></div>
 
             <!-- Auto TOC -->
             <div class="table-of-contents" id="auto-toc"></div>
@@ -595,10 +593,8 @@
               </div>
             </div>
 
-            <!-- AdSense Bottom -->
-            <div class="adsense-slot adsense-bottom" style="display:flex; align-items:center; justify-content:center;">
-              <span style="color: var(--text-light); font-size: 0.8rem;">📣 Vị trí AdSense Cuối Bài (min-height: 250px)</span>
-            </div>
+            <!-- AdSense Bottom (Mặc định ẩn) -->
+            <div id="post-ad-bottom-slot" class="post-ad-slot-container" style="display: none;"></div>
 
             <!-- Post Bottom Share Area -->
             <div class="post-bottom-share" role="group" aria-label="Chia sẻ bài viết">
@@ -837,7 +833,7 @@
                data-pattern="series"
                data-limit="5"
                data-sort="random"
-               data-title="📚 Chuỗi chuyên đề | 📚 Series topic">
+               data-title="📚 Chuyên Đề | 📚 Series Topic">
           </div>
         </div>
 
@@ -1027,10 +1023,8 @@
           </div>
         </div>
 
-        <!-- Widget: Sticky AdSense Banner (vị trí cuối cùng để bám theo khi đọc bài dài) -->
-        <div class="adsense-slot adsense-sidebar" style="display: flex; align-items: center; justify-content: center;">
-          <span style="color: var(--text-light); font-size: 0.8rem;">📣 Banner Sidebar Sticky (300x250/600)</span>
-        </div>
+        <!-- Widget: Sticky AdSense Banner (Mặc định ẩn) -->
+        <div class="adsense-slot adsense-sidebar" style="display: none;"></div>
 
       </aside>
 
@@ -1133,14 +1127,8 @@
       </button>
     </div><!-- /.footer-bottom-wrapper -->
 
-    <!-- ═══ TẦNG 3: QUẢNG CÁO CHÂN TRANG ═══ -->
-    <div class="site-wrapper">
-      <div class="footer-ads-tier">
-        <div class="footer-ads-slot">
-          📣 Vùng Quảng Cáo Đáy Trang (AdSense / Sponsor Banner)
-        </div>
-      </div><!-- /.footer-ads-tier -->
-    </div><!-- /.site-wrapper (Tầng 3) -->
+    <!-- ═══ TẦNG 3: QUẢNG CÁO CHÂN TRANG (MẶC ĐỊNH ẨN) ═══ -->
+    <div class="site-wrapper" style="display: none;"></div>
 
   </footer>
 
@@ -1994,8 +1982,10 @@
           if (isSeries) {
             headerHtml = '<div class="sp-widget-header series-widget-header">' +
                          '<h3 class="sidebar-widget-title series-main-title">' +
-                         '<span class="series-title-text">' + escapeHtml(title || '📚 Chuỗi chuyên đề | 📚 Series topic') + '</span>' +
-                         '<button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">🔀</button>' +
+                         '<span class="series-title-text">' + escapeHtml(title || '📚 Chuyên Đề | 📚 Series Topic') + '</span>' +
+                         '<button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">' +
+                         '<svg class="series-shuffle-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>' +
+                         '</button>' +
                          '</h3></div>';
           } else {
             headerHtml = '<div class="sp-widget-header">' +
@@ -2045,7 +2035,7 @@
         },
         series: {
           pattern: 'series',
-          title: '📚 Chuỗi chuyên đề | 📚 Series topic',
+          title: '📚 Chuyên Đề | 📚 Series Topic',
           labels: 'series:The-Law-Of-Union',
           limit: 3,
           sort: 'random',

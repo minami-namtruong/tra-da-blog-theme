@@ -60,7 +60,7 @@
     });
 
     // Dọn dẹp các widget sidebar cũ đã loại bỏ (phòng khi Blogger tự động khôi phục từ database)
-    ['HTML14', 'HTML15', 'HTML16', 'HTML17'].forEach(function(id) {
+    ['HTML15', 'HTML16', 'HTML17'].forEach(function(id) {
       var orphaned = document.getElementById(id);
       if (orphaned) orphaned.remove();
     });
@@ -158,7 +158,7 @@
     const showSnippet    = container.dataset.showSnippet   !== 'false';
     const rawViewAll     = container.dataset.viewAllText;
     const viewAllText    = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả »');
-    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
+    const widgetTitle    = container.dataset.title         || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
@@ -365,7 +365,7 @@
      ═══════════════════════════════════════════════════════════════ */
   function buildWidgetShell(title, viewAllText, rawLabels, pattern, bodyHtml, posts, extraHeaderHtml) {
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
-    const cleanTitle = title ? escapeHtml(title) : (pattern === 'series' ? '📚 Chuỗi chuyên đề | 📚 Series topic' : '');
+    const cleanTitle = title ? escapeHtml(title) : (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
     const parsedTitle = window.parseBilingualText ? window.parseBilingualText(cleanTitle, lang) : cleanTitle.split('|')[0].trim();
     
     const activeLabel = resolveActiveLabel(rawLabels, posts);
@@ -382,8 +382,8 @@
     const isSeries = pattern === 'series';
     const headerHtml = cleanTitle ? `
       <div class="sp-widget-header ${isSeries ? 'series-widget-header' : ''}">
-        <h3 class="${isSeries ? 'sidebar-widget-title series-main-title' : 'sp-widget-title'}" data-bilingual="true" data-raw-label="${cleanTitle}">
-          <span class="${isSeries ? 'series-title-text' : ''}">${parsedTitle}</span>
+        <h3 class="${isSeries ? 'sidebar-widget-title series-main-title' : 'sp-widget-title'}">
+          <span class="${isSeries ? 'series-title-text' : 'sp-title-text'}" data-bilingual="true" data-raw-label="${cleanTitle}">${parsedTitle}</span>
           ${isSeries ? headerActionsHtml : ''}
         </h3>
         ${!isSeries ? headerActionsHtml : ''}
@@ -798,17 +798,20 @@
     return name;
   }
 
-  async function fetchAvailableSeriesLabels() {
+  async function fetchAvailableSeriesLabels(forceRefresh = false) {
     const cacheKey = CACHE_PREFIX + 'series_catalog_v2';
-    const cached = readCache(cacheKey);
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return cached;
+    if (!forceRefresh) {
+      const cached = readCache(cacheKey);
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        return cached;
+      }
     }
 
     let foundLabels = [];
     try {
       const blogUrl = getBlogBaseUrl();
-      const res = await fetch(`${blogUrl}/feeds/posts/summary?alt=json&max-results=150`);
+      const cbParam = forceRefresh ? `&_cb=${Date.now()}` : '';
+      const res = await fetch(`${blogUrl}/feeds/posts/summary?alt=json&max-results=500${cbParam}`);
       if (res.ok) {
         const data = await res.json();
         if (data && data.feed) {
@@ -951,12 +954,23 @@
   async function renderSeriesContainerView(container, seriesLabel, limit, widgetTitle) {
     const posts = await fetchSeriesPosts(seriesLabel);
     const seriesTitle = formatSeriesTitle(seriesLabel);
-    const available = container._availableSeries || [];
-    const shuffleBtnHtml = available.length > 1 ? `
-      <button type="button" class="series-shuffle-btn" aria-label="Đổi tuyến bài" title="Khám phá chuyên đề khác">
-        <span class="shuffle-icon" aria-hidden="true">🔀</span>
+    const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
+    const shuffleRawLabel = 'Đổi tuyến bài | Switch series';
+    const shuffleRawTitle = 'Khám phá chuyên đề khác | Discover another series';
+    const shuffleParsedLabel = window.parseBilingualText ? window.parseBilingualText(shuffleRawLabel, lang) : 'Đổi tuyến bài';
+    const shuffleParsedTitle = window.parseBilingualText ? window.parseBilingualText(shuffleRawTitle, lang) : 'Khám phá chuyên đề khác';
+
+    const shuffleBtnHtml = `
+      <button type="button" class="series-shuffle-btn" aria-label="${escapeHtml(shuffleParsedLabel)}" title="${escapeHtml(shuffleParsedTitle)}">
+        <svg class="series-shuffle-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="16 3 21 3 21 8"></polyline>
+          <line x1="4" y1="20" x2="21" y2="3"></line>
+          <polyline points="21 16 21 21 16 21"></polyline>
+          <line x1="15" y1="15" x2="21" y2="21"></line>
+          <line x1="4" y1="4" x2="9" y2="9"></line>
+        </svg>
       </button>
-    ` : '';
+    `;
 
     const bodyHtml = renderSeriesPattern(posts, {
       limit,
@@ -966,7 +980,7 @@
     });
 
     container.innerHTML = buildWidgetShell(
-      widgetTitle || '📚 Chuỗi chuyên đề | 📚 Series topic',
+      widgetTitle || '📚 Chuyên Đề | 📚 Series Topic',
       '',
       seriesLabel,
       'series',
@@ -983,9 +997,21 @@
         e.stopPropagation();
 
         shuffleBtn.classList.add('is-spinning');
-        const available = container._availableSeries || [];
+        let available = container._availableSeries || [];
+
+        // Nếu chỉ có 1 series hoặc rỗng, thử quét lại feed (forceRefresh) để cập nhật nếu có series mới
+        if (available.length <= 1) {
+          try {
+            available = await fetchAvailableSeriesLabels(true);
+            container._availableSeries = available;
+          } catch (_) {}
+        }
+
         if (available.length > 1) {
           let nextIdx = ((container._currentSeriesIndex || 0) + 1) % available.length;
+          if (available[nextIdx] === seriesLabel) {
+            nextIdx = (nextIdx + 1) % available.length;
+          }
           container._currentSeriesIndex = nextIdx;
           const nextLabel = available[nextIdx];
 
@@ -1001,7 +1027,18 @@
           if (newBody) {
             newBody.style.opacity = '1';
           }
+        } else {
+          // Blog chỉ có 1 series: tạo hiệu ứng reload nhẹ và dừng xoay
+          const bodyEl = container.querySelector('.series-widget-body, .sp-widget-body');
+          if (bodyEl) {
+            bodyEl.style.opacity = '0.4';
+            bodyEl.style.transition = 'opacity 0.2s ease';
+            setTimeout(() => {
+              bodyEl.style.opacity = '1';
+            }, 300);
+          }
         }
+
         setTimeout(function () {
           const btn = container.querySelector('.series-shuffle-btn');
           if (btn) btn.classList.remove('is-spinning');

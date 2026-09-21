@@ -71,8 +71,8 @@
             </b:includable>
           </b:widget>
 
-          <!-- Widget: Standalone Series Showcase (📚 Chuỗi chuyên đề | 📚 Series topic) -->
-          <b:widget id='HTML18' type='HTML' version='2' title='📚 Chuỗi chuyên đề | 📚 Series topic'>
+          <!-- Widget: Standalone Series Showcase (📚 Chuyên Đề | 📚 Series Topic) -->
+          <b:widget id='HTML18' type='HTML' version='2' title='📚 Chuyên Đề | 📚 Series Topic'>
             <b:includable id='main'>
               <div class='sidebar-widget special-posts-widget'
                    id='widget-series-showcase'
@@ -82,7 +82,7 @@
                 <b:if cond='data:title'>
                   <b:attr name='data-title' expr:value='data:title'/>
                 <b:else/>
-                  <b:attr name='data-title' value='📚 Chuỗi chuyên đề | 📚 Series topic'/>
+                  <b:attr name='data-title' value='📚 Chuyên Đề | 📚 Series Topic'/>
                 </b:if>
                 <b:if cond='data:content'>
                   <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
@@ -109,14 +109,14 @@
             </b:includable>
           </b:widget>
 
-          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng) -->
-          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)'>
+          <!-- Widget: AdSense Sidebar (Sticky ở cuối cùng - Mặc định ẩn, bật trong Bố cục khi cần) -->
+          <b:widget id='HTML3' type='HTML' version='2' title='Quảng Cáo Sidebar (Sticky)' visible='false'>
             <b:includable id='main'>
-              <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
-                <b:if cond='data:content'>
+              <b:if cond='data:content and data:content != &quot;&quot;'>
+                <div class='adsense-slot adsense-sidebar' aria-label='Quảng cáo'>
                   <data:content/>
-                </b:if>
-              </div>
+                </div>
+              </b:if>
             </b:includable>
           </b:widget>
 

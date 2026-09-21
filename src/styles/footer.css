@@ -395,6 +395,11 @@
 /* ══════════════════════════════════════════
    TẦNG 3: QUẢNG CÁO CHÂN TRANG (ADS SLOT)
    ══════════════════════════════════════════ */
+#footer-ads-section:empty,
+.site-footer .site-wrapper:has(#footer-ads-section:empty) {
+  display: none !important;
+}
+
 .footer-ads-tier {
   padding: 1.5rem 0;
   display: flex;
