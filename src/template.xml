@@ -219,21 +219,21 @@
               <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
               <b:if cond='data:view.isMultipleItems'>
                 <b:if cond='data:view.isLabelSearch'>
-                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary);'>
-                    <h2 id='search-page-title' style='margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
+                  <div class='search-label-header'>
+                    <h2 class='search-label-header-title' id='search-page-title' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
                   </div>
                 <b:elseif cond='data:view.isSearch and data:view.search.query'/>
-                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary);'>
-                    <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Kết quả tìm kiếm cho | Search results for:</span>
-                    <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);'><data:view.search.query/></h2>
+                  <div class='search-label-header'>
+                    <span class='search-label-header-eyebrow' data-bilingual='true'>Kết quả tìm kiếm cho | Search results for:</span>
+                    <h2 class='search-label-header-title'><data:view.search.query/></h2>
                   </div>
                 </b:if>
                 <b:if cond='data:posts.empty'>
-                  <div class='feed-empty-state' style='padding: 3.5rem 1rem; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 2rem;'>
-                    <span style='font-size: 2.5rem; display: block; margin-bottom: 0.75rem;'>📭</span>
-                    <h3 style='font-size: 1.15rem; color: var(--text-main); margin: 0 0 0.5rem;' data-bilingual='true'>Không tìm thấy bài viết nào | No posts found</h3>
-                    <p style='font-size: 0.85rem; margin: 0 0 1.25rem;' data-bilingual='true'>Chưa có bài viết nào thuộc danh mục này hoặc bài viết đã được di chuyển. | There are no posts in this category or they have been moved.</p>
-                    <a href='/' style='display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; color: var(--primary); background: var(--primary-light); border-radius: var(--radius-full); text-decoration: none;' data-bilingual='true'>← Về trang chủ | Back to home</a>
+                  <div class='feed-empty-state'>
+                    <span class='feed-empty-icon'>📭</span>
+                    <h3 class='feed-empty-heading' data-bilingual='true'>Không tìm thấy bài viết nào | No posts found</h3>
+                    <p class='feed-empty-desc' data-bilingual='true'>Chưa có bài viết nào thuộc danh mục này hoặc bài viết đã được di chuyển. | There are no posts in this category or they have been moved.</p>
+                    <a class='feed-empty-btn' href='/' data-bilingual='true'>← Về trang chủ | Back to home</a>
                   </div>
                 </b:if>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
@@ -364,11 +364,11 @@
 
                       <!-- ── CỘT TRÁI: TÔN CHỈ & HƯỚNG DẪN ── -->
                       <div class='contact-manifesto'>
-                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
+                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Blog | Write With Us</h1>
                         <p class='contact-description' data-bilingual='true'>
-                          Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
+                          Chúng mình luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
                           phong cách sống, kiến trúc phần mềm và những chiêm nghiệm đời thường.
-                          | Trà Đá Blog welcomes genuine, insightful perspectives on technology,
+                          | We always welcome genuine, insightful perspectives on technology,
                           lifestyle, software architecture and everyday reflections.
                         </p>
 
@@ -383,8 +383,8 @@
                         <!-- Kênh liên hệ trực tiếp -->
                         <div class='contact-direct-row'>
                           <span class='contact-direct-label' data-bilingual='true'>Liên hệ trực tiếp | Direct contact:</span>
-                          <a class='contact-direct-link' href='mailto:namtruong.contact@gmail.com'>
-                            ✉️ namtruong.contact@gmail.com
+                          <a class='contact-direct-link' href='mailto:contact@yourblog.com'>
+                            ✉️ contact@yourblog.com
                           </a>
                         </div>
                       </div>

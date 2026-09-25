@@ -466,16 +466,14 @@
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'theme-toast-notification';
-      toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#0f172a;color:#fff;padding:0.85rem 1.4rem;border-radius:999px;font-size:0.92rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:99999;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:0.5rem;border:1px solid rgba(255,255,255,0.15);';
+      toast.className = 'theme-floating-toast';
       document.body.appendChild(toast);
     }
     toast.textContent = msg;
-    toast.style.transform = 'translateY(0)';
-    toast.style.opacity = '1';
+    toast.classList.add('is-visible');
     clearTimeout(toast._timer);
     toast._timer = setTimeout(function() {
-      toast.style.transform = 'translateY(20px)';
-      toast.style.opacity = '0';
+      toast.classList.remove('is-visible');
     }, 3500);
   }
 
@@ -491,7 +489,7 @@
           if (input) {
             setTimeout(function() {
               input.focus();
-              input.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.4)';
+              input.style.boxShadow = '0 0 0 3px rgba(var(--primary-rgb), 0.4)';
               setTimeout(function() { input.style.boxShadow = ''; }, 1600);
             }, 500);
           }
@@ -511,7 +509,7 @@
         var email = input.value.trim();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !emailRegex.test(email)) {
-          input.style.borderColor = '#ef4444';
+          input.style.borderColor = 'var(--danger)';
           input.focus();
           showToast('⚠️ Vui lòng nhập địa chỉ email hợp lệ!');
           setTimeout(function() { input.style.borderColor = ''; }, 2500);
@@ -523,9 +521,7 @@
         if (btn) {
           btn.disabled = true;
           btn.innerHTML = '✓ Đã Đăng Ký!';
-          btn.style.backgroundColor = '#10b981';
-          btn.style.borderColor = '#10b981';
-          btn.style.color = '#ffffff';
+          btn.classList.add('theme-btn-success-state');
         }
         input.value = '';
         showToast('🎉 Cảm ơn bạn! Đã ghi nhận email đăng ký bản tin thành công.');
@@ -534,9 +530,7 @@
           if (btn) {
             btn.disabled = false;
             btn.innerHTML = origText;
-            btn.style.backgroundColor = '';
-            btn.style.borderColor = '';
-            btn.style.color = '';
+            btn.classList.remove('theme-btn-success-state');
           }
         }, 4000);
       });

@@ -841,7 +841,8 @@
     });
 
     let seriesLabels = Array.from(labelMap.values());
-    if (seriesLabels.length === 0) {
+    const isLocalDev = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    if (seriesLabels.length === 0 && isLocalDev) {
       seriesLabels = Object.keys(MOCK_SERIES_CATALOG);
     }
 
@@ -857,7 +858,8 @@
       posts = [];
     }
 
-    if (!posts || posts.length === 0) {
+    const isLocalDev = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    if ((!posts || posts.length === 0) && isLocalDev) {
       const mock = MOCK_SERIES_CATALOG[seriesLabel] || Object.values(MOCK_SERIES_CATALOG)[0];
       if (mock && mock.posts) {
         posts = mock.posts.map(p => Object.assign({}, p));
@@ -954,6 +956,10 @@
 
   async function renderSeriesContainerView(container, seriesLabel, limit, widgetTitle) {
     const posts = await fetchSeriesPosts(seriesLabel);
+    if (!posts || posts.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
     const seriesTitle = formatSeriesTitle(seriesLabel);
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const shuffleRawLabel = 'Đổi tuyến bài | Switch series';

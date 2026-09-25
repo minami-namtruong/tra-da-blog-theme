@@ -59,13 +59,13 @@
 <div class="guest-cta-config">
   <!-- Nút trên Banner Hero (MẶC ĐỊNH HIỆN: display:inline-flex, đổi thành display:none nếu muốn tắt) -->
   <a class="btn-guest-hero-config" href="/p/lien-he.html" style="display:inline-flex;">
-    <span data-bilingual="true">✍️ Viết cùng Trà Đá | ✍️ Write with us</span>
+    <span data-bilingual="true">✍️ Viết cùng chúng mình | ✍️ Write with us</span>
   </a>
 
   <!-- Callout chân bài viết (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
   <div class="post-guest-callout-config" style="display:none;">
     <span class="callout-text" data-bilingual="true">
-      Bạn muốn chia sẻ câu chuyện của mình trên Trà Đá Blog? | Want to share your thoughts on Trà Đá Blog?
+      Bạn muốn chia sẻ câu chuyện của mình cùng độc giả? | Want to share your thoughts with our readers?
     </span>
     <a class="callout-btn" href="/p/lien-he.html">
       <span data-bilingual="true">Gửi bài viết ➔ | Submit article ➔</span>
@@ -84,7 +84,7 @@
 <script>
   window.__CONTACT_CONFIG = {
     adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
-    adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
+    adminEmail: 'contact@yourblog.com', // Thay bằng email thật của Blog
     gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
   };
 </script>

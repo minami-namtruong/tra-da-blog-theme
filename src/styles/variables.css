@@ -16,8 +16,11 @@
 
   /* Brand & Accent Colors */
   --primary: #2563eb;         /* Blue 600 */
+  --primary-rgb: 37, 99, 235;
   --primary-hover: #1d4ed8;   /* Blue 700 */
   --primary-light: #eff6ff;   /* Blue 50 */
+  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
   --accent: #f59e0b;          /* Amber 500 */
   --success: #10b981;         /* Emerald 500 */
   --warning: #f59e0b;         /* Amber 500 */
@@ -30,9 +33,11 @@
   --surface-input: var(--bg-input);
   --text-primary: var(--text-main);
   --text-secondary: var(--text-muted);
+  --text-heading: var(--text-main);
   --border-hairline: var(--border-color);
   --action-primary: var(--primary);
   --action-hover: var(--primary-hover);
+  --error: var(--danger);
 
   /* Overlays & Glass */
   --header-bg: rgba(255, 255, 255, 0.88);
@@ -63,6 +68,7 @@
   /* Typography */
   --font-main: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Lora", "Merriweather", Georgia, serif;
+  --font-heading: var(--font-serif);
   --font-mono: "Fira Code", "Courier New", monospace;
 
   /* Sizing & Spacing */
@@ -122,6 +128,7 @@
   --border-hover: #334155;
 
   --primary: #3b82f6;         /* Blue 500 */
+  --primary-rgb: 59, 130, 246;
   --primary-hover: #60a5fa;   /* Blue 400 */
   --primary-light: rgba(59, 130, 246, 0.15);
 
@@ -149,4 +156,51 @@
   --ai-callout-text: #e9d5ff;
   --ai-micro-bg: rgba(168, 85, 247, 0.22);
   --ai-micro-text: #c084fc;
+}
+
+/* ==========================================
+   GLOBAL UTILITIES FOR DYNAMIC STATES & TOASTS
+   ========================================== */
+.theme-floating-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--text-main);
+  color: var(--bg-card);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 99999;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: var(--stroke-hairline) solid var(--border-color);
+}
+.theme-floating-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.theme-floating-toast--success {
+  background: var(--success);
+  color: var(--text-inverse);
+  border-color: transparent;
+}
+.theme-floating-toast--error {
+  background: var(--danger);
+  color: var(--text-inverse);
+  border-color: transparent;
+}
+
+.theme-btn-success-state {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+  color: var(--text-inverse) !important;
 }

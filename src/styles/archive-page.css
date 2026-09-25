@@ -142,13 +142,13 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #f59e0b;
+  background: var(--accent);
   border: 1.5px solid var(--bg-card);
   box-shadow: 0 0 4px rgba(245, 158, 11, 0.6);
 }
 
 .archive-filter-trigger-btn.is-active .filter-badge-dot {
-  background: #ffffff;
+  background: var(--text-inverse);
   border-color: var(--primary);
 }
 
@@ -156,9 +156,9 @@
 .archive-filter-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: var(--modal-backdrop-bg);
+  backdrop-filter: var(--modal-backdrop-blur);
+  -webkit-backdrop-filter: var(--modal-backdrop-blur);
   z-index: 998;
 }
 
@@ -719,7 +719,7 @@
 
 .subway-post-card:hover .subway-pill--quote {
   background: #d97706;
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .subway-title--quote {
@@ -739,7 +739,7 @@
 }
 
 .subway-card--bulletin:hover {
-  border-color: #ef4444;
+  border-color: var(--danger);
   background: rgba(239, 68, 68, 0.04);
 }
 
@@ -751,7 +751,7 @@
 
 .subway-post-card:hover .subway-pill--bulletin {
   background: #dc2626;
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 /* ── 4.3. Định dạng Thẻ @Tiêu điểm (Nổi Bật - Viền Hổ Phách Mảnh) ── */
@@ -769,7 +769,7 @@
 
 .subway-pill--spotlight {
   background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  color: var(--text-inverse);
   border: none;
 }
 

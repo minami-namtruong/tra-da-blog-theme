@@ -41,9 +41,9 @@
         : nameStr.slice(0, 2).toUpperCase();
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
         '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">' +
-        '<rect width="80" height="80" rx="40" fill="#4f7cac"/>' +
+        '<rect width="80" height="80" rx="40" fill="#2563eb"/>' +
         '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" ' +
-        'font-family="Be Vietnam Pro,sans-serif" font-size="28" font-weight="700" fill="#fff">' +
+        'font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="700" fill="#ffffff">' +
         initials + '</text></svg>'
       );
     }
@@ -144,7 +144,7 @@
         btn.href = configBtn.getAttribute('href') || '/p/lien-he.html';
         btn.setAttribute('data-bilingual', 'true');
         var span = configBtn.querySelector('[data-bilingual]');
-      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng Trà Đá | ✍️ Write with us';
+      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng chúng mình | ✍️ Write with us';
       var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
       btn.setAttribute('data-bilingual', 'true');
       btn.setAttribute('data-raw-label', rawLabel);

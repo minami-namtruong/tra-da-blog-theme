@@ -340,7 +340,7 @@ Mặc định form liên hệ hỗ trợ cơ chế chống spam Honeypot (`_hone
 <script>
   window.__CONTACT_CONFIG = {
     adapter: 'blogger', // Options: 'blogger' | 'gas' | 'formsubmit'
-    adminEmail: 'tradabanthesu@gmail.com',
+    adminEmail: 'your-email@gmail.com', // Thay bằng email nhận thư của bạn
     gasWebhookUrl: 'https://script.google.com/macros/s/.../exec'
   };
 </script>
@@ -430,6 +430,19 @@ Theme hỗ trợ chuyển đổi phong cách thiết kế cao cấp và chế đ
         data-theme-preset='airy-pastel'>
   ```
 
+### 11.3. Hệ Thống Design Tokens & Biến CSS Toàn Cục (`variables.css`)
+Toàn bộ màu sắc, khoảng cách, font chữ và bo góc tuân thủ nghiêm ngặt hệ thống Design Tokens (CSS Variables):
+
+| Nhóm Token | Tên Biến CSS | Ý Nghĩa / Giá Trị Mặc Định |
+| :--- | :--- | :--- |
+| **Thương Hiệu & Màu Chính** | `--primary`, `--primary-hover`, `--primary-light` | Màu xanh chủ đạo (`#2563eb`), hover (`#1d4ed8`), nền nhạt (`#eff6ff`) |
+| **Kênh Màu RGB (Dùng cho Alpha)** | `--primary-rgb` | `37, 99, 235` (Light mode) và `59, 130, 246` (Dark mode) |
+| **Gradients Cao Cấp** | `--primary-gradient`, `--primary-gradient-hover` | Dải màu gradient tuyến tính cho các nút kêu gọi hành động CTA |
+| **Trạng Thái & Cảnh Báo** | `--success`, `--warning`, `--danger`, `--error` | Xanh lục (`#10b981`), Hổ phách (`#f59e0b`), Đỏ nguy hiểm (`#ef4444`) |
+| **Kiểu Chữ (Typography)** | `--font-main`, `--font-serif`, `--font-heading`, `--font-mono` | Be Vietnam Pro (chính), Lora (tiêu đề/chân phương), Fira Code (mã nguồn) |
+| **Bo Góc (Radius Scale)** | `--radius-xs` (4px), `--radius-sm` (8px), `--radius-md` (12px), `--radius-lg` (16px), `--radius-full` (9999px) | Thang bo góc đồng nhất chuẩn hóa |
+| **Mặt Nền & Đổ Bóng** | `--bg-body`, `--bg-card`, `--bg-surface`, `--shadow-sm`, `--shadow-md`, `--shadow-lg` | Tự động đồng bộ và đảo màu khi chuyển Dark/Light mode |
+
 ---
 
 ## CHƯƠNG 12: THANH TIẾN TRÌNH ĐỌC & MỤC LỤC BÀI VIẾT TỰ ĐỘNG (AUTO TOC)
@@ -499,7 +512,7 @@ Mặc định nút này được ẩn để giữ giao diện tối giản. Nế
 
 ---
 
-#### 2. Nút "✍️ Viết Cùng Trà Đá / Gửi Bài" (Guest Post Hero Button)
+#### 2. Nút "✍️ Viết Cùng Chúng Mình / Gửi Bài" (Guest Post Hero Button)
 * **Vị trí hiển thị:** Nằm trên Banner Hero đầu trang chủ, bên cạnh nút Đăng ký Bản tin.
 * **Cách BẬT:** Sửa `style="display:none;"` thành `style="display:inline-flex;"`.
 * **Cách ẨN:** Sửa `style="display:inline-flex;"` thành `style="display:none;"`.
@@ -507,7 +520,7 @@ Mặc định nút này được ẩn để giữ giao diện tối giản. Nế
 ```html
 <!-- BẬT NÚT MỜI VIẾT BÀI ĐẦU TRANG CHỦ -->
 <a class="btn-guest-hero" href="/p/lien-he.html" style="display:inline-flex;" data-bilingual="true">
-  ✍️ Viết Cùng Trà Đá | Write With Us
+  ✍️ Viết Cùng Chúng Mình | Write With Us
 </a>
 ```
 
@@ -520,7 +533,7 @@ Mặc định nút này được ẩn để giữ giao diện tối giản. Nế
 ```html
 <!-- BẬT THẺ MỜI GỬI BÀI CUỐI BÀI VIẾT -->
 <div class="post-guest-cta" style="display:block;">
-  <p><span data-bilingual="true">☕ Bạn có góc nhìn muốn chia sẻ trên Trà Đá Blog? | ☕ Have a story to share on Tra Da Blog?</span></p>
+  <p><span data-bilingual="true">☕ Bạn có góc nhìn muốn chia sẻ cùng độc giả? | ☕ Have a story to share with our readers?</span></p>
   <a class="btn-guest-post-link" href="/p/lien-he.html" data-bilingual="true">Gửi bài viết đóng góp ➔ | Submit a guest post ➔</a>
 </div>
 ```
@@ -556,7 +569,7 @@ Nếu bạn không muốn bật quảng cáo qua widget ô riêng mà muốn nh�
 <script>
   window.__CONTACT_CONFIG = {
     adapter: 'blogger', // 'blogger' | 'gas' | 'formsubmit'
-    adminEmail: 'tradabanthesu@gmail.com',
+    adminEmail: 'your-email@gmail.com', // Thay bằng email nhận thư thật của bạn
     gasWebhookUrl: 'https://script.google.com/macros/s/YOUR_GAS_ID/exec'
   };
 </script>

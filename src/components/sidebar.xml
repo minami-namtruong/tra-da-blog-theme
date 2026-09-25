@@ -24,10 +24,10 @@
                   </script>
                   
                   <div class='sidebar-about-text lang-vi'>
-                    Chào bạn, đây là Trà Đá Blog — một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
+                    Chào bạn, đây là một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
                   </div>
                   <div class='sidebar-about-text lang-en'>
-                    Welcome to Trà Đá Blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
+                    Welcome to my blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
                   </div>
 
                   <div class='sidebar-socials'>
@@ -65,7 +65,7 @@
                     </b:loop>
                   </ul>
                 <b:else/>
-                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
+                  <p class='popular-posts-empty'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
                 </b:if>
               </div>
             </b:includable>

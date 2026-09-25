@@ -205,35 +205,12 @@
 
     var toast = document.createElement('div');
     toast.id = 'copied-toast';
+    toast.className = 'theme-floating-toast is-visible';
     toast.innerText = toastMsg;
-    toast.style.cssText = [
-      'position: fixed',
-      'bottom: 1.5rem',
-      'left: 50%',
-      'transform: translateX(-50%)',
-      'background: #0f172a',
-      'color: #fff',
-      'padding: 0.65rem 1.35rem',
-      'border-radius: 9999px',
-      'font-size: 0.88rem',
-      'font-weight: 600',
-      'z-index: 9999',
-      'box-shadow: 0 4px 20px rgba(0,0,0,0.3)',
-      'animation: fadeInUp 0.3s ease'
-    ].join(';');
-
-    // Inject keyframe once
-    if (!document.getElementById('toast-keyframe')) {
-      var style = document.createElement('style');
-      style.id = 'toast-keyframe';
-      style.textContent = '@keyframes fadeInUp { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }';
-      document.head.appendChild(style);
-    }
-
     document.body.appendChild(toast);
+
     setTimeout(function() {
-      toast.style.opacity = '0';
-      toast.style.transition = 'opacity 0.3s ease';
+      toast.classList.remove('is-visible');
       setTimeout(function() { toast.remove(); }, 350);
     }, 2200);
   }
@@ -292,7 +269,7 @@
         var email = emailInput.value.trim();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !emailRegex.test(email)) {
-          emailInput.style.borderColor = '#ef4444';
+          emailInput.style.borderColor = 'var(--danger)';
           emailInput.focus();
           setTimeout(function() { emailInput.style.borderColor = ''; }, 2500);
           return;
@@ -304,7 +281,7 @@
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.innerText = (lang === 'en') ? '✓ Subscribed!' : '✓ Đã Đăng Ký!';
-          submitBtn.style.background = '#10b981';
+          submitBtn.classList.add('theme-btn-success-state');
         }
 
         // Show toast
@@ -313,11 +290,13 @@
           : '🎉 Cảm ơn bạn! Đã đăng ký nhận bản tin thành công.';
         
         var toast = document.createElement('div');
-        toast.className = 'newsletter-success-toast';
+        toast.className = 'theme-floating-toast theme-floating-toast--success is-visible';
         toast.innerText = successMsg;
-        toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:0.75rem 1.5rem;border-radius:9999px;font-weight:700;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.25);';
         document.body.appendChild(toast);
-        setTimeout(function() { toast.remove(); }, 3500);
+        setTimeout(function() {
+          toast.classList.remove('is-visible');
+          setTimeout(function() { toast.remove(); }, 350);
+        }, 3500);
 
         setTimeout(function() {
           closeModal();
@@ -325,7 +304,7 @@
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerText = origText;
-            submitBtn.style.background = '';
+            submitBtn.classList.remove('theme-btn-success-state');
           }
         }, 1500);
       });

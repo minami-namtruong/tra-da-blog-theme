@@ -23,7 +23,7 @@
     var cfg = window.__CONTACT_CONFIG || {};
 
     // ── 0. Thay thế email hiển thị động ─────────────────────────────────
-    var adminEmail = cfg.adminEmail || 'tradabanthesu@gmail.com';
+    var adminEmail = cfg.adminEmail || 'contact@yourblog.com';
     var emailLink = app.querySelector('.contact-direct-link');
     if (emailLink) {
       emailLink.href = 'mailto:' + adminEmail;

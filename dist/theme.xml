@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Compiled at: 2026-09-25T03:32:09.714Z -->
+<!-- Compiled at: 2026-09-25T07:08:54.777Z -->
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
       xmlns='http://www.w3.org/1999/xhtml'
@@ -117,8 +117,11 @@
 
   /* Brand & Accent Colors */
   --primary: #2563eb;         /* Blue 600 */
+  --primary-rgb: 37, 99, 235;
   --primary-hover: #1d4ed8;   /* Blue 700 */
   --primary-light: #eff6ff;   /* Blue 50 */
+  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
   --accent: #f59e0b;          /* Amber 500 */
   --success: #10b981;         /* Emerald 500 */
   --warning: #f59e0b;         /* Amber 500 */
@@ -131,9 +134,11 @@
   --surface-input: var(--bg-input);
   --text-primary: var(--text-main);
   --text-secondary: var(--text-muted);
+  --text-heading: var(--text-main);
   --border-hairline: var(--border-color);
   --action-primary: var(--primary);
   --action-hover: var(--primary-hover);
+  --error: var(--danger);
 
   /* Overlays & Glass */
   --header-bg: rgba(255, 255, 255, 0.88);
@@ -164,6 +169,7 @@
   /* Typography */
   --font-main: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Lora", "Merriweather", Georgia, serif;
+  --font-heading: var(--font-serif);
   --font-mono: "Fira Code", "Courier New", monospace;
 
   /* Sizing & Spacing */
@@ -223,6 +229,7 @@
   --border-hover: #334155;
 
   --primary: #3b82f6;         /* Blue 500 */
+  --primary-rgb: 59, 130, 246;
   --primary-hover: #60a5fa;   /* Blue 400 */
   --primary-light: rgba(59, 130, 246, 0.15);
 
@@ -250,6 +257,53 @@
   --ai-callout-text: #e9d5ff;
   --ai-micro-bg: rgba(168, 85, 247, 0.22);
   --ai-micro-text: #c084fc;
+}
+
+/* ==========================================
+   GLOBAL UTILITIES FOR DYNAMIC STATES & TOASTS
+   ========================================== */
+.theme-floating-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--text-main);
+  color: var(--bg-card);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 99999;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: var(--stroke-hairline) solid var(--border-color);
+}
+.theme-floating-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.theme-floating-toast--success {
+  background: var(--success);
+  color: var(--text-inverse);
+  border-color: transparent;
+}
+.theme-floating-toast--error {
+  background: var(--danger);
+  color: var(--text-inverse);
+  border-color: transparent;
+}
+
+.theme-btn-success-state {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+  color: var(--text-inverse) !important;
 }
 
 
@@ -1559,33 +1613,33 @@ a:hover {
   padding: 0.45rem 1.05rem;
   border-radius: var(--radius-full);
   border: none;
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  color: #ffffff !important;
+  background: var(--primary-gradient);
+  color: var(--text-inverse) !important;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.32);
+  box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.32);
   user-select: none;
   font-family: inherit;
 }
 
 .post-share-trigger:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
-  color: #ffffff !important;
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+  background: var(--primary-gradient-hover);
+  color: var(--text-inverse) !important;
+  box-shadow: 0 6px 18px rgba(var(--primary-rgb), 0.45);
   transform: translateY(-2px) scale(1.02);
 }
 
 .post-share-trigger[aria-expanded="true"] {
-  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), 0 6px 18px rgba(37, 99, 235, 0.45);
+  background: var(--primary-gradient-hover);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25), 0 6px 18px rgba(var(--primary-rgb), 0.45);
 }
 
 .post-share-trigger .share-icon {
   width: 15px;
   height: 15px;
-  stroke: #ffffff;
+  stroke: var(--text-inverse);
   stroke-width: 2.2;
   flex-shrink: 0;
 }
@@ -1652,7 +1706,7 @@ a:hover {
 }
 
 .share-menu-item.share-menu-fb:hover {
-  color: #1877f2;
+  color: var(--brand-facebook);
 }
 
 .share-menu-item.share-menu-tw:hover {
@@ -1660,7 +1714,7 @@ a:hover {
 }
 
 .share-menu-item.share-menu-li:hover {
-  color: #0a66c2;
+  color: var(--brand-linkedin);
 }
 
 .share-menu-item.share-menu-native {
@@ -1897,7 +1951,7 @@ a:hover {
 
 .newsletter-modal-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
 
 .newsletter-modal-btn {
@@ -1905,20 +1959,20 @@ a:hover {
   padding: 0.85rem;
   border: none;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  color: #ffffff;
+  background: var(--primary-gradient);
+  color: var(--text-inverse);
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.35);
   font-family: inherit;
 }
 
 .newsletter-modal-btn:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  background: var(--primary-gradient-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.45);
 }
 
 .newsletter-modal-footer {
@@ -2266,8 +2320,8 @@ a:hover {
   width: 32px;
   height: 32px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(37, 99, 235, 0.16);
-  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(var(--primary-rgb), 0.16);
+  background: rgba(var(--primary-rgb), 0.05);
   color: var(--primary);
   display: inline-flex;
   align-items: center;
@@ -2289,28 +2343,28 @@ a:hover {
 }
 .series-shuffle-btn:hover {
   background: var(--primary);
-  color: #ffffff;
+  color: var(--text-inverse);
   border-color: var(--primary);
   transform: rotate(20deg) scale(1.08);
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.22);
+  box-shadow: 0 3px 10px rgba(var(--primary-rgb), 0.22);
 }
 .series-shuffle-btn.is-spinning {
   transform: rotate(360deg);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 [data-theme="dark"] .series-shuffle-btn {
-  background: rgba(59, 130, 246, 0.12);
-  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(var(--primary-rgb), 0.12);
+  border-color: rgba(var(--primary-rgb), 0.25);
   color: var(--primary);
 }
 [data-theme="dark"] .series-shuffle-btn:hover {
   background: var(--primary);
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 /* Series Showcase Compact Header Line (Tên bên trái, số bài bên phải) */
 .series-showcase-summary {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(37, 99, 235, 0.02) 100%);
-  border: 1px solid rgba(37, 99, 235, 0.15);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.06) 0%, rgba(var(--primary-rgb), 0.02) 100%);
+  border: 1px solid rgba(var(--primary-rgb), 0.15);
   border-left: 3.5px solid var(--primary);
   border-radius: var(--radius-md);
   padding: 0.45rem 0.75rem;
@@ -2319,12 +2373,12 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.03);
+  box-shadow: 0 1px 3px rgba(var(--primary-rgb), 0.03);
   transition: all 0.2s ease;
 }
 [data-theme="dark"] .series-showcase-summary {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.04) 100%);
-  border-color: rgba(59, 130, 246, 0.22);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.12) 0%, rgba(var(--primary-rgb), 0.04) 100%);
+  border-color: rgba(var(--primary-rgb), 0.22);
   border-left-color: var(--primary);
 }
 .series-showcase-name-group {
@@ -2361,15 +2415,15 @@ a:hover {
   color: var(--primary);
   background: var(--bg-card);
   padding: 0.15rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
   white-space: nowrap;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 [data-theme="dark"] .series-showcase-count-pill {
-  background: rgba(19, 27, 46, 0.85);
-  border-color: rgba(59, 130, 246, 0.35);
-  color: #93c5fd;
+  background: var(--bg-card);
+  border-color: rgba(var(--primary-rgb), 0.35);
+  color: var(--primary-hover);
 }
 .series-showcase-list {
   margin: 0;
@@ -2771,6 +2825,79 @@ body.view-not-homepage #main-above-feed {
   padding: 0 !important;
 }
 
+/* Search Header & Feed Empty States */
+.search-label-header {
+  margin-bottom: 1.5rem;
+  padding: 1.1rem 1.35rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border-left: 3.5px solid var(--primary);
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-left: 3.5px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.search-label-header-eyebrow {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  display: block;
+}
+.search-label-header-title {
+  margin: 0.2rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.feed-empty-state {
+  padding: 3.5rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+  border: var(--stroke-hairline) solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+.feed-empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.feed-empty-heading {
+  font-size: 1.15rem;
+  color: var(--text-main);
+  margin: 0 0 0.5rem;
+}
+.feed-empty-desc {
+  font-size: 0.85rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+.feed-empty-btn {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.feed-empty-btn:hover {
+  background: var(--primary);
+  color: var(--text-inverse);
+}
+
+.popular-posts-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 0.75rem 0;
+  margin: 0;
+}
+
 
 /* ==========================================================================
    POST SERIES NAVIGATOR — LUXURY EDITORIAL EDITION
@@ -2793,9 +2920,9 @@ body.view-not-homepage #main-above-feed {
   flex-wrap: wrap;
   gap: 0.5rem 0.65rem;
   padding: 0.35rem 0.85rem 0.35rem 0.65rem;
-  background: rgba(37, 99, 235, 0.04);
-  border: 1px solid rgba(37, 99, 235, 0.16);
-  border-radius: 9999px;
+  background: rgba(var(--primary-rgb), 0.04);
+  border: 1px solid rgba(var(--primary-rgb), 0.16);
+  border-radius: var(--radius-full);
   font-size: 0.82rem;
   color: var(--text-main);
   text-decoration: none;
@@ -2805,10 +2932,10 @@ body.view-not-homepage #main-above-feed {
 }
 
 .series-header-pill:hover {
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(var(--primary-rgb), 0.08);
   border-color: var(--primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.12);
 }
 
 .series-pill-kicker {
@@ -2816,9 +2943,9 @@ body.view-not-homepage #main-above-feed {
   align-items: center;
   gap: 0.35rem;
   background: var(--primary);
-  color: #ffffff;
+  color: var(--text-inverse);
   padding: 0.15rem 0.55rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -3306,72 +3433,72 @@ body.view-not-homepage #main-above-feed {
 
 /* ── 6. Dark Theme Refinements ── */
 [data-theme="dark"] .series-header-pill {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(var(--primary-rgb), 0.08);
+  border-color: rgba(var(--primary-rgb), 0.25);
 }
 
 [data-theme="dark"] .series-roadmap-box {
-  background: #111827;
-  background-image: radial-gradient(ellipse at 90% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
-  border-color: #1f2937;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+  background: var(--bg-card);
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(var(--primary-rgb), 0.08) 0%, transparent 60%);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-lg);
 }
 
 [data-theme="dark"] .series-step-node {
-  background: #111827;
-  border-color: #374151;
+  background: var(--bg-card);
+  border-color: var(--border-color);
 }
 
 [data-theme="dark"] .series-step-item.is-active .series-step-node {
-  border-color: #111827;
+  border-color: var(--bg-card);
 }
 
 [data-theme="dark"] .series-step-item.is-active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.03) 100%);
-  border-color: rgba(59, 130, 246, 0.35);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.15) 0%, rgba(var(--primary-rgb), 0.03) 100%);
+  border-color: rgba(var(--primary-rgb), 0.35);
 }
 
 [data-theme="dark"] .series-step-badge.badge-read {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
+  background: color-mix(in srgb, var(--success) 18%, transparent);
+  color: var(--success);
 }
 
 [data-theme="dark"] .series-step-badge.badge-next {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(var(--primary-rgb), 0.15);
+  color: var(--primary-hover);
+  border-color: rgba(var(--primary-rgb), 0.3);
 }
 
 [data-theme="dark"] .series-step-badge.badge-upcoming {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text-muted);
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-color);
 }
 
 [data-theme="dark"] .series-nav-next {
   background: linear-gradient(135deg, #1e1b4b 0%, #1e3a8a 100%);
-  border-color: rgba(96, 165, 250, 0.3);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  border-color: rgba(var(--primary-rgb), 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 [data-theme="dark"] .series-nav-next:hover {
   background: linear-gradient(135deg, #2e1065 0%, #1e40af 100%);
-  border-color: rgba(96, 165, 250, 0.5);
+  border-color: rgba(var(--primary-rgb), 0.5);
 }
 
 [data-theme="dark"] .series-nav-next .series-nav-kicker {
-  color: #93c5fd;
+  color: var(--primary-hover);
 }
 
 [data-theme="dark"] .series-nav-prev {
-  background: #1f2937;
-  border-color: #374151;
+  background: var(--bg-surface);
+  border-color: var(--border-color);
 }
 
 [data-theme="dark"] .series-completed-msg {
-  background: rgba(16, 185, 129, 0.1);
-  color: #34d399;
-  border-color: rgba(16, 185, 129, 0.3);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+  border-color: color-mix(in srgb, var(--success) 30%, transparent);
 }
 
 /* ── 7. Responsive Mobile Tuning ── */
@@ -4316,13 +4443,13 @@ body.view-not-homepage #main-above-feed {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #f59e0b;
+  background: var(--accent);
   border: 1.5px solid var(--bg-card);
   box-shadow: 0 0 4px rgba(245, 158, 11, 0.6);
 }
 
 .archive-filter-trigger-btn.is-active .filter-badge-dot {
-  background: #ffffff;
+  background: var(--text-inverse);
   border-color: var(--primary);
 }
 
@@ -4330,9 +4457,9 @@ body.view-not-homepage #main-above-feed {
 .archive-filter-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: var(--modal-backdrop-bg);
+  backdrop-filter: var(--modal-backdrop-blur);
+  -webkit-backdrop-filter: var(--modal-backdrop-blur);
   z-index: 998;
 }
 
@@ -4893,7 +5020,7 @@ body.view-not-homepage #main-above-feed {
 
 .subway-post-card:hover .subway-pill--quote {
   background: #d97706;
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .subway-title--quote {
@@ -4913,7 +5040,7 @@ body.view-not-homepage #main-above-feed {
 }
 
 .subway-card--bulletin:hover {
-  border-color: #ef4444;
+  border-color: var(--danger);
   background: rgba(239, 68, 68, 0.04);
 }
 
@@ -4925,7 +5052,7 @@ body.view-not-homepage #main-above-feed {
 
 .subway-post-card:hover .subway-pill--bulletin {
   background: #dc2626;
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 /* ── 4.3. Định dạng Thẻ @Tiêu điểm (Nổi Bật - Viền Hổ Phách Mảnh) ── */
@@ -4943,7 +5070,7 @@ body.view-not-homepage #main-above-feed {
 
 .subway-pill--spotlight {
   background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  color: var(--text-inverse);
   border: none;
 }
 
@@ -6244,13 +6371,13 @@ body.view-not-homepage #main-above-feed {
 }
 
 .contact-headline {
-  font-family: var(--font-heading, 'Lora', serif);
+  font-family: var(--font-heading);
   font-size: 2.25rem;
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1.25rem;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--text-heading, #111) 0%, var(--primary, #3b82f6) 100%);
+  background: linear-gradient(135deg, var(--text-heading) 0%, var(--primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -6293,7 +6420,7 @@ body.view-not-homepage #main-above-feed {
   width: 1.25rem;
   height: 1.25rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -6404,7 +6531,7 @@ body.view-not-homepage #main-above-feed {
 }
 
 .contact-form-label .req {
-  color: var(--error, #e53e3e);
+  color: var(--danger);
   margin-left: 0.2em;
 }
 
@@ -6412,9 +6539,9 @@ body.view-not-homepage #main-above-feed {
 .contact-form-textarea {
   width: 100%;
   padding: 0.7rem 0.9rem;
-  border: var(--stroke-hairline, 1px) solid var(--border-color);
-  border-radius: var(--radius-md, 8px);
-  background: var(--bg-input, var(--bg-surface));
+  border: var(--stroke-hairline) solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
   color: var(--text-main);
   font-size: 0.93rem;
   font-family: inherit;
@@ -6427,13 +6554,13 @@ body.view-not-homepage #main-above-feed {
 .contact-form-textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 79, 124, 172), 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
 }
 
 .contact-form-input.is-invalid,
 .contact-form-textarea.is-invalid {
-  border-color: var(--error, #e53e3e);
-  box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.12);
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
 }
 
 .contact-form-textarea {
@@ -6453,7 +6580,7 @@ body.view-not-homepage #main-above-feed {
 
 .contact-field-error {
   font-size: 0.8rem;
-  color: var(--error, #e53e3e);
+  color: var(--danger);
   font-weight: 500;
 }
 
@@ -6478,21 +6605,21 @@ body.view-not-homepage #main-above-feed {
   padding: 0.85rem 1.5rem;
   margin-top: 0.5rem;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   font-size: 0.97rem;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 2px 10px rgba(var(--primary-rgb, 79, 124, 172), 0.35);
+  box-shadow: 0 2px 10px rgba(var(--primary-rgb), 0.35);
 }
 
 .contact-submit-btn:hover:not(:disabled) {
-  background: var(--primary-hover, var(--primary));
+  background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(var(--primary-rgb, 79, 124, 172), 0.45);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.45);
 }
 
 .contact-submit-btn:active:not(:disabled) {
@@ -6511,7 +6638,7 @@ body.view-not-homepage #main-above-feed {
   width: 1em;
   height: 1em;
   border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: #fff;
+  border-top-color: var(--text-inverse);
   border-radius: 50%;
   animation: contact-spin 0.7s linear infinite;
   vertical-align: middle;
@@ -6528,7 +6655,7 @@ body.view-not-homepage #main-above-feed {
 .contact-toast {
   display: none;
   padding: 1rem 1.25rem;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   font-size: 0.92rem;
   font-weight: 500;
   line-height: 1.5;
@@ -6546,25 +6673,25 @@ body.view-not-homepage #main-above-feed {
 }
 
 .contact-toast--success {
-  background: color-mix(in srgb, var(--success, #38a169) 12%, transparent);
-  color: var(--success, #2f855a);
-  border-color: var(--success, #38a169);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+  border-color: var(--success);
 }
 
 .contact-toast--error {
-  background: color-mix(in srgb, var(--error, #e53e3e) 10%, transparent);
-  color: var(--error, #c53030);
-  border-color: var(--error, #e53e3e);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 [data-theme='dark'] .contact-toast--success {
-  background: rgba(56, 161, 105, 0.15);
-  color: #68d391;
+  background: color-mix(in srgb, var(--success) 18%, transparent);
+  color: var(--success);
 }
 
 [data-theme='dark'] .contact-toast--error {
-  background: rgba(229, 62, 62, 0.15);
-  color: #fc8181;
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+  color: var(--danger);
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -6581,7 +6708,7 @@ body.view-not-homepage #main-above-feed {
   color: var(--primary);
   background: color-mix(in srgb, var(--primary) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
-  border-radius: var(--radius-full, 100px);
+  border-radius: var(--radius-full);
   padding: 0.15em 0.6em;
   vertical-align: middle;
   margin-bottom: 0.2rem;
@@ -6589,7 +6716,7 @@ body.view-not-homepage #main-above-feed {
 }
 
 [data-theme='dark'] .author-badge-guest {
-  background: rgba(var(--primary-rgb, 79, 124, 172), 0.2);
+  background: rgba(var(--primary-rgb), 0.2);
 }
 
 /* Author Bio Box — guest variant */
@@ -6626,19 +6753,19 @@ body.view-not-homepage #main-above-feed {
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.8rem;
-  border-radius: var(--radius-full, 100px);
-  background: var(--bg-surface, #f5f5f5);
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
   color: var(--text-main);
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  border: var(--stroke-hairline, 1px) solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
 }
 
 .author-social-btn:hover {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
   transform: translateY(-1px);
 }
@@ -6656,7 +6783,7 @@ body.view-not-homepage #main-above-feed {
   display: none; /* mặc định ẩn, JS bật khi config cho phép */
   margin-top: 1.5rem;
   padding: 1.25rem 1.5rem;
-  border-radius: var(--radius-lg, 16px);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--primary) 8%, var(--bg-surface));
   border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
   display: flex;
@@ -6667,8 +6794,8 @@ body.view-not-homepage #main-above-feed {
 }
 
 [data-theme='dark'] .post-guest-callout {
-  background: rgba(var(--primary-rgb, 79, 124, 172), 0.1);
-  border-color: rgba(var(--primary-rgb, 79, 124, 172), 0.25);
+  background: rgba(var(--primary-rgb), 0.1);
+  border-color: rgba(var(--primary-rgb), 0.25);
 }
 
 .callout-text {
@@ -6685,8 +6812,8 @@ body.view-not-homepage #main-above-feed {
   gap: 0.4rem;
   padding: 0.55rem 1.25rem;
   background: var(--primary);
-  color: #fff;
-  border-radius: var(--radius-full, 100px);
+  color: var(--text-inverse);
+  border-radius: var(--radius-full);
   font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
@@ -6695,7 +6822,7 @@ body.view-not-homepage #main-above-feed {
 }
 
 .callout-btn:hover {
-  background: var(--primary-hover, var(--primary));
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -6708,10 +6835,10 @@ body.view-not-homepage #main-above-feed {
   align-items: center;
   gap: 0.4rem;
   padding: 0.65rem 1.4rem;
-  border-radius: var(--radius-full, 100px);
+  border-radius: var(--radius-full);
   background: transparent;
   color: var(--text-main);
-  border: var(--stroke-hairline, 1.5px) solid var(--border-color);
+  border: var(--stroke-hairline) solid var(--border-color);
   font-size: 0.9rem;
   font-weight: 600;
   font-family: inherit;
@@ -6724,10 +6851,10 @@ body.view-not-homepage #main-above-feed {
 
 .btn-guest-hero:hover {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: var(--primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(var(--primary-rgb, 79, 124, 172), 0.35);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.35);
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -6737,7 +6864,7 @@ body.view-not-homepage #main-above-feed {
 .sidebar-guest-card {
   margin-top: 1.5rem;
   padding: 1.25rem;
-  border-radius: var(--radius-lg, 16px);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
   border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
   text-align: center;
@@ -6746,7 +6873,7 @@ body.view-not-homepage #main-above-feed {
 .sidebar-guest-card .sidebar-widget-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-heading, var(--text-main));
+  color: var(--text-heading);
   margin-bottom: 0.5rem;
 }
 
@@ -6761,8 +6888,8 @@ body.view-not-homepage #main-above-feed {
   display: inline-block;
   padding: 0.5rem 1.2rem;
   background: var(--primary);
-  color: #fff;
-  border-radius: var(--radius-full, 100px);
+  color: var(--text-inverse);
+  border-radius: var(--radius-full);
   font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
@@ -6770,7 +6897,7 @@ body.view-not-homepage #main-above-feed {
 }
 
 .sidebar-cta-btn:hover {
-  background: var(--primary-hover, var(--primary));
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -7154,21 +7281,21 @@ body.view-not-homepage #main-above-feed {
               <!-- ── HOMEPAGE / ARCHIVE VIEW ── -->
               <b:if cond='data:view.isMultipleItems'>
                 <b:if cond='data:view.isLabelSearch'>
-                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary);'>
-                    <h2 id='search-page-title' style='margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
+                  <div class='search-label-header'>
+                    <h2 class='search-label-header-title' id='search-page-title' data-bilingual='true' expr:data-raw-label='data:view.search.label'><data:view.search.label/></h2>
                   </div>
                 <b:elseif cond='data:view.isSearch and data:view.search.query'/>
-                  <div class='search-label-header' style='margin-bottom: 1.5rem; padding: 1.1rem 1.35rem; background: var(--bg-card); border-radius: var(--radius-md); border-left: 3.5px solid var(--primary);'>
-                    <span style='font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;' data-bilingual='true'>Kết quả tìm kiếm cho | Search results for:</span>
-                    <h2 style='margin: 0.2rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);'><data:view.search.query/></h2>
+                  <div class='search-label-header'>
+                    <span class='search-label-header-eyebrow' data-bilingual='true'>Kết quả tìm kiếm cho | Search results for:</span>
+                    <h2 class='search-label-header-title'><data:view.search.query/></h2>
                   </div>
                 </b:if>
                 <b:if cond='data:posts.empty'>
-                  <div class='feed-empty-state' style='padding: 3.5rem 1rem; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 2rem;'>
-                    <span style='font-size: 2.5rem; display: block; margin-bottom: 0.75rem;'>📭</span>
-                    <h3 style='font-size: 1.15rem; color: var(--text-main); margin: 0 0 0.5rem;' data-bilingual='true'>Không tìm thấy bài viết nào | No posts found</h3>
-                    <p style='font-size: 0.85rem; margin: 0 0 1.25rem;' data-bilingual='true'>Chưa có bài viết nào thuộc danh mục này hoặc bài viết đã được di chuyển. | There are no posts in this category or they have been moved.</p>
-                    <a href='/' style='display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; color: var(--primary); background: var(--primary-light); border-radius: var(--radius-full); text-decoration: none;' data-bilingual='true'>← Về trang chủ | Back to home</a>
+                  <div class='feed-empty-state'>
+                    <span class='feed-empty-icon'>📭</span>
+                    <h3 class='feed-empty-heading' data-bilingual='true'>Không tìm thấy bài viết nào | No posts found</h3>
+                    <p class='feed-empty-desc' data-bilingual='true'>Chưa có bài viết nào thuộc danh mục này hoặc bài viết đã được di chuyển. | There are no posts in this category or they have been moved.</p>
+                    <a class='feed-empty-btn' href='/' data-bilingual='true'>← Về trang chủ | Back to home</a>
                   </div>
                 </b:if>
                 <div class='posts-feed' role='feed' id='posts-feed-container'>
@@ -7299,11 +7426,11 @@ body.view-not-homepage #main-above-feed {
 
                       <!-- ── CỘT TRÁI: TÔN CHỈ & HƯỚNG DẪN ── -->
                       <div class='contact-manifesto'>
-                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Trà Đá Blog | Write With Us</h1>
+                        <h1 class='contact-headline' data-bilingual='true'>Đồng Hành Cùng Blog | Write With Us</h1>
                         <p class='contact-description' data-bilingual='true'>
-                          Trà Đá Blog luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
+                          Chúng mình luôn chào đón những góc nhìn chân thực, sâu sắc về công nghệ,
                           phong cách sống, kiến trúc phần mềm và những chiêm nghiệm đời thường.
-                          | Trà Đá Blog welcomes genuine, insightful perspectives on technology,
+                          | We always welcome genuine, insightful perspectives on technology,
                           lifestyle, software architecture and everyday reflections.
                         </p>
 
@@ -7318,8 +7445,8 @@ body.view-not-homepage #main-above-feed {
                         <!-- Kênh liên hệ trực tiếp -->
                         <div class='contact-direct-row'>
                           <span class='contact-direct-label' data-bilingual='true'>Liên hệ trực tiếp | Direct contact:</span>
-                          <a class='contact-direct-link' href='mailto:namtruong.contact@gmail.com'>
-                            ✉️ namtruong.contact@gmail.com
+                          <a class='contact-direct-link' href='mailto:contact@yourblog.com'>
+                            ✉️ contact@yourblog.com
                           </a>
                         </div>
                       </div>
@@ -7873,10 +8000,10 @@ body.view-not-homepage #main-above-feed {
                   </script>
                   
                   <div class='sidebar-about-text lang-vi'>
-                    Chào bạn, đây là Trà Đá Blog — một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
+                    Chào bạn, đây là một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.
                   </div>
                   <div class='sidebar-about-text lang-en'>
-                    Welcome to Trà Đá Blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
+                    Welcome to my blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.
                   </div>
 
                   <div class='sidebar-socials'>
@@ -7914,7 +8041,7 @@ body.view-not-homepage #main-above-feed {
                     </b:loop>
                   </ul>
                 <b:else/>
-                  <p class='popular-posts-empty' style='color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
+                  <p class='popular-posts-empty'>✨ Các bài viết được quan tâm nhất sẽ hiển thị tại đây.</p>
                 </b:if>
               </div>
             </b:includable>
@@ -8037,13 +8164,13 @@ body.view-not-homepage #main-above-feed {
 <div class="guest-cta-config">
   <!-- Nút trên Banner Hero (MẶC ĐỊNH HIỆN: display:inline-flex, đổi thành display:none nếu muốn tắt) -->
   <a class="btn-guest-hero-config" href="/p/lien-he.html" style="display:inline-flex;">
-    <span data-bilingual="true">✍️ Viết cùng Trà Đá | ✍️ Write with us</span>
+    <span data-bilingual="true">✍️ Viết cùng chúng mình | ✍️ Write with us</span>
   </a>
 
   <!-- Callout chân bài viết (MẶC ĐỊNH ẨN: đổi display:none thành display:block để bật) -->
   <div class="post-guest-callout-config" style="display:none;">
     <span class="callout-text" data-bilingual="true">
-      Bạn muốn chia sẻ câu chuyện của mình trên Trà Đá Blog? | Want to share your thoughts on Trà Đá Blog?
+      Bạn muốn chia sẻ câu chuyện của mình cùng độc giả? | Want to share your thoughts with our readers?
     </span>
     <a class="callout-btn" href="/p/lien-he.html">
       <span data-bilingual="true">Gửi bài viết ➔ | Submit article ➔</span>
@@ -8062,7 +8189,7 @@ body.view-not-homepage #main-above-feed {
 <script>
   window.__CONTACT_CONFIG = {
     adapter: 'blogger', // Chọn adapter: blogger | formsubmit | gas
-    adminEmail: 'tradabanthesu@gmail.com', // Thay bằng email thật của Blog
+    adminEmail: 'contact@yourblog.com', // Thay bằng email thật của Blog
     gasWebhookUrl: '' // Bỏ trống nếu không dùng GAS
   };
 </script>
@@ -8313,7 +8440,7 @@ body.view-not-homepage #main-above-feed {
       relatedPosts: '📚 Bài Viết Liên Quan',
       commentsTitle: '💬 Bình Luận',
       aboutAuthor: 'Về tác giả',
-      authorBioDesc: 'Chào bạn, đây là Trà Đá Blog — một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.',
+      authorBioDesc: 'Chào bạn, đây là một góc nhỏ bình dị để tôi bày tỏ quan điểm, chia sẻ kiến thức và những trải nghiệm sống chân thực. Một điểm dừng chân để chúng ta cùng nhìn cuộc sống dưới những lăng kính thú vị hơn.',
       buyMeACoffee: '☕ Mời tôi ly cà phê',
       subscribeNewsletter: '💌 Đăng ký bản tin',
       newsletterTitle: 'Nhận bài viết mới',
@@ -8345,7 +8472,7 @@ body.view-not-homepage #main-above-feed {
       relatedPosts: '📚 Related Articles',
       commentsTitle: '💬 Comments',
       aboutAuthor: 'About the author',
-      authorBioDesc: 'Welcome to Trà Đá Blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.',
+      authorBioDesc: 'Welcome to my blog — a humble little corner where I express my perspectives, share knowledge, and document authentic life experiences. A pit stop for us to look at life through more interesting lenses.',
       buyMeACoffee: '☕ Buy me a coffee',
       subscribeNewsletter: '💌 Newsletter',
       newsletterTitle: 'Newsletter',
@@ -10412,35 +10539,12 @@ body.view-not-homepage #main-above-feed {
 
     var toast = document.createElement('div');
     toast.id = 'copied-toast';
+    toast.className = 'theme-floating-toast is-visible';
     toast.innerText = toastMsg;
-    toast.style.cssText = [
-      'position: fixed',
-      'bottom: 1.5rem',
-      'left: 50%',
-      'transform: translateX(-50%)',
-      'background: #0f172a',
-      'color: #fff',
-      'padding: 0.65rem 1.35rem',
-      'border-radius: 9999px',
-      'font-size: 0.88rem',
-      'font-weight: 600',
-      'z-index: 9999',
-      'box-shadow: 0 4px 20px rgba(0,0,0,0.3)',
-      'animation: fadeInUp 0.3s ease'
-    ].join(';');
-
-    // Inject keyframe once
-    if (!document.getElementById('toast-keyframe')) {
-      var style = document.createElement('style');
-      style.id = 'toast-keyframe';
-      style.textContent = '@keyframes fadeInUp { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }';
-      document.head.appendChild(style);
-    }
-
     document.body.appendChild(toast);
+
     setTimeout(function() {
-      toast.style.opacity = '0';
-      toast.style.transition = 'opacity 0.3s ease';
+      toast.classList.remove('is-visible');
       setTimeout(function() { toast.remove(); }, 350);
     }, 2200);
   }
@@ -10499,7 +10603,7 @@ body.view-not-homepage #main-above-feed {
         var email = emailInput.value.trim();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !emailRegex.test(email)) {
-          emailInput.style.borderColor = '#ef4444';
+          emailInput.style.borderColor = 'var(--danger)';
           emailInput.focus();
           setTimeout(function() { emailInput.style.borderColor = ''; }, 2500);
           return;
@@ -10511,7 +10615,7 @@ body.view-not-homepage #main-above-feed {
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.innerText = (lang === 'en') ? '✓ Subscribed!' : '✓ Đã Đăng Ký!';
-          submitBtn.style.background = '#10b981';
+          submitBtn.classList.add('theme-btn-success-state');
         }
 
         // Show toast
@@ -10520,11 +10624,13 @@ body.view-not-homepage #main-above-feed {
           : '🎉 Cảm ơn bạn! Đã đăng ký nhận bản tin thành công.';
         
         var toast = document.createElement('div');
-        toast.className = 'newsletter-success-toast';
+        toast.className = 'theme-floating-toast theme-floating-toast--success is-visible';
         toast.innerText = successMsg;
-        toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:0.75rem 1.5rem;border-radius:9999px;font-weight:700;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.25);';
         document.body.appendChild(toast);
-        setTimeout(function() { toast.remove(); }, 3500);
+        setTimeout(function() {
+          toast.classList.remove('is-visible');
+          setTimeout(function() { toast.remove(); }, 350);
+        }, 3500);
 
         setTimeout(function() {
           closeModal();
@@ -10532,7 +10638,7 @@ body.view-not-homepage #main-above-feed {
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerText = origText;
-            submitBtn.style.background = '';
+            submitBtn.classList.remove('theme-btn-success-state');
           }
         }, 1500);
       });
@@ -12076,7 +12182,8 @@ body.view-not-homepage #main-above-feed {
     });
 
     let seriesLabels = Array.from(labelMap.values());
-    if (seriesLabels.length === 0) {
+    const isLocalDev = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    if (seriesLabels.length === 0 && isLocalDev) {
       seriesLabels = Object.keys(MOCK_SERIES_CATALOG);
     }
 
@@ -12092,7 +12199,8 @@ body.view-not-homepage #main-above-feed {
       posts = [];
     }
 
-    if (!posts || posts.length === 0) {
+    const isLocalDev = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    if ((!posts || posts.length === 0) && isLocalDev) {
       const mock = MOCK_SERIES_CATALOG[seriesLabel] || Object.values(MOCK_SERIES_CATALOG)[0];
       if (mock && mock.posts) {
         posts = mock.posts.map(p => Object.assign({}, p));
@@ -12189,6 +12297,10 @@ body.view-not-homepage #main-above-feed {
 
   async function renderSeriesContainerView(container, seriesLabel, limit, widgetTitle) {
     const posts = await fetchSeriesPosts(seriesLabel);
+    if (!posts || posts.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
     const seriesTitle = formatSeriesTitle(seriesLabel);
     const lang = (() => { try { return localStorage.getItem('user_lang') || 'vi'; } catch(e) { return 'vi'; } })();
     const shuffleRawLabel = 'Đổi tuyến bài | Switch series';
@@ -13722,16 +13834,14 @@ body.view-not-homepage #main-above-feed {
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'theme-toast-notification';
-      toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#0f172a;color:#fff;padding:0.85rem 1.4rem;border-radius:999px;font-size:0.92rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:99999;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:0.5rem;border:1px solid rgba(255,255,255,0.15);';
+      toast.className = 'theme-floating-toast';
       document.body.appendChild(toast);
     }
     toast.textContent = msg;
-    toast.style.transform = 'translateY(0)';
-    toast.style.opacity = '1';
+    toast.classList.add('is-visible');
     clearTimeout(toast._timer);
     toast._timer = setTimeout(function() {
-      toast.style.transform = 'translateY(20px)';
-      toast.style.opacity = '0';
+      toast.classList.remove('is-visible');
     }, 3500);
   }
 
@@ -13747,7 +13857,7 @@ body.view-not-homepage #main-above-feed {
           if (input) {
             setTimeout(function() {
               input.focus();
-              input.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.4)';
+              input.style.boxShadow = '0 0 0 3px rgba(var(--primary-rgb), 0.4)';
               setTimeout(function() { input.style.boxShadow = ''; }, 1600);
             }, 500);
           }
@@ -13767,7 +13877,7 @@ body.view-not-homepage #main-above-feed {
         var email = input.value.trim();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !emailRegex.test(email)) {
-          input.style.borderColor = '#ef4444';
+          input.style.borderColor = 'var(--danger)';
           input.focus();
           showToast('⚠️ Vui lòng nhập địa chỉ email hợp lệ!');
           setTimeout(function() { input.style.borderColor = ''; }, 2500);
@@ -13779,9 +13889,7 @@ body.view-not-homepage #main-above-feed {
         if (btn) {
           btn.disabled = true;
           btn.innerHTML = '✓ Đã Đăng Ký!';
-          btn.style.backgroundColor = '#10b981';
-          btn.style.borderColor = '#10b981';
-          btn.style.color = '#ffffff';
+          btn.classList.add('theme-btn-success-state');
         }
         input.value = '';
         showToast('🎉 Cảm ơn bạn! Đã ghi nhận email đăng ký bản tin thành công.');
@@ -13790,9 +13898,7 @@ body.view-not-homepage #main-above-feed {
           if (btn) {
             btn.disabled = false;
             btn.innerHTML = origText;
-            btn.style.backgroundColor = '';
-            btn.style.borderColor = '';
-            btn.style.color = '';
+            btn.classList.remove('theme-btn-success-state');
           }
         }, 4000);
       });
@@ -13970,9 +14076,9 @@ body.view-not-homepage #main-above-feed {
         : nameStr.slice(0, 2).toUpperCase();
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
         '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">' +
-        '<rect width="80" height="80" rx="40" fill="#4f7cac"/>' +
+        '<rect width="80" height="80" rx="40" fill="#2563eb"/>' +
         '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" ' +
-        'font-family="Be Vietnam Pro,sans-serif" font-size="28" font-weight="700" fill="#fff">' +
+        'font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="700" fill="#ffffff">' +
         initials + '</text></svg>'
       );
     }
@@ -14073,7 +14179,7 @@ body.view-not-homepage #main-above-feed {
         btn.href = configBtn.getAttribute('href') || '/p/lien-he.html';
         btn.setAttribute('data-bilingual', 'true');
         var span = configBtn.querySelector('[data-bilingual]');
-      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng Trà Đá | ✍️ Write with us';
+      var rawLabel = span ? span.textContent.trim() : '✍️ Viết cùng chúng mình | ✍️ Write with us';
       var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('user_lang')) || 'vi';
       btn.setAttribute('data-bilingual', 'true');
       btn.setAttribute('data-raw-label', rawLabel);
@@ -14159,7 +14265,7 @@ body.view-not-homepage #main-above-feed {
     var cfg = window.__CONTACT_CONFIG || {};
 
     // ── 0. Thay thế email hiển thị động ─────────────────────────────────
-    var adminEmail = cfg.adminEmail || 'tradabanthesu@gmail.com';
+    var adminEmail = cfg.adminEmail || 'contact@yourblog.com';
     var emailLink = app.querySelector('.contact-direct-link');
     if (emailLink) {
       emailLink.href = 'mailto:' + adminEmail;
