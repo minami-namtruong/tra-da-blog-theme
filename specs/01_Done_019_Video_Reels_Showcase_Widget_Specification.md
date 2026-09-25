@@ -15,23 +15,24 @@ Trong kỷ nguyên tiêu thụ nội dung đa phương tiện, các nền tảng
 - Tác giả thường xuyên sản xuất nội dung kết hợp: bài viết phân tích chuyên sâu đi kèm clip ngắn, video đánh giá thực tế, hoặc tập âm thanh tâm sự (voice/podcast).
 - Tác giả triển khai **chiến lược bán chéo nội dung (Cross-sale Content & Affiliate Marketing)** trên diện rộng: phần lớn bài viết đều gắn các đường link video giới thiệu hoặc voice chia sẻ sản phẩm / dịch vụ.
 - Cần một tiện ích **Trình diễn Video & Voice Reels (Video & Voice Reels Showcase Widget)** có giao diện trực quan, linh động ở mọi vị trí trên blog, vừa gia tăng thời gian độc giả ở lại trang (Time-on-Site), vừa tối ưu hóa tỷ lệ chuyển đổi nhấp chuột vào bài viết bán hàng.
-- **Trăn trở cốt lõi về trải nghiệm (UX Core Problem):** Nếu khung hình Reels chỉ hiển thị ảnh đại diện tĩnh (static thumbnail) trơ trọi kèm nút Play, độc giả sẽ lướt qua như một bức ảnh thông thường, làm mất hoàn toàn tính hấp dẫn của định dạng Reels. Widget **phải chuyển động sống động (Living Canvas)**, mang đầy đủ các dấu hiệu nhận diện đặc trưng của Reels (video preview khi rê chuột, sóng âm thanh nhảy múa, vạch story, nốt nhạc chạy chữ, rạp chiếu Reels Lightbox chuyên dụng) mà vẫn không gây giật lag trang.
+- **Trăn trở cốt lõi về trải nghiệm (UX Core Problem):** Nếu khung hình Reels chỉ hiển thị ảnh đại diện tĩnh (static thumbnail) trơ trọi kèm nút Play, độc giả sẽ lướt qua như một bức ảnh thông thường, làm mất hoàn toàn tính hấp dẫn của định dạng Reels. Widget **phải chuyển động sống động (Living Canvas)**, mang đầy đủ các dấu hiệu nhận diện đặc trưng của Reels (hiệu ứng hover Cinematic Zoom phóng to mượt mà, sóng âm thanh nhảy múa, nốt nhạc chạy chữ, rạp chiếu Reels Lightbox chuyên dụng) mà vẫn không gây giật lag trang.
 - **Tiến hóa thiết kế (Design Evolution v2.0):** Thay vì các khung thẻ hộp thô cứng có quá nhiều viền bao quanh (double border) hoặc kích thước chưa cân đối, giao diện được nâng cấp toàn diện theo ngôn ngữ thiết kế **Facebook Reels Feed**:
-  1. Thẻ Unibody Full-Bleed 175px chuẩn 9:16 với Title Overlay chìm trên nền dải chuyển màu đen (dark gradient).
+  1. Thẻ Unibody Full-Bleed 175px chuẩn 9:16 với Title Overlay chìm trên nền dải chuyển màu đen (dark gradient), mép trên thoáng sạch không có vạch kẻ thừa.
   2. Khung hộp Facebook Reels Shelf thanh lịch (`border: 1px solid var(--border-color); border-radius: 14px`), header tối giản gồm icon clapperboard và tiêu đề "Video" cùng nút menu `···`.
   3. Cột bên Sidebar tràn viền 100% (Edge-to-Edge) triệt tiêu viền thừa, tự động xoay tua video sau 6 giây (Auto-advance) kèm tính năng Tạm dừng thông minh (Smart Pause) và cặp nút điều hướng tròn kính mờ chỉ xuất hiện khi rê chuột (Hover Reveal).
   4. Căn chỉnh mép trên (Top alignment) đồng trục hoàn hảo giữa Main Content và Sidebar.
 
 ### 1.2. Mục tiêu kỹ thuật cốt lõi
-1. **Tích hợp mở rộng vào hệ thống `special-posts` hiện có:** Kế thừa kiến trúc **Pluggable Pattern Strategy** sẵn có trong `src/scripts/special-posts.js` (`pattern: reels`), sử dụng chung bộ nạp feed song song, cơ chế cache `sessionStorage` (60 phút), parser cấu hình và bộ chống giật khung hình (Zero-CLS Skeleton Shimmer).
+1. **Tích hợp mở rộng vào hệ thống `special-posts` hiện có:** Kế thừa kiến trúc **Pluggable Pattern Strategy** sẵn có trong `src/scripts/special-posts.js` (`pattern: reels`), sử dụng chung bộ nạp feed song song, kế thừa cơ chế cache `sessionStorage` dùng chung của theme (có thể cấu hình thời gian sống qua `window.__EDITORIAL_CACHE_TTL__`, mặc định 60 phút), parser cấu hình và bộ chống giật khung hình (Zero-CLS Skeleton Shimmer).
 2. **Khung hình đứng 9:16 Unibody 175px chuẩn Facebook Reels (Living Canvas):**
    - Thiết kế thẻ Unibody 175px: Toàn bộ ảnh thumbnail/video phủ trọn 100% diện tích thẻ từ trên xuống dưới (`aspect-ratio: 9 / 16; width: 175px; border-radius: 12px; background: #000`).
    - Tiêu đề bài viết phủ chìm trực tiếp lên thẻ (Title Overlay) trên nền dải chuyển màu đen mờ mịn ở đáy thẻ (`linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 60%, transparent 100%)`).
    - Nút menu hành động 3 chấm dọc `⋮` ở góc trên bên phải thẻ.
    - Nút Play trung tâm có hiệu ứng xung nhịp (Pulse ring animation) kích thước 42px.
-   - **Hover / Smart In-View Preview:** Tự động phát preview ngắn khi rê chuột (YouTube Animated WebP 6s hoặc MP4 video loop câm) mà không làm tốn tài nguyên.
+   - **Hover Cinematic Zoom & Micro-interactions:** Phóng to nhẹ mượt mà (`scale(1.06)`), nút Play tỏa ánh hào quang khi rê chuột.
+   - **Khung Poster Nhận Diện Thương Hiệu (Branded Fallback Poster):** Tự động render poster màu gradient phong cách mạng xã hội (Facebook Reel, TikTok neon, MP4, Audio) khi bài viết chưa đính kèm ảnh đại diện.
    - **Voice Equalizer Waveform:** Sóng nhạc dao động liên tục đối với các tệp Audio/Podcast để độc giả nhận diện tức thì đây là file âm thanh đang sẵn sàng nghe.
-   - **Bộ nhận diện chuẩn Reels:** Vạch tiến trình Story ở mép trên, thời lượng video (`0:45`), và dòng chữ âm thanh chạy ngang (Ticker Marquee).
+   - **Bộ nhận diện chuẩn Reels:** Huy hiệu `🔥 HOT`, thời lượng video (`0:45`), và dòng chữ âm thanh chạy ngang (Ticker Marquee). Giao diện mép trên tinh giản, thoáng đãng không dùng vạch kẻ phân đoạn.
 3. **Cơ chế tương thích tỉ lệ khung hình (16:9 Landscape vs 9:16 Portrait Shorts):**
    - Áp dụng kỹ thuật **Blurred Background Fill** chuẩn mực của TikTok/Reels đối với các video ngang 16:9 truyền thống của YouTube: Giữ nguyên vẹn 100% hình ảnh không bị cắt xén, phủ nền mờ nghệ thuật phía sau và biến khoảng trống trên/dưới thành khu vực an toàn cho tiêu đề và tương tác.
    - Tràn viền 100% (`object-fit: cover`) đối với các video vốn dĩ đã là tỉ lệ dọc 9:16 (YouTube Shorts, TikTok).
@@ -71,7 +72,7 @@ Tuân thủ chuẩn quy tắc nhãn tính năng tiền tố `@` của theme:
   2. Bóc tách link media từ nội dung HTML của từng bài (đảm bảo mỗi bài viết chỉ xuất hiện tối đa 1 khung hình Reel).
   3. Áp dụng thuật toán Fisher-Yates Shuffle để xáo trộn ngẫu nhiên từng giỏ bài.
   4. Lấy các bài Hot đưa vào vị trí ưu tiên (Vị trí 1, 2) và bù các bài Thường vào các vị trí còn lại theo tỷ lệ 60:40 cho đến khi đủ số khung `limit`.
-- **Cơ chế Cache `sessionStorage`:** Toàn bộ kết quả bóc tách được lưu tạm trong trình duyệt trong **60 phút** (1 giờ). Độc giả chuyển đổi giữa các bài viết trong phiên đọc sẽ không tốn bất kỳ request mạng nào (tốc độ hiển thị 0ms).
+- **Cơ chế Cache `sessionStorage`:** Kết quả bóc tách được lưu tạm trong trình duyệt theo cơ chế cache dùng chung của theme (mặc định 60 phút, có thể tùy biến qua `window.__EDITORIAL_CACHE_TTL__`). Độc giả chuyển đổi giữa các bài viết trong phiên đọc sẽ không tốn bất kỳ request mạng nào (tốc độ hiển thị 0ms).
 
 ---
 
@@ -81,27 +82,26 @@ Tuân thủ chuẩn quy tắc nhãn tính năng tiền tố `@` của theme:
 
 | Nền tảng | Dạng link hỗ trợ trong bài viết | Quy tắc trích xuất (Extraction Rule) | Nguồn Thumbnail & Preview Động | Phương thức phát khi Click Play |
 | :--- | :--- | :--- | :--- | :--- |
-| **YouTube (Chuẩn & Shorts)** | • `youtube.com/watch?v={id}`<br>• `youtu.be/{id}`<br>• `youtube.com/shorts/{id}`<br>• `youtube.com/embed/{id}` | Regex bắt Video ID (11 ký tự):<br>`/(?:youtu\.be\/\|v\/\|u\/\w\/\|embed\/\|shorts\/\|watch\?v=)([^#&?]*)/` | **Ảnh tĩnh:** `i.ytimg.com/vi/{id}/hqdefault.jpg`<br>**Ảnh động preview 6s (Khi hover):** `i.ytimg.com/an_webp/{id}/mqdefault_6s.webp` | Mở Reels Theater Modal hoặc chèn `<iframe>` với `src="https://www.youtube.com/embed/{id}?autoplay=1&playsinline=1"` trực tiếp tại khung |
-| **TikTok** | • `tiktok.com/@{user}/video/{id}` | Regex bắt TikTok Video ID:<br>`/tiktok\.com\/@[\w.-]+\/video\/(\d+)/` | Ảnh đại diện bài viết (Featured Image) | Chèn iframe embed chuẩn của TikTok: `https://www.tiktok.com/embed/v2/{id}` |
-| **Facebook Reels** | • `facebook.com/reel/{id}`<br>• `facebook.com/watch/?v={id}` | Bắt toàn bộ URL hợp lệ của Facebook | Ảnh đại diện bài viết (Featured Image) | Chèn iframe Plugin Facebook Video Player chính thức |
-| **Direct Video (MP4 / WebM)** | • Thẻ `<video src="...">`<br>• Đường link file `.mp4`, `.webm` | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp4\|webm))/i` | Thẻ `<video muted loop playsinline preload="metadata">` tự động phát câm khi rê chuột hoặc in-view | Bật âm thanh, hiện full controls HTML5 video |
+| **YouTube (Chuẩn & Shorts)** | • `youtube.com/watch?v={id}`<br>• `youtu.be/{id}`<br>• `youtube.com/shorts/{id}`<br>• `youtube.com/embed/{id}` | Regex bắt Video ID (11 ký tự):<br>`/(?:youtu\.be\/\|v\/\|u\/\w\/\|embed\/\|shorts\/\|watch\?v=)([^#&?]*)/` | **Ảnh tĩnh:** `i.ytimg.com/vi/{id}/hqdefault.jpg`<br>**Hiệu ứng hover:** Cinematic Zoom `scale(1.06)` & Play Pulse Ring | Mở Reels Theater Modal hoặc chèn `<iframe>` với `src="https://www.youtube.com/embed/{id}?autoplay=1&playsinline=1"` trực tiếp tại khung |
+| **TikTok** | • `tiktok.com/@{user}/video/{id}` | Regex bắt TikTok Video ID:<br>`/tiktok\.com\/@[\w.-]+\/video\/(\d+)/` | Ảnh đại diện bài viết hoặc **Branded TikTok Poster** (Neon Gradient & Logo) nếu chưa có ảnh | Chèn iframe embed chuẩn TikTok, tích hợp sẵn **Nút Bật/Tắt Tiếng (`unMute`)** qua `postMessage` |
+| **Facebook Reels** | • `facebook.com/reel/{id}`<br>• `facebook.com/watch/?v={id}` | Bắt toàn bộ URL hợp lệ của Facebook | Ảnh đại diện bài viết hoặc **Branded Facebook Poster** (Gradient xanh & Logo) nếu chưa có ảnh | Chèn iframe `plugins/video.php` chính thức của Meta; người xem chạm 1 lần vào biểu tượng Loa (🔇) để bật tiếng |
+| **Direct Video (MP4 / WebM)** | • Thẻ `<video src="...">`<br>• Đường link file `.mp4`, `.webm` | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp4\|webm))/i` | Ảnh đại diện bài viết hoặc **Branded Video Poster** | Bật âm thanh, hiện full controls HTML5 video |
 | **Audio / Voice / Podcast** | • Thẻ `<audio src="...">`<br>• Đường link file `.mp3`, `.m4a`<br>• Link Spotify / SoundCloud | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp3\|m4a))/i` | Ảnh đại diện bài viết kết hợp **Hiệu ứng sóng âm dao động (Equalizer Waveform)** nhảy múa liên tục | Render thẻ HTML5 `<audio src="..." controls autoplay>` hoặc mini embed |
 
-### 3.2. Cơ Chế Preview Chuyển Động Sống Động (Living Canvas & Hover Engine)
+### 3.2. Cơ Chế Tương Tác Sống Động (Living Canvas & Hover Engine)
 
 Widget tích hợp hệ thống hiệu ứng chuyển động đa tầng:
 
-#### A. Video Preview Chuyển Động (Hover & Smart In-View)
+#### A. Hiệu Ứng Tương Tác Vi Mô (Cinematic Zoom & Hover Engine)
 - **Trên máy tính (Desktop Hover):**
   - Khi chuột chưa rê vào: Khung hình hiển thị ảnh thumbnail sắc nét (HQ).
-  - Khi rê chuột vào (`mouseenter`):
-    - Đối với YouTube: Script tự động tráo ảnh sang ảnh động WebP 6 giây (`mqdefault_6s.webp`) của Google. Độc giả thấy ngay chuyển động của video clip!
-    - Đối với MP4: Video tự động chạy mượt mà không tiếng (`muted .play()`).
-  - Khi rời chuột (`mouseleave`): Trở về ảnh tĩnh hoặc tạm dừng để tiết kiệm CPU.
-- **Trên điện thoại di động (Smart In-View IntersectionObserver):**
-  - Do màn hình cảm ứng không có chuột rê, widget sử dụng `IntersectionObserver` với ngưỡng `threshold: 0.7`.
-  - Khung hình nào đang trượt vào **chính giữa màn hình** sẽ tự động kích hoạt preview chuyển động câm.
-  - Các khung hình lệch sang 2 bên tự động dừng lại, đảm bảo điện thoại luôn mượt và mát máy.
+  - Khi rê chuột vào (`mouseenter` / `:hover`):
+    - Thẻ card nhấc nổi nhẹ (`translateY(-3px)`), ảnh đại diện phóng to mượt mà (`transform: scale(1.06)`).
+    - Nút Play trung tâm sáng rực và phóng to (`transform: scale(1.14)`), các vòng sóng xung nhịp (`sp-reel-play-pulse`) tỏa ra dồn dập.
+    - Không sử dụng file `an_webp` cũ của Google để tránh mã lỗi HTTP 403 Forbidden do YouTube siết chặt chính sách bảo mật máy chủ.
+  - Khi rời chuột (`mouseleave`): Trở về kích thước ban đầu mượt mà, giải phóng tài nguyên CPU.
+- **Trên điện thoại di động (Smart In-View Optimization):**
+  - Sử dụng CSS thuần tối ưu GPU, không chạy script nền nặng nề, đảm bảo thiết bị di động luôn mượt và mát máy.
 
 #### B. Trực Quan Hóa Âm Thanh (Audio Equalizer Waveform & Vinyl Disc)
 - Đối với các bài viết có file âm thanh/voice:
@@ -110,8 +110,8 @@ Widget tích hợp hệ thống hiệu ứng chuyển động đa tầng:
   - **Dòng chữ nhạc chạy ngang (Audio Marquee Ticker):** Chạy dòng text `♫ Âm thanh bài viết - Trà Đá Blog...` kèm icon nốt nhạc rung rinh.
 
 #### C. Bộ Nhận Diện Chi Tiết Chuẩn Reels (Reels Visual Cues)
-1. **Thanh vạch Story ở mép trên (Story Progress Bars):** 3–4 vạch trắng bán trong suốt trên đỉnh khung hình tạo cảm giác xem thước phim ngắn.
-2. **Huy hiệu thời lượng (Duration Badge):** Ví dụ `🎬 0:45` hoặc `🎙️ 2:15` hiển thị rõ ràng ở góc trên bên trái.
+1. **Mép trên tinh giản & thoáng đãng:** Không dùng vạch kẻ Story phân đoạn, giúp ảnh thumbnail hiển thị trọn vẹn, không bị rối mắt.
+2. **Huy hiệu nổi bật (Top Badges):** Huy hiệu nhận diện `🔥 HOT` cho video chiến dịch, huy hiệu thời lượng (ví dụ `🎬 0:45` hoặc `🎙️ 2:15`) hiển thị rõ nét ở góc trên bên trái.
 3. **Nút menu 3 chấm dọc (`⋮`):** Nằm ở góc trên bên phải thẻ, tăng tính chân thực chuẩn giao diện Reels.
 4. **Nút Play phát xung nhịp (Pulse Animation):** Nút Play trung tâm có hiệu ứng sóng mờ tỏa ra liên tục (`pulse ring animation`), kích thích hành vi nhấp chuột của độc giả.
 5. **Title Overlay đáy thẻ:** Tiêu đề bài viết phủ chìm trên dải màu chuyển tối ở chân thẻ, kèm nút CTA chuyển đổi cao.
@@ -128,7 +128,7 @@ Widget áp dụng giải pháp **"Blurred Background Fill" (Nền Mờ Nghệ Th
 
 ```
 ┌──────────────────────────────────────┐
-│ [▬ ▬ ▬ ▬]              [ 🎬 03:45 ]  │  <-- Nửa trên: Badge + Vạch Story
+│ [ 🎬 03:45 ]                           │  <-- Nửa trên: Huy hiệu thời lượng / HOT
 │                                      │
 │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  <-- Lớp nền mờ nghệ thuật
 │ ┌──────────────────────────────────┐ │      (Chính là video/ảnh được zoom to
@@ -139,7 +139,7 @@ Widget áp dụng giải pháp **"Blurred Background Fill" (Nền Mờ Nghệ Th
 │ └──────────────────────────────────┘ │
 │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                      │
-│ [🔥 HOT REEL]                        │  <-- Nửa dưới: Tận dụng khoảng trống
+│ [🔥 HOT]                             │  <-- Nửa dưới: Tận dụng khoảng trống
 │ Tiêu đề bài viết bán chéo...         │      Title Overlay phủ chìm trên nền đen
 │ [ Xem bài viết & Ưu đãi ➔ ]          │  <-- Nút CTA chuyển đổi cao
 └──────────────────────────────────────┘
@@ -193,7 +193,7 @@ Widget áp dụng giải pháp **"Blurred Background Fill" (Nền Mờ Nghệ Th
 - **Tính năng Tạm dừng thông minh (Smart Pause):**
   - Tự động dừng bộ đếm 6s khi người dùng rê chuột vào card (`mouseenter`), khi đang mở rạp chiếu modal, hoặc khi video đang phát trực tiếp.
   - Tiếp tục đếm khi người dùng rời chuột (`mouseleave`).
-- **Thanh Story Progress Bars đồng bộ:** Thanh vạch Story trên đỉnh thẻ chạy tiến trình đồng bộ theo nhịp 6 giây và tạm dừng theo trạng thái hover.
+- **Giao diện mép trên tinh giản:** Không dùng vạch kẻ Story phân đoạn, giữ trọn vẹn 100% diện tích ảnh bìa sắc nét.
 - **Nút điều hướng Hover Reveal:**
   - Cặp nút tròn kính mờ Prev / Next (`.sp-reels-single-nav`) ẩn mặc định (`opacity: 0; pointer-events: none`).
   - Chỉ hiện mượt mà khi người dùng rê chuột vào card (`:hover`), cho phép chủ động bấm lướt clip bất cứ lúc nào.
@@ -221,7 +221,7 @@ Người dùng có thể cấu hình widget bằng cách gõ cú pháp ngắn g�
 | **`fetch-count`** | Integer | `40` | `10` đến `100` | Số lượng bài viết nạp về từ Blogger Feed API để bóc tách video. |
 | **`sort`** | Enum | `random` | `random` \| `latest` \| `oldest` | Thứ tự hiển thị các khung: ngẫu nhiên, mới nhất, hoặc cũ nhất. |
 | **`labels`** | String | `@video` | Tên nhãn | Nhãn bài viết dùng để truy vấn feed. |
-| **`hot-label`** | String | `@video-hot` | Tên nhãn | Nhãn bài viết ưu tiên cho chiến dịch bán chéo. |
+| **`hot-label`** | String | `@video-hot` | Tên nhãn | Nhãn bài viết ưu tiên cho chiến dịch bán chéo (`🔥 HOT`). |
 | **`hot-ratio`** | Percentage | `60%` | `0%` đến `100%` | Tỷ lệ ưu tiên cho các bài Hot (tự động bù trừ nếu không đủ bài). |
 | **`extract`** | Enum | `first` | `first` \| `random` | Cách chọn video khi bài viết có nhiều clip: lấy clip đầu tiên hay bốc ngẫu nhiên. |
 | **`media`** | Enum | `all` | `all` \| `video` \| `audio` | Bộ lọc loại phương tiện: hiển thị cả video và audio, hoặc chỉ lấy 1 loại. |
@@ -267,14 +267,17 @@ cta-text: Nghe ngay ➔
    - Module bóc tách media: `extractPostMedia(post, opts)` (hỗ trợ YouTube Shorts, YouTube thường, TikTok, FB, MP4, MP3).
    - Module `renderReelsWidget(container, opts)`:
      - Tự động nhận diện `inSidebar` để gắn class `.sidebar-widget--edge-to-edge`.
-     - Phân loại Hot/Regular, thuật toán Fisher-Yates Shuffle, tỷ lệ 60:40.
-     - Dựng cấu trúc thẻ Unibody 175px với Title Overlay, menu 3 chấm dọc `⋮`, vạch Story, nút Play Pulse.
+     - Phân loại Hot/Regular, thuật toán Fisher-Yates Shuffle, tỷ lệ 60:40, huy hiệu `🔥 HOT`.
+     - Dựng cấu trúc thẻ Unibody 175px với Title Overlay, menu 3 chấm dọc `⋮`, nút Play Pulse; loại bỏ vạch Story để mép trên thông thoáng.
+     - Tự động sinh Branded Fallback Poster mang logo mạng xã hội khi bài viết chưa đính kèm ảnh đại diện.
+     - Bộ lọc Strict Label Filtering: Bắt buộc bài viết có nhãn `@video` hoặc `@video-hot`.
      - Khởi tạo bộ đếm thời gian 6s Auto-advance với Smart Pause (pause on hover / modal open / inline play) và cặp nút chuyển clip Hover Reveal trong chế độ `single`.
-     - Khởi tạo Reels Lightbox Theater Modal với điều hướng phím mũi tên (`ArrowUp`/`ArrowDown`/`ArrowLeft`/`ArrowRight`), cử chỉ vuốt touch (swipe up/down) và nút CTA.
+     - Khởi tạo Reels Lightbox Theater Modal với điều hướng phím mũi tên (`ArrowUp`/`ArrowDown`/`ArrowLeft`/`ArrowRight`), cử chỉ vuốt touch (swipe up/down), nút CTA và nút Bật tiếng TikTok qua `postMessage`.
 2. **[src/styles/special-posts.css](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/styles/special-posts.css):**
    - `.sp-reels-shelf`: Khung hộp Facebook Reels Shelf có viền `1px solid var(--border-color)`, bo góc `14px`, `background: var(--bg-card)`.
    - `.sp-reels-header`: Header gồm icon clapperboard + tiêu đề "Video" + nút `···`.
    - `.sp-reel-card`: Thẻ Unibody kích thước `175px`, tỷ lệ `9 / 16`, bo góc `12px`, `background: #000`.
+   - `.sp-reel-thumb-poster`: Poster chuyển sắc nhận diện thương hiệu cho Facebook, TikTok, MP4, Audio khi bài viết chưa có thumbnail.
    - `.sp-reel-title-overlay`: Lớp phủ tiêu đề chìm trên nền dải chuyển màu đen ở đáy thẻ.
    - `.sp-reels-nav-btn`: Cặp nút tròn màu trắng nổi khối 40px lơ lửng hai mép thẻ.
    - `.sidebar-widget--edge-to-edge`, `.sidebar-widget:has(.pattern-reels)`: Triệt tiêu viền, padding và bóng đổ của widget sidebar.
@@ -283,27 +286,30 @@ cta-text: Nghe ngay ➔
    - `.sp-reels-modal`: Giao diện rạp chiếu Reels Lightbox Theater Modal toàn màn hình với `backdrop-filter: blur(16px)`.
 3. **[src/styles/main.css](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/styles/main.css):**
    - Bổ sung quy tắc `#main-above-feed > :first-child { margin-top: 0 !important; }` để căn mép trên của widget đầu tiên thẳng hàng hoàn hảo với Cột bên Sidebar.
-4. **[src/preview.html](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/preview.html):**
+4. **[src/template.xml](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/template.xml):**
+   - Bổ sung `<b:section id='top-wide-section' name='Tiện Ích Toàn Chiều Rộng Đầu Trang (Top Full Width)' showaddelement='yes'>` cùng widget mặc định `HTML19` (`🎬 Video &amp; Reels`) nằm độc lập giữa `category-tabs-section` và `layout-grid`.
+5. **[src/preview.html](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/preview.html):**
    - Cung cấp demo trực quan của cả 2 chế độ:
-     - Widget Slider Facebook Reels Feed ở khu vực `main-above-feed`.
+     - Widget Slider Facebook Reels Feed toàn chiều rộng tại `#top-wide-section` (tràn 100% container từ lề trái sang lề phải giữa Category Tabs và nội dung bài viết).
      - Widget Reels Single Edge-to-Edge tự động xoay tua ở Cột bên Sidebar.
-5. **[scripts/build.js](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/scripts/build.js):**
+6. **[scripts/build.js](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/scripts/build.js):**
    - Tự động biên dịch mã nguồn thành [dist/theme.xml](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/dist/theme.xml).
 
 ---
 
 ## 7. TIÊU CHÍ NGHIỆM THU (ACCEPTANCE CRITERIA)
 
-- [x] **AC-1 (Thẻ Unibody 175px chuẩn Facebook Reels):** Các khung video hiển thị đúng tỉ lệ dọc 9:16 (`width: 175px`), hình ảnh tràn viền unibody, Title Overlay phủ chìm trên dải gradient đen ở đáy thẻ, nút menu 3 chấm dọc `⋮` ở góc trên.
+- [x] **AC-1 (Thẻ Unibody 175px chuẩn Facebook Reels):** Các khung video hiển thị đúng tỉ lệ dọc 9:16 (`width: 175px`), hình ảnh tràn viền unibody, Title Overlay phủ chìm trên dải gradient đen ở đáy thẻ, nút menu 3 chấm dọc `⋮` ở góc trên, mép trên tinh giản không vạch kẻ thừa.
 - [x] **AC-2 (Nhận diện Media đa nguồn):** Trích xuất chính xác Video ID và ảnh thumbnail HD từ các link YouTube (cả Shorts và thường), TikTok, Facebook, MP4 và MP3.
 - [x] **AC-3 (Kỹ thuật Blurred Background Fill 16:9):** Đối với video ngang 16:9, video hiển thị sắc nét ở giữa không bị crop, nền mờ nghệ thuật phủ xung quanh. Đối với Shorts/TikTok 9:16, hiển thị tràn viền full-bleed.
-- [x] **AC-4 (Preview động khi Hover / In-View):** Khi rê chuột vào khung YouTube, ảnh tĩnh chuyển đổi sang ảnh động WebP 6s xem trước mượt mà; với MP4 thì tự động phát video câm; trên mobile khung chính giữa tự động kích hoạt.
+- [x] **AC-4 (Hiệu ứng Hover Cinematic Zoom & Play Pulse):** Khi rê chuột vào khung video, ảnh đại diện phóng to mượt mà chuẩn điện ảnh (`scale(1.06)`), nút Play trung tâm tỏa sáng rực rỡ và phát xung nhịp dồn dập (`pulse ring`); với MP4 tự phát video câm.
 - [x] **AC-5 (Sóng âm thanh Equalizer cho Voice):** Đối với tệp Voice/Audio/Podcast, hiển thị dải sóng nhạc Equalizer dao động nhịp nhàng và icon đĩa nhạc quay, nhận diện ngay là tệp âm thanh.
 - [x] **AC-6 (Khung Hộp Facebook Reels Shelf & Top Alignment):** Bao bọc bởi hộp viền mảnh bo góc 14px, header clapperboard + tiêu đề "Video" + nút `···`, cặp nút điều hướng tròn trắng 40px nổi khối; mép trên căn thẳng hàng đồng trục với widget Cột bên.
-- [x] **AC-7 (Phân cấp Hot / Regular):** Bài `@video-hot` được ưu tiên đứng ở vị trí 1 và 2, có huy hiệu nổi bật và viền sáng khác biệt.
+- [x] **AC-7 (Phân cấp Hot / Regular):** Bài `@video-hot` được ưu tiên đứng ở vị trí 1 và 2, có huy hiệu `🔥 HOT` nổi bật và viền sáng khác biệt.
 - [x] **AC-8 (Random không trùng lặp):** Khi bật chế độ `sort: random`, danh sách video được xáo trộn ngẫu nhiên; mỗi bài viết chỉ xuất hiện tối đa 1 lần trên widget.
 - [x] **AC-9 (Thích ứng số lượng & Ẩn rỗng):** Nếu có $M < limit$ thì hiển thị đúng $M$ khung; nếu $M = 0$ thì widget ẩn hoàn toàn khỏi màn hình mà không để lại khoảng trắng.
 - [x] **AC-10 (Sidebar Tràn Viền Edge-to-Edge, 6s Auto-advance & Hover Reveal):** Khi đặt trong Cột bên Sidebar, widget tự động chuyển sang 1 khung tràn viền 100% không viền thừa, không header thừa; tự động chuyển video mỗi 6 giây kèm tính năng Smart Pause khi hover/mở player; cặp nút điều hướng Prev/Next tròn kính mờ ẩn mặc định và chỉ hiện khi rê chuột.
 - [x] **AC-11 (Hiệu năng Click-to-Play Facade):** Khi trang vừa tải xong, không có bất kỳ iframe video nặng bên thứ 3 nào được tải; chỉ khi người dùng click vào nút Play thì player tương ứng mới được nạp.
-- [x] **AC-12 (Reels Lightbox Theater Modal):** Mở rạp chiếu toàn màn hình chuyên dụng khi click Play, hỗ trợ phím mũi tên máy tính và thao tác vuốt lướt clip trên màn hình cảm ứng di động.
-- [x] **AC-13 (Biên dịch thành công):** Lệnh `npm run build` hoàn tất không lỗi, `dist/theme.xml` được cập nhật đồng bộ.
+- [x] **AC-12 (Reels Lightbox Theater Modal):** Mở rạp chiếu toàn màn hình chuyên dụng khi click Play, hỗ trợ phím mũi tên máy tính và thao tác vuốt lướt clip trên màn hình cảm ứng di động; tích hợp nút Bật tiếng TikTok qua `postMessage`.
+- [x] **AC-13 (Strict Label Filtering & Branded Poster Fallback):** Widget lọc nghiêm ngặt theo nhãn `@video` hoặc `@video-hot`, không quét nội dung bài viết ngoài danh mục để tối ưu hiệu năng; tự động render poster màu gradient kèm logo nền tảng khi bài viết chưa đính kèm ảnh bìa.
+- [x] **AC-14 (Biên dịch thành công):** Lệnh `npm run build` hoàn tất không lỗi, `dist/theme.xml` được cập nhật đồng bộ.

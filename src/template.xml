@@ -177,6 +177,30 @@
     <!-- {{INCLUDE:components/category-tabs.xml}} -->
 
     <!-- ==========================================
+         TOP FULL-WIDTH SECTION (Video & Reels / Wide Banners)
+         Vị trí toàn chiều rộng: Nằm giữa Category Tabs và Nội dung chính bên dưới
+         ========================================== -->
+    <b:section id='top-wide-section' name='Tiện Ích Toàn Chiều Rộng Đầu Trang (Top Full Width)' showaddelement='yes'>
+      <b:widget id='HTML19' type='HTML' version='2' title='🎬 Video &amp; Reels (Toàn Chiều Rộng)'>
+        <b:includable id='main'>
+          <b:if cond='data:view.isHomepage'>
+            <div class='special-posts-widget'
+                 id='widget-top-reels'
+                 data-pattern='reels'
+                 data-limit='12'
+                 data-sort='random'
+                 data-mode='slider'
+                 data-play-mode='modal'>
+              <b:if cond='data:content'>
+                <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+              </b:if>
+            </div>
+          </b:if>
+        </b:includable>
+      </b:widget>
+    </b:section>
+
+    <!-- ==========================================
          MAIN LAYOUT GRID (Posts + Sidebar)
          ========================================== -->
     <div class='layout-grid'>
@@ -184,9 +208,31 @@
       <!-- Main Content Column -->
       <main class='main-content' id='main-content'>
 
-        <!-- ── VỊ TRÍ 1: ĐẦU LUỒNG BÀI VIẾT (Hero / Spotlight) ──
+        <!-- ── VỊ TRÍ 1 & 2: ĐẦU LUỒNG BÀI VIẾT (Video / Hero / Spotlight) ──
              Chỉ hiển thị ở Trang chủ đầu tiên (Page 1), tự động ẩn trên Trang 2+ -->
-        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Hero / Spotlight)' maxwidgets='1' showaddelement='yes'>
+        <b:section id='main-above-feed' name='Đầu Luồng Bài Viết (Video / Spotlight)' maxwidgets='4' showaddelement='yes'>
+          <b:widget id='HTML20' type='HTML' version='2' title='🎬 Video &amp; Reels (Đầu Luồng Bài)' visible='true'>
+            <b:includable id='main'>
+              <b:if cond='data:view.isHomepage'>
+                <div class='special-posts-widget'
+                     id='widget-main-reels'
+                     data-pattern='reels'
+                     data-limit='10'
+                     data-sort='random'
+                     data-mode='slider'
+                     data-play-mode='modal'>
+                  <b:if cond='data:title'>
+                    <b:attr name='data-title' expr:value='data:title'/>
+                  <b:else/>
+                    <b:attr name='data-title' value='🎬 Video &amp; Reels'/>
+                  </b:if>
+                  <b:if cond='data:content'>
+                    <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                  </b:if>
+                </div>
+              </b:if>
+            </b:includable>
+          </b:widget>
           <b:widget id='HTML10' type='HTML' version='2' title='🌟 Tiêu Điểm | Spotlight'>
             <b:includable id='main'>
               <b:if cond='data:view.isHomepage'>

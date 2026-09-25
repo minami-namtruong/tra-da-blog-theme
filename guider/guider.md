@@ -103,10 +103,11 @@ Theme hỗ trợ **5 kiểu dáng widget (patterns)** được thiết kế theo
 ## CHƯƠNG 3: HƯỚNG DẪN CHI TIẾT CẤU HÌNH WIDGET QUA TRƯỜNG "CONTENT"
 
 Trong trang **Bố cục (Layout)** của Blogger, theme đã bố trí sẵn các vị trí widget đẹp nhất:
-1. `main-above-feed`: Đầu luồng bài viết (🌟 Bài Viết Tiêu Điểm Tuần - Spotlight)
-2. `main-in-feed-section`: Xen kẽ giữa các bài viết sau bài số 3 (☕ Trích Dẫn Chiêm Nghiệm - Quote)
-3. `main-special-posts-section`: Dưới luồng bài viết chính (📊 Top Bài Đọc Nhiều - Ranked)
-4. `sidebar-section`: Cột bên phải (Bài nổi bật, Chiêm nghiệm, Điểm tin, Tiêu điểm, Chuyên đề)
+1. `top-wide-section`: Toàn chiều rộng đầu trang (🎬 Video & Reels Showcase Vị trí 1 - Widget `HTML19`, nằm giữa Category Tabs và phần Nội dung bên dưới)
+2. `main-above-feed`: Đầu luồng bài viết (🎬 Video & Reels Showcase Vị trí 2 - Widget `HTML20`, và 🌟 Bài Viết Tiêu Điểm - `HTML10`)
+3. `main-in-feed-section`: Xen kẽ giữa các bài viết sau bài số 3 (☕ Trích Dẫn Chiêm Nghiệm - `HTML11`)
+4. `main-special-posts-section`: Dưới luồng bài viết chính (📊 Top Bài Đọc Nhiều - `HTML13`)
+5. `sidebar-section`: Cột bên phải (Bài nổi bật, Chiêm nghiệm, Điểm tin, Tiêu điểm, Chuyên đề `HTML18`, và 🎬 Video & Reels Showcase Vị trí 3 - Widget `HTML23`)
 
 Khi bạn bấm nút hình **Cây bút (Chỉnh sửa / Edit)** tại bất kỳ widget nào:
 * **Ô Title:** Đổi tiêu đề hiển thị trên blog.
@@ -635,10 +636,10 @@ Widget `pattern: reels` biến các bài viết có chứa link video/audio thà
 - 📦 **Khung Viền & Tiêu Đề Chuẩn Facebook**: Bao bọc bởi hộp thẻ viền mảnh thanh lịch (`border: 1px solid var(--border-color)`), bo góc mềm mại `14px`, tiêu đề gọn gàng **"Video"** kèm icon clapperboard đặc trưng và nút tùy chọn `···` ở góc phải.
 - 📱 **Thẻ Unibody Full-Bleed Chuẩn Facebook Reels (175px, Tỷ lệ 9:16)**: Hình ảnh/video chiếm trọn 100% diện tích thẻ từ trên xuống dưới, bo góc `12px`, có nút 3 chấm `⋮` ở góc trên và tiêu đề bài viết phủ chìm trên nền dải chuyển màu đen (dark gradient) ở đáy thẻ.
 - 🔘 **Nút Điều Hướng Tròn Nổi Khối**: Nút chuyển clip trái/phải hình tròn màu trắng tinh tế lơ lửng ngay mép thẻ tương tự nút trượt trên Facebook.
-- 🎬 Preview động khi rê chuột (YouTube animated WebP 6s)
+- 🎬 Hover tương tác vi mô chuẩn Cinematic Zoom, phóng to mượt mà
 - 🔊 Sóng âm Equalizer nhảy múa cho file Audio/Podcast
 - ▶️ Nút Play xung nhịp (Pulse ring animation)
-- 📽️ Vạch Story ở mép trên, huy hiệu thời lượng
+- ⏱️ Huy hiệu thời lượng & thẻ nhận diện `🔥 HOT`
 - 🌫️ Nền mờ nghệ thuật (Blurred Background Fill) cho video 16:9 YouTube
 - ⚡ Click-to-Play Facade: không tải iframe nặng cho đến khi người dùng bấm Play
 - 🎭 Rạp chiếu Reels Lightbox Theater Modal cực kỳ WOW với phím mũi tên & cử chỉ vuốt touch mobile.
@@ -650,7 +651,9 @@ Widget `pattern: reels` biến các bài viết có chứa link video/audio thà
 | `@video` | Đánh dấu bài có video/audio cần xuất hiện trong widget Reels | Tất cả |
 | `@video-hot` hoặc `@hotvideo` | Đánh dấu video bán chéo chủ lực, đẩy lên vị trí 1-2 | Vị trí 1 & 2 |
 
-> **Lưu ý:** Cả 2 nhãn đều bắt đầu bằng `@` nên sẽ **tự động ẩn khỏi feed trang chủ và thanh Category Tabs**.
+> **Lưu ý:**
+> - Cả 2 nhãn đều bắt đầu bằng `@` nên sẽ **tự động ẩn khỏi feed trang chủ và thanh Category Tabs**.
+> - **Nguyên tắc lọc nghiêm ngặt (Strict Label Filtering):** Widget chỉ nạp những bài viết được gắn đúng nhãn `@video` hoặc `@video-hot`. Các bài viết tin tức, bài luận thông thường (dù có chèn link video tham khảo) sẽ không bị bốc nhầm vào widget Reels, đảm bảo hiệu năng tải trang cao nhất.
 
 ### 16.3. Cách Nhúng Link Video Vào Bài Viết
 Widget tự động quét nội dung bài viết và bóc tách link media. Bạn chỉ cần dán link vào bài viết bình thường:
@@ -660,20 +663,48 @@ Widget tự động quét nội dung bài viết và bóc tách link media. Bạ
 | YouTube (Chuẩn) | `https://www.youtube.com/watch?v=dQw4w9WgXcQ` | Tự động nhận diện, dùng Blurred BG Fill |
 | YouTube Shorts | `https://www.youtube.com/shorts/dQw4w9WgXcQ` | Hiển thị tràn viền (cover) |
 | TikTok | `https://www.tiktok.com/@user/video/123456789` | Dùng ảnh đại diện bài viết |
-| Facebook Reel | `https://www.facebook.com/reel/123456789` | Dùng ảnh đại diện bài viết |
+| Facebook Reel | `https://www.facebook.com/reel/123456789012345` | Bắt buộc link gốc có ID số (xem lưu ý bên dưới) |
 | File MP4/WebM | `https://cdn.example.com/video.mp4` | Tự phát không tiếng khi hover |
 | File MP3/M4A | `https://cdn.example.com/audio.mp3` | Hiển thị Equalizer sóng nhạc |
 
-### 16.4. Thêm Widget Video & Reels Qua Blogger Layout
-Vào **Bố cục (Layout)** ➔ Bấm **+ Thêm tiện ích** ➔ Chọn **HTML/JavaScript** ➔ Nhập vào ô **Content**:
+> [!WARNING]
+> **Lưu ý đặc biệt đối với Facebook Reels & Facebook Video:**
+> 1. **Dùng Link Gốc (Canonical URL có ID số):**
+>    - Khi bấm chia sẻ từ điện thoại, Facebook thường tạo ra link rút gọn chuyển hướng dạng: `https://www.facebook.com/share/r/...` hoặc `fb.watch/...`. Trình phát nhúng của Facebook (`facebook.com/plugins/video.php`) **hoàn toàn từ chối các link rút gọn này** và sẽ hiển thị lỗi màn hình đen *"Video không khả dụng"*.
+>    - **Cách lấy link chuẩn:** Mở link trên máy tính bằng trình duyệt (Chrome, Cốc Cốc, Safari...). Sau khi trang web chuyển hướng xong, copy URL từ thanh địa chỉ có dạng: `https://www.facebook.com/reel/{DÃY_SỐ_ID}/` hoặc `https://www.facebook.com/watch/?v={DÃY_SỐ_ID}` rồi dán vào bài viết.
+> 2. **Quyền riêng tư & Bản quyền nhạc:**
+>    - Video trên Facebook **phải ở chế độ Công khai (Public 🌐)**. Nếu là clip trong Nhóm kín hoặc giới hạn Bạn bè, Facebook sẽ chặn bên ngoài.
+>    - Nếu clip Reel sử dụng bài hát bản quyền độc quyền trên nền tảng Meta, Facebook có thể tắt tiếng hoặc chặn phát trên website ngoài.
+>> [!TIP]
+> **Quy tắc hiển thị Ảnh Bìa (Thumbnail) của Video:**
+> - **YouTube**: Tự động sinh ảnh đại diện HD sắc nét từ Video ID (`i.ytimg.com/vi/...`) ngay cả khi bài viết không có hình ảnh nào.
+> - **Facebook, TikTok, MP4 & Audio**: Do chính sách bảo mật, các nền tảng này không cấp URL ảnh tĩnh qua ID. **Cách làm chuẩn nhất là bạn chèn 1 bức ảnh vào bài viết trên Blogger (ảnh bìa clip hoặc ảnh liên quan)**, theme sẽ tự động lấy ảnh đó làm Thumbnail cho thẻ Reel.
+> - **Khung Poster Tự Động (Branded Poster Fallback):** Nếu bài viết chỉ dán link thuần và chưa có ảnh tải lên, theme sẽ tự động kích hoạt **Khung Poster Nhận Diện Thương Hiệu** sang trọng (Gradient ánh xanh Facebook, Gradient đen neon TikTok, tím điện ảnh MP4...) kèm logo chính thức, đảm bảo giao diện luôn bóng bẩy và không bị lỗi màn hình trống.
+
+
+### 16.4. Ba Widget Video & Reels Có Sẵn Trong Blogger Layout
+Theme đã tích hợp sẵn **3 tiện ích Widget Video & Reels** tương ứng với 3 vị trí khác nhau trong trang **Bố cục (Layout)** của Blogger. Bạn có thể bật hiển thị **1 trong 3 vị trí** (hoặc tùy biến cả 3) chỉ bằng một thao tác bật/tắt:
+
+| Vị Trí | Tên Widget Trong Layout | Mã Widget | Trạng Thái Mặc Định | Kiểu Dáng Đặc Trưng |
+| :--- | :--- | :---: | :---: | :--- |
+| **Vị trí 1** | `🎬 Video & Reels (Toàn Chiều Rộng)` | `HTML19` | **Bật (Hiển thị)** | Tràn ngang 100% màn hình giữa Category Tabs & Nội dung, không viền, không title, nhiều khung trượt (12 khung) |
+| **Vị trí 2** | `🎬 Video & Reels (Đầu Luồng Bài)` | `HTML20` | **Bật (Hiển thị)** | Co theo độ rộng cột bài viết chính, có viền hộp và tiêu đề `Video` chuẩn Facebook Reels |
+| **Vị trí 3** | `🎬 Video & Reels (Sidebar)` | `HTML23` | **Bật (Hiển thị)** | Dạng 1 khung 9:16 tràn viền cột bên (Edge-to-Edge), tự xoay tua sau mỗi 6 giây |
+
+**Cách lựa chọn vị trí hiển thị trên Blog:**
+1. Vào **Blogger Admin ➔ Bố cục (Layout)**.
+2. Tìm đến vị trí bạn muốn hiển thị:
+   - Nếu muốn hiển thị ở **Vị trí 1 (Toàn chiều rộng)**: Giữ nguyên `HTML19`.
+   - Nếu muốn chuyển sang **Vị trí 2 (Đầu luồng bài)**: Bấm bút chì sửa `HTML19` ➔ Tắt **"Hiển thị tiện ích này"**; sau đó bấm sửa `HTML20` ➔ Bật **"Hiển thị tiện ích này"** ➔ Lưu.
+   - Nếu muốn chuyển sang **Vị trí 3 (Sidebar)**: Bấm bút chì sửa `HTML19` ➔ Tắt **"Hiển thị tiện ích này"**; sau đó bấm sửa `HTML23` ➔ Bật **"Hiển thị tiện ích này"** ➔ Lưu.
+3. Nếu muốn tùy chỉnh tham số (như đổi tiêu đề, số lượng clip, tỷ lệ clip hot), bạn chỉ cần nhập vào ô **Content** của widget đó:
 
 ```text
 pattern: reels
-title: Video
-limit: 8
+limit: 10
 sort: random
 hot-ratio: 60%
-cta-text: Xem bài viết & Ưu đãi ➔
+cta-text: Xem chi tiết ➔
 ```
 
 ### 16.5. Bảng Tham Số Cấu Hình Đầy Đủ
@@ -694,20 +725,26 @@ cta-text: Xem bài viết & Ưu đãi ➔
 | `mode` | `auto` | `auto` (tự nhận ngữ cảnh) \| `slider` (ép thanh trượt) \| `single` (ép 1 khung). |
 | `play-mode` | `modal` | `modal` (Mở màn hình Reels Theater chuẩn TikTok/IG với phím mũi tên & lướt clip) \| `inline` (Phát trực tiếp tại khung thẻ). |
 
-### 16.6. Trải Nghiệm Reels Lightbox Theater Modal
+### 16.6. Trải Nghiệm Reels Lightbox Theater Modal & Khung Phát Đa Nền Tảng
 Khi `play-mode: modal` (mặc định), người dùng bấm Play sẽ mở ra **Màn hình rạp chiếu Reels chuyên dụng**:
 - 🎬 Khung hình 9:16 sắc nét ở trung tâm với phông nền mờ đen (`backdrop-filter: blur(16px)`).
+- ▶️ **Tự động phát (Autoplay)**: Hỗ trợ tự động chạy ngay khi mở cho cả **YouTube Shorts, TikTok, Facebook Reel và file MP4**.
+- 🎛️ **Bảo toàn đầy đủ bộ icon chức năng từng nền tảng**:
+  - **TikTok**: Tự động phát mượt mà, tích hợp sẵn **Nút Bật/Tắt Tiếng thông minh (🔇 Bật tiếng / 🔊 Tắt tiếng)** giao tiếp trực tiếp với TikTok Player qua `postMessage` API, kèm nút mở nhanh "Mở TikTok ↗".
+  - **Facebook Reel**: Hiển thị chuẩn kích thước dọc 9:16, không bị cắt xén hai bên. Do quy định bảo mật trình duyệt (Autoplay Policy) và thiết kế nhúng của Meta, trình phát `plugins/video.php` của Facebook luôn bắt đầu ở trạng thái tắt tiếng mặc định (mute) kể cả khi bấm Play; người xem chỉ cần nhấp 1 lần vào **biểu tượng Loa (🔇)** ở góc dưới bên phải khung phát để bật âm thanh. Theme giữ nguyên biểu tượng loa 🔇/🔊, toàn màn hình và nút dẫn nhanh "Mở FB ↗".
+  - **YouTube Shorts**: Giữ nguyên toàn bộ icon tương tác, timeline và chất lượng HD của Google Player API.
 - 🔄 **Lướt clip liên tục**: Có nút điều hướng **Clip trước / Clip kế tiếp**, hỗ trợ phím mũi tên `↑` / `↓` hoặc `←` / `→` trên bàn phím máy tính.
 - 📱 **Vuốt ngón tay trên điện thoại**: Vuốt lên để chuyển clip sau, vuốt xuống để xem lại clip trước y hệt TikTok / Instagram Reels.
 - ✕ Đóng nhanh bằng phím `Esc` hoặc bấm ra ngoài màn hình mà không làm mất vị trí cuộn trang.
-- 🔗 Nút CTA nổi bật dẫn thẳng vào bài viết gốc.
+- 🔗 Nút CTA nổi bật góc trái dẫn thẳng vào bài viết gốc mà không che khuất các nút điều khiển âm lượng bên phải.
 
 ### 16.7. Ba Ngữ Cảnh Hiển Thị Tự Động
 
 | Vị Trí | Chế Độ Tự Động | Giao Diện |
 | :--- | :--- | :--- |
+| **Toàn chiều rộng đầu trang (`top-wide-section`)** | `slider` — thanh trượt ngang tràn viền phẳng (Seamless) | Nằm giữa Category Tabs và Layout Grid, **không viền hộp bên ngoài và không tiêu đề** (phẳng mượt tương tự thanh Category Tabs ngay bên trên). Thẻ Reel nổi trực tiếp trên nền trang, số khung tăng lên (10–15 khung) kèm cặp nút tròn ◀ ▶ nổi khối lơ lửng hai mép thẻ để lướt xem mượt mà |
 | **Cột bên (Sidebar)** | `single` — 1 khung tràn viền tự động | Thẻ Reel tràn viền 100% cột bên (Edge-to-Edge) không tiêu đề thừa, tự động chuyển clip sau 6s (hover tạm dừng), nút điều hướng Prev/Next ẩn tinh tế và chỉ hiển thị khi rê chuột (Hover Reveal) |
-| **Đầu trang / Main Content** | `slider` — thanh trượt ngang | Khung Facebook Reels có border, tiêu đề "Video", 3–5 khung hiển thị cùng lúc, nút ◀ ▶ |
+| **Đầu trang luồng bài (`main-above-feed`)** | `slider` — thanh trượt ngang | Khung Facebook Reels có border, tiêu đề "Video", 3–5 khung hiển thị cùng lúc trong cột bài viết chính |
 | **Cột bên hẹp (≤ 360px)** | Container Query tự thu nhỏ | Card 160px, nút Play nhỏ hơn |
 
 ### 16.8. Ví Dụ Thực Tế
@@ -737,3 +774,29 @@ limit: 5
 media: audio
 cta-text: Nghe ngay ➔
 ```
+
+---
+
+## CHƯƠNG 17: BẢNG TỔNG HỢP TRA CỨU NHANH & XỬ LÝ BỘ NHỚ ĐỆM (CHEATSHEET & CACHE)
+
+### 17.1. Cơ Chế Bộ Nhớ Đệm Toàn Theme (Theme-wide Cache Architecture)
+
+Theme sử dụng bộ nhớ đệm trình duyệt `sessionStorage` để lưu trữ dữ liệu feed (Bài viết đặc biệt, Tuyến bài Series, Video Reels Showcase) nhằm tối ưu hiệu năng:
+- **Tốc độ phản hồi:** 0ms khi độc giả chuyển trang qua lại giữa các bài viết.
+- **Tiết kiệm tài nguyên:** Không gửi request lặp lại lên máy chủ Google Blogger trong suốt phiên đọc.
+- **Thời gian sống mặc định (Default TTL):** **60 phút** (1 giờ).
+- **Tự động làm mới:** Khi độc giả đóng tab và mở lại, hoặc khi hết hạn cache, hệ thống tự động tải lại dữ liệu mới nhất.
+
+### 17.2. Tùy Biến Thời Gian Sống Bộ Nhớ Đệm (Configuring Cache TTL)
+
+Bạn hoàn toàn có thể tùy chỉnh thời gian sống của cache mà không cần chỉnh sửa sâu vào logic cốt lõi. Để thay đổi thời gian cache (ví dụ đặt thành 30 phút hoặc 2 giờ), bạn chỉ cần khai báo biến cấu hình toàn cục `__EDITORIAL_CACHE_TTL__` (tính bằng mili-giây) ở thẻ `<head>` hoặc trước các script:
+
+```html
+<script>
+  // Tùy biến thời gian lưu cache: 30 phút (30 * 60 * 1000 = 1800000 ms)
+  window.__EDITORIAL_CACHE_TTL__ = 30 * 60 * 1000;
+</script>
+```
+
+Nếu không khai báo biến này, theme sẽ luôn sử dụng giá trị mặc định là **60 phút** (`3600000 ms`).
+

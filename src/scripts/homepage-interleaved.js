@@ -282,6 +282,49 @@
     }
   }
 
+  function initTopWideSection() {
+    const topWide = document.getElementById('top-wide-section');
+    if (!topWide) return;
+
+    // Kiểm tra nếu là trang chi tiết bài viết (Single Post) hoặc trang lưu trữ (Archive)
+    const singlePostWrapper = document.getElementById('single-post-wrapper');
+    const isSinglePost = document.body.classList.contains('view-single') ||
+                         (singlePostWrapper && singlePostWrapper.style.display !== 'none');
+
+    const archiveWrapper = document.getElementById('archive-page-wrapper');
+    const isArchivePage = document.body.classList.contains('view-archive') ||
+                          (archiveWrapper && archiveWrapper.style.display !== 'none');
+
+    if (isSinglePost || isArchivePage) {
+      topWide.style.display = 'none';
+      return;
+    }
+
+    // Kiểm tra nếu là Trang 2 trở đi (Page 2+)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPaged = urlParams.has('updated-max') ||
+                    urlParams.get('page') === '2' ||
+                    urlParams.get('paged') === '2' ||
+                    document.body.classList.contains('is-paged') ||
+                    document.body.classList.contains('view-paged');
+
+    if (isPaged) {
+      topWide.style.display = 'none';
+      return;
+    }
+
+    // Kiểm tra rỗng
+    const hasWidgets = topWide.querySelectorAll('.widget, .special-posts-widget').length > 0 ||
+                       (topWide.children.length > 0 && topWide.textContent.trim().length > 0);
+
+    if (!hasWidgets) {
+      topWide.style.display = 'none';
+      return;
+    }
+
+    topWide.style.display = 'block';
+  }
+
   function initAboveFeedSection() {
     const aboveFeed = document.getElementById('main-above-feed');
     if (!aboveFeed) return;
@@ -643,6 +686,7 @@
     initPostCardsProcessing();
     initSearchPageHeader();
     initProfileCoverSection();
+    initTopWideSection();
     initAboveFeedSection();
     initInFeedInterleaving();
     initPrePaginationSection();

@@ -678,6 +678,51 @@
   position: relative;
 }
 
+#main-above-feed .sp-reels-shelf,
+#main-above-feed #widget-main-reels {
+  margin: 0 0 1.75rem !important;
+}
+
+/* ── Vị trí 1: Toàn chiều rộng Seamless (Không viền & Không tiêu đề — phẳng như Category Tabs) ── */
+.sp-reels-shelf--seamless,
+#top-wide-section .sp-reels-shelf {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 1.5rem !important;
+  overflow: visible !important;
+}
+
+.sp-reels-shelf--seamless .sp-reels-header,
+#top-wide-section .sp-reels-header {
+  display: none !important;
+}
+
+.sp-reels-shelf--seamless .sp-reels-track,
+#top-wide-section .sp-reels-track {
+  padding: 0.25rem 0 0.5rem;
+}
+
+.sp-reels-shelf--seamless .sp-reels-btn-prev,
+#top-wide-section .sp-reels-btn-prev {
+  left: -8px;
+}
+.sp-reels-shelf--seamless .sp-reels-btn-next,
+#top-wide-section .sp-reels-btn-next {
+  right: -8px;
+}
+@media (max-width: 768px) {
+  .sp-reels-shelf--seamless .sp-reels-btn-prev,
+  #top-wide-section .sp-reels-btn-prev {
+    left: 2px;
+  }
+  .sp-reels-shelf--seamless .sp-reels-btn-next,
+  #top-wide-section .sp-reels-btn-next {
+    right: 2px;
+  }
+}
+
 /* ── Tiêu đề Video chuẩn Facebook (Icon + Video + More Actions) ── */
 .sp-reels-header {
   display: flex;
@@ -861,10 +906,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
 }
-.sp-reel-card--previewing .sp-reel-thumb--cover {
-  transform: scale(1.04);
+.sp-reel-card:hover .sp-reel-thumb--cover,
+.sp-reel-card--hovered .sp-reel-thumb--cover {
+  transform: scale(1.06);
+  filter: brightness(1.05);
 }
 
 /* ── Blurred Background Fill (YouTube 16:9) ── */
@@ -889,10 +936,91 @@
   max-height: 62%;
   object-fit: contain;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
 }
-.sp-reel-card--previewing .sp-reel-media-center .sp-reel-thumb {
-  transform: scale(1.03);
+.sp-reel-card:hover .sp-reel-media-center .sp-reel-thumb,
+.sp-reel-card--hovered .sp-reel-media-center .sp-reel-thumb {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* ── Platform Fallback Poster (Khi bài viết chưa đính kèm ảnh bìa) ── */
+.sp-reel-thumb-poster {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0.75rem;
+  box-sizing: border-box;
+  text-align: center;
+  color: #fff;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+.sp-reel-poster-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.65rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sp-reel-poster-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+.sp-reel-thumb-poster--facebook {
+  background: radial-gradient(circle at 50% 35%, #1877f2 0%, #0c4391 100%);
+}
+.sp-reel-thumb-poster--facebook .sp-reel-poster-icon {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+.sp-reel-thumb-poster--tiktok {
+  background: radial-gradient(circle at 50% 35%, #1e1e24 0%, #08080a 100%);
+}
+.sp-reel-thumb-poster--tiktok .sp-reel-poster-icon {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: -2px -2px 12px rgba(0, 242, 254, 0.45), 2px 2px 12px rgba(254, 44, 85, 0.45);
+}
+.sp-reel-thumb-poster--youtube,
+.sp-reel-thumb-poster--youtube-shorts {
+  background: radial-gradient(circle at 50% 35%, #e62117 0%, #700200 100%);
+}
+.sp-reel-thumb-poster--youtube .sp-reel-poster-icon,
+.sp-reel-thumb-poster--youtube-shorts .sp-reel-poster-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+.sp-reel-thumb-poster--mp4 {
+  background: radial-gradient(circle at 50% 35%, #6366f1 0%, #1e1b4b 100%);
+}
+.sp-reel-thumb-poster--mp4 .sp-reel-poster-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+.sp-reel-thumb-poster--audio {
+  background: radial-gradient(circle at 50% 35%, #059669 0%, #022c22 100%);
+}
+.sp-reel-thumb-poster--audio .sp-reel-poster-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sp-reel-card:hover .sp-reel-thumb-poster,
+.sp-reel-card--hovered .sp-reel-thumb-poster {
+  transform: scale(1.05);
+}
+.sp-reel-card:hover .sp-reel-poster-icon,
+.sp-reel-card--hovered .sp-reel-poster-icon {
+  transform: scale(1.12);
 }
 
 /* ── Overlay gradient + controls ── */
@@ -912,47 +1040,12 @@
   );
 }
 
-/* ── Story Bars (mép trên) ── */
-/* ── Story Bars (mép trên thon gọn) ── */
-.sp-reel-story-bars {
-  display: flex;
-  gap: 2px;
-  padding: 0.4rem 0.45rem 0;
-}
-.sp-reel-story-bar {
-  flex: 1;
-  height: 2px;
-  border-radius: 1px;
-  background: rgba(255,255,255,0.35);
-}
-.sp-reel-story-bar--done {
-  background: rgba(255,255,255,0.9);
-}
-.sp-reel-story-bar--active {
-  background: rgba(255,255,255,0.75);
-  position: relative;
-  overflow: hidden;
-}
-.sp-reel-story-bar--active::after {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 60%;
-  background: #fff;
-  border-radius: 1px;
-  animation: sp-story-progress 3s linear infinite;
-}
-@keyframes sp-story-progress {
-  0%   { width: 0%; }
-  100% { width: 100%; }
-}
-
 /* ── Top row: Badge Hot + Duration + Facebook 3-dots ── */
 .sp-reel-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.35rem 0.45rem 0;
+  padding: 0.5rem 0.55rem 0;
   pointer-events: auto;
 }
 .sp-reel-top-badges {
@@ -1017,10 +1110,12 @@
   z-index: 5;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
-.sp-reel-play-btn:hover {
-  transform: translate(-50%, -50%) scale(1.12);
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+.sp-reel-play-btn:hover,
+.sp-reel-card:hover .sp-reel-play-btn,
+.sp-reel-card--hovered .sp-reel-play-btn {
+  transform: translate(-50%, -50%) scale(1.14);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 .sp-reel-play-btn svg {
   width: 18px;
@@ -1223,7 +1318,7 @@
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
-  margin-bottom: 1.5rem !important;
+  margin: 0 !important;
 }
 
 .sp-reels-shelf--sidebar,
@@ -1341,13 +1436,6 @@
   }
 }
 
-/* Vạch tiến trình ở single mode chạy 6s và tạm dừng khi rê chuột */
-.sp-reels-container--single .sp-reel-story-bar--active::after {
-  animation-duration: 6s;
-}
-.sp-reels-container--single:hover .sp-reel-story-bar--active::after {
-  animation-play-state: paused;
-}
 
 /* ── Container Query: Sidebar (≤ 360px) ── */
 @container special-widget (max-width: 360px) {
@@ -1617,8 +1705,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 3.5rem 1.25rem 1.25rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.65) 55%, transparent 100%);
+  padding: 3rem 1rem 3.4rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 55%, transparent 100%);
   pointer-events: none;
   z-index: 10;
 }
@@ -1626,21 +1714,23 @@
 .sp-reels-modal-info {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  pointer-events: auto;
+  gap: 0.5rem;
+  max-width: 72%;
+  pointer-events: none;
 }
 
 .sp-reels-modal-title {
   margin: 0;
   color: #ffffff;
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  line-height: 1.4;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  line-height: 1.35;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .sp-reels-modal-cta {
@@ -1653,12 +1743,13 @@
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: #ffffff;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  padding: 0.45rem 1rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full, 9999px);
   text-decoration: none;
   transition: all 0.2s ease;
+  pointer-events: auto;
 }
 
 .sp-reels-modal-cta:hover {
@@ -1666,6 +1757,17 @@
   color: #000000;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.35);
+}
+
+.sp-tiktok-sound-btn {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sp-tiktok-sound-btn:hover {
+  transform: scale(1.05);
+}
+.sp-tiktok-sound-btn:active {
+  transform: scale(0.96);
 }
 
 /* Mobile responsive */

@@ -1260,8 +1260,9 @@
    3-TIER MAIN FEED & INTERLEAVED WIDGETS
    =================================================== */
 
-/* Tầng 1: Khoảng cách của vùng Đầu Luồng (Hero / Spotlight) */
+/* Tầng 1: Khoảng cách của vùng Đầu Luồng (Video / Hero / Spotlight) */
 #main-above-feed {
+  display: block;
   margin-bottom: 1.75rem;
   width: 100%;
 }
@@ -1271,6 +1272,15 @@
   padding: 0 !important;
   border: none !important;
   background: transparent !important;
+}
+#main-above-feed .widget:not(:last-child) {
+  margin-bottom: 1.75rem !important;
+}
+#main-above-feed .widget:empty,
+#main-above-feed .widget:has(> .widget-content:empty),
+#main-above-feed .widget:has(.special-posts-widget[style*="display: none"]) {
+  display: none !important;
+  margin: 0 !important;
 }
 #main-above-feed > :first-child {
   margin-top: 0 !important;
@@ -1310,11 +1320,25 @@
   padding-top: 0 !important;
 }
 
+/* ── Top Full Width Section (Nằm giữa Category Tabs và Layout Grid) ── */
+#top-wide-section,
+#top-wide-section .widget,
+#top-wide-section .widget-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
 /* Tự động ẩn hoàn toàn nếu ô bị để trống (Zero CLS / No empty space) */
+#top-wide-section:empty,
+#top-wide-section:has(.special-posts-widget[style*="display: none"]:only-child),
 #main-above-feed:empty,
 #main-in-feed-section:empty,
 #main-pre-pagination-section:empty,
+body.view-single #top-wide-section,
 body.view-single #main-above-feed,
+body.view-archive #top-wide-section,
 body.view-not-homepage #main-above-feed {
   display: none !important;
   margin: 0 !important;
@@ -1327,16 +1351,20 @@ body.view-not-homepage #main-above-feed {
 .single-post-container ~ #main-above-feed,
 .single-post-container ~ #main-in-feed-section,
 .single-post-container ~ #main-pre-pagination-section,
+body.view-single #top-wide-section,
 body.view-single #main-above-feed,
 body.view-single #main-in-feed-section,
 body.view-single #main-pre-pagination-section,
+body.view-archive #top-wide-section,
 body.view-archive #main-above-feed,
 body.view-archive #main-in-feed-section,
 body.view-archive #main-pre-pagination-section {
   display: none !important;
 }
 
-/* Tự động ẩn Tầng 1 (Hero Spotlight) khi sang Trang 2+ (Page 2+) */
+/* Tự động ẩn Tầng 1 (Hero Spotlight / Top Video) khi sang Trang 2+ (Page 2+) */
+body.view-paged #top-wide-section,
+body.is-paged #top-wide-section,
 body.view-paged #main-above-feed,
 body.is-paged #main-above-feed,
 body.view-not-homepage #main-above-feed {

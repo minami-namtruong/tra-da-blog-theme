@@ -167,6 +167,18 @@
       <a class="tab-pill" href="#" data-bilingual="true">Công Nghệ | Technology</a>
     </nav>
 
+    <!-- ── TẦNG TOÀN CHIỀU RỘNG (TOP FULL WIDTH): TIỆN ÍCH VIDEO & REELS SHOWCASE (DONE_019 - Vị trí 1: Phẳng Không viền, Không title) ── -->
+    <div id="top-wide-section">
+      <div class="special-posts-widget"
+           id="widget-reels-top"
+           data-pattern="reels"
+           data-limit="12"
+           data-sort="random"
+           data-mode="slider"
+           data-play-mode="modal">
+      </div>
+    </div>
+
     <!-- ── MAIN LAYOUT GRID (POSTS + SIDEBAR) ── -->
     <div class="layout-grid">
 
@@ -176,7 +188,7 @@
         <!-- ── TẦNG 1: ĐẦU LUỒNG BÀI VIẾT (HERO / SPOTLIGHT) ── -->
         <div id="main-above-feed">
 
-          <!-- DEMO: Video & Reels Showcase Widget — Main Content Slider (OPEN_019) -->
+          <!-- DEMO: Video & Reels Showcase Widget — Main Content Slider (DONE_019 - Vị trí 2) -->
           <div class="special-posts-widget"
                id="widget-reels-main"
                data-pattern="reels"
@@ -1362,6 +1374,7 @@
       var contactWrapper = document.getElementById("contact-page-wrapper");
       var heroBanner = document.getElementById("profile-cover-hero");
       var categoryTabs = document.querySelector(".category-tabs-bar");
+      var topWideSection = document.getElementById("top-wide-section");
 
       var btnHome = document.getElementById("view-mode-home");
       var btnPost = document.getElementById("view-mode-post");
@@ -1403,6 +1416,7 @@
         if (contactWrapper) contactWrapper.style.display = "none";
         if (heroBanner) heroBanner.style.display = "";
         if (categoryTabs) categoryTabs.style.display = "";
+        if (topWideSection) topWideSection.style.display = "";
 
         if (resetFilter !== false) {
           var allPostCards = document.querySelectorAll(".posts-feed .post-card");
@@ -1425,6 +1439,7 @@
         if (contactWrapper) contactWrapper.style.display = "none";
         if (heroBanner) heroBanner.style.display = "";
         if (categoryTabs) categoryTabs.style.display = "";
+        if (topWideSection) topWideSection.style.display = "none";
 
         if (title) {
           var postTitleEl = document.querySelector("#single-post-wrapper .single-post-title, #single-post-wrapper .post-title-main");
@@ -1459,6 +1474,7 @@
         if (contactWrapper) contactWrapper.style.display = "none";
         if (heroBanner) heroBanner.style.display = ""; // Giữ nguyên Cover Banner giống hệt trang chủ
         if (categoryTabs) categoryTabs.style.display = ""; // Giữ nguyên thanh nhãn chuyên mục dưới banner
+        if (topWideSection) topWideSection.style.display = "none";
 
         updateActiveButtons("archive");
         if (window.initHomepageInterleavedWidgets) window.initHomepageInterleavedWidgets();
@@ -1484,6 +1500,7 @@
         if (contactWrapper) contactWrapper.style.display = "";
         if (heroBanner) heroBanner.style.display = "";
         if (categoryTabs) categoryTabs.style.display = "";
+        if (topWideSection) topWideSection.style.display = "none";
         updateActiveButtons("contact");
 
         // Init contact page module
@@ -1582,6 +1599,7 @@
           togglePageBtn.style.borderColor = isPage2 ? "#10b981" : "var(--border-color)";
         }
 
+        if (topWideSection) topWideSection.style.display = isPage2 ? "none" : "";
         if (window.initHomepageInterleavedWidgets) {
           window.initHomepageInterleavedWidgets();
         }
@@ -1608,10 +1626,12 @@
       // Toggle Empty State để test Graceful Empty State (không thừa khoảng trắng)
       var toggleEmptyBtn = document.getElementById("toggle-empty-state");
       var isEmptyState = false;
+      var topWideZone = document.getElementById("top-wide-section");
       var aboveFeedZone = document.getElementById("main-above-feed");
       var inFeedZone = document.getElementById("main-in-feed-section");
       var prePaginationZone = document.getElementById("main-pre-pagination-section");
 
+      var originalTopWide = topWideZone ? topWideZone.innerHTML : "";
       var originalAboveFeed = aboveFeedZone ? aboveFeedZone.innerHTML : "";
       var originalInFeed = inFeedZone ? inFeedZone.innerHTML : "";
       var originalPrePagination = prePaginationZone ? prePaginationZone.innerHTML : "";
@@ -1620,12 +1640,14 @@
         toggleEmptyBtn.addEventListener("click", function() {
           isEmptyState = !isEmptyState;
           if (isEmptyState) {
+            if (topWideZone) topWideZone.innerHTML = "";
             if (aboveFeedZone) aboveFeedZone.innerHTML = "";
             if (inFeedZone) inFeedZone.innerHTML = "";
             if (prePaginationZone) prePaginationZone.innerHTML = "";
             toggleEmptyBtn.innerText = "👁️ Đang test: [Ô ĐỂ TRỐNG] (Bấm bật lại Widget)";
             toggleEmptyBtn.style.borderColor = "#ef4444";
           } else {
+            if (topWideZone) topWideZone.innerHTML = originalTopWide;
             if (aboveFeedZone) aboveFeedZone.innerHTML = originalAboveFeed;
             if (inFeedZone) inFeedZone.innerHTML = originalInFeed;
             if (prePaginationZone) prePaginationZone.innerHTML = originalPrePagination;

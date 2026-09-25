@@ -17,10 +17,22 @@
 (function () {
   'use strict';
 
-  /* ─── Constants ─────────────────────────────────────────────── */
-  const CACHE_PREFIX      = 'editorial_sp_v3_';
-  const CACHE_TTL         = 5 * 60 * 1000;  // 5 phút (posts thông thường)
-  const CACHE_TTL_REELS   = 60 * 60 * 1000; // 60 phút (reels feed)
+  /* ─── Cache Configuration & Helpers ────────────────────────── */
+  const CACHE_PREFIX      = 'editorial_sp_v5_';
+  const DEFAULT_CACHE_TTL = 2 * 60 * 1000; // 2 phút mặc định (giảm TTL để bài mới hiển thị nhanh)
+
+  function getEffectiveCacheTtl(customTtl) {
+    if (typeof customTtl === 'number' && customTtl > 0) return customTtl;
+    if (typeof window !== 'undefined') {
+      if (typeof window.__EDITORIAL_CACHE_TTL__ === 'number' && window.__EDITORIAL_CACHE_TTL__ > 0) {
+        return window.__EDITORIAL_CACHE_TTL__;
+      }
+      if (typeof window.EDITORIAL_CACHE_TTL === 'number' && window.EDITORIAL_CACHE_TTL > 0) {
+        return window.EDITORIAL_CACHE_TTL;
+      }
+    }
+    return DEFAULT_CACHE_TTL;
+  }
 
   /* ─── Pattern → Renderer map (Pluggable Strategy) ───────────── */
   const PATTERN_RENDERERS = {
@@ -180,7 +192,7 @@
     const pattern        = container.dataset.pattern  || 'digest';
     const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
     const defaultLimit   = pattern === 'series' ? 5 : (pattern === 'reels' ? 10 : 4);
-    const limit          = Math.min(parseInt(container.dataset.limit, 10) || defaultLimit, 10);
+    const limit          = Math.min(parseInt(container.dataset.limit, 10) || defaultLimit, pattern === 'reels' ? 24 : 10);
     const sort           = container.dataset.sort     || (pattern === 'series' ? 'random' : 'latest');
     const handpickedRaw  = container.dataset.posts    || '';
     const showThumb      = container.dataset.showThumbnail !== 'false';
@@ -406,11 +418,13 @@
 
     if (pattern === 'reels') {
       const inSidebar = !!container.closest('.sidebar, aside, [class*="sidebar"], .sidebar-widget');
+      const inTopWide = !!container.closest('#top-wide-section');
+      const isSeamless = inTopWide || container.dataset.seamless === 'true';
       if (inSidebar) {
         const parentWidget = container.closest('.sidebar-widget');
         if (parentWidget) parentWidget.classList.add('sidebar-widget--edge-to-edge');
       }
-      container.innerHTML = buildReelsWidgetShell(title, skeletonBody, inSidebar);
+      container.innerHTML = buildReelsWidgetShell(title, skeletonBody, inSidebar, isSeamless);
     } else {
       container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
     }
@@ -472,9 +486,10 @@
   }
 
   /* ── Reels Widget Shell (Khung viền Facebook Reels sang trọng) ── */
-  function buildReelsWidgetShell(title, bodyHtml, isSidebar = false) {
+  function buildReelsWidgetShell(title, bodyHtml, isSidebar = false, isSeamless = false) {
     const displayTitle = title ? title.trim() : 'Video';
-    const headerHtml = isSidebar ? '' : `
+    const showHeader = !isSidebar && !isSeamless;
+    const headerHtml = showHeader ? `
         <div class="sp-reels-header">
           <div class="sp-reels-header-left">
             <svg class="sp-reels-header-icon" viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
@@ -491,10 +506,10 @@
               </svg>
             </button>
           </div>
-        </div>`;
+        </div>` : '';
 
     return `
-      <div class="sp-reels-shelf pattern-reels ${isSidebar ? 'sp-reels-shelf--sidebar' : ''}">
+      <div class="sp-reels-shelf pattern-reels ${isSidebar ? 'sp-reels-shelf--sidebar' : ''} ${isSeamless ? 'sp-reels-shelf--seamless' : ''}">
         ${headerHtml}
         <div class="sp-reels-body">
           ${bodyHtml}
@@ -1246,6 +1261,81 @@
       url: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
       duration: '0:19',
       postThumbnail: ''
+    },
+    {
+      type: 'youtube',
+      videoId: 'dQw4w9WgXcQ',
+      isShorts: false,
+      isHot: true,
+      thumbnail: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/dQw4w9WgXcQ/mqdefault_6s.webp',
+      title: '🔥 Âm Nhạc & Cảm Hứng Sáng Tạo Đỉnh Cao (Music Video Showcase)',
+      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      duration: '3:33',
+      postThumbnail: ''
+    },
+    {
+      type: 'mp4',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '☕ Góc Làm Việc Tối Giản & Trải Nghiệm Deep Work Mỗi Sáng',
+      url: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+      duration: '0:05',
+      postThumbnail: ''
+    },
+    {
+      type: 'audio',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '🎙️ Podcast Đọc Sách: Tư Duy Nhanh Và Chậm Trong Đời Sống',
+      url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      duration: '7:05',
+      postThumbnail: ''
+    },
+    {
+      type: 'youtube',
+      videoId: '9bZkp7q19f0',
+      isShorts: false,
+      isHot: true,
+      thumbnail: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/9bZkp7q19f0/mqdefault_6s.webp',
+      title: '🔥 Kỷ Nguyên AI & Công Nghệ Thay Đổi Cách Chúng Ta Làm Việc',
+      url: 'https://www.youtube.com/watch?v=9bZkp7q19f0',
+      duration: '4:12',
+      postThumbnail: ''
+    },
+    {
+      type: 'mp4',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '🌿 Hành Trình Khám Phá Thiên Nhiên & Tìm Lại Sự Bình Yên',
+      url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      duration: '0:10',
+      postThumbnail: ''
+    },
+    {
+      type: 'youtube',
+      videoId: 'L_LUpnjgPso',
+      isShorts: false,
+      isHot: false,
+      thumbnail: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/L_LUpnjgPso/mqdefault_6s.webp',
+      title: '💡 Bài Học Khởi Nghiệp & Quản Trị Thời Gian Hiệu Quả',
+      url: 'https://www.youtube.com/watch?v=L_LUpnjgPso',
+      duration: '5:40',
+      postThumbnail: ''
     }
   ];
 
@@ -1260,40 +1350,52 @@
 
     // 1. YouTube (Chuẩn + Shorts + Embed)
     if (mediaFilter === 'all' || mediaFilter === 'video') {
-      const ytRegex = /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=)([^#&?\s"'<>]{11})/g;
+      // Quét trong content HTML sau khi giải mã ký tự entity
+      const searchSrc = String(content + ' ' + postUrl)
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+      const ytRegex = /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|shorts\/|live\/|(?:watch|watch_popup)\?(?:[^#\s"'>]*&)?v=)([^#&?\s"'<>\\]{11})/gi;
       let m;
-      // Quét trong content HTML
-      const searchSrc = content + ' ' + postUrl;
       while ((m = ytRegex.exec(searchSrc)) !== null) {
         const videoId = m[1];
-        const isShorts = /shorts\//.test(m[0]);
+        const isShorts = /shorts\//i.test(m[0]);
         found.push({
           type: isShorts ? 'youtube-shorts' : 'youtube',
           videoId,
           isShorts,
           thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-          previewWebp: `https://i.ytimg.com/an_webp/${videoId}/mqdefault_6s.webp`,
+          previewWebp: '',
           postThumbnail: post.thumbnail || '',
         });
       }
 
       // 2. TikTok
-      const ttRegex = /tiktok\.com\/@[\w.-]+\/video\/(\d+)/g;
-      while ((m = ttRegex.exec(content)) !== null) {
+      const ttRegex = /(?:https?:\/\/)?(?:www\.|m\.|vm\.|vt\.)?tiktok\.com\/@?[\w.-]*\/video\/(\d+)/g;
+      while ((m = ttRegex.exec(searchSrc)) !== null) {
+        const fullMatched = m[0].startsWith('http') ? m[0] : ('https://' + m[0]);
         found.push({
           type: 'tiktok', videoId: m[1], isShorts: true,
+          src: fullMatched,
           thumbnail: post.thumbnail || '',
           previewWebp: '',
           postThumbnail: post.thumbnail || '',
         });
       }
 
-      // 3. Facebook Reel / Video
-      const fbRegex = /facebook\.com\/(?:reel\/(\d+)|watch\/?\?v=(\d+)|video\/(\d+))/g;
-      while ((m = fbRegex.exec(content)) !== null) {
-        const fbId = m[1] || m[2] || m[3];
+      // 3. Facebook Reel / Video / Watch / Share
+      const fbRegex = /(?:https?:\/\/)?(?:www\.|m\.|web\.)?(?:facebook\.com\/(?:reel\/([a-zA-Z0-9_-]+)|watch\/?\?(?:[^#\s"'>]*&)?v=([a-zA-Z0-9_-]+)|(?:[\w.-]+\/videos\/([a-zA-Z0-9_-]+))|video\/([a-zA-Z0-9_-]+)|share\/r\/([a-zA-Z0-9_-]+))|fb\.watch\/([a-zA-Z0-9_-]+))/gi;
+      while ((m = fbRegex.exec(searchSrc)) !== null) {
+        const fullMatched = m[0].startsWith('http') ? m[0] : ('https://' + m[0]);
+        const fbId = m[1] || m[2] || m[3] || m[4] || m[5] || m[6] || '';
+        const isReel = /reel|share\/r/i.test(m[0]);
+        let canonicalFbUrl = fullMatched;
+        if (fbId && /^\d+$/.test(fbId)) {
+          canonicalFbUrl = isReel ? `https://www.facebook.com/reel/${fbId}/` : `https://www.facebook.com/watch/?v=${fbId}`;
+        }
         found.push({
-          type: 'facebook', videoId: fbId, isShorts: true,
+          type: 'facebook',
+          videoId: fbId,
+          src: canonicalFbUrl,
+          isShorts: isReel,
           thumbnail: post.thumbnail || '',
           previewWebp: '',
           postThumbnail: post.thumbnail || '',
@@ -1302,7 +1404,7 @@
 
       // 4. Direct MP4 / WebM
       const mp4Regex = /(https?:\/\/[^\s"'<>]+\.(?:mp4|webm))/gi;
-      while ((m = mp4Regex.exec(content)) !== null) {
+      while ((m = mp4Regex.exec(searchSrc)) !== null) {
         found.push({
           type: 'mp4', videoId: '', src: m[1], isShorts: false,
           thumbnail: post.thumbnail || '',
@@ -1314,9 +1416,11 @@
 
     // 5. Audio / Voice / Podcast
     if (mediaFilter === 'all' || mediaFilter === 'audio') {
+      const searchAudioSrc = String(content + ' ' + postUrl)
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
       const audioRegex = /(https?:\/\/[^\s"'<>]+\.(?:mp3|m4a|ogg|wav))/gi;
       let m2;
-      while ((m2 = audioRegex.exec(content)) !== null) {
+      while ((m2 = audioRegex.exec(searchAudioSrc)) !== null) {
         found.push({
           type: 'audio', videoId: '', src: m2[1], isShorts: false,
           thumbnail: post.thumbnail || '',
@@ -1365,26 +1469,12 @@
     // Blurred background mode: dùng cho YouTube 16:9 (không phải Shorts)
     const useBlur = isYouTube && !isShorts;
 
-    // Story bars (tương thích cả playlist nhiều clip hoặc 3 bars mặc định)
-    const count = totalCount && totalCount > 1 ? Math.min(totalCount, 8) : 3;
-    const activeIdx = (itemIndex !== undefined && itemIndex >= 0) ? (itemIndex % count) : 1;
-    const storyBarsList = Array.from({ length: count }).map((_, bIdx) => {
-      if (bIdx < activeIdx) return '<span class="sp-reel-story-bar sp-reel-story-bar--done"></span>';
-      if (bIdx === activeIdx) return '<span class="sp-reel-story-bar sp-reel-story-bar--active"></span>';
-      return '<span class="sp-reel-story-bar"></span>';
-    }).join('');
-
-    const storyBars = `
-      <div class="sp-reel-story-bars" aria-hidden="true">
-        ${storyBarsList}
-      </div>`;
-
     // Duration badge
     const durationIcon = isAudio ? '🎙️' : '🎬';
     const durationHtml = item.duration ? `<span class="sp-reel-duration">${durationIcon} ${escapeHtml(item.duration)}</span>` : '';
 
     // Hot badge
-    const hotBadgeHtml = isHot ? `<span class="sp-reel-badge-hot">🔥 HOT REEL</span>` : '';
+    const hotBadgeHtml = isHot ? `<span class="sp-reel-badge-hot">🔥 HOT</span>` : '';
 
     // Thumbnail
     const thumb = item.thumbnail || item.postThumbnail || '';
@@ -1402,7 +1492,7 @@
         <span class="sp-reel-disc-inner">🎵</span>
       </div>
       <div class="sp-reel-marquee" aria-hidden="true">
-        <span class="sp-reel-marquee-text">♫ Âm thanh bài viết · Trà Đá Blog · ♪ ♫ Âm thanh bài viết · Trà Đá Blog ·</span>
+        <span class="sp-reel-marquee-text">♫ Âm thanh bài viết · Audio Reel · ♪ ♫ Âm thanh bài viết · Audio Reel ·</span>
       </div>` : '';
 
     // Play button
@@ -1412,20 +1502,71 @@
         <span class="sp-reel-play-pulse"></span>
       </button>`;
 
+    // Fallback Poster cho bài viết chưa đính kèm ảnh bìa
+    function buildPlatformFallbackPoster(pType) {
+      if (pType === 'facebook') {
+        return `
+          <div class="sp-reel-thumb-poster sp-reel-thumb-poster--facebook">
+            <div class="sp-reel-poster-icon">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <span class="sp-reel-poster-label">Facebook Reel</span>
+          </div>`;
+      }
+      if (pType === 'tiktok') {
+        return `
+          <div class="sp-reel-thumb-poster sp-reel-thumb-poster--tiktok">
+            <div class="sp-reel-poster-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/></svg>
+            </div>
+            <span class="sp-reel-poster-label">TikTok</span>
+          </div>`;
+      }
+      if (pType === 'audio') {
+        return `
+          <div class="sp-reel-thumb-poster sp-reel-thumb-poster--audio">
+            <div class="sp-reel-poster-icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <span class="sp-reel-poster-label">Audio Reel</span>
+          </div>`;
+      }
+      if (pType === 'mp4') {
+        return `
+          <div class="sp-reel-thumb-poster sp-reel-thumb-poster--mp4">
+            <div class="sp-reel-poster-icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span class="sp-reel-poster-label">Video Clip</span>
+          </div>`;
+      }
+      return `
+        <div class="sp-reel-thumb-poster sp-reel-thumb-poster--youtube">
+          <div class="sp-reel-poster-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <span class="sp-reel-poster-label">YouTube</span>
+        </div>`;
+    }
+
     // Blurred background fill layout (16:9 YouTube)
-    const mediaInner = useBlur ? `
-      <div class="sp-reel-blur-backdrop" style="--reel-thumb: url('${thumb}')"></div>
-      <div class="sp-reel-media-center">
-        <img class="sp-reel-thumb" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>
-      </div>` : `
-      <img class="sp-reel-thumb sp-reel-thumb--cover" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>`;
+    let mediaInner;
+    if (thumb) {
+      mediaInner = useBlur ? `
+        <div class="sp-reel-blur-backdrop" style="--reel-thumb: url('${thumb}')"></div>
+        <div class="sp-reel-media-center">
+          <img class="sp-reel-thumb" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>
+        </div>` : `
+        <img class="sp-reel-thumb sp-reel-thumb--cover" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>`;
+    } else {
+      mediaInner = buildPlatformFallbackPoster(item.type);
+    }
 
     return `
       <div class="sp-reel-card ${isHot ? 'sp-reel-card--hot' : ''} ${isAudio ? 'sp-reel-card--audio' : ''} ${useBlur ? 'sp-reel-card--blur' : 'sp-reel-card--cover'}" data-post-url="${escapeHtml(item.url)}" data-reel-index="${itemIndex !== undefined ? itemIndex : 0}">
         <div class="sp-reel-media">
           ${mediaInner}
           <div class="sp-reel-overlay">
-            ${storyBars}
             <div class="sp-reel-top-row">
               <div class="sp-reel-top-badges">
                 ${hotBadgeHtml}
@@ -1461,26 +1602,76 @@
 
   /* ── Fetch reels feed với cache 60 phút ── */
   async function fetchReelsFeed(label, fetchCount) {
-    const cacheKey = CACHE_PREFIX + 'reels_' + encodeURIComponent(label) + '_' + fetchCount;
-    // Đọc cache với TTL 60 phút
+    const cleanLabel = (label || '@video').trim();
+    const cacheKey = CACHE_PREFIX + 'reels_' + encodeURIComponent(cleanLabel) + '_' + fetchCount;
+
+    // Đọc cache với TTL 60 phút (chỉ lấy nếu data có ít nhất 1 bài hợp lệ)
     try {
       const raw = sessionStorage.getItem(cacheKey);
       if (raw) {
         const { data, ts } = JSON.parse(raw);
-        if (Date.now() - ts <= CACHE_TTL_REELS) return data;
+        if (Array.isArray(data) && data.length > 0 && Date.now() - ts <= getEffectiveCacheTtl()) {
+          return data;
+        }
         sessionStorage.removeItem(cacheKey);
       }
     } catch (_) {}
 
     try {
       const blogUrl = getBlogBaseUrl();
-      const url = `${blogUrl}/feeds/posts/default/-/${encodeURIComponent(label)}?alt=json&max-results=${fetchCount}&orderby=published`;
-      const res = await fetch(url);
-      if (!res.ok) return [];
-      const json = await res.json();
-      const entries = (json.feed && json.feed.entry) ? json.feed.entry : [];
-      const posts = parseFeedEntries(entries);
-      try { sessionStorage.setItem(cacheKey, JSON.stringify({ data: posts, ts: Date.now() })); } catch (_) {}
+      let posts = [];
+
+      // Blogger Atom Feed endpoint '/feeds/posts/default/-/{label}' không hỗ trợ ký tự '@' trong URL path (trả về rỗng).
+      // Do đó, nếu label chứa ký tự '@', ta bỏ qua query category và chuyển thẳng sang fetch feed tổng để lọc client-side.
+      const hasAtSymbol = cleanLabel.includes('@');
+
+      if (!hasAtSymbol) {
+        try {
+          const catUrl = `${blogUrl}/feeds/posts/default/-/${encodeURIComponent(cleanLabel)}?alt=json&max-results=${fetchCount}&orderby=published`;
+          const res = await fetch(catUrl);
+          if (res.ok) {
+            const json = await res.json();
+            const entries = (json.feed && json.feed.entry) ? json.feed.entry : [];
+            posts = parseFeedEntries(entries);
+          }
+        } catch (_) {}
+      }
+
+      // Fallback: Nếu query category không có bài hoặc nhãn có chứa '@'
+      if (!posts || posts.length === 0) {
+        const genUrl = `${blogUrl}/feeds/posts/default?alt=json&max-results=${Math.max(fetchCount, 50)}&orderby=published`;
+        const res = await fetch(genUrl);
+        if (res.ok) {
+          const json = await res.json();
+          const entries = (json.feed && json.feed.entry) ? json.feed.entry : [];
+          const allPosts = parseFeedEntries(entries);
+
+          // Tạo danh sách các biến thể nhãn chuẩn: @video, @video-hot, @hotvideo và nhãn do widget cấu hình
+          const targetVariations = new Set(['@video', 'video', '@video-hot', 'video-hot', '@hotvideo', 'hotvideo']);
+          const labelParts = cleanLabel.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+          labelParts.forEach(lp => {
+            targetVariations.add(lp);
+            targetVariations.add(lp.replace(/^@/, ''));
+            targetVariations.add('@' + lp.replace(/^@/, ''));
+          });
+
+          // Lọc nghiêm ngặt: BẮT BUỘC bài viết phải có nhãn @video hoặc @video-hot
+          let matched = allPosts.filter(p => {
+            const pLabels = (p.labels || []).map(l => l.toLowerCase());
+            return pLabels.some(l => targetVariations.has(l));
+          });
+
+          posts = matched;
+        }
+      }
+
+      // Chỉ cache khi CÓ dữ liệu (không bao giờ cache mảng rỗng để bài viết mới hiển thị tức thì khi tải lại trang)
+      if (posts && posts.length > 0) {
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify({ data: posts, ts: Date.now() }));
+        } catch (_) {}
+      }
+
       return posts;
     } catch (_) {
       return [];
@@ -1599,7 +1790,9 @@
         ${showNav ? `<button class="sp-reels-btn sp-reels-btn-next" aria-label="Tiếp theo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>` : ''}
       </div>`;
 
-    container.innerHTML = buildReelsWidgetShell(widgetTitle, bodyHtml, isSidebar);
+    const inTopWide = !!container.closest('#top-wide-section');
+    const isSeamless = inTopWide || container.dataset.seamless === 'true';
+    container.innerHTML = buildReelsWidgetShell(widgetTitle, bodyHtml, isSidebar, isSeamless);
     container.dataset.reelItems = JSON.stringify(reelItems);
 
     // Gắn sự kiện
@@ -1641,13 +1834,15 @@
       const origSrc = thumb.src;
 
       card.addEventListener('mouseenter', () => {
-        if (previewWebp) {
+        card.classList.add('sp-reel-card--hovered');
+        if (previewWebp && !previewWebp.includes('an_webp')) {
           thumb.src = previewWebp;
           card.classList.add('sp-reel-card--previewing');
         }
       });
       card.addEventListener('mouseleave', () => {
-        if (previewWebp) {
+        card.classList.remove('sp-reel-card--hovered');
+        if (previewWebp && !previewWebp.includes('an_webp')) {
           thumb.src = origSrc;
           card.classList.remove('sp-reel-card--previewing');
         }
@@ -1874,6 +2069,18 @@
     activeModalPlaylist = playlist;
     activeModalIndex = (startIndex >= 0 && startIndex < playlist.length) ? startIndex : 0;
 
+    // Dừng tất cả các thẻ đang phát inline trong widget để tránh 2 âm thanh đè nhau
+    document.querySelectorAll('.sp-reel-card--playing').forEach(c => {
+      c.classList.remove('sp-reel-card--playing');
+      const s = c.querySelector('.sp-reel-player-slot');
+      if (s) {
+        s.querySelectorAll('video, audio').forEach(m => { try { m.pause(); m.src = ''; } catch(e){} });
+        s.innerHTML = '';
+        s.hidden = true;
+        s.style.display = 'none';
+      }
+    });
+
     const modal = ensureReelsModal();
     modal.classList.add('sp-reels-modal--open');
     modal.setAttribute('aria-hidden', 'false');
@@ -1888,7 +2095,10 @@
     reelsModalEl.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     const slot = reelsModalEl.querySelector('.sp-reels-modal-player-slot');
-    if (slot) slot.innerHTML = '';
+    if (slot) {
+      slot.querySelectorAll('video, audio').forEach(m => { try { m.pause(); m.src = ''; } catch(e){} });
+      slot.innerHTML = '';
+    }
   }
 
   function changeModalReel(dir) {
@@ -1919,13 +2129,17 @@
     const slot = reelsModalEl.querySelector('.sp-reels-modal-player-slot');
     if (!slot) return;
 
+    // Dọn sạch video/audio cũ trước khi nạp clip mới (tránh ghost audio)
+    slot.querySelectorAll('video, audio').forEach(m => { try { m.pause(); m.src = ''; m.load(); } catch(e) {} });
+    slot.innerHTML = '';
+
     let mediaHtml = '';
     const vType = item.type;
     const vId = item.videoId;
     const vSrc = item.src;
 
     if (vType === 'youtube' || vType === 'youtube-shorts') {
-      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" title="Reels Video Player"></iframe>`;
+      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" frameborder="0" title="Reels Video Player"></iframe>`;
     } else if (vType === 'mp4') {
       mediaHtml = `<video class="sp-reels-modal-video" src="${escapeHtml(vSrc)}" controls autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>`;
     } else if (vType === 'audio') {
@@ -1936,18 +2150,152 @@
           <audio class="sp-reels-modal-audio" src="${escapeHtml(vSrc)}" controls autoplay></audio>
         </div>`;
     } else if (vType === 'tiktok') {
-      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}" allow="fullscreen; autoplay" frameborder="0" title="TikTok player"></iframe>`;
+      const ttDirectUrl = vSrc || `https://www.tiktok.com/@/video/${vId}`;
+      mediaHtml = `
+        <div class="sp-reels-tiktok-wrap" style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;">
+          <iframe class="sp-reels-modal-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}?autoplay=1&controls=1&music_info=1&description=1" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="true" scrolling="no" frameborder="0" title="TikTok player"></iframe>
+          <div class="sp-reels-tt-controls" style="position:absolute;top:12px;left:12px;z-index:30;display:flex;align-items:center;gap:8px;">
+            <button class="sp-tiktok-sound-btn" data-muted="true" aria-label="Bật/Tắt âm thanh TikTok" title="Bật/Tắt âm thanh" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(254,44,85,0.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border-radius:20px;font-size:0.75rem;font-weight:700;border:1px solid rgba(255,255,255,0.25);cursor:pointer;box-shadow:0 4px 14px rgba(254,44,85,0.45);transition:all 0.2s;">
+              <span class="sp-tiktok-sound-icon" style="font-size:0.95rem;">🔇</span>
+              <span class="sp-tiktok-sound-text">Bật tiếng</span>
+            </button>
+            <a href="${escapeHtml(ttDirectUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);color:#fff;border-radius:20px;font-size:0.75rem;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,0.2);">
+              <span>Mở TikTok ↗</span>
+            </a>
+          </div>
+        </div>`;
     } else if (vType === 'facebook') {
-      const fbUrl = encodeURIComponent(`https://www.facebook.com/video/${vId}`);
-      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbUrl}&show_text=false&autoplay=true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen frameborder="0" title="Facebook video player"></iframe>`;
+      const fbTargetUrl = vSrc || (item && item.isShorts ? `https://www.facebook.com/reel/${vId}/` : `https://www.facebook.com/watch/?v=${vId}`);
+      const isShortRedirect = /share\/[rv]|fb\.watch/i.test(fbTargetUrl) || !/\d{8,}/.test(fbTargetUrl);
+
+      if (isShortRedirect) {
+        // Link chia sẻ rút gọn từ app điện thoại (Facebook chặn giải mã redirect trong iframe)
+        mediaHtml = `
+          <div class="sp-reels-facebook-wrap" style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;background:radial-gradient(circle at center, #1c2738 0%, #0d1117 100%);color:#fff;box-sizing:border-box;">
+            <div style="width:72px;height:72px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;box-shadow:0 8px 28px rgba(24,119,242,0.45);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <h3 style="font-size:1.2rem;font-weight:700;margin:0 0 0.5rem;color:#fff;">Facebook Reel</h3>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.8);max-width:320px;line-height:1.55;margin:0 0 1.5rem;">
+              Đây là link chia sẻ rút gọn từ ứng dụng điện thoại (<code>/share/r/</code>). Facebook yêu cầu mở trực tiếp để xem:
+            </p>
+            <a href="${escapeHtml(fbTargetUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:0.75rem 1.75rem;background:#1877f2;color:#fff;border-radius:30px;font-size:0.92rem;font-weight:700;text-decoration:none;box-shadow:0 6px 20px rgba(24,119,242,0.5);transition:transform 0.2s;">
+              <span>Mở xem trên Facebook</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:1.25rem;">Mẹo: Dùng link gốc có ID số trên máy tính để nhúng phát trực tiếp.</span>
+          </div>`;
+      } else {
+        const fbHref = encodeURIComponent(fbTargetUrl);
+        const slotW = slot.clientWidth || 380;
+        const fbW = Math.min(Math.max(slotW, 280), 450);
+        const fbH = Math.round(fbW * 16 / 9);
+
+        mediaHtml = `
+          <div class="sp-reels-facebook-wrap" style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;">
+            <iframe class="sp-reels-modal-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbHref}&show_text=false&autoplay=true&mute=0&width=${fbW}&height=${fbH}" width="${fbW}" height="${fbH}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen="true" scrolling="no" frameborder="0" title="Facebook Reel player" style="width:100%;height:100%;border:none;"></iframe>
+            <div class="sp-reels-fb-direct-link" style="position:absolute;top:12px;left:12px;z-index:30;display:flex;align-items:center;gap:8px;">
+              <a href="${escapeHtml(fbTargetUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(24,119,242,0.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border-radius:20px;font-size:0.75rem;font-weight:600;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.2);transition:all 0.2s;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span>Xem trên Facebook ↗</span>
+              </a>
+            </div>
+          </div>`;
+      }
     }
 
     slot.innerHTML = mediaHtml;
+
+    // Gắn sự kiện điều khiển âm thanh TikTok qua postMessage
+    const ttSoundBtn = slot.querySelector('.sp-tiktok-sound-btn');
+    if (ttSoundBtn) {
+      const ttIframe = slot.querySelector('iframe.sp-reels-modal-iframe');
+      if (ttIframe) {
+        ttIframe.addEventListener('load', () => {
+          setTimeout(() => { sendTikTokAudioCmd(ttIframe, true); }, 500);
+        });
+        ttSoundBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isCurrentlyMuted = ttSoundBtn.dataset.muted !== 'false';
+          sendTikTokAudioCmd(ttIframe, isCurrentlyMuted);
+          ttSoundBtn.dataset.muted = isCurrentlyMuted ? 'false' : 'true';
+          const icon = ttSoundBtn.querySelector('.sp-tiktok-sound-icon');
+          const txt = ttSoundBtn.querySelector('.sp-tiktok-sound-text');
+          if (icon) icon.textContent = isCurrentlyMuted ? '🔊' : '🔇';
+          if (txt) txt.textContent = isCurrentlyMuted ? 'Tắt tiếng' : 'Bật tiếng';
+          ttSoundBtn.style.background = isCurrentlyMuted ? 'rgba(34, 197, 94, 0.95)' : 'rgba(254, 44, 85, 0.95)';
+          ttSoundBtn.style.boxShadow = isCurrentlyMuted ? '0 4px 14px rgba(34, 197, 94, 0.45)' : '0 4px 14px rgba(254, 44, 85, 0.45)';
+        });
+      }
+    }
+
+    // Tự làm mờ gợi ý âm thanh Facebook sau 4 giây
+    setTimeout(() => {
+      const tip = slot.querySelector('.sp-reels-fb-sound-tip');
+      if (tip) {
+        tip.style.opacity = '0';
+      }
+    }, 4000);
+  }
+
+  /* ── Helper: Gửi lệnh điều khiển âm thanh tới TikTok Player iframe ── */
+  function sendTikTokAudioCmd(iframe, unmute) {
+    if (!iframe || !iframe.contentWindow) return;
+    const msg = {
+      'x-tiktok-player': true,
+      'type': unmute ? 'unMute' : 'mute',
+      'value': null
+    };
+    iframe.contentWindow.postMessage(msg, '*');
+    try {
+      iframe.contentWindow.postMessage(JSON.stringify(msg), '*');
+    } catch (e) {}
+  }
+
+  // Lắng nghe sự kiện trạng thái âm thanh từ TikTok Player
+  if (!window._spTikTokMessageBound) {
+    window._spTikTokMessageBound = true;
+    window.addEventListener('message', function(event) {
+      let data = event.data;
+      if (typeof data === 'string') {
+        try { data = JSON.parse(data); } catch(e) {}
+      }
+      if (data && data['x-tiktok-player']) {
+        if (data.type === 'onMute') {
+          const isMuted = !!data.value;
+          document.querySelectorAll('.sp-tiktok-sound-btn').forEach(btn => {
+            btn.dataset.muted = isMuted ? 'true' : 'false';
+            const icon = btn.querySelector('.sp-tiktok-sound-icon');
+            const txt = btn.querySelector('.sp-tiktok-sound-text');
+            if (icon) icon.textContent = isMuted ? '🔇' : '🔊';
+            if (txt) txt.textContent = isMuted ? 'Bật tiếng' : 'Tắt tiếng';
+            btn.style.background = isMuted ? 'rgba(254, 44, 85, 0.95)' : 'rgba(34, 197, 94, 0.95)';
+          });
+        }
+      }
+    });
   }
 
   /* ── Phát Video/Audio trong card (Click-to-Play Facade — chế độ inline) ── */
   function playReelCard(card) {
     if (!card || card.classList.contains('sp-reel-card--playing')) return;
+
+    // Dừng tất cả các thẻ khác đang phát để tránh xung đột âm thanh
+    document.querySelectorAll('.sp-reel-card--playing').forEach(otherCard => {
+      if (otherCard !== card) {
+        otherCard.classList.remove('sp-reel-card--playing');
+        const otherSlot = otherCard.querySelector('.sp-reel-player-slot');
+        if (otherSlot) {
+          otherSlot.querySelectorAll('video, audio').forEach(m => {
+            try { m.pause(); m.src = ''; m.load(); } catch(e) {}
+          });
+          otherSlot.innerHTML = '';
+          otherSlot.hidden = true;
+          otherSlot.style.display = 'none';
+        }
+      }
+    });
+
     const btn = card.querySelector('.sp-reel-play-btn');
     const playerSlot = card.querySelector('.sp-reel-player-slot');
     if (!playerSlot || !btn) return;
@@ -1958,16 +2306,56 @@
 
     let playerHtml = '';
     if (vType === 'youtube' || vType === 'youtube-shorts') {
-      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" title="Video player"></iframe>`;
+      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" frameborder="0" title="Video player"></iframe>`;
     } else if (vType === 'mp4') {
       playerHtml = `<video class="sp-reel-iframe" src="${escapeHtml(vSrc)}" controls autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>`;
     } else if (vType === 'audio') {
       playerHtml = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:1.5rem;text-align:center;background:#111;"><div style="font-size:3rem;margin-bottom:1rem;animation:sp-spin-disc 4s linear infinite;">💿</div><div style="color:#fff;font-size:0.85rem;font-weight:600;margin-bottom:1.25rem;">${escapeHtml(card.querySelector('.sp-reel-title') ? card.querySelector('.sp-reel-title').textContent : 'Đang phát Podcast')}</div><audio class="sp-reel-audio-player" src="${escapeHtml(vSrc)}" controls autoplay style="width:100%;"></audio></div>`;
     } else if (vType === 'tiktok') {
-      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}" allow="fullscreen; autoplay" frameborder="0" title="TikTok player"></iframe>`;
+      const ttDirectUrl = vSrc || `https://www.tiktok.com/@/video/${vId}`;
+      playerHtml = `
+        <div style="position:relative;width:100%;height:100%;background:#000;">
+          <iframe class="sp-reel-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}?autoplay=1&controls=1&music_info=1&description=1" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="true" scrolling="no" frameborder="0" title="TikTok player"></iframe>
+          <div style="position:absolute;top:8px;left:8px;z-index:25;display:flex;align-items:center;gap:4px;">
+            <button class="sp-tiktok-sound-btn" data-muted="true" aria-label="Bật/Tắt âm thanh" style="display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(254,44,85,0.95);color:#fff;border-radius:14px;font-size:0.68rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">
+              <span class="sp-tiktok-sound-icon">🔇</span>
+              <span class="sp-tiktok-sound-text">Bật tiếng</span>
+            </button>
+            <a href="${escapeHtml(ttDirectUrl)}" target="_blank" rel="noopener" style="padding:4px 8px;background:rgba(0,0,0,0.65);color:#fff;border-radius:14px;font-size:0.68rem;font-weight:600;text-decoration:none;">
+              <span>TikTok ↗</span>
+            </a>
+          </div>
+        </div>`;
     } else if (vType === 'facebook') {
-      const fbUrl = encodeURIComponent(`https://www.facebook.com/video/${vId}`);
-      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbUrl}&show_text=false&autoplay=true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen frameborder="0" title="Facebook video player"></iframe>`;
+      const fbTargetUrl = vSrc || (vId ? `https://www.facebook.com/reel/${vId}/` : '');
+      const isShortRedirect = /share\/[rv]|fb\.watch/i.test(fbTargetUrl) || !/\d{8,}/.test(fbTargetUrl);
+
+      if (isShortRedirect) {
+        playerHtml = `
+          <div style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;background:#111;color:#fff;box-sizing:border-box;">
+            <div style="width:48px;height:48px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.4rem;">Facebook Reel</div>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.7);margin:0 0 1rem;line-height:1.4;">Link rút gọn từ điện thoại cần mở trực tiếp trên Facebook.</p>
+            <a href="${escapeHtml(fbTargetUrl)}" target="_blank" rel="noopener" style="padding:6px 14px;background:#1877f2;color:#fff;border-radius:20px;font-size:0.8rem;font-weight:700;text-decoration:none;">
+              Mở trên Facebook ↗
+            </a>
+          </div>`;
+      } else {
+        const fbHref = encodeURIComponent(fbTargetUrl);
+        const cardW = card.clientWidth || 175;
+        const fbW = Math.min(Math.max(cardW, 175), 450);
+        const fbH = Math.round(fbW * 16 / 9);
+
+        playerHtml = `
+          <div style="position:relative;width:100%;height:100%;background:#000;">
+            <iframe class="sp-reel-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbHref}&show_text=false&autoplay=true&mute=0&width=${fbW}&height=${fbH}" width="${fbW}" height="${fbH}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen="true" scrolling="no" frameborder="0" title="Facebook Reel player" style="width:100%;height:100%;border:none;"></iframe>
+            <a href="${escapeHtml(fbTargetUrl)}" target="_blank" rel="noopener" style="position:absolute;top:8px;left:8px;z-index:20;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(24,119,242,0.92);color:#fff;border-radius:14px;font-size:0.7rem;font-weight:600;text-decoration:none;">
+              <span>Mở FB ↗</span>
+            </a>
+          </div>`;
+      }
     }
 
     if (!playerHtml) return;
@@ -1976,6 +2364,47 @@
     playerSlot.innerHTML = playerHtml + `<button class="sp-reel-close-btn" aria-label="Đóng" title="Đóng video">✕</button>`;
     playerSlot.hidden = false;
     playerSlot.style.display = 'flex';
+
+    // Kích hoạt phát video/audio HTML5 an toàn (nếu unmuted bị chặn thì tự động mute để không bị đơ)
+    const nativeCardVideo = playerSlot.querySelector('video.sp-reel-iframe');
+    if (nativeCardVideo) {
+      const p = nativeCardVideo.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          nativeCardVideo.muted = true;
+          nativeCardVideo.play();
+        });
+      }
+    }
+    const nativeCardAudio = playerSlot.querySelector('audio.sp-reel-audio-player');
+    if (nativeCardAudio) {
+      const p2 = nativeCardAudio.play();
+      if (p2 && typeof p2.catch === 'function') {
+        p2.catch(() => {});
+      }
+    }
+
+    // Gắn sự kiện âm thanh TikTok cho inline card
+    const cardTtBtn = playerSlot.querySelector('.sp-tiktok-sound-btn');
+    if (cardTtBtn) {
+      const cardTtIframe = playerSlot.querySelector('iframe.sp-reel-iframe');
+      if (cardTtIframe) {
+        cardTtIframe.addEventListener('load', () => {
+          setTimeout(() => { sendTikTokAudioCmd(cardTtIframe, true); }, 500);
+        });
+        cardTtBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isCurrentlyMuted = cardTtBtn.dataset.muted !== 'false';
+          sendTikTokAudioCmd(cardTtIframe, isCurrentlyMuted);
+          cardTtBtn.dataset.muted = isCurrentlyMuted ? 'false' : 'true';
+          const icon = cardTtBtn.querySelector('.sp-tiktok-sound-icon');
+          const txt = cardTtBtn.querySelector('.sp-tiktok-sound-text');
+          if (icon) icon.textContent = isCurrentlyMuted ? '🔊' : '🔇';
+          if (txt) txt.textContent = isCurrentlyMuted ? 'Tắt tiếng' : 'Bật tiếng';
+          cardTtBtn.style.background = isCurrentlyMuted ? 'rgba(34, 197, 94, 0.95)' : 'rgba(254, 44, 85, 0.95)';
+        });
+      }
+    }
 
     const closeBtn = playerSlot.querySelector('.sp-reel-close-btn');
     if (closeBtn) {
@@ -2233,7 +2662,7 @@
       // Labels
       const labels = (entry.category || []).map(c => c.term || '');
 
-      const rawContent = entry.content ? (entry.content.$t || '') : '';
+      const rawContent = (entry.content && entry.content.$t) ? entry.content.$t : ((entry.summary && entry.summary.$t) ? entry.summary.$t : '');
 
       return { url, title, thumbnail, snippet, published, dateFormatted, labels, rawContent };
     } catch {
@@ -2406,7 +2835,7 @@
       const raw = sessionStorage.getItem(key);
       if (!raw) return null;
       const { data, ts } = JSON.parse(raw);
-      if (Date.now() - ts > CACHE_TTL) {
+      if (Date.now() - ts > getEffectiveCacheTtl()) {
         sessionStorage.removeItem(key);
         return null;
       }

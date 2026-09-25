@@ -91,6 +91,28 @@
             </b:includable>
           </b:widget>
 
+          <!-- Widget: Video & Reels Sidebar (Vị trí 3: Cột bên - Edge to Edge, Auto-slide) -->
+          <b:widget id='HTML23' type='HTML' version='2' title='🎬 Video &amp; Reels (Sidebar)' visible='true'>
+            <b:includable id='main'>
+              <div class='sidebar-widget special-posts-widget'
+                   id='widget-sidebar-reels'
+                   data-pattern='reels'
+                   data-limit='5'
+                   data-mode='single'
+                   data-sort='random'
+                   data-play-mode='modal'>
+                <b:if cond='data:title'>
+                  <b:attr name='data-title' expr:value='data:title'/>
+                <b:else/>
+                  <b:attr name='data-title' value='🎬 Video &amp; Reels'/>
+                </b:if>
+                <b:if cond='data:content'>
+                  <div class='sp-raw-user-content' style='display:none;'><data:content/></div>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+
           <!-- Widget: Newsletter -->
           <b:widget id='HTML4' type='HTML' version='2' title='📨 Nhận Bản Tin | 📨 Newsletter'>
             <b:includable id='main'>
