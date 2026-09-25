@@ -1,6 +1,6 @@
 # ĐẶC TẢ KỸ THUẬT: TIỆN ÍCH VIDEO & VOICE REELS BÁN CHÉO NỘI DUNG (VIDEO & VOICE REELS SHOWCASE WIDGET)
 
-- **Mã spec:** OPEN_019 | **Phiên bản:** 1.0.0 | **Trạng thái:** Open | **Ngày:** 21/09/2026
+- **Mã spec:** OPEN_019 | **Phiên bản:** 1.3.0 | **Trạng thái:** Open | **Ngày:** 25/09/2026
 - **Dự án:** Trà Đá Blog (Blogger Editorial Theme - Blogspot XML v3)
 - **Tài liệu tham chiếu:** [01_Done_007_Flexible_Special_Posts_Widget_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/01_Done_007_Flexible_Special_Posts_Widget_Specification.md), [01_Done_018_Standalone_Series_Showcase_Widget_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/01_Done_018_Standalone_Series_Showcase_Widget_Specification.md), [04_Idea_017_Editorial_Theme_Backlog_And_Widget_Enhancements_Specification.md](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/specs/04_Idea_017_Editorial_Theme_Backlog_And_Widget_Enhancements_Specification.md)
 
@@ -15,18 +15,26 @@ Trong kỷ nguyên tiêu thụ nội dung đa phương tiện, các nền tảng
 - Tác giả thường xuyên sản xuất nội dung kết hợp: bài viết phân tích chuyên sâu đi kèm clip ngắn, video đánh giá thực tế, hoặc tập âm thanh tâm sự (voice/podcast).
 - Tác giả triển khai **chiến lược bán chéo nội dung (Cross-sale Content & Affiliate Marketing)** trên diện rộng: phần lớn bài viết đều gắn các đường link video giới thiệu hoặc voice chia sẻ sản phẩm / dịch vụ.
 - Cần một tiện ích **Trình diễn Video & Voice Reels (Video & Voice Reels Showcase Widget)** có giao diện trực quan, linh động ở mọi vị trí trên blog, vừa gia tăng thời gian độc giả ở lại trang (Time-on-Site), vừa tối ưu hóa tỷ lệ chuyển đổi nhấp chuột vào bài viết bán hàng.
+- **Trăn trở cốt lõi về trải nghiệm (UX Core Problem):** Nếu khung hình Reels chỉ hiển thị ảnh đại diện tĩnh (static thumbnail) trơ trọi kèm nút Play, độc giả sẽ lướt qua như một bức ảnh thông thường, làm mất hoàn toàn tính hấp dẫn của định dạng Reels. Widget **phải chuyển động sống động (Living Canvas)**, mang đầy đủ các dấu hiệu nhận diện đặc trưng của Reels (video preview khi rê chuột, sóng âm thanh nhảy múa, vạch story, nốt nhạc chạy chữ) mà vẫn không gây giật lag trang.
 
 ### 1.2. Mục tiêu kỹ thuật cốt lõi
-1. **Tích hợp mở rộng vào hệ thống `special-posts` hiện có:** Kế thừa kiến trúc **Pluggable Pattern Strategy** sẵn có trong `src/scripts/special-posts.js` (`pattern: reels`), sử dụng chung bộ nạp feed song song, cơ chế cache `sessionStorage` (5 phút), parser cấu hình và bộ chống giật khung hình (Zero-CLS Skeleton Shimmer).
-2. **Khung hình đứng 9:16 phong cách Reels:** Dàn hàng ngang có thanh trượt cảm ứng (Touch Slider / Carousel), hỗ trợ cuộn mượt bằng CSS Scroll Snap và 2 nút điều hướng Trái / Phải.
-3. **Phân cấp nội dung thông minh (`@video-hot` & `@video`):**
+1. **Tích hợp mở rộng vào hệ thống `special-posts` hiện có:** Kế thừa kiến trúc **Pluggable Pattern Strategy** sẵn có trong `src/scripts/special-posts.js` (`pattern: reels`), sử dụng chung bộ nạp feed song song, cơ chế cache `sessionStorage` (60 phút), parser cấu hình và bộ chống giật khung hình (Zero-CLS Skeleton Shimmer).
+2. **Khung hình đứng 9:16 sống động phong cách Reels (Living Canvas):**
+   - Dàn hàng ngang có thanh trượt cảm ứng (Touch Slider / Carousel), hỗ trợ cuộn mượt bằng CSS Scroll Snap và 2 nút điều hướng Trái / Phải.
+   - **Hover / Smart In-View Preview:** Tự động phát preview ngắn khi rê chuột (YouTube Animated WebP 6s hoặc MP4 video loop câm) mà không làm tốn tài nguyên.
+   - **Voice Equalizer Waveform:** Sóng nhạc dao động liên tục đối với các tệp Audio/Podcast để độc giả nhận diện tức thì đây là file âm thanh đang sẵn sàng nghe.
+   - **Bộ nhận diện chuẩn Reels:** Vạch tiến trình Story ở mép trên, thời lượng video (`0:45`), nút Play hiệu ứng xung nhịp (Pulse), và dòng chữ âm thanh chạy ngang (Ticker Marquee).
+3. **Cơ chế tương thích tỉ lệ khung hình (16:9 Landscape vs 9:16 Portrait Shorts):**
+   - Áp dụng kỹ thuật **Blurred Background Fill** chuẩn mực của TikTok/Reels đối với các video ngang 16:9 truyền thống của YouTube: Giữ nguyên vẹn 100% hình ảnh không bị cắt xén, phủ nền mờ nghệ thuật phía sau và biến khoảng trống trên/dưới thành khu vực vàng cho nút CTA và tiêu đề bài viết.
+   - Tràn viền 100% (`object-fit: cover`) đối với các video vốn dĩ đã là tỉ lệ dọc 9:16 (YouTube Shorts, TikTok).
+4. **Phân cấp nội dung thông minh (`@video-hot` & `@video`):**
    - Phân loại rõ video chiến dịch bán chạy (`@video-hot`) và video thường (`@video`).
    - Ưu tiên hiển thị bài Hot ở các "Vị trí vàng" (Vị trí 1 và 2) để tối ưu hiển thị trên màn hình di động.
    - Tỷ lệ phân bổ mục tiêu: 60% Hot : 40% Thường, kèm cơ chế tự động bù trừ nếu thiếu bài.
-4. **Cơ chế bóc tách đa nền tảng (Universal Media Extraction):** Tự động nhận diện YouTube (cả Shorts và link thường), TikTok, Facebook Reels, file trực tiếp HTML5 Video (`.mp4`, `.webm`) và Audio / Voice (`.mp3`, podcast).
-5. **Hiệu năng cao — Kỹ thuật Facade (Click to Play):** Tuyệt đối không nhúng hàng loạt thẻ iframe khi tải trang ban đầu để bảo vệ điểm số Google PageSpeed / Lighthouse (100 điểm). Chỉ nạp player khi độc giả click vào nút Play.
-6. **Thích ứng linh hoạt theo dữ liệu (Dynamic Adaptive & Zero Waste):** Cấu hình tối đa từ `1` đến `10` khung hình. Nếu số video thực tế ít hơn thì tự động co lại đúng số lượng đó; nếu không có video nào thì widget tự động ẩn hoàn toàn khỏi DOM (`display: none`).
-7. **Nhận diện ngữ cảnh hiển thị (Context-Aware):** Tự động chuyển sang chế độ **1 Frame xoay tua ngẫu nhiên** khi đặt ở Cột bên (Sidebar), hoặc chế độ **Thanh trượt dàn ngang** khi đặt ở Đầu trang hoặc Trong luồng bài viết chính.
+5. **Cơ chế bóc tách đa nền tảng (Universal Media Extraction):** Tự động nhận diện YouTube (cả Shorts và link thường), TikTok, Facebook Reels, file trực tiếp HTML5 Video (`.mp4`, `.webm`) và Audio / Voice (`.mp3`, podcast).
+6. **Hiệu năng cao — Kỹ thuật Facade (Click to Play):** Tuyệt đối không nhúng hàng loạt thẻ iframe khi tải trang ban đầu để bảo vệ điểm số Google PageSpeed / Lighthouse (100 điểm). Chỉ nạp player đầy đủ khi độc giả click vào nút Play.
+7. **Thích ứng linh hoạt theo dữ liệu (Dynamic Adaptive & Zero Waste):** Cấu hình tối đa từ `1` đến `10` khung hình. Nếu số video thực tế ít hơn thì tự động co lại đúng số lượng đó; nếu không có video nào thì widget tự động ẩn hoàn toàn khỏi DOM (`display: none`).
+8. **Nhận diện ngữ cảnh hiển thị (Context-Aware):** Tự động chuyển sang chế độ **1 Frame xoay tua ngẫu nhiên** khi đặt ở Cột bên (Sidebar), hoặc chế độ **Thanh trượt dàn ngang** khi đặt ở Đầu trang hoặc Trong luồng bài viết chính.
 
 ---
 
@@ -52,65 +60,114 @@ Tuân thủ chuẩn quy tắc nhãn tính năng tiền tố `@` của theme:
   2. Bóc tách link media từ nội dung HTML của từng bài.
   3. Áp dụng thuật toán Fisher-Yates Shuffle để xáo trộn ngẫu nhiên từng giỏ bài.
   4. Lấy các bài Hot đưa vào vị trí ưu tiên (Vị trí 1, 2) và bù các bài Thường vào các vị trí còn lại theo tỷ lệ 60:40 cho đến khi đủ số khung `limit`.
-- **Cơ chế Cache `sessionStorage`:** Toàn bộ kết quả bóc tách được lưu tạm trong trình duyệt trong **5 phút**. Độc giả chuyển đổi giữa các bài viết trong phiên đọc sẽ không tốn bất kỳ request mạng nào (tốc độ hiển thị 0ms).
+- **Cơ chế Cache `sessionStorage`:** Toàn bộ kết quả bóc tách được lưu tạm trong trình duyệt trong **60 phút** (1 giờ). Độc giả chuyển đổi giữa các bài viết trong phiên đọc sẽ không tốn bất kỳ request mạng nào (tốc độ hiển thị 0ms).
 
 ---
 
-## 3. CƠ CHẾ BÓC TÁCH & PHÁT PHƯƠNG TIỆN (MEDIA EXTRACTION & PLAYBACK ENGINE)
+## 3. CƠ CHẾ BÓC TÁCH & TRẢI NGHIỆM CHUYỂN ĐỘNG SỐNG ĐỘNG (LIVING CANVAS & PLAYBACK ENGINE)
 
 ### 3.1. Ma trận Nhận diện Phương tiện (Platform Regex Matchers)
 
-| Nền tảng | Dạng link hỗ trợ trong bài viết | Quy tắc trích xuất (Extraction Rule) | Nguồn Thumbnail | Phương thức phát khi Click Play |
+| Nền tảng | Dạng link hỗ trợ trong bài viết | Quy tắc trích xuất (Extraction Rule) | Nguồn Thumbnail & Preview Động | Phương thức phát khi Click Play |
 | :--- | :--- | :--- | :--- | :--- |
-| **YouTube (Chuẩn & Shorts)** | • `youtube.com/watch?v={id}`<br>• `youtu.be/{id}`<br>• `youtube.com/shorts/{id}`<br>• `youtube.com/embed/{id}` | Regex bắt Video ID (11 ký tự):<br>`/(?:youtu\.be\/\|v\/\|u\/\w\/\|embed\/\|shorts\/\|watch\?v=)([^#&?]*)/` | `https://i.ytimg.com/vi/{id}/hqdefault.jpg` *(Miễn phí, chuẩn HD, 0ms tải)* | Chèn `<iframe>` với `src="https://www.youtube.com/embed/{id}?autoplay=1&playsinline=1"` trực tiếp tại khung |
+| **YouTube (Chuẩn & Shorts)** | • `youtube.com/watch?v={id}`<br>• `youtu.be/{id}`<br>• `youtube.com/shorts/{id}`<br>• `youtube.com/embed/{id}` | Regex bắt Video ID (11 ký tự):<br>`/(?:youtu\.be\/\|v\/\|u\/\w\/\|embed\/\|shorts\/\|watch\?v=)([^#&?]*)/` | **Ảnh tĩnh:** `i.ytimg.com/vi/{id}/hqdefault.jpg`<br>**Ảnh động preview 6s (Khi hover):** `i.ytimg.com/an_webp/{id}/mqdefault_6s.webp` | Chèn `<iframe>` với `src="https://www.youtube.com/embed/{id}?autoplay=1&playsinline=1"` trực tiếp tại khung |
 | **TikTok** | • `tiktok.com/@{user}/video/{id}` | Regex bắt TikTok Video ID:<br>`/tiktok\.com\/@[\w.-]+\/video\/(\d+)/` | Ảnh đại diện bài viết (Featured Image) | Chèn iframe embed chuẩn của TikTok: `https://www.tiktok.com/embed/v2/{id}` |
 | **Facebook Reels** | • `facebook.com/reel/{id}`<br>• `facebook.com/watch/?v={id}` | Bắt toàn bộ URL hợp lệ của Facebook | Ảnh đại diện bài viết (Featured Image) | Chèn iframe Plugin Facebook Video Player chính thức |
-| **Direct Video (MP4 / WebM)** | • Thẻ `<video src="...">`<br>• Đường link file `.mp4`, `.webm` | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp4\|webm))/i` | Ảnh đại diện bài viết (hoặc poster video) | Render thẻ HTML5 `<video src="..." controls autoplay playsinline>` |
-| **Audio / Voice / Podcast** | • Thẻ `<audio src="...">`<br>• Đường link file `.mp3`, `.m4a`<br>• Link Spotify / SoundCloud | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp3\|m4a))/i` | Ảnh đại diện bài viết kèm hoạt ảnh sóng âm (Equalizer Waveform) | Render thẻ HTML5 `<audio src="..." controls autoplay>` hoặc mini embed |
+| **Direct Video (MP4 / WebM)** | • Thẻ `<video src="...">`<br>• Đường link file `.mp4`, `.webm` | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp4\|webm))/i` | Thẻ `<video muted loop playsinline preload="metadata">` tự động phát câm khi rê chuột hoặc in-view | Bật âm thanh, hiện full controls HTML5 video |
+| **Audio / Voice / Podcast** | • Thẻ `<audio src="...">`<br>• Đường link file `.mp3`, `.m4a`<br>• Link Spotify / SoundCloud | Regex: `/(https?:\/\/[^\s"'<>]+\.(?:mp3\|m4a))/i` | Ảnh đại diện bài viết kết hợp **Hiệu ứng sóng âm dao động (Equalizer Waveform)** nhảy múa liên tục | Render thẻ HTML5 `<audio src="..." controls autoplay>` hoặc mini embed |
 
-### 3.2. Quy tắc Xử lý Nhiều Video Trong Cùng Một Bài (Multiple Videos Handling)
+### 3.2. Cơ Chế Preview Chuyển Động Sống Động (Living Canvas & Hover Engine)
+
+Để loại bỏ hoàn toàn cảm giác "ảnh tĩnh nhàm chán", widget tích hợp hệ thống hiệu ứng chuyển động đa tầng:
+
+#### A. Video Preview Chuyển Động (Hover & Smart In-View)
+- **Trên máy tính (Desktop Hover):**
+  - Khi chuột chưa rê vào: Khung hình hiển thị ảnh thumbnail sắc nét (HQ).
+  - Khi rê chuột vào (`mouseenter`):
+    - Đối với YouTube: Script tự động tráo ảnh sang ảnh động WebP 6 giây (`mqdefault_6s.webp`) của Google. Độc giả thấy ngay chuyển động của video clip!
+    - Đối với MP4: Video tự động chạy mượt mà không tiếng (`muted .play()`).
+  - Khi rời chuột (`mouseleave`): Trở về ảnh tĩnh hoặc tạm dừng để tiết kiệm CPU.
+- **Trên điện thoại di động (Smart In-View IntersectionObserver):**
+  - Do màn hình cảm ứng không có chuột rê, widget sử dụng `IntersectionObserver` với ngưỡng `threshold: 0.7`.
+  - Khung hình nào đang trượt vào **chính giữa màn hình** sẽ tự động kích hoạt preview chuyển động câm.
+  - Các khung hình lệch sang 2 bên tự động dừng lại, đảm bảo điện thoại luôn mượt và mát máy.
+
+#### B. Trực Quan Hóa Âm Thanh (Audio Equalizer Waveform & Vinyl Disc)
+- Đối với các bài viết có file âm thanh/voice, khung Reel không để ảnh bất động mà trang bị:
+  - **Dải sóng âm chuyển động (Equalizer Waveform Bars):** 4–5 cột sóng nhảy lên xuống theo nhịp điệu CSS animation ở góc dưới, mô phỏng trực quan luồng âm thanh đang sẵn sàng phát.
+  - **Icon đĩa than xoay nhẹ (Spinning Disc):** Mô phỏng đĩa nhạc quay phong cách TikTok/Instagram Reels.
+  - **Dòng chữ nhạc chạy ngang (Audio Marquee Ticker):** Chạy dòng text `♫ Âm thanh bài viết - Trà Đá Blog...` kèm icon nốt nhạc rung rinh.
+
+#### C. Bộ Nhận Diện Chi Tiết Chuẩn Reels (Reels Visual Cues)
+1. **Thanh vạch Story ở mép trên (Story Progress Bars):** 3–4 vạch trắng bán trong suốt trên đỉnh khung hình tạo cảm giác xem thước phim ngắn.
+2. **Huy hiệu thời lượng (Duration Badge):** Ví dụ `🎬 0:45` hoặc `🎙️ 2:15` hiển thị rõ ràng ở góc trên.
+3. **Nút Play phát xung nhịp (Pulse Animation):** Nút Play trung tâm có hiệu ứng sóng mờ tỏa ra liên tục (`pulse ring animation`), kích thích hành vi nhấp chuột của độc giả.
+
+### 3.3. Quy tắc Xử lý Nhiều Video Trong Cùng Một Bài (Multiple Videos Handling)
 - **Quy tắc Bất Di Bất Dịch (Unique Post Guarantee):** Trong cùng một thời điểm hiển thị trên widget, **mỗi bài viết chỉ được xuất hiện tối đa 1 khung hình Reel duy nhất** (tránh tình trạng một bài viết chứa 3 video làm chiếm trọn 3 khung hình cạnh nhau, gây cảm giác lặp bài nhàm chán).
 - **Cơ chế chọn clip đại diện (`extract` parameter):**
   - `extract: first` *(Mặc định)*: Luôn lấy video/voice đầu tiên tìm thấy trong bài viết.
   - `extract: random`: Nếu bài viết có $N$ video ($N \ge 2$), thuật toán bốc ngẫu nhiên 1 trong $N$ video đó làm đại diện cho bài viết.
 
-### 3.3. Trải nghiệm Phát Phương Tiện (Facade Performance Pattern)
+---
+
+## 4. THIẾT KẾ GIAO DIỆN & TƯƠNG THÍCH TỈ LỆ KHUNG HÌNH (UI/UX & ASPECT RATIO ADAPTATION)
+
+### 4.1. Giải Pháp Hiển Thị Video Ngang 16:9 Trong Khung Dọc 9:16 (Blurred Background Fill)
+
+Do phần lớn video YouTube được sản xuất ở định dạng **ngang truyền thống (16:9)**, nếu nhồi trực tiếp vào khung dọc 9:16 sẽ nảy sinh mâu thuẫn: phóng to thì bị cắt mất 2 bên mép (mất nội dung/phụ đề), để viền đen thì đơn điệu.
+
+Widget áp dụng giải pháp **"Blurred Background Fill" (Nền Mờ Nghệ Thuật)** chuẩn mực của TikTok/Facebook Reels:
+
 ```
-[Trạng thái Tĩnh - Mặc định]
-┌───────────────────────────────┐
-│ [🔥 HOT REEL]                 │  <-- Huy hiệu phân cấp
-│                               │
-│       Ảnh Thumbnail HD        │
-│          ┌─────────┐          │
-│          │   ▶    │          │  <-- Nút Play nổi bật
-│          └─────────┘          │
-│                               │
-│  Tiêu đề bài viết ngắn gọn... │  <-- Gradient phủ tối
-│  [ Xem chi tiết ➔ ]           │  <-- Nút CTA Cross-sale
-└───────────────────────────────┘
+┌──────────────────────────────────────┐
+│ [▬ ▬ ▬ ▬]              [ 🎬 03:45 ]  │  <-- Nửa trên: Badge + Vạch Story
+│                                      │
+│ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  <-- Lớp nền mờ nghệ thuật
+│ ┌──────────────────────────────────┐ │      (Chính là video/ảnh được zoom to
+│ │                                  │ │       và làm mờ: blur 20px)
+│ │      VIDEO 16:9 NẰM Ở GIỮA       │ │
+│ │       (SẮC NÉT TRỌN VẸN 100%)    │ │  <-- Video 16:9 hiển thị trọn vẹn,
+│ │                                  │ │      KHÔNG BỊ CẮT MẤT NỘI DUNG HAI BÊN!
+│ └──────────────────────────────────┘ │
+│ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
+│                                      │
+│ [🔥 HOT REEL]                        │  <-- Nửa dưới: Tận dụng khoảng trống
+│ Tiêu đề bài viết bán chéo...         │      đặt tiêu đề rõ ràng, dễ đọc
+│ [ Xem bài viết & Ưu đãi ➔ ]          │  <-- Nút CTA chuyển đổi cao
+└──────────────────────────────────────┘
                │
                │ (Người dùng Click vào nút Play)
                ▼
-[Trạng thái Đang Phát - Inline Swap]
-┌───────────────────────────────┐
-│ <iframe> YouTube / TikTok     │
-│ hoặc HTML5 Video / Audio      │
-│ (Tự động phát - Autoplay)     │
-│ [✕ Đóng]      [Xem bài viết ➔]│
-└───────────────────────────────┘
+[Trạng thái Đang Phát - Inline Player]
+┌──────────────────────────────────────┐
+│ [▬ ▬ ▬ ▬]                  [ ✕ Đóng ]│
+│                                      │
+│ ┌──────────────────────────────────┐ │
+│ │ <iframe> YouTube 16:9 Embed      │ │  <-- Video 16:9 phát ngay tại khung giữa
+│ │ (Tự động phát có tiếng)          │ │
+│ └──────────────────────────────────┘ │
+│                                      │
+│ [🔥 HOT REEL]                        │
+│ Tiêu đề bài viết bán chéo...         │
+│ [ Mua ngay / Xem bài viết ➔ ]        │  <-- Độc giả vừa xem vừa click mua hàng!
+└──────────────────────────────────────┘
 ```
 
----
+#### Ưu thế vượt trội:
+1. **Bảo toàn 100% hình ảnh:** Không bị crop mất nội dung, phụ đề hay góc quay của video.
+2. **Khu vực vàng chuyển đổi:** Khoảng trống phía dưới được tận dụng hoàn hảo làm khu vực trình bày tiêu đề bài viết và nút CTA ("Xem chi tiết & Ưu đãi ➔") mà **không hề che khuất hình ảnh video**.
+3. **Thích ứng tự động (Auto-Aspect Detection):**
+   - Nếu là **YouTube Shorts / TikTok** (đã là 9:16): Tự động hiển thị `object-fit: cover` tràn viền toàn bộ khung.
+   - Nếu là **Video 16:9 thông thường**: Tự động kích hoạt chế độ **Blurred Background Fill**.
 
-## 4. THIẾT KẾ GIAO DIỆN & KHẢ NĂNG THÍCH ỨNG (UI/UX & CONTEXT MODES)
-
-### 4.1. Quy chuẩn Thẩm mỹ & Tỉ lệ Khung Hình
+### 4.2. Quy chuẩn Thẩm mỹ & Tỉ lệ Khung Hình
 - **Tỉ lệ khung hình (Aspect Ratio):** Chuẩn `9 / 16`. Kích thước cơ sở đề xuất trên desktop: chiều rộng `200px`, chiều cao `355px`.
 - **Bo góc & Đổ bóng:** `border-radius: var(--radius-lg, 12px)`, `box-shadow: var(--shadow-sm)`.
 - **Huy hiệu bài Hot (`.sp-reel-badge-hot`):** Nền gradient đỏ cam nổi bật, viền phát sáng nhẹ (`box-shadow: 0 0 12px rgba(255, 107, 107, 0.45)`).
 - **Nút Kêu gọi hành động CTA (`.sp-reel-cta`):** Đặt gọn gàng ở đáy khung hình, chữ trắng có nền mờ chống lóa (`backdrop-filter: blur(8px); background: rgba(255,255,255,0.2)`), click mở bài viết trong tab mới hoặc chuyển trang.
 
-### 4.2. Ba Ngữ Cảnh Hiển Thị Tự Động (Three Display Contexts)
+### 4.3. Ba Ngữ Cảnh Hiển Thị Tự Động (Three Display Contexts)
 
 #### Chế độ A: Cột Bên (Sidebar - Không gian hẹp $\le 360px$)
 - **Nhận diện:** Nằm bên trong `<aside class="sidebar">` hoặc `@container (max-width: 360px)`.
@@ -133,7 +190,7 @@ Tuân thủ chuẩn quy tắc nhãn tính năng tiền tố `@` của theme:
   - Desktop: Hiển thị 3–4 khung cùng lúc.
   - Mobile: Hiển thị 1.5 khung hình để tạo gợi ý trực quan cho người dùng vuốt trượt ngang.
 
-### 4.3. Cơ Chế Thích Ứng Số Lượng & Ẩn Rỗng (Zero-Waste Dynamic Adaptation)
+### 4.4. Cơ Chế Thích Ứng Số Lượng & Ẩn Rỗng (Zero-Waste Dynamic Adaptation)
 Gọi $K$ là giới hạn cấu hình (`limit`, từ 1 đến 10, mặc định 10), và $M$ là số video thực tế tìm được:
 - **Trường hợp $M = 0$:** Toàn bộ widget tự động ẩn hoàn toàn khỏi DOM (`container.style.display = 'none'`), không để lại bất kỳ tiêu đề thừa hay khoảng trống nào trên trang.
 - **Trường hợp $M = 1$:** Chỉ hiển thị đúng 1 khung duy nhất, tự động ẩn 2 nút mũi tên trượt.
@@ -181,16 +238,21 @@ cta-text: Mua ngay & Ưu đãi ➔
 1. **[MODIFY] [src/scripts/special-posts.js](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/scripts/special-posts.js):**
    - Đăng ký `reels: renderReelsPattern` vào bảng `PATTERN_RENDERERS` (dòng 29).
    - Bổ sung module bóc tách media: `extractPostMedia(post, opts)` (hỗ trợ YouTube, TikTok, FB, MP4, MP3).
-   - Xây dựng hàm `renderReelsPattern(posts, opts)` xử lý phân loại Hot/Regular, thuật toán Fisher-Yates Shuffle, tỷ lệ 60:40, và cấu trúc HTML khung 9:16.
+   - Xây dựng hàm `renderReelsPattern(posts, opts)` xử lý phân loại Hot/Regular, thuật toán Fisher-Yates Shuffle, tỷ lệ 60:40, và cấu trúc HTML khung 9:16 sống động.
+   - Thêm cơ chế Blurred Background Fill cho video 16:9 và Full-bleed cho Shorts 9:16.
+   - Thêm bộ lắng nghe sự kiện Hover / In-View Preview (WebP swap, silent video loop).
+   - Thêm hoạt ảnh sóng âm Audio Equalizer Waveform cho file Voice.
    - Thêm sự kiện Click to Play (Facade swap) và nút điều hướng trượt ngang (Prev / Next với `scrollBy`).
    - Xử lý nút "🎲 Đổi video khác" cho chế độ Sidebar.
 2. **[MODIFY] [src/styles/special-posts.css](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/styles/special-posts.css):**
    - Thêm CSS cho khối container `.sp-reels-container`, thanh trượt `.sp-reels-track` (`overflow-x: auto; scroll-snap-type: x mandatory;`).
-   - Style cho thẻ `.sp-reel-card` với `aspect-ratio: 9 / 16;`, gradient che bóng, badge Hot/Regular, nút Play trung tâm, nút CTA đáy thẻ.
+   - Style cho thẻ `.sp-reel-card` với `aspect-ratio: 9 / 16;`, lớp nền mờ `.sp-reel-blur-backdrop`, khung video 16:9 ở giữa `.sp-reel-media-center`, gradient che bóng, badge Hot/Regular, nút Play hiệu ứng xung nhịp Pulse, nút CTA đáy thẻ.
+   - Style hoạt ảnh CSS sóng nhạc `@keyframes spEqualizer` và đĩa than xoay `@keyframes spSpinDisc`.
+   - Vạch Story `.sp-reel-story-bars`, thanh thời lượng `.sp-reel-duration`.
    - Container Query `@container (max-width: 360px)` tối ưu riêng cho Sidebar.
 3. **[MODIFY] [src/preview.html](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/src/preview.html):**
    - Bổ sung demo trực quan của `pattern: reels` ở 2 vị trí:
-     - 1 widget Slider ngang rộng ở khu vực Main Content.
+     - 1 widget Slider ngang rộng ở khu vực Main Content (kèm demo hiệu ứng Blurred Background Fill cho video 16:9, Shorts dọc, và sóng nhạc voice).
      - 1 widget Single Reel Card xoay tua ở Cột bên Sidebar.
 4. **[COMPILE] [scripts/build.js](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/scripts/build.js):**
    - Biên dịch tự động ra [dist/theme.xml](file:///Users/nam.truong/Documents/Viber%20Coding/blogspot-editorial-theme/dist/theme.xml).
@@ -201,9 +263,13 @@ cta-text: Mua ngay & Ưu đãi ➔
 
 - [ ] **AC-1 (Hiển thị 9:16 chuẩn):** Các khung video hiển thị đúng tỉ lệ dọc 9:16, không bị méo ảnh, bo góc và đổ bóng đồng bộ với Design System của theme.
 - [ ] **AC-2 (Nhận diện Media đa nguồn):** Trích xuất chính xác Video ID và ảnh thumbnail HD từ các link YouTube (cả Shorts và thường), TikTok, Facebook, MP4 và MP3.
-- [ ] **AC-3 (Phân cấp Hot / Regular):** Bài `@video-hot` được ưu tiên đứng ở vị trí 1 và 2, có huy hiệu nổi bật và viền sáng khác biệt.
-- [ ] **AC-4 (Random không trùng lặp):** Khi bật chế độ `sort: random`, danh sách video được xáo trộn ngẫu nhiên; mỗi bài viết chỉ xuất hiện tối đa 1 lần trên widget.
-- [ ] **AC-5 (Thích ứng số lượng & Ẩn rỗng):** Nếu có $M < limit$ thì hiển thị đúng $M$ khung; nếu $M = 0$ thì widget ẩn hoàn toàn khỏi màn hình mà không để lại khoảng trắng.
-- [ ] **AC-6 (Chế độ Sidebar):** Khi đặt trong Cột bên Sidebar, widget tự động chuyển sang 1 khung duy nhất, có nút "🎲 Đổi video khác" hoạt động mượt mà.
-- [ ] **AC-7 (Hiệu năng Click-to-Play):** Khi trang vừa tải xong, không có bất kỳ iframe video bên thứ 3 nào được tải; chỉ khi người dùng click vào nút Play thì player tương ứng mới được nạp và phát video.
-- [ ] **AC-8 (Biên dịch thành công):** Lệnh `npm run build` hoàn tất không lỗi, `dist/theme.xml` được cập nhật đồng bộ.
+- [ ] **AC-3 (Kỹ thuật Blurred Background Fill 16:9):** Đối với video ngang 16:9, video hiển thị sắc nét ở giữa không bị crop, nền mờ nghệ thuật phủ xung quanh, tiêu đề và nút CTA nằm gọn ở nửa dưới mà không che video. Đối với Shorts/TikTok 9:16, hiển thị tràn viền.
+- [ ] **AC-4 (Preview động khi Hover / In-View):** Khi rê chuột vào khung YouTube, ảnh tĩnh chuyển đổi sang ảnh động WebP 6s xem trước mượt mà; với MP4 thì tự động phát video câm; trên mobile khung chính giữa tự động kích hoạt.
+- [ ] **AC-5 (Sóng âm thanh Equalizer cho Voice):** Đối với tệp Voice/Audio/Podcast, hiển thị dải sóng nhạc Equalizer dao động nhịp nhàng và icon đĩa nhạc quay, nhận diện ngay là tệp âm thanh.
+- [ ] **AC-6 (Bộ nhận diện chuẩn Reels):** Có thanh vạch Story trên đỉnh, thời lượng video (`0:45`), nút Play hiệu ứng xung nhịp (Pulse ring), và nốt nhạc chạy chữ.
+- [ ] **AC-7 (Phân cấp Hot / Regular):** Bài `@video-hot` được ưu tiên đứng ở vị trí 1 và 2, có huy hiệu nổi bật và viền sáng khác biệt.
+- [ ] **AC-8 (Random không trùng lặp):** Khi bật chế độ `sort: random`, danh sách video được xáo trộn ngẫu nhiên; mỗi bài viết chỉ xuất hiện tối đa 1 lần trên widget.
+- [ ] **AC-9 (Thích ứng số lượng & Ẩn rỗng):** Nếu có $M < limit$ thì hiển thị đúng $M$ khung; nếu $M = 0$ thì widget ẩn hoàn toàn khỏi màn hình mà không để lại khoảng trắng.
+- [ ] **AC-10 (Chế độ Sidebar):** Khi đặt trong Cột bên Sidebar, widget tự động chuyển sang 1 khung duy nhất, có nút "🎲 Đổi video khác" hoạt động mượt mà.
+- [ ] **AC-11 (Hiệu năng Click-to-Play):** Khi trang vừa tải xong, không có bất kỳ iframe video nặng bên thứ 3 nào được tải; chỉ khi người dùng click vào nút Play thì player tương ứng mới được nạp và phát video.
+- [ ] **AC-12 (Biên dịch thành công):** Lệnh `npm run build` hoàn tất không lỗi, `dist/theme.xml` được cập nhật đồng bộ.
