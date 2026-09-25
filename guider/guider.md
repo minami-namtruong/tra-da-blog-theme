@@ -1,33 +1,39 @@
 # CẨM NANG HƯỚNG DẪN CẤU HÌNH & QUẢN TRỊ THEME
-> Tài liệu hướng dẫn toàn diện dành cho Quản trị viên (Admin) và Tác giả nội dung. Giúp bạn khai thác tối đa mọi tính năng cao cấp của theme: Hệ thống Widget, Quy tắc gắn Nhãn (Labels), Đa ngôn ngữ (VI/EN), Minh bạch AI, và Trang Mục lục toàn thư.
+> Tài liệu hướng dẫn toàn diện dành cho Quản trị viên (Admin) và Tác giả nội dung. Giúp bạn khai thác tối đa mọi tính năng cao cấp của theme: Hệ thống Widget Bài viết, Chuỗi Chuyên đề (Series), Quy tắc gắn Nhãn (Labels), Tác giả Khách mời (Guest Author), Trang Liên hệ & Gửi bài, Đa ngôn ngữ (VI/EN), Minh bạch AI, Giao diện Theme Preset (Airy Pastel), và Trang Mục lục Tàu điện ngầm (Subway Timeline Archive).
 
 ---
 
 ## MỤC LỤC
 1. [Chương 1: Quy Tắc Gắn Nhãn Bài Viết (Post Labels)](#chương-1-quy-tắc-gắn-nhãn-bài-viết-post-labels)
-2. [Chương 2: Hệ Thống 4 Kiểu Widget Bài Viết Đặc Biệt](#chương-2-hệ-thống-4-kiểu-widget-bài-viết-đặc-biệt)
-3. [Chương 3: Hướng Dẫn Cấu Hình Widget Có Sẵn](#chương-3-hướng-dẫn-cấu-hình-widget-có-sẵn)
+2. [Chương 2: Hệ Thống 5 Kiểu Widget Bài Viết Đặc Biệt](#chương-2-hệ-thống-5-kiểu-widget-bài-viết-đặc-biệt)
+3. [Chương 3: Hướng Dẫn Cấu Hình Widget Có Sẵn Qua Trường "Content"](#chương-3-hướng-dẫn-cấu-hình-widget-có-sẵn-qua-trường-content)
 4. [Chương 4: Cách Thêm Mới Widget Tùy Ý (+ Add a Gadget)](#chương-4-cách-thêm-mới-widget-tùy-ý--add-a-gadget)
-5. [Chương 5: Thiết Lập Nội Dung Song Ngữ (Bilingual VI / EN)](#chương-5-thiết-lập-nội-dung-song-ngữ-bilingual-vi--en)
-6. [Chương 6: Hệ Thống Nhãn Minh Bạch AI (AI Transparency)](#chương-6-hệ-thống-nhãn-minh-bạch-ai-ai-transparency)
-7. [Chương 7: Tạo Trang Mục Lục Toàn Thư (Archive / Timeline Page)](#chương-7-tạo-trang-mục-lục-toàn-thư-archive--timeline-page)
-8. [Chương 8: Gợi Ý Tiếp Thị Liên Kết Minh Bạch (Affiliate Box)](#chương-8-gợi-ý-tiếp-thị-liên-kết-minh-bạch-affiliate-box)
-9. [Chương 9: Cấu Hình Tác Giả & Component Ẩn](#chương-9-cấu-hình-tác-giả--component-ẩn)
-10. [Chương 10: Quản Lý & Bật/Tắt Vị Trí Quảng Cáo (AdSense & Banners)](#chương-10-quản-lý--bậttắt-vị-trí-quảng-cáo-adsense--banners)
+5. [Chương 5: Chuỗi Bài Viết & Chuyên Đề (Post Series Navigator - `series:`)](#chương-5-chuỗi-bài-viết--chuyên-đề-post-series-navigator---series)
+6. [Chương 6: Quản Lý Tác Giả Khách Mời (Guest Author Meta)](#chương-6-quản-lý-tác-giả-khách-mời-guest-author-meta)
+7. [Chương 7: Trang Liên Hệ & Gửi Bài Viết Khách Mời (`/p/lien-he.html`) & 4 Vị Trí CTA](#chương-7-trang-liên-hệ--gửi-bài-viết-khách-mời-plien-hehtml--4-vị-trí-cta)
+8. [Chương 8: Tạo Trang Mục Lục Toàn Thư (Subway Metro Timeline Archive v5.0)](#chương-8-tạo-trang-mục-lục-toàn-thư-subway-metro-timeline-archive-v50)
+9. [Chương 9: Thiết Lập Nội Dung Song Ngữ (Bilingual VI / EN)](#chương-9-thiết-lập-nội-dung-song-ngữ-bilingual-vi--en)
+10. [Chương 10: Hệ Thống Nhãn Minh Bạch AI (AI Transparency)](#chương-10-hệ-thống-nhãn-minh-bạch-ai-ai-transparency)
+11. [Chương 11: Cấu Hình Phong Cách Giao Diện (Theme Presets & Dark/Light Mode)](#chương-11-cấu-hình-phong-cách-giao-diện-theme-presets--darklight-mode)
+12. [Chương 12: Thanh Tiến Trình Đọc & Mục Lục Bài Viết Tự Động (Auto TOC)](#chương-12-thanh-tiến-trình-đọc--mục-lục-bài-viết-tự-động-auto-toc)
+13. [Chương 13: Gợi Ý Tiếp Thị Liên Kết Minh Bạch (Affiliate Box)](#chương-13-gợi-ý-tiếp-thị-liên-kết-minh-bạch-affiliate-box)
+14. [Chương 14: Cấu Hình Component Ẩn, Nút Cà Phê & Điểm Chạm (Widget `HTML88`)](#chương-14-cấu-hình-component-ẩn-nút-cà-phê--điểm-chạm-widget-html88)
+15. [Chương 15: Quản Lý & Bật/Tắt Vị Trí Quảng Cáo (AdSense & Banners)](#chương-15-quản-lý--bậttắt-vị-trí-quảng-cáo-adsense--banners)
+16. [Bảng Tổng Hợp Tra Cứu Nhanh & Xử Lý Bộ Nhớ Đệm (Cheatsheet & Cache)](#bảng-tổng-hợp-tra-cứu-nhanh--xử-lý-bộ-nhớ-đệm-cheatsheet--cache)
 
 ---
 
 ## CHƯƠNG 1: QUY TẮC GẮN NHÃN BÀI VIẾT (POST LABELS)
 
-Khi viết bài trên Blogger, bạn nhập các nhãn ở cột bên phải (**Bài đăng -> Cài đặt bài đăng -> Nhãn / Labels**). Theme phân loại nhãn thành **4 nhóm chức năng rõ ràng**:
+Khi viết bài trên Blogger, bạn nhập các nhãn ở cột bên phải (**Bài đăng -> Cài đặt bài đăng -> Nhãn / Labels**). Theme phân loại nhãn thành **5 nhóm chức năng rõ ràng**:
 
 ```
-                            HỆ THỐNG NHÃN (LABELS)
-                                      │
-         ┌──────────────────┬─────────┴─────────┬──────────────────┐
-         ▼                  ▼                   ▼                  ▼
-   1. Nhãn Thường     2. Nhãn Độc Quyền    3. Nhãn Song Ngữ    4. Nhãn AI
-     (Chủ đề feed)       (Bắt đầu bằng @)    (Dùng dấu |)     (Bắt đầu ai:)
+                                HỆ THỐNG NHÃN (LABELS)
+                                          │
+       ┌──────────────────┬───────────────┼───────────────┬──────────────────┐
+       ▼                  ▼               ▼               ▼                  ▼
+ 1. Nhãn Thường     2. Nhãn Độc Quyền  3. Nhãn Chuyên Đề  4. Nhãn Song Ngữ   5. Nhãn AI
+   (Chủ đề feed)     (Bắt đầu bằng @)  (Bắt đầu series:)  (Dùng dấu |)     (Bắt đầu ai:)
 ```
 
 ### 1.1. Nhãn Chủ Đề Thường (Regular Labels)
@@ -48,32 +54,38 @@ Khi viết bài trên Blogger, bạn nhập các nhãn ở cột bên phải (**
 
 > **Mẹo hay:** Nếu bạn muốn một bài viết **vừa hiện ở widget Tiêu điểm, vừa hiện bình thường ở trang chủ**, chỉ cần gắn 2 nhãn: `@Tiêu điểm, Sách hay`.
 
-### 1.3. Nhãn Song Ngữ (Bilingual Labels)
+### 1.3. Nhãn Chuỗi Chuyên Đề (Post Series Labels - Bắt đầu bằng `series:`)
+* **Mục đích:** Nhóm các bài viết thuộc cùng một chuỗi bài/chuyên đề nhiều phần (ví dụ: Chuỗi 5 bài về Chủ nghĩa Khắc kỷ).
+* **Cú pháp:** `series:Tên Chuyên Đề` (hoặc `series:tên-chuyên-đề`)
+* **Ví dụ:** `series:Triết Lý Khắc Kỷ`, `series:Kỹ Năng Viết Lách`
+* **Cơ chế tự động:** Khi gắn nhãn này, theme sẽ tự động kích hoạt **Bộ điều hướng Chuyên đề (Post Series Navigator)** dưới bài viết và cho phép hiển thị widget chuỗi chuyên đề (`pattern: series`).
+
+### 1.4. Nhãn Song Ngữ (Bilingual Labels)
 * **Cú pháp:** `Tên Tiếng Việt | English Name`
 * **Ví dụ:** `Triết Lý | Philosophy`, `Kỹ Năng | Skills`
 * **Hiển thị:** Khi người đọc bấm nút chuyển ngôn ngữ **EN**, nhãn sẽ tự động đổi sang tiếng Anh.
 
-### 1.4. Nhãn Minh Bạch AI (AI Transparency Labels - Bắt đầu bằng `ai:`)
-* **Mục đích:** Khai báo và minh bạch mức độ can thiệp/hỗ trợ của Trí tuệ nhân tạo (AI) trong quá trình sáng tạo nội dung bài viết.
+### 1.5. Nhãn Minh Bạch AI (AI Transparency Labels - Bắt đầu bằng `ai:`)
+* **Mục đích:** Khai báo và minh bạch mức độ can thiệp/hỗ trợ của Trí tuệ nhân tạo (AI) trong quá trình sáng tạo nội dung.
 * **Cơ chế hoạt động:**
   * **Ẩn khỏi Thanh Chủ Đề:** Theme tự động loại trừ các nhãn `ai:` khỏi thanh Category Tabs để không làm rối menu chủ đề chính.
   * **Tự động gắn Huy hiệu (Badge):** Tự động render huy hiệu minh bạch ngay dưới tiêu đề bài viết (ở cả Feed trang chủ và trang đọc chi tiết).
-  * **Kích hoạt Modal giải trình:** Khi người đọc bấm vào huy hiệu, một cửa sổ popup sẽ hiển thị giải trình chi tiết về vai trò của con người và AI.
-* **Bảng các nhãn AI được hỗ trợ:**
+  * **Kích hoạt Modal giải trình:** Khi người đọc bấm vào huy hiệu, cửa sổ popup hiển thị giải trình chi tiết về vai trò của con người và AI.
+* **Bảng đầy đủ 6 nhãn AI được hỗ trợ:**
   | Tên Nhãn Nhập Vào | Huy Hiệu Hiển Thị | Tỷ Lệ AI | Ý Nghĩa Sử Dụng |
   | :--- | :---: | :---: | :--- |
-  | `ai:generated` *(hoặc `AI-Generated`)* | 🤖 AI Tạo Lập | ~80-100% | Bài viết do AI tạo lập nội dung chính theo prompt/định hướng của tác giả. |
-  | `ai:assisted` *(hoặc `AI-Assisted`)* | ✨ AI Hỗ Trợ | ~20-50% | Tác giả tự viết, AI hỗ trợ chỉnh sửa ngữ pháp, dàn ý hoặc dịch thuật. |
+  | `ai:generated` *(hoặc `AI-Generated`)* | ⚡ AI Tạo Lập | ~80-100% | Nội dung do AI khởi tạo hoàn toàn theo prompt/định hướng của tác giả. |
+  | `ai:contributed` *(hoặc `AI-Contributed`)* | ✨ AI Đóng Góp | ~50-80% | AI trực tiếp nghiên cứu và xây dựng các đoạn nội dung chính dưới sự chỉ đạo của tác giả. |
+  | `ai:assisted` *(hoặc `AI-Assisted`)* | ✨ AI Hỗ Trợ | ~20-50% | Tác giả tự viết, AI hỗ trợ tra cứu, sắp xếp thông tin, dàn ý hoặc ngữ pháp. |
+  | `ai:product` *(hoặc `AI-Product`)* | 🤖 Sản Phẩm AI | N/A | Bài viết đánh giá, review thực tế về một công cụ hoặc sản phẩm AI. |
+  | `ai:translated` *(hoặc `AI-Translated`)* | 🌐 AI Dịch Thuật | N/A | Bản dịch ngôn ngữ (VI ↔ EN) được thực hiện bởi công cụ AI dịch thuật. |
   | `ai:none` *(hoặc `AI-None`)* | ✍️ 100% Con Người | 0% | Bài viết sáng tác thủ công hoàn toàn, không sử dụng công cụ AI sinh nội dung. |
-* **Ví dụ gắn nhãn kết hợp thực tế:**
-  `Công nghệ, Sách hay, ai:assisted`
-  *(Bài viết vừa thuộc chủ đề Công nghệ, Sách hay, vừa có huy hiệu AI Hỗ Trợ).*
 
 ---
 
-## CHƯƠNG 2: HỆ THỐNG 4 KIỂU WIDGET BÀI VIẾT ĐẶC BIỆT
+## CHƯƠNG 2: HỆ THỐNG 5 KIỂU WIDGET BÀI VIẾT ĐẶC BIỆT
 
-Theme hỗ trợ 4 kiểu dáng widget (patterns) được thiết kế theo phong cách tạp chí cao cấp:
+Theme hỗ trợ **5 kiểu dáng widget (patterns)** được thiết kế theo phong cách tạp chí cao cấp:
 
 | Kiểu (Pattern) | Tên Gọi | Mô Tả Giao Diện |
 | :---: | :--- | :--- |
@@ -81,31 +93,32 @@ Theme hỗ trợ 4 kiểu dáng widget (patterns) được thiết kế theo pho
 | **`ranked`** | **Xếp Hạng** | Danh sách bài viết được đánh số thứ tự lớn trang trọng `01`, `02`, `03`... Thích hợp cho Top bài đọc nhiều. |
 | **`quote`** | **Trích Dẫn** | Khung danh ngôn chiêm nghiệm thanh lịch, font serif, icon mở ngoặc kép tinh tế. |
 | **`digest`** | **Điểm Tin** | Lưới thẻ card nhỏ gọn, có thumbnail, ngày tháng và tóm tắt nhanh. |
+| **`series`** | **Chuỗi Chuyên Đề** | Khung trình diễn chuyên đề series kèm lộ trình các phần, thanh tiến trình và liên kết từng bài. |
 
 ---
 
 ## CHƯƠNG 3: HƯỚNG DẪN CHI TIẾT CẤU HÌNH WIDGET QUA TRƯỜNG "CONTENT"
 
-Trong trang **Bố cục (Layout)** của Blogger, theme đã bố trí sẵn các widget tại các vị trí đẹp nhất:
+Trong trang **Bố cục (Layout)** của Blogger, theme đã bố trí sẵn các vị trí widget đẹp nhất:
 1. `main-above-feed`: Đầu luồng bài viết (🌟 Bài Viết Tiêu Điểm Tuần - Spotlight)
 2. `main-in-feed-section`: Xen kẽ giữa các bài viết sau bài số 3 (☕ Trích Dẫn Chiêm Nghiệm - Quote)
 3. `main-special-posts-section`: Dưới luồng bài viết chính (📊 Top Bài Đọc Nhiều - Ranked)
-4. `sidebar-section`: Cột bên phải (Bài nổi bật, Chiêm nghiệm, Điểm tin, Tiêu điểm)
+4. `sidebar-section`: Cột bên phải (Bài nổi bật, Chiêm nghiệm, Điểm tin, Tiêu điểm, Chuyên đề)
 
 Khi bạn bấm nút hình **Cây bút (Chỉnh sửa / Edit)** tại bất kỳ widget nào:
 * **Ô Title:** Đổi tiêu đề hiển thị trên blog.
-* **Ô Content:** Là nơi bạn có toàn quyền cấu hình **toàn bộ các tùy chọn như trên trang Preview**!
+* **Ô Content:** Nơi cấu hình tất cả các tùy chọn theo cú pháp ngắn gọn hoặc mã HTML nhúng.
 
 ---
 
-### 3.1. Bảng Tổng Hợp Tất Cả Các Tham Số Cấu Hình (Như Demo Tại `preview.html`)
+### 3.1. Bảng Tổng Hợp Tất Cả Các Tham Số Cấu Hình
 
 Mọi tùy chọn trên bộ điều khiển Interactive Playground của trang Preview đều có thể thiết lập trực tiếp thông qua ô **Content**:
 
 | Tham Số | Thuộc Tính HTML Tương Ứng | Giá Trị Mặc Định | Giá Trị Hợp Lệ | Mô Tả Tác Dụng |
 | :--- | :--- | :---: | :--- | :--- |
-| **`pattern`** | `data-pattern` | `digest` | `spotlight`, `ranked`, `quote`, `digest` | Kiểu dáng giao diện hiển thị của widget. |
-| **`label`** | `data-labels` | Theo widget | Tên nhãn (VD: `Triết lý`, `Sách, AI`) | Lọc bài viết theo một hoặc nhiều nhãn chủ đề. |
+| **`pattern`** | `data-pattern` | `digest` | `spotlight`, `ranked`, `quote`, `digest`, `series` | Kiểu dáng giao diện hiển thị của widget. |
+| **`label`** | `data-labels` | Theo widget | Tên nhãn (VD: `Triết lý`, `series:Khắc Kỷ`) | Lọc bài viết theo một hoặc nhiều nhãn chủ đề. |
 | **`limit`** | `data-limit` | `1` đến `6` | Số nguyên từ `1` đến `10` | Số lượng bài viết hiển thị tối đa trong widget. |
 | **`sort`** | `data-sort` | `latest` | `latest`, `random`, `views` (hoặc `popular`) | Tiêu chí sắp xếp (Mới nhất, Ngẫu nhiên, Đọc nhiều nhất). |
 | **`timeRange`** | `data-time-range` | `all_time` | `all_time`, `last_year`, `last_30_days`, `last_7_days` | Khoảng thời gian tính lượt xem (khi sort là `views`). |
@@ -118,268 +131,248 @@ Mọi tùy chọn trên bộ điều khiển Interactive Playground của trang 
 
 ---
 
-### 3.2. Chi Tiết 4 Loại Widget & Mẫu Cấu Hình Cho Từng Loại
+### 3.2. Chi Tiết 5 Loại Widget & Mẫu Cấu Hình Cho Từng Loại
 
 #### 🌟 1. Kiểu Tiêu Điểm (`pattern: spotlight`)
 * **Mục đích:** Tạo điểm nhấn thị giác lớn cho bài viết then chốt của tuần/tháng (Editor's Choice), thường đặt ở đầu trang chủ (`main-above-feed`) hoặc đầu thanh Sidebar.
-* **Giao diện:** Ảnh bìa lớn tỉ lệ 16:9 sắc nét, huy hiệu chủ đề nổi bật, tiêu đề lớn, đoạn trích dẫn súc tích và nút CTA đọc bài viết.
-* **Vị trí sẵn có:** Widget `HTML10` (Đầu luồng bài viết) & `HTML17` (Cột bên Sidebar).
-* **Cấu hình mặc định:** Nhãn `@Tiêu điểm`, lấy 1 bài (`limit: 1`), sắp xếp `latest`.
-* **Các mẫu cấu hình trong ô Content:**
-  * *Chỉ đổi nhãn hiển thị:* `label: Góc nhìn` *(hoặc chỉ cần gõ thẳng chữ `Góc nhìn`)*
-  * *Tắt ảnh thu nhỏ:* `thumb: false`
-  * *Tắt đoạn tóm tắt:* `snippet: false`
-  * *Đổi chữ nút đọc:* `viewall: Khám phá ngay »`
-  * *Mẫu đầy đủ (Cú pháp ngắn gọn):*
-    ```text
-    label: Góc nhìn | thumb: true | snippet: true | viewall: Khám phá ngay »
-    ```
-  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
-    ```html
-    <div class="special-posts-widget"
-         data-pattern="spotlight"
-         data-labels="Góc nhìn"
-         data-limit="1"
-         data-show-thumbnail="true"
-         data-show-snippet="true"
-         data-view-all-text="Khám phá ngay »">
-    </div>
-    ```
-
----
-
-#### 🏆 2. Kiểu Bảng Xếp Hạng (`pattern: ranked`)
-* **Mục đích:** Vinh danh các bài viết được đọc nhiều nhất hoặc các bài viết hay nhất được tuyển chọn theo thứ bậc.
-* **Giao diện:** Đánh số thứ tự lớn nghệ thuật (`01`, `02`, `03`...), font chữ thanh lịch, layout tự động chuyển sang 2-3 cột khi đặt ở vùng Main content rộng và 1 cột khi đặt ở Sidebar.
-* **Vị trí sẵn có:** Widget `HTML13` (Cuối luồng bài viết chính) & `HTML14` (Cột bên Sidebar).
-* **Cấu hình mặc định:** Sắp xếp theo lượt đọc `sort: views`, lấy 5-6 bài (`limit: 5` hoặc `6`).
-* **Các mẫu cấu hình trong ô Content:**
-  * *Lấy Top 5 bài đọc nhiều nhất mọi thời đại (Toàn blog):*
-    ```text
-    sort: views | timeRange: all_time | limit: 5
-    ```
-  * *Lấy Top 4 bài đọc nhiều trong 30 ngày qua của chuyên mục Sách:*
-    ```text
-    label: Sách | sort: views | timeRange: last_30_days | limit: 4
-    ```
-  * *Lấy 5 bài mới nhất mang nhãn `@Nổi bật` (Do tác giả tự chọn):*
-    ```text
-    label: @Nổi bật | sort: latest | limit: 5
-    ```
-  * *Tắt ảnh thumbnail để danh sách xếp hạng tinh gọn:*
-    ```text
-    sort: views | limit: 5 | thumb: false
-    ```
-  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
-    ```html
-    <div class="special-posts-widget"
-         data-pattern="ranked"
-         data-labels="Sách"
-         data-sort="views"
-         data-time-range="last_30_days"
-         data-limit="5"
-         data-show-thumbnail="true"
-         data-view-all-text="Xem bảng xếp hạng đầy đủ »">
-    </div>
-    ```
-
----
-
-#### ☕ 3. Kiểu Trích Dẫn Chiêm Nghiệm (`pattern: quote`)
-* **Mục đích:** Hiển thị một đoạn trích dẫn tâm đắc, lời hay ý đẹp hoặc một mẩu suy ngẫm triết lý sâu sắc được trích ra từ các bài viết.
-* **Giao diện:** Thiết kế hộp danh ngôn cao cấp, font chữ Serif trang trọng, dấu ngoặc kép mở đầu nghệ thuật, hiển thị ngẫu nhiên (random) mỗi lần người đọc tải lại trang.
-* **Vị trí sẵn có:** Widget `HTML11` (Xen kẽ giữa các bài sau bài thứ 3) & `HTML15` (Cột bên Sidebar).
-* **Cấu hình mặc định:** Nhãn `@Quote`, sắp xếp ngẫu nhiên `sort: random`, lấy 1 bài (`limit: 1`).
-* **Các mẫu cấu hình trong ô Content:**
-  * *Lấy ngẫu nhiên từ nhãn Triết Lý:*
-    ```text
-    label: Triết lý | sort: random
-    ```
-  * *Lấy câu trích dẫn từ bài viết mới nhất (không ngẫu nhiên):*
-    ```text
-    label: Chiêm nghiệm | sort: latest
-    ```
-  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
-    ```html
-    <div class="special-posts-widget"
-         data-pattern="quote"
-         data-labels="Triết lý"
-         data-sort="random"
-         data-limit="1"
-         data-insert-after="3">
-    </div>
-    ```
-  * *Hoặc chèn một trích dẫn tĩnh cố định bằng HTML thuần (Không cần tạo bài viết Blogger):*
-    ```html
-    <div class="special-quote-box">
-      <blockquote class="special-quote-text">"Sự đơn giản là đỉnh cao của tinh tế."</blockquote>
-      <cite class="special-quote-author">— Leonardo da Vinci</cite>
-    </div>
-    ```
-
----
-
-#### ⚡ 4. Kiểu Điểm Tin & Xu Hướng (`pattern: digest`)
-* **Mục đích:** Hiển thị danh sách các bài viết vắn tắt, cập nhật tin tức nhanh, ghi chú ngắn theo dạng thẻ card hiện đại.
-* **Giao diện:** Thẻ card nhỏ gọn, có thumbnail bo góc mềm mại, ngày tháng xuất bản định dạng rõ ràng, tiêu đề tinh tế và đoạn tóm tắt 2 dòng.
-* **Vị trí sẵn có:** Widget `HTML16` (Cột bên Sidebar).
-* **Cấu hình mặc định:** Nhãn `@Điểm tin`, lấy 4 bài (`limit: 4`), sắp xếp `latest`.
-* **Các mẫu cấu hình trong ô Content:**
-  * *Lấy 4 tin mới nhất nhãn Công Nghệ:*
-    ```text
-    label: Công nghệ | limit: 4
-    ```
-  * *Lọc từ nhiều nhãn cùng lúc:*
-    ```text
-    labels: AI, Công nghệ | limit: 5
-    ```
-  * *Tắt hiển thị tóm tắt, chỉ giữ ảnh và tiêu đề:*
-    ```text
-    label: Tin tức | limit: 4 | snippet: false
-    ```
-  * *Mẫu đầy đủ (Mã HTML chuẩn copy từ Preview):*
-    ```html
-    <div class="special-posts-widget"
-         data-pattern="digest"
-         data-labels="Công nghệ"
-         data-limit="4"
-         data-sort="latest"
-         data-show-thumbnail="true"
-         data-show-snippet="true"
-         data-view-all-text="Xem tất cả tin »">
-    </div>
-    ```
-
----
-
-### 3.3. Tính Năng Cao Cấp: Chọn Đích Danh Bài Viết Bằng URL (Handpicked Posts)
-Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xác tuyệt đối các bài viết** muốn đưa lên widget:
-* Nhập danh sách link bài viết (phân tách bởi dấu phẩy) vào ô `Content`:
-  ```text
-  posts: https://myblog.blogspot.com/2026/09/bai-viet-1.html, https://myblog.blogspot.com/2026/09/bai-viet-2.html
-  ```
-* Hoặc dạng thẻ HTML:
+* **Cú pháp ô Content:** `label: Góc nhìn | thumb: true | snippet: true | viewall: Khám phá ngay »`
+* **Mã HTML mẫu:**
   ```html
   <div class="special-posts-widget"
        data-pattern="spotlight"
-       data-posts="https://myblog.blogspot.com/2026/09/bai-viet-1.html">
+       data-labels="Góc nhìn"
+       data-limit="1"
+       data-show-thumbnail="true"
+       data-show-snippet="true"
+       data-view-all-text="Khám phá ngay »">
   </div>
   ```
 
 ---
 
-### 3.4. Cấu Hình Widget Ảnh Bìa & Tác Giả (Profile Cover Hero)
-Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (trong khu vực **Ảnh Bìa & Tác Giả**). Theme đã tách bạch sẵn **3 tiện ích riêng biệt** để bạn thao tác nhanh chóng và thuận tiện nhất:
-
-#### 1. Tải Ảnh Bìa Banner (Widget `Image1` — `🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)`)
-1. Trong mục **Bố cục (Layout)** ➔ khu vực **Ảnh Bìa & Tác Giả**, bấm **Chỉnh sửa** tại widget `🖼️ 1. Tải Lên Ảnh Bìa Banner (Từ Máy Tính)`.
-2. Tại mục **Hình ảnh (Image)**, chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm nút **Chọn tệp (Choose File)** và chọn ảnh bìa từ máy của bạn.
-3. Bấm **LƯU (SAVE)**. Theme sẽ tự động lấy ảnh này làm hình nền Banner toàn màn hình!
-
-#### 2. Tải Avatar Tròn Tác Giả (Widget `Image2` — `👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)`)
-1. Bấm **Chỉnh sửa** tại widget `👤 2. Tải Lên Avatar Tác Giả (Từ Máy Tính)`.
-2. Chọn **"Tải hình ảnh lên từ máy tính"** ➔ Bấm **Chọn tệp (Choose File)** và chọn ảnh đại diện của bạn.
-3. Bấm **LƯU (SAVE)**. Theme tự động gán ảnh vào khung avatar tròn viền trắng sang trọng!
-
-#### 3. Cài Đặt Tên & Lời Giới Thiệu (Widget `HTML1` — `✍️ 3. Tên & Lời Giới Thiệu Tác Giả`)
-Bấm **Chỉnh sửa** widget này:
-* **Đổi Tên Tác Giả:** Nhập trực tiếp tên bạn vào ô **Tiêu đề (Title)** (Ví dụ: `Nam Trương`).
-* **Đổi Lời Giới Thiệu (Bio):** Nhập trực tiếp đoạn văn bản giới thiệu về bạn vào ô **Nội dung (Content)**.
-  > Không cần phải nhớ cú pháp phức tạp! Bạn chỉ cần gõ văn bản tự nhiên, theme sẽ tự động nhận diện và cập nhật ngay lập tức.
-* **Tùy chọn nâng cao:** Nếu bạn muốn dùng link ảnh trực tuyến ngoài thay vì tải từ máy tính, bạn có thể gõ vào ô Content:
-  ```text
-  banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Lời giới thiệu của bạn | name: Tên của bạn
+#### 🏆 2. Kiểu Bảng Xếp Hạng (`pattern: ranked`)
+* **Mục đích:** Vinh danh các bài viết được đọc nhiều nhất hoặc các bài viết hay nhất được tuyển chọn theo thứ bậc.
+* **Cú pháp ô Content:** `sort: views | timeRange: last_30_days | limit: 5`
+* **Mã HTML mẫu:**
+  ```html
+  <div class="special-posts-widget"
+       data-pattern="ranked"
+       data-labels="Sách"
+       data-sort="views"
+       data-time-range="last_30_days"
+       data-limit="5"
+       data-show-thumbnail="true"
+       data-view-all-text="Xem bảng xếp hạng đầy đủ »">
+  </div>
   ```
 
 ---
 
-### 3.5. Cơ Chế Smart Fallback Tự Động (Chống Lỗi Cho Blog Mới Cài Đặt)
-Từ phiên bản này, theme tích hợp cơ chế **Smart Fallback** toàn diện:
-* **Tự động lấy bài mới nhất:** Nếu bạn cấu hình widget lọc theo nhãn (như `@Tiêu điểm`, `@Nổi bật`, `@Điểm tin`,...) nhưng blog của bạn chưa kịp gắn nhãn đó, widget sẽ **tự động lấy các bài viết mới nhất** để hiển thị lấp đầy, thay vì báo lỗi "Không thể tải nội dung mục này."
-* **Trích dẫn chiêm nghiệm dự phòng:** Nếu widget Trích dẫn (`quote`) chưa có bài gắn nhãn `@Quote`, theme sẽ tự động hiển thị câu danh ngôn triết lý nghệ thuật mặc định.
-* **Gõ câu nói trực tiếp vào widget Trích dẫn:** Bạn có thể mở bất kỳ widget trích dẫn nào và gõ thẳng câu nói tâm đắc của bạn vào ô **Nội dung (Content)** (Ví dụ: `"Cuộc sống là một hành trình. - Khuyết danh"`), widget sẽ hiển thị ngay câu nói đó!
-* **Dự phòng Menu & Danh mục khi blog mới:** Nếu bạn chưa kịp tạo menu hoặc danh sách trống, theme tự động hiển thị các đề mục mẫu hoàn chỉnh, đảm bảo blog luôn sống động và đầy đủ cấu trúc.
+#### ☕ 3. Kiểu Trích Dẫn Chiêm Nghiệm (`pattern: quote`)
+* **Mục đích:** Hiển thị một đoạn trích dẫn tâm đắc, lời hay ý đẹp hoặc một mẩu suy ngẫm triết lý sâu sắc được trích ra từ các bài viết.
+* **Cú pháp ô Content:** `label: Triết lý | sort: random`
+* **Nhập trích dẫn trực tiếp trong ô Content:** Bạn có thể gõ trực tiếp câu danh ngôn vào ô Content mà không cần tạo bài viết Blogger:
+  `"Sự đơn giản là đỉnh cao của tinh tế." - Leonardo da Vinci`
 
 ---
 
-### 3.6. Quản Lý Menu, Thanh Chủ Đề & Chân Trang 100% Bằng Chuột (Widget Danh Sách Liên Kết / LinkList)
+#### ⚡ 4. Kiểu Điểm Tin & Xu Hướng (`pattern: digest`)
+* **Mục đích:** Hiển thị danh sách các bài viết vắn tắt, cập nhật tin tức nhanh, ghi chú ngắn theo dạng thẻ card hiện đại.
+* **Cú pháp ô Content:** `label: Công nghệ | limit: 4`
+* **Mã HTML mẫu:**
+  ```html
+  <div class="special-posts-widget"
+       data-pattern="digest"
+       data-labels="Công nghệ"
+       data-limit="4"
+       data-sort="latest"
+       data-show-thumbnail="true"
+       data-show-snippet="true">
+  </div>
+  ```
 
-Bạn hoàn toàn có thể **Thêm, Sửa, Xoá hoặc Sắp xếp** bất kỳ liên kết nào trực tiếp trên giao diện **Bố cục (Layout)** của Blogger mà không cần can thiệp vào mã nguồn:
+---
 
-```
-                            HỆ THỐNG 5 WIDGET LINKLIST
-                                       │
-          ┌──────────────────┬─────────┴─────────┬──────────────────┐
-          ▼                  ▼                   ▼                  ▼
-    1. Menu Chính      2. Thanh Chủ Đề     3. Chính Sách      4. Mạng Xã Hội
-     (LinkList1)          (Label1)            (LinkList3)        (LinkList4)
-      Tại Header       Dưới Banner Cover    Footer Cột 2        Footer Cột 3
-```
+#### 📚 5. Kiểu Chuỗi Chuyên Đề (`pattern: series`)
+* **Mục đích:** Hiển thị một chuyên đề series cụ thể ngay trên Sidebar hoặc trang chủ dưới dạng card chuyên đề chuyên nghiệp.
+* **Cú pháp ô Content:** `pattern: series | label: series:Triết Lý Khắc Kỷ`
+* **Mã HTML mẫu:**
+  ```html
+  <div class="special-posts-widget"
+       data-pattern="series"
+       data-labels="series:Triết Lý Khắc Kỷ"
+       data-view-all-text="Xem toàn bộ chuyên đề »">
+  </div>
+  ```
 
-#### 🧭 1. Menu Điều Hướng Chính (`LinkList1` - Khu vực `Menu Điều Hướng Chính (Header)`)
-* **Thao tác:** Bấm ✏️ **Chỉnh sửa** tại widget `🧭 Menu Điều Hướng Chính`.
-* **Thêm liên kết thường:** Bấm `+ Thêm mục mới`, nhập Tên hiển thị (Ví dụ: `Trang Chủ | Home`) và Đường dẫn URL.
-* **Tạo Menu Đổ Xuống (Dropdown Submenu):** Nếu muốn một mục nằm thụt vào làm menu con của mục phía trước, bạn chỉ cần gõ thêm dấu gạch dưới `_` ở đầu tên.
-  * *Ví dụ:* 
-    * `Chuyên Mục | Categories` (Mục cha)
-    * `_Trải Nghiệm Sống | Life Stories` (Mục con 1)
-    * `_Sách & Công Cụ | Books & Tools` (Mục con 2)
-  * Theme sẽ tự động biến chúng thành menu đổ xuống nhiều cấp tuyệt đẹp!
+---
 
-#### 🏷️ 2. Thanh Chủ Đề Tự Động (`Label1` - Khu vực `Thanh Chủ Đề (Category Tabs)`)
-* **Cơ chế tự động hóa 100%:** Được vận hành bởi widget `Label1` chuẩn của Google Blogger kết hợp thuật toán đồng bộ thông minh. **Mỗi khi bạn đăng bài viết mới và gắn nhãn (Labels), nhãn đó sẽ tự động xuất hiện ngay trên Thanh Chủ Đề**!
-* **Bộ lọc thông minh (Smart Filter):** Theme tự động lọc bỏ các nhãn tính năng bắt đầu bằng `@` (như `@Quote`, `@Tiêu điểm`) và nhãn AI (`ai:assisted`, `ai:generated`) để thanh menu chủ đề luôn gọn gàng và chuẩn mực.
-* **Nhận diện trạng thái chọn (Active State):** Khi người đọc click vào bất kỳ chủ đề nào, tab đó sẽ tự động phát sáng màu chủ đạo (active pill), đồng thời "✦ Tất cả" sẽ nhường chỗ cho chuyên mục đang xem.
-* **Tùy biến trong Bố cục (Layout):** Bạn có thể bấm ✏️ tại widget `🏷️ Thanh Chủ Đề` để chọn:
-  * Hiển thị tất cả nhãn hoặc chỉ chọn những nhãn bạn muốn hiển thị.
-  * Sắp xếp theo Bảng chữ cái (Alphabetical) hoặc Tần suất bài viết (Frequency).
+### 3.3. Tính Năng Cao Cấp: Chọn Đích Danh Bài Viết Bằng URL (Handpicked Posts)
+Nếu bạn không muốn lọc theo nhãn mà muốn **chỉ định chính xác tuyệt đối các bài viết** đưa lên widget:
+* Nhập danh sách link bài viết (phân tách bởi dấu phẩy) vào ô `Content`:
+  ```text
+  posts: https://myblog.blogspot.com/2026/09/bai-viet-1.html, https://myblog.blogspot.com/2026/09/bai-viet-2.html
+  ```
 
-#### ⚖️ 3. Chính Sách & Minh Bạch (`LinkList3` - Footer Cột 2)
-* **Vị trí:** Cột thứ 2 tại Tầng 1 của Footer.
-* **Mục đích:** Quản lý các trang thông tin pháp lý, bản quyền, minh bạch AI và thông tin liên hệ.
-* **Thao tác:** Thoải mái thêm các trang riêng (`/p/chinh-sach.html`, `/p/lien-he.html`) hoặc xoá bớt tuỳ theo nhu cầu của blog.
+---
 
-#### 🌐 4. Kết Nối Mạng Xã Hội (`LinkList4` - Footer Cột 3)
-* **Vị trí:** Cột thứ 3 tại Tầng 1 của Footer (dưới form nhận bản tin).
-* **Cách nhận diện biểu tượng tự động:** Khi bạn nhập tên mạng xã hội (như `Facebook`, `X`, `GitHub`, `YouTube`, `Instagram`, `RSS`), theme sẽ tự động áp dụng màu sắc thương hiệu và icon tròn tương ứng!
+### 3.4. Cấu Hình Widget Ảnh Bìa & Tác Giả (Profile Cover Hero)
+Khu vực ảnh bìa to bản và thông tin tác giả nằm ở đầu blog (trong khu vực **Ảnh Bìa & Tác Giả**). Theme đã tách bạch sẵn **3 tiện ích riêng biệt**:
 
-#### 🔗 5. Menu Đáy Trang (`LinkList5` - Footer Tầng 2)
-* **Vị trí:** Nằm ở thanh đáy ngoài cùng của blog, bên cạnh dòng chữ bản quyền.
-* **Mục đích:** Điều hướng phụ tinh gọn (Trang chủ, Mục lục, RSS).
+1. **Tải Ảnh Bìa Banner (Widget `Image1` — `🖼️ 1. Tải Lên Ảnh Bìa Banner`):** Bấm chỉnh sửa ➔ Tải hình ảnh lên từ máy tính ➔ Lưu.
+2. **Tải Avatar Tròn Tác Giả (Widget `Image2` — `👤 2. Tải Lên Avatar Tác Giả`):** Bấm chỉnh sửa ➔ Tải hình ảnh đại diện ➔ Lưu.
+3. **Cài Đặt Tên & Lời Giới Thiệu (Widget `HTML1` — `✍️ 3. Tên & Lời Giới Thiệu Tác Giả`):**
+   * **Tiêu đề (Title):** Nhập tên tác giả (VD: `Nam Trương`).
+   * **Nội dung (Content):** Nhập lời giới thiệu tự nhiên.
+   * **Tùy chọn nâng cao:** `banner: https://link-anh-bia.jpg | avatar: https://link-avatar.jpg | bio: Lời giới thiệu | name: Tên của bạn`
 
-> **Lưu ý an toàn tuyệt đối:** Nếu danh sách liên kết trong widget trống (hoặc bạn vô tình xoá hết), hệ thống sẽ **tự động kích hoạt bộ liên kết mặc định mẫu** để giao diện blog luôn đẹp mắt và không bao giờ bị vỡ!
+---
+
+### 3.5. Cơ Chế Smart Fallback Tự Động
+* **Tự động lấy bài mới nhất:** Nếu widget lọc nhãn `@` chưa có bài viết, theme sẽ tự động lấy bài mới nhất lấp đầy.
+* **Trích dẫn dự phòng:** Widget `quote` tự động hiển thị câu danh ngôn mặc định nếu chưa có bài gắn nhãn `@Quote`.
+* **Dự phòng Menu & Danh mục:** Đảm bảo giao diện luôn đầy đủ cấu trúc kể cả với blog mới khởi tạo.
+
+---
+
+### 3.6. Quản Lý Menu & Thanh Chủ Đề (Widget LinkList & Label)
+
+| Widget | Vị Trí Trong Bố Cục | Chức Năng & Cách Cấu Hình |
+| :--- | :--- | :--- |
+| **`LinkList1`** | Header (`🧭 Menu Điều Hướng Chính`) | Thêm/Sửa/Xoá menu. Dùng gạch dưới `_` ở đầu tên để tạo Submenu đổ xuống (VD: `_Trải Nghiệm Sống`). |
+| **`Label1`** | Dưới Banner (`🏷️ Thanh Chủ Đề`) | **Tự động 100%**: Mọi nhãn bài viết mới sẽ tự xuất hiện. Theme tự động lọc bỏ nhãn `@`, `series:` và `ai:`. |
+| **`LinkList3`** | Footer Cột 2 | Các trang chính sách, điều khoản, liên hệ. |
+| **`LinkList4`** | Footer Cột 3 | Mạng xã hội. Tự chọn màu thương hiệu và icon tròn theo tên (Facebook, X, GitHub, YouTube, Instagram). |
+| **`LinkList5`** | Footer Tầng 2 (Thanh đáy) | Menu phụ tinh gọn (Trang chủ, Mục lục, RSS). |
 
 ---
 
 ## CHƯƠNG 4: CÁCH THÊM MỚI WIDGET TÙY Ý (+ ADD A GADGET)
 
-Bạn có thể thêm **bao nhiêu widget tùy thích** vào bất kỳ vị trí nào có nút **"+ Thêm tiện ích"** (+ Add a Gadget) theo 2 cách cực kỳ nhanh:
+Bạn có thể thêm widget mới bằng 2 cách:
 
 ### Cách 1: Gõ Cú Pháp Ngắn (Khuyên Dùng)
 1. Bấm **"+ Thêm tiện ích"** ➔ Chọn **"HTML/JavaScript"**.
-2. Nhập **Title** (Tên widget của bạn).
-3. Trong ô **Content**, chỉ cần gõ đúng 1 dòng:
-   * **Tạo widget Trích dẫn:** `pattern: quote | label: Triết lý`
-   * **Tạo widget Điểm tin:** `pattern: digest | label: Công nghệ | limit: 4`
-   * **Tạo widget Top đọc nhiều:** `pattern: ranked | sort: views | limit: 5`
-   * **Tạo widget Tiêu điểm:** `pattern: spotlight | label: Tiêu điểm`
-4. Bấm **SAVE**. Theme sẽ tự động chuyển đổi thành widget bài viết tương ứng!
+2. Nhập **Title** (Tên widget).
+3. Ô **Content** gõ đúng 1 dòng:
+   * **Trích dẫn:** `pattern: quote | label: Triết lý`
+   * **Điểm tin:** `pattern: digest | label: Công nghệ | limit: 4`
+   * **Top đọc nhiều:** `pattern: ranked | sort: views | limit: 5`
+   * **Chuyên đề:** `pattern: series | label: series:Kỹ Năng Viết`
+4. Bấm **SAVE**.
 
 ### Cách 2: Sao Chép Mã Trực Quan Từ Trang Preview (`preview.html`)
-1. Mở file `src/preview.html` trên máy tính bằng trình duyệt.
-2. Mở bảng **Bộ Tạo Mã Tiện Ích (Interactive Playground)**:
-   * Chọn kiểu giao diện (Spotlight, Ranked, Quote, Digest).
-   * Nhập tên nhãn, số lượng bài, tích chọn bật/tắt ảnh thu nhỏ hoặc đoạn tóm tắt.
-3. Bấm nút **"Sao chép mã widget"**.
-4. Mở widget trên Blogger, dán mã HTML đó vào ô **Content** ➔ Bấm **SAVE**.
+Mở file `src/preview.html` ➔ Mở bảng **Bộ Tạo Mã Tiện Ích** ➔ Tùy chỉnh thông số ➔ Bấm **"Sao chép mã widget"** ➔ Dán vào ô Content trên Blogger.
 
 ---
 
-## CHƯƠNG 5: THIẾT LẬP NỘI DUNG SONG NGỮ (BILINGUAL VI / EN)
+## CHƯƠNG 5: CHUỖI BÀI VIẾT & CHUYÊN ĐỀ (POST SERIES NAVIGATOR - `series:`)
 
-Theme tích hợp sẵn bộ chuyển đổi ngôn ngữ trơn tru giữa Tiếng Việt (mặc định) và Tiếng Anh.
+Tính năng **Post Series Navigator** giúp bạn tự động liên kết các bài viết nhiều phần thành một chuyên đề hoàn chỉnh với trải nghiệm đọc trực quan.
 
-### 5.1. Với nội dung ngắn (Tiêu đề menu, Tên widget, Tên nhãn)
+### 5.1. Cách Tạo Một Chuỗi Bài Viết
+1. Mở các bài viết thuộc cùng một series trong Blogger.
+2. Tại cột bên phải (**Nhãn / Labels**), nhập nhãn có tiền tố `series:` giống hệt nhau cho tất cả các bài:
+   `series:Triết Lý Khắc Kỷ` *(hoặc `series:Kỹ Năng Viết Lách`)*
+3. Đăng bài. Theme sẽ tự động thu thập tất cả bài viết cùng series, sắp xếp theo thứ tự thời gian đăng (Phần 1, Phần 2, Phần 3...).
+
+### 5.2. Các Thành Phần Giao Diện Tự Động Hiển Thị Trong Bài Viết
+* **Huy hiệu Chuyên đề (Header Pill):** Hiển thị ở đầu bài viết với tên chuyên đề và tổng số phần.
+* **Lộ trình Chuyên đề (Roadmap Box):** Đặt ở cuối bài viết, hiển thị:
+  * Thanh tiến trình hoàn thành (VD: `Đã đọc 2/5 phần - 40%`).
+  * Thẻ bài viết hiện tại (Active illuminated card - "Đang đọc").
+  * Thẻ bài tiếp theo ("Tiếp theo") với nút CTA đọc bài tiếp theo.
+  * Danh sách các bài đã đọc / chưa đọc với hiệu ứng Timeline Tàu điện ngầm rực rỡ.
+
+---
+
+## CHƯƠNG 6: QUẢN LÝ TÁC GIẢ KHÁCH MỜI (GUEST AUTHOR META)
+
+Nếu bài viết do một tác giả khách mời (Guest Author) đóng góp, bạn có thể override toàn bộ thông tin tác giả (Avatar, Tên, Chức danh, Bio song ngữ, Mạng xã hội) cho duy nhất bài viết đó mà không ảnh hưởng đến hồ sơ chính của bạn.
+
+### Cách Thiết Lập:
+Khi soạn thảo bài viết ở chế độ **Xem HTML (HTML view)**, dán thẻ ẩn sau vào đầu hoặc cuối bài viết:
+
+```html
+<div class="guest-author-meta"
+     data-author-name="Nguyễn Văn A"
+     data-author-role="Nhà nghiên cứu Triết học"
+     data-author-avatar="https://example.com/avatar-nguyen-van-a.jpg"
+     data-author-bio-vi="Nguyễn Văn A là nhà nghiên cứu triết học độc lập với hơn 10 năm kinh nghiệm."
+     data-author-bio-en="Nguyen Van A is an independent philosophy researcher with over 10 years of experience."
+     data-author-website="https://nguyenvana.com"
+     data-author-facebook="https://facebook.com/nguyenvana"
+     data-author-twitter="https://x.com/nguyenvana"
+     data-author-linkedin="https://linkedin.com/in/nguyenvana"
+     data-author-email="contact@nguyenvana.com">
+</div>
+```
+
+* **Hành vi tự động:** Theme sẽ phát hiện thẻ ẩn này, gắn huy hiệu **Khách mời | Guest**, cập nhật thông tin tên/avatar ở cả khung tác giả đầu bài và Bio Box cuối bài.
+* **Avatar thông minh:** Nếu bạn bỏ trống `data-author-avatar`, theme sẽ tự động khởi tạo ảnh đại diện SVG với 2 chữ cái đầu của tên tác giả (Initials Avatar).
+
+---
+
+## CHƯƠNG 7: TRANG LIÊN HỆ & GỬI BÀI VIẾT KHÁCH MỜI (`/p/lien-he.html`) & 4 VỊ TRÍ CTA
+
+Theme tích hợp sẵn ứng dụng **Trang Liên Hệ & Gửi Bài Viết Khách Mời** chuyên nghiệp.
+
+### 7.1. Cách Tạo Trang
+1. Trong Blogger ➔ Chọn **Trang (Pages)** ➔ Bấm **+ Trang mới**.
+2. Tiêu đề: `Liên Hệ` (hoặc `Contact`).
+3. Cột bên phải (**Đường dẫn cố định / Permalink**): Chọn *Đường dẫn cố định tùy chỉnh*, đặt tên là:
+   `lien-he` *(Đường dẫn hoàn chỉnh sẽ là `.../p/lien-he.html`)*
+4. Bấm **Xuất bản**. Theme sẽ tự động biến trang này thành ứng dụng 2 Tab:
+   * **Tab 1: Gửi Bài Viết Khách Mời (Guest Post Submission):** Cho phép độc giả/tác giả gửi đề xuất bài viết, link Google Docs, tóm tắt và thông tin liên hệ.
+   * **Tab 2: Liên Hệ Chung (General Contact):** Form gửi thắc mắc, phản hồi hoặc hợp tác.
+
+### 7.2. 4 Vị Trí Nút Bấm / Điểm Chạm Mời Viết Bài (Guest Post Touchpoints)
+Theme thiết lập 4 điểm chạm dẫn người đọc về trang `/p/lien-he.html`:
+1. **Banner Profile Hero (Đầu trang chủ - `.btn-guest-hero`):** Mặc định **HIỂN THỊ** cạnh nút Bản tin.
+2. **Chân bài viết (`.post-guest-cta`):** Thẻ mời gọi dưới khung tác giả cuối bài (Mặc định ẩn, bật qua `HTML88`).
+3. **Cột bên Sidebar (`.sidebar-guest-cta`):** Widget mời viết bài trên Sidebar (Mặc định ẩn, bật qua `HTML88`).
+4. **Thanh menu điều hướng (Header / Footer):** Thêm link `/p/lien-he.html` trong `LinkList1` hoặc `LinkList5`.
+
+### 7.3. Cấu Hình Nhận Thư (Adapter Settings)
+Mặc định form liên hệ hỗ trợ cơ chế chống spam Honeypot (`_honey`) và tự động gửi thông tin. Bạn có thể cấu hình Adapter gửi thư thông qua widget `HTML88` (xem Chương 14) hoặc dán mã cấu hình:
+
+```html
+<script>
+  window.__CONTACT_CONFIG = {
+    adapter: 'blogger', // Options: 'blogger' | 'gas' | 'formsubmit'
+    adminEmail: 'tradabanthesu@gmail.com',
+    gasWebhookUrl: 'https://script.google.com/macros/s/.../exec'
+  };
+</script>
+```
+
+---
+
+## CHƯƠNG 8: TẠO TRANG MỤC LỤC TOÀN THƯ (SUBWAY METRO TIMELINE ARCHIVE v5.0)
+
+Theme sở hữu ứng dụng **Mục Lục Toàn Thư dạng Bản Đồ Tàu Điện Ngầm (Subway Metro Timeline Archive v5.0)** rực rỡ và hiện đại.
+
+### Cách Thiết Lập:
+1. Vào mục **Trang (Pages)** ➔ Bấm **+ Trang mới**.
+2. Tiêu đề: `Mục Lục Toàn Thư` (hoặc `Archive`).
+3. **Đường dẫn cố định tùy chỉnh (Permalink):**
+   `muc-luc` *(Đường dẫn hoàn chỉnh `.../p/muc-luc.html`)*
+4. Bấm **Xuất bản**.
+
+### Các Tính Năng Nổi Bật Của Trang Mục Lục:
+* **Giao diện Subway Metro Map:** Các năm xuất bản biến thành Trạm ga lớn (Year Stations), các bài viết rẽ nhánh thành lá bài thời gian (Post Leaves).
+* **Dòng thời gian hợp nhất:** Hiển thị cả bài viết chính lẫn các ghi chép/trích dẫn độc quyền gắn nhãn `@`.
+* **Bộ lọc đa tầng:**
+  * Thanh Category Tabs dưới Banner.
+  * Ô Tìm kiếm thời gian thực (Tự động lọc bỏ dấu tiếng Việt, gõ "triet hoc" vẫn tìm ra "Triết học").
+  * Cửa sổ Popover bộ lọc nâng cao (Lọc theo nhãn `@`, nhãn AI, định dạng bài).
+* **Di động & Dark Mode:** Tự động tối ưu dạng Bottom Sheet trên điện thoại và đồng bộ chế độ sáng/tối.
+
+---
+
+## CHƯƠNG 9: THIẾT LẬP NỘI DUNG SONG NGỮ (BILINGUAL VI / EN)
+
+### 9.1. Với Nội Dung Ngắn (Tiêu đề menu, Tên widget, Tên nhãn)
 Sử dụng dấu gạch đứng `|`:
 ```text
 Trang Chủ | Home
@@ -387,58 +380,76 @@ Góc Nhìn | Perspectives
 Bài Viết Nổi Bật | Featured Posts
 ```
 
-### 5.2. Với nội dung dài (Bài viết chi tiết, Giới thiệu tác giả, Footer)
+### 9.2. Với Nội Dung Dài (Bài viết chi tiết, Giới thiệu tác giả, Footer)
 Sử dụng 2 khối thẻ `div` tương ứng:
 ```html
 <div data-lang="vi">
-  <p>Chào mừng bạn đến với blog Trà Đá Triết Lý. Nơi chia sẻ những suy ngẫm sâu sắc về cuộc sống.</p>
+  <p>Chào mừng bạn đến với blog Trà Đá Triết Lý.</p>
 </div>
 
 <div data-lang="en">
-  <p>Welcome to Tra Da Philosophy. A sanctuary for deep reflections and meaningful living.</p>
+  <p>Welcome to Tra Da Philosophy.</p>
 </div>
 ```
-*Trình duyệt sẽ tự động ẩn khối tiếng Anh khi người đọc chọn Tiếng Việt và ngược lại.*
 
 ---
 
-## CHƯƠNG 6: HỆ THỐNG NHÃN MINH BẠCH AI (AI TRANSPARENCY)
+## CHƯƠNG 10: HỆ THỐNG NHÃN MINH BẠCH AI (AI TRANSPARENCY)
 
-Theme tuân thủ tiêu chuẩn đạo đức AI và minh bạch nội dung cho độc giả:
+Theme hỗ trợ tiêu chuẩn đạo đức AI và minh bạch nội dung cho độc giả:
 
-### 6.1. Các nhãn AI được hỗ trợ:
-Khi bài viết có sự tham gia của AI, gắn 1 trong các nhãn sau:
+### Bảng Đầy Đủ 6 Nhãn AI Được Hỗ Trợ:
+| Tên Nhãn Nhập Vào | Huy Hiệu Hiển Thị | Tỷ Lệ AI | Ý Nghĩa Sử Dụng |
+| :--- | :---: | :---: | :--- |
+| `ai:generated` *(hoặc `AI-Generated`)* | ⚡ AI Tạo Lập | ~80-100% | Nội dung do AI khởi tạo hoàn toàn theo prompt/định hướng của tác giả. |
+| `ai:contributed` *(hoặc `AI-Contributed`)* | ✨ AI Đóng Góp | ~50-80% | AI trực tiếp nghiên cứu và xây dựng các đoạn nội dung chính dưới sự chỉ đạo của tác giả. |
+| `ai:assisted` *(hoặc `AI-Assisted`)* | ✨ AI Hỗ Trợ | ~20-50% | Tác giả tự viết, AI hỗ trợ tra cứu, sắp xếp thông tin, dàn ý hoặc ngữ pháp. |
+| `ai:product` *(hoặc `AI-Product`)* | 🤖 Sản Phẩm AI | N/A | Bài viết đánh giá, review thực tế về một công cụ hoặc sản phẩm AI. |
+| `ai:translated` *(hoặc `AI-Translated`)* | 🌐 AI Dịch Thuật | N/A | Bản dịch ngôn ngữ (VI ↔ EN) được thực hiện bởi công cụ AI dịch thuật. |
+| `ai:none` *(hoặc `AI-None`)* | ✍️ 100% Con Người | 0% | Bài viết sáng tác thủ công hoàn toàn, không sử dụng công cụ AI sinh nội dung. |
 
-| Tên Nhãn Bài Viết | Mức Độ Minh Bạch | Ý Nghĩa Hiển Thị Trên Blog |
-| :--- | :---: | :--- |
-| `ai:generated` | 🤖 AI Tạo Lập | Bài viết do AI tạo ra phần lớn nội dung dưới sự định hướng của tác giả. |
-| `ai:assisted` | ✨ AI Hỗ Trợ | Tác giả tự viết, AI hỗ trợ chỉnh sửa ngữ pháp, dàn ý hoặc dịch thuật. |
-| `ai:none` | ✍️ 100% Con Người | Tác phẩm sáng tác thủ công hoàn toàn, không sử dụng công cụ AI. |
-
-> **Đặc điểm:** Toàn bộ nhãn có tiền tố `ai:` sẽ **tự động ẩn khỏi thanh menu Category Tabs** để giữ thanh chủ đề luôn gọn gàng, đồng thời tự động kích hoạt **Huy hiệu Minh Bạch AI** và cửa sổ giải trình chi tiết khi bạn đọc click vào!
-
----
-
-## CHƯƠNG 7: TẠO TRANG MỤC LỤC TOÀN THƯ (ARCHIVE / TIMELINE PAGE)
-
-Theme có sẵn ứng dụng tìm kiếm bài viết và cây thư mục thời gian (Timeline) cực kỳ hiện đại.
-
-### Cách Thiết Lập:
-1. Vào trang quản trị Blogger ➔ Chọn mục **Trang (Pages)** ➔ Bấm **+ Trang mới**.
-2. Đặt Tiêu đề trang: `Mục Lục Toàn Thư` (hoặc `Archive`).
-3. Cột bên phải mục **Đường dẫn cố định (Permalink)**: Chọn *Đường dẫn cố định tùy chỉnh*, đặt tên là:
-   ```text
-   muc-luc
-   ```
-   *(Đường dẫn hoàn chỉnh sẽ là `.../p/muc-luc.html`)*
-4. Bấm **Xuất bản (Publish)**.
-5. **Hoàn thành!** Theme sẽ tự động biến trang này thành một ứng dụng Mục lục thông minh với thanh tìm kiếm thời gian thực, bộ đếm bài viết và phân loại theo năm.
+> **Đặc điểm:** Toàn bộ nhãn `ai:` tự động ẩn khỏi menu Category Tabs và tự động kích hoạt **Huy hiệu Minh Bạch AI** kèm popup giải trình khi độc giả click vào!
 
 ---
 
-## CHƯƠNG 8: GỢI Ý TIẾP THỊ LIÊN KẾT MINH BẠCH (AFFILIATE BOX)
+## CHƯƠNG 11: CẤU HÌNH PHONG CÁCH GIAO DIỆN (THEME PRESETS & DARK/LIGHT MODE)
 
-Khi bạn muốn giới thiệu một cuốn sách hoặc sản phẩm tâm đắc trong bài viết kèm liên kết affiliate, hãy dán đoạn mã sau vào bài viết (ở chế độ xem HTML):
+Theme hỗ trợ chuyển đổi phong cách thiết kế cao cấp và chế độ sáng/tối thông minh.
+
+### 11.1. Chế Độ Sáng / Tối (Light & Dark Mode)
+* **Công tắc trên Header:** Độc giả bấm nút `☀️` / `🌙` trên thanh điều hướng để chuyển đổi giữa Sáng và Tối.
+* **Tự động nhận diện thiết bị:** Mặc định tự động nhận diện chế độ hệ thống của độc giả (`prefers-color-scheme`).
+* **Lưu trạng thái:** Lưu trữ lựa chọn trong `localStorage` với key `theme` (`light` hoặc `dark`).
+
+### 11.2. Theme Preset: Airy Minimalist & Pastel Gradient (`airy-pastel`)
+* **Mô tả:** Phong cách giao diện lấy cảm hứng từ các tạp chí số và sản phẩm công nghệ hiện đại (*tatca.ai*, *Linear*, *Stripe*, *Refactoring*). Sử dụng viền Hairline siêu mỏng, hiệu ứng Gradient Pastel mềm mại và hiệu ứng kính mờ Frosted Glass.
+* **Cách kích hoạt:** Được tích hợp mặc định trong theme hoặc khai báo tại thẻ HTML đầu file template:
+  ```xml
+  <html b:css='false' b:responsive='true' b:version='2'
+        data-theme='light'
+        data-theme-preset='airy-pastel'>
+  ```
+
+---
+
+## CHƯƠNG 12: THANH TIẾN TRÌNH ĐỌC & MỤC LỤC BÀI VIẾT TỰ ĐỘNG (AUTO TOC)
+
+### 12.1. Thanh Tiến Trình Đọc (Reading Progress Bar) & Thời Gian Đọc
+* **Thanh tiến trình:** Tự động hiển thị một đường chỉ màu chạy ở đỉnh màn hình khi độc giả cuộn đọc bài viết.
+* **Thời gian đọc:** Tự động tính toán số phút đọc dựa trên tổng số từ trong bài (~200 từ/phút) và hiển thị huy hiệu thời gian đọc ở đầu bài.
+
+### 12.2. Mục Lục Bài Viết Tự Động (Auto Table of Contents)
+* **Cơ chế:** Theme tự động quét các thẻ tiêu đề `<h2>` và `<h3>` trong nội dung bài viết để tạo ra khung **Mục Lục Bài Viết** đẹp mắt ở đầu bài.
+* **Tính năng:**
+  * Cho phép bấm ẩn/hiện mục lục.
+  * Bấm vào từng mục để cuộn mượt (smooth scroll) đến đoạn tương ứng.
+  * Tự động phát sáng tiêu đề mục lục đang đọc theo vị trí cuộn màn hình.
+
+---
+
+## CHƯƠNG 13: GỢI Ý TIẾP THỊ LIÊN KẾT MINH BẠCH (AFFILIATE BOX)
+
+Khi giới thiệu sách hoặc sản phẩm kèm liên kết affiliate, dán đoạn mã sau vào bài viết (ở chế độ xem HTML):
 
 ```html
 <aside class="affiliate-box" aria-label="Gợi ý sản phẩm">
@@ -460,55 +471,102 @@ Khi bạn muốn giới thiệu một cuốn sách hoặc sản phẩm tâm đ�
 
 ---
 
-## BẢNG TỔNG HỢP TRA CỨU NHANH (CHEATSHEET)
+## CHƯƠNG 14: CẤU HÌNH COMPONENT ẨN, NÚT CÀ PHÊ & ĐIỂM CHẠM (WIDGET `HTML88`)
 
-| Thao Tác Cần Thực Hiện | Cách Làm Nhanh Nhất |
-| :--- | :--- |
-| **Đổi chế độ Sáng / Tối / Bạc hà** | Bấm nút công tắc 3 nấc `☀️` / `🌙` / `🍃` ở góc trên bên phải. |
-| **Chuyển đổi Tiếng Việt / Tiếng Anh** | Bấm nút chuyển đổi `VI` / `EN` trên thanh điều hướng. |
-| **Đưa bài viết lên vị trí Tiêu Điểm** | Gắn nhãn `@Tiêu điểm` cho bài viết đó. |
-| **Biến bài viết thành Trích Dẫn ngẫu nhiên** | Gắn nhãn `@Quote` cho bài viết đó. |
-| **Ẩn bài viết ngắn khỏi Trang Chủ** | Gắn bất kỳ nhãn nào bắt đầu bằng ký tự `@` (VD: `@Quote`, `@TinNhanh`). |
-| **Khai báo bài viết có AI hỗ trợ** | Gắn nhãn `ai:assisted`. |
-| **Tạo menu song ngữ** | Nhập tên liên kết dạng `Tên Việt \| English Name`. |
-| **Đổi nhãn cho widget** | Mở widget trong Bố cục, gõ tên nhãn vào ô `Content` (VD: `Sách hay`). |
-| **Thêm widget mới** | Bấm `+ Thêm tiện ích` ➔ Chọn `HTML/JavaScript` ➔ Ô Content gõ `pattern: digest \| label: TênNhãn`. |
-| **Bật quảng cáo Trang chủ / Sidebar / Footer / Bài viết** | Vào **Bố cục (Layout)** ➔ Sửa widget quảng cáo tương ứng ➔ Tích chọn **"Hiển thị"** và dán mã AdSense/Banner vào ô Content. |
+Widget `⚙️ Cấu hình component ẩn | Hide Component Setting` (`HTML88`) nằm ở đáy trang quản trị **Bố cục (Layout)** là trung tâm điều chỉnh toàn bộ các tính năng ẩn và điểm chạm hành động của blog.
+
+### 14.1. Vị trí quản lý trong Blogger Admin
+1. Vào **Blogger Dashboard -> Bố cục (Layout)**.
+2. Cuộn xuống phần dưới cùng của trang: Khu vực **`⚙️ CẤU HÌNH COMPONENT ẨN`**.
+3. Bấm vào cây bút chì chỉnh sửa widget **`⚙️ Cấu hình component ẩn | Hide Component Setting`** (Mã widget: `HTML88`).
 
 ---
 
-## CHƯƠNG 9: CẤU HÌNH TÁC GIẢ & COMPONENT ẨN
+### 14.2. Hướng dẫn BẬT / ẨN từng Component cụ thể
 
-Theme cung cấp một cơ chế vô cùng thông minh giúp bạn đồng bộ và cấu hình các thành phần ẩn (ví dụ như phần thông tin tác giả và các nút bấm dưới đáy bài viết). Mọi thứ đều được thiết kế theo nguyên tắc "Cấu hình 1 nơi, hiển thị nhiều nơi".
+#### 1. Nút "☕ Mời Tôi Ly Cà Phê" (Buy Me A Coffee Button)
+Mặc định nút này được ẩn để giữ giao diện tối giản. Nếu bạn muốn nhận ủng hộ từ độc giả:
+* **Cách BẬT:** Trong ô Content của `HTML88`, tìm thẻ `<a class="btn-coffee" ...>` và sửa `style="display:none;"` thành `style="display:inline-flex;"`.
+* **Thay link ủng hộ:** Sửa thuộc tính `href="https://www.buymeacoffee.com/your-id"` thành đường dẫn BuyMeACoffee, Ko-fi hoặc MoMo của bạn.
+* **Cách ẨN lại:** Sửa thành `style="display:none;"`.
 
-### 9.1. Widget 👤 Về Tác Giả (Sidebar)
-* **Vị trí:** Nằm trong mục Bố cục (Layout) -> Cột Bên (Sidebar).
-* **Mục đích:** Đây là trung tâm quản lý (Nguồn phát) toàn bộ nội dung Giới thiệu tác giả.
-* **Cách hoạt động:** Khi bạn nhập các thẻ HTML chứa lời giới thiệu song ngữ (như `<div class="lang-vi">` và `<div class="lang-en">`) vào widget này, đoạn chữ sẽ hiển thị trên Sidebar, ĐỒNG THỜI tự động được Javascript nhân bản xuống mục Tác giả dưới cùng của mỗi bài viết! Bạn không bao giờ phải sửa lời giới thiệu ở 2 nơi.
-
-### 9.2. Widget ⚙️ Cấu hình component ẩn | Hide Component Setting
-* **Vị trí:** Nằm trong mục Bố cục (Layout) -> Phần cuối cùng dưới đáy trang (⚙️ CẤU HÌNH COMPONENT ẨN).
-* **Mục đích:** Quản lý cấu hình của các nút bấm hoặc các component không nằm trong một khu vực Widget cụ thể nào (VD: Nút Mua Cà Phê, Nút Đăng Ký Bản Tin dưới mỗi bài viết).
-* **Cách tuỳ biến:**
-   Khi bạn mở Widget này lên, nội dung HTML cấu hình đã được tạo sẵn bên trong ô Content.
-   * **Bật/Tắt một nút bấm:** Tìm đến nút bạn muốn điều chỉnh. Nếu muốn ẩn, sửa mã thành `style="display:none;"`. Nếu muốn bật lên, sửa thành `style="display:inline-flex;"`.
-   * **Đổi link:** Tìm thuộc tính `href="..."` và điền liên kết (Link Buymeacoffee, Facebook, Form bản tin, v.v.) của bạn vào.
-
-**Ví dụ một mẫu thiết lập bật nút Cà phê:**
 ```html
-<a class="btn-coffee" href="https://www.buymeacoffee.com/your-id" target="_blank" rel="noopener noreferrer" style="display:inline-flex;">
+<!-- BẬT NÚT MỜI CÀ PHÊ -->
+<a class="btn-coffee" href="https://www.buymeacoffee.com/id-cua-ban" target="_blank" rel="noopener noreferrer" style="display:inline-flex;">
   <span data-bilingual="true">☕ Mời tôi ly cà phê | ☕ Buy me a coffee</span>
 </a>
 ```
 
 ---
 
-## CHƯƠNG 10: QUẢN LÝ & BẬT/TẮT VỊ TRÍ QUẢNG CÁO (ADSENSE & BANNERS)
+#### 2. Nút "✍️ Viết Cùng Trà Đá / Gửi Bài" (Guest Post Hero Button)
+* **Vị trí hiển thị:** Nằm trên Banner Hero đầu trang chủ, bên cạnh nút Đăng ký Bản tin.
+* **Cách BẬT:** Sửa `style="display:none;"` thành `style="display:inline-flex;"`.
+* **Cách ẨN:** Sửa `style="display:inline-flex;"` thành `style="display:none;"`.
 
-Để mang lại giao diện tinh gọn, thanh lịch và tôn trọng độc giả tối đa, theme **thiết lập mặc định ẨN (Hide)** toàn bộ các widget và khung quảng cáo trên blog. Khi blog của bạn đạt chuẩn tham gia Google AdSense hoặc có các đối tác tài trợ banner, bạn có thể **chủ động bật từng vị trí** lên bất cứ lúc nào trực tiếp từ giao diện quản trị Blogger mà không cần chỉnh sửa code template XML.
+```html
+<!-- BẬT NÚT MỜI VIẾT BÀI ĐẦU TRANG CHỦ -->
+<a class="btn-guest-hero" href="/p/lien-he.html" style="display:inline-flex;" data-bilingual="true">
+  ✍️ Viết Cùng Trà Đá | Write With Us
+</a>
+```
 
-### 10.1. Danh Sách 4 Vị Trí Quảng Cáo Sẵn Có
-Theme đã tính toán sẵn 4 vị trí vàng (chuẩn kích thước IAB, chống giật layout CLS=0 tuyệt đối):
+---
+
+#### 3. Thẻ Mời Viết Bài Ở Cuối Bài Viết (`.post-guest-cta`)
+* **Vị trí hiển thị:** Khối thẻ callout nằm ngay dưới khung tác giả cuối mỗi bài viết.
+* **Cách BẬT:** Sửa `style="display:none;"` thành `style="display:block;"`.
+
+```html
+<!-- BẬT THẺ MỜI GỬI BÀI CUỐI BÀI VIẾT -->
+<div class="post-guest-cta" style="display:block;">
+  <p><span data-bilingual="true">☕ Bạn có góc nhìn muốn chia sẻ trên Trà Đá Blog? | ☕ Have a story to share on Tra Da Blog?</span></p>
+  <a class="btn-guest-post-link" href="/p/lien-he.html" data-bilingual="true">Gửi bài viết đóng góp ➔ | Submit a guest post ➔</a>
+</div>
+```
+
+---
+
+#### 4. Quảng Cáo Google AdSense Trong Bài Viết (In-Article Ads)
+Nếu bạn không muốn bật quảng cáo qua widget ô riêng mà muốn nhúng mã AdSense tự động vào bài viết:
+* **Cách BẬT:** Đổi `style="display:none;"` thành `style="display:block;"`.
+* Dán mã AdSense vào giữa 2 thẻ `<div class="ad-top-code">` (Đầu bài) và `<div class="ad-bottom-code">` (Cuối bài).
+
+```html
+<!-- BẬT QUẢNG CÁO TRONG BÀI VIẾT -->
+<div class="in-post-ads-config" style="display:block;">
+  <div class="ad-top-code">
+    <!-- Dán mã nhúng AdSense Đầu bài viết tại đây -->
+  </div>
+  <div class="ad-bottom-code">
+    <!-- Dán mã nhúng AdSense Cuối bài viết tại đây -->
+  </div>
+</div>
+```
+
+---
+
+#### 5. Cấu Hình Backend Trang Liên Hệ (`__CONTACT_CONFIG`)
+* Quản lý email nhận thông tin phản hồi từ độc giả và chọn Adapter backend:
+  * `'blogger'`: Gửi thư qua comment/feed mặc định của Blogger (Miễn phí, gửi về Gmail chủ blog).
+  * `'gas'`: Gửi webhook về Google Apps Script (Lưu tự động vào Google Sheets + báo Gmail).
+  * `'formsubmit'`: Gửi qua dịch vụ FormSubmit.co.
+
+```html
+<script>
+  window.__CONTACT_CONFIG = {
+    adapter: 'blogger', // 'blogger' | 'gas' | 'formsubmit'
+    adminEmail: 'tradabanthesu@gmail.com',
+    gasWebhookUrl: 'https://script.google.com/macros/s/YOUR_GAS_ID/exec'
+  };
+</script>
+```
+
+---
+
+## CHƯƠNG 15: QUẢN LÝ & BẬT/TẮT VỊ TRÍ QUẢNG CÁO (ADSENSE & BANNERS)
+
+Theme thiết lập mặc định **ẨN** toàn bộ quảng cáo để giao diện tinh gọn. Khi blog đủ điều kiện, bạn bật 4 vị trí sau từ **Bố cục (Layout)**:
 
 | STT | Vị Trí Quảng Cáo | Tên Widget Trong Bố Cục | Kích Thước Khuyến Nghị |
 | :--- | :--- | :--- | :--- |
@@ -517,35 +575,33 @@ Theme đã tính toán sẵn 4 vị trí vàng (chuẩn kích thước IAB, ch�
 | 3 | **Chân Trang (Footer Tầng 3)** | `Banner Quảng Cáo Đáy Trang` (`HTML6`) | 728x90 hoặc 970x90 Leaderboard |
 | 4 | **Trong Bài Viết (Đầu & Cuối)**| `Quảng Cáo Đầu Bài Viết` (`HTML21`) & `Quảng Cáo Cuối Bài Viết` (`HTML22`) | Responsive In-Article Ads |
 
----
-
-### 10.2. Cách Bật (Show/Enable) Widget Qua Giao Diện Bố Cục (Layout)
-Đây là cách đơn giản và khuyến nghị nhất:
-1. Vào **Blogger Dashboard -> Bố cục (Layout)**.
-2. Tìm đến ô chứa vị trí quảng cáo bạn muốn hiển thị:
-   - **Trang chủ:** Ô `Kết Luồng Bài Viết (Trên Nút Phân Trang / Quảng Cáo AdSense)` -> Bấm vào cây bút chì sửa `Quảng Cáo Kết Luồng (Trên Nút Phân Trang)`.
-   - **Sidebar:** Ô `Cột Bên (Sidebar)` -> Bấm vào cây bút chì sửa `Quảng Cáo Sidebar (Sticky)`.
-   - **Footer:** Ô `Footer Tầng 3: Quảng Cáo Đáy Trang` -> Bấm vào cây bút chì sửa `Banner Quảng Cáo Đáy Trang`.
-   - **Trong bài viết:** Ô `Quảng Cáo Đầu Bài Viết (In-Post Top)` hoặc `Quảng Cáo Cuối Bài Viết (In-Post Bottom)` -> Bấm vào cây bút chì sửa.
-3. Tích chọn **"Hiển thị HTML/JavaScript"** (Show this widget).
-4. Dán mã nhúng của Google AdSense hoặc mã HTML banner vào ô **Nội dung (Content)**.
-5. Bấm **Lưu (Save)**. Widget sẽ lập tức xuất hiện trên blog!
-
-> **Mẹo tắt đi:** Nếu bất kỳ lúc nào bạn muốn tạm dừng quảng cáo, chỉ cần bấm sửa widget và bỏ tích "Hiển thị HTML/JavaScript" -> Khung quảng cáo sẽ biến mất sạch sẽ, không để lại bất kỳ khoảng trống thừa nào.
+**Cách bật:** Bấm cây bút chỉnh sửa widget ➔ Tích chọn **"Hiển thị HTML/JavaScript"** ➔ Dán mã AdSense vào ô Content ➔ Bấm **Lưu**.
 
 ---
 
-### 10.3. Cách Bật Nhanh Bằng Tiện Ích Cấu Hình Ẩn (`HTML88`)
-Nếu bạn không muốn quản lý qua nhiều ô widget riêng lẻ mà muốn dán mã AdSense dùng chung cho bài viết:
-1. Vào **Bố cục -> Ô ⚙️ CẤU HÌNH COMPONENT ẨN** -> Mở widget `⚙️ Cấu hình component ẩn | Hide Component Setting` (`HTML88`).
-2. Tìm đến đoạn:
-   ```html
-   <!-- 2. Quảng cáo trong nội dung bài viết -->
-   <div class="in-post-ads-config" style="display:none;">
-     <div class="ad-top-code"><!-- Dán mã quảng cáo đầu bài tại đây --></div>
-     <div class="ad-bottom-code"><!-- Dán mã quảng cáo cuối bài tại đây --></div>
-   </div>
-   ```
-3. Dán mã quảng cáo vào giữa 2 thẻ trên và đổi `style="display:none;"` thành `style="display:block;"`.
-4. Nhấn **Lưu**. Mã quảng cáo sẽ tự động được inject vào các bài viết đơn trên blog.
+## BẢNG TỔNG HỢP TRA CỨU NHANH & XỬ LÝ BỘ NHỚ ĐỆM (CHEATSHEET & CACHE)
 
+### Bảng Tra Cứu Thao Tác Nhanh
+| Thao Tác Cần Thực Hiện | Cách Làm Nhanh Nhất |
+| :--- | :--- |
+| **Đổi chế độ Sáng / Tối** | Bấm nút công tắc `☀️` / `🌙` ở góc trên bên phải. |
+| **Chuyển đổi Tiếng Việt / Tiếng Anh** | Bấm nút chuyển đổi `VI` / `EN` trên thanh điều hướng. |
+| **Tạo chuỗi chuyên đề bài viết** | Gắn nhãn `series:Tên Chuyên Đề` cho các bài thuộc chuỗi. |
+| **Hiển thị widget Chuyên đề** | Bấm `+ Thêm tiện ích` ➔ Ô Content gõ `pattern: series \| label: series:TênChuyênĐề`. |
+| **Thêm tác giả khách mời** | Dán thẻ `<div class="guest-author-meta" data-author-name="..."></div>` vào nội dung bài viết. |
+| **Tạo trang Liên hệ & Gửi bài** | Tạo Trang mới ➔ Permalink đặt là `lien-he`. |
+| **Tạo trang Mục lục Tàu điện ngầm** | Tạo Trang mới ➔ Permalink đặt là `muc-luc`. |
+| **Đưa bài viết lên vị trí Tiêu Điểm** | Gắn nhãn `@Tiêu điểm` cho bài viết đó. |
+| **Biến bài viết thành Trích Dẫn ngẫu nhiên** | Gắn nhãn `@Quote` cho bài viết đó. |
+| **Ẩn bài viết ngắn khỏi Trang Chủ** | Gắn bất kỳ nhãn nào bắt đầu bằng ký tự `@` (VD: `@Quote`, `@TinNhanh`). |
+| **Khai báo bài viết có AI hỗ trợ** | Gắn nhãn `ai:assisted`. |
+| **Khai báo bài viết dịch bằng AI** | Gắn nhãn `ai:translated`. |
+| **Khai báo bài viết là review sản phẩm AI** | Gắn nhãn `ai:product`. |
+| **Tạo menu song ngữ** | Nhập tên liên kết dạng `Tên Việt \| English Name`. |
+| **Đổi nhãn cho widget** | Mở widget trong Bố cục, gõ tên nhãn vào ô `Content` (VD: `Sách hay`). |
+| **Thêm widget mới** | Bấm `+ Thêm tiện ích` ➔ Chọn `HTML/JavaScript` ➔ Ô Content gõ `pattern: digest \| label: TênNhãn`. |
+| **Bật quảng cáo hoặc nút Cà phê / Guest CTA** | Vào **Bố cục (Layout)** ➔ Chỉnh sửa widget tương ứng (hoặc widget `HTML88`) và chọn **Hiển thị**. |
+
+### 💡 Lưu Ý Quan Trọng Về Bộ Nhớ Đệm (SessionStorage Caching)
+Để đảm bảo tốc độ tải trang cực nhanh (Load dưới 0.5s), theme sử dụng bộ nhớ đệm tạm thời `sessionStorage` (thời hạn 3 - 5 phút) cho Widget Bài Viết, Chuyên Đề và Trang Mục Lục. 
+* **Nếu bạn vừa đăng bài viết mới hoặc vừa sửa nhãn bài viết nhưng chưa thấy widget cập nhật ngay:** Hãy đóng tab trình duyệt và mở lại, hoặc nhấn phím `Ctrl + Shift + R` (`Cmd + Shift + R` trên Mac) để xóa cache SessionStorage và tải lại dữ liệu mới nhất từ Blogger API.
