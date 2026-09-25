@@ -19,7 +19,8 @@
 13. [Chương 13: Gợi Ý Tiếp Thị Liên Kết Minh Bạch (Affiliate Box)](#chương-13-gợi-ý-tiếp-thị-liên-kết-minh-bạch-affiliate-box)
 14. [Chương 14: Cấu Hình Component Ẩn, Nút Cà Phê & Điểm Chạm (Widget `HTML88`)](#chương-14-cấu-hình-component-ẩn-nút-cà-phê--điểm-chạm-widget-html88)
 15. [Chương 15: Quản Lý & Bật/Tắt Vị Trí Quảng Cáo (AdSense & Banners)](#chương-15-quản-lý--bậttắt-vị-trí-quảng-cáo-adsense--banners)
-16. [Bảng Tổng Hợp Tra Cứu Nhanh & Xử Lý Bộ Nhớ Đệm (Cheatsheet & Cache)](#bảng-tổng-hợp-tra-cứu-nhanh--xử-lý-bộ-nhớ-đệm-cheatsheet--cache)
+16. [Chương 16: Tiện Ích Video & Voice Reels Nổi Bật (Video & Reels Showcase Widget)](#chương-16-tiện-ích-video--voice-reels-nổi-bật-video--reels-showcase-widget)
+17. [Bảng Tổng Hợp Tra Cứu Nhanh & Xử Lý Bộ Nhớ Đệm (Cheatsheet & Cache)](#bảng-tổng-hợp-tra-cứu-nhanh--xử-lý-bộ-nhớ-đệm-cheatsheet--cache)
 
 ---
 
@@ -51,6 +52,8 @@ Khi viết bài trên Blogger, bạn nhập các nhãn ở cột bên phải (**
   | `@Quote` | **☕ Trích Dẫn Chiêm Nghiệm** | Đoạn danh ngôn, trích dẫn sâu sắc (hiển thị ngẫu nhiên). |
   | `@Nổi bật` | **🔥 Bài Viết Nổi Bật** | Danh sách bài viết chọn lọc nhiều lượt đọc nhất. |
   | `@Điểm tin` | **⚡ Điểm Tin Mỗi Ngày** | Các tin vắn, cập nhật nhanh theo dạng thẻ card. |
+  | `@video` | **🎬 Video & Reels Nổi Bật** | Bài viết chứa link video/audio, hiển thị trong widget Reels Showcase. |
+  | `@video-hot` / `@hotvideo` | **🔥 Video Chiến Dịch Bán Chéo** | Video ưu tiên bán chéo, sẽ xuất hiện ở vị trí 1-2 trong widget Reels. |
 
 > **Mẹo hay:** Nếu bạn muốn một bài viết **vừa hiện ở widget Tiêu điểm, vừa hiện bình thường ở trang chủ**, chỉ cần gắn 2 nhãn: `@Tiêu điểm, Sách hay`.
 
@@ -614,7 +617,123 @@ Theme thiết lập mặc định **ẨN** toàn bộ quảng cáo để giao di
 | **Đổi nhãn cho widget** | Mở widget trong Bố cục, gõ tên nhãn vào ô `Content` (VD: `Sách hay`). |
 | **Thêm widget mới** | Bấm `+ Thêm tiện ích` ➔ Chọn `HTML/JavaScript` ➔ Ô Content gõ `pattern: digest \| label: TênNhãn`. |
 | **Bật quảng cáo hoặc nút Cà phê / Guest CTA** | Vào **Bố cục (Layout)** ➔ Chỉnh sửa widget tương ứng (hoặc widget `HTML88`) và chọn **Hiển thị**. |
+| **Hiển thị widget Video & Reels Nổi Bật** | Gắn nhãn `@video` cho bài có video, rồi thêm widget với `pattern: reels`. |
+| **Đẩy video bán chéo lên đầu Reels** | Gắn thêm nhãn `@video-hot` cho bài viết Video đó. |
 
 ### 💡 Lưu Ý Quan Trọng Về Bộ Nhớ Đệm (SessionStorage Caching)
-Để đảm bảo tốc độ tải trang cực nhanh (Load dưới 0.5s), theme sử dụng bộ nhớ đệm tạm thời `sessionStorage` (thời hạn 3 - 5 phút) cho Widget Bài Viết, Chuyên Đề và Trang Mục Lục. 
+Để đảm bảo tốc độ tải trang cực nhanh (Load dưới 0.5s), theme sử dụng bộ nhớ đệm tạm thời `sessionStorage` (thời hạn 3 - 5 phút cho widget bài viết, **60 phút cho widget Reels**) cho Widget Bài Viết, Chuyên Đề và Trang Mục Lục. 
 * **Nếu bạn vừa đăng bài viết mới hoặc vừa sửa nhãn bài viết nhưng chưa thấy widget cập nhật ngay:** Hãy đóng tab trình duyệt và mở lại, hoặc nhấn phím `Ctrl + Shift + R` (`Cmd + Shift + R` trên Mac) để xóa cache SessionStorage và tải lại dữ liệu mới nhất từ Blogger API.
+
+---
+
+## CHƯƠNG 16: TIỆN ÍCH VIDEO & VOICE REELS NỔI BẬT (VIDEO & REELS SHOWCASE WIDGET)
+
+> **Spec:** DONE_019 | Video & Voice Reels Showcase Widget — Living Canvas, Blurred BG Fill, Equalizer Waveform, Click-to-Play Facade.
+
+### 16.1. Tổng Quan
+Widget `pattern: reels` biến các bài viết có chứa link video/audio thành một **Khung Video & Reels chuẩn phong cách Facebook**:
+- 📦 **Khung Viền & Tiêu Đề Chuẩn Facebook**: Bao bọc bởi hộp thẻ viền mảnh thanh lịch (`border: 1px solid var(--border-color)`), bo góc mềm mại `14px`, tiêu đề gọn gàng **"Video"** kèm icon clapperboard đặc trưng và nút tùy chọn `···` ở góc phải.
+- 📱 **Thẻ Unibody Full-Bleed Chuẩn Facebook Reels (175px, Tỷ lệ 9:16)**: Hình ảnh/video chiếm trọn 100% diện tích thẻ từ trên xuống dưới, bo góc `12px`, có nút 3 chấm `⋮` ở góc trên và tiêu đề bài viết phủ chìm trên nền dải chuyển màu đen (dark gradient) ở đáy thẻ.
+- 🔘 **Nút Điều Hướng Tròn Nổi Khối**: Nút chuyển clip trái/phải hình tròn màu trắng tinh tế lơ lửng ngay mép thẻ tương tự nút trượt trên Facebook.
+- 🎬 Preview động khi rê chuột (YouTube animated WebP 6s)
+- 🔊 Sóng âm Equalizer nhảy múa cho file Audio/Podcast
+- ▶️ Nút Play xung nhịp (Pulse ring animation)
+- 📽️ Vạch Story ở mép trên, huy hiệu thời lượng
+- 🌫️ Nền mờ nghệ thuật (Blurred Background Fill) cho video 16:9 YouTube
+- ⚡ Click-to-Play Facade: không tải iframe nặng cho đến khi người dùng bấm Play
+- 🎭 Rạp chiếu Reels Lightbox Theater Modal cực kỳ WOW với phím mũi tên & cử chỉ vuốt touch mobile.
+
+### 16.2. Nhãn Bài Viết Cần Gắn
+
+| Nhãn | Mục Đích | Vị Trí Ưu Tiên |
+| :--- | :--- | :---: |
+| `@video` | Đánh dấu bài có video/audio cần xuất hiện trong widget Reels | Tất cả |
+| `@video-hot` hoặc `@hotvideo` | Đánh dấu video bán chéo chủ lực, đẩy lên vị trí 1-2 | Vị trí 1 & 2 |
+
+> **Lưu ý:** Cả 2 nhãn đều bắt đầu bằng `@` nên sẽ **tự động ẩn khỏi feed trang chủ và thanh Category Tabs**.
+
+### 16.3. Cách Nhúng Link Video Vào Bài Viết
+Widget tự động quét nội dung bài viết và bóc tách link media. Bạn chỉ cần dán link vào bài viết bình thường:
+
+| Nền Tảng | Link Ví Dụ | Ghi Chú |
+| :--- | :--- | :--- |
+| YouTube (Chuẩn) | `https://www.youtube.com/watch?v=dQw4w9WgXcQ` | Tự động nhận diện, dùng Blurred BG Fill |
+| YouTube Shorts | `https://www.youtube.com/shorts/dQw4w9WgXcQ` | Hiển thị tràn viền (cover) |
+| TikTok | `https://www.tiktok.com/@user/video/123456789` | Dùng ảnh đại diện bài viết |
+| Facebook Reel | `https://www.facebook.com/reel/123456789` | Dùng ảnh đại diện bài viết |
+| File MP4/WebM | `https://cdn.example.com/video.mp4` | Tự phát không tiếng khi hover |
+| File MP3/M4A | `https://cdn.example.com/audio.mp3` | Hiển thị Equalizer sóng nhạc |
+
+### 16.4. Thêm Widget Video & Reels Qua Blogger Layout
+Vào **Bố cục (Layout)** ➔ Bấm **+ Thêm tiện ích** ➔ Chọn **HTML/JavaScript** ➔ Nhập vào ô **Content**:
+
+```text
+pattern: reels
+title: Video
+limit: 8
+sort: random
+hot-ratio: 60%
+cta-text: Xem bài viết & Ưu đãi ➔
+```
+
+### 16.5. Bảng Tham Số Cấu Hình Đầy Đủ
+
+| Tham Số | Mặc Định | Giải Thích |
+| :--- | :---: | :--- |
+| `pattern` | `reels` | Bắt buộc, định danh widget Reels. |
+| `title` | `Video` | Tiêu đề đầu widget (mặc định là `Video`). Hỗ trợ song ngữ `VI \| EN`. |
+| `limit` | `10` | Số khung video tối đa (1–10). |
+| `fetch-count` | `40` | Số bài nạp từ feed để bóc tách video (10–100). |
+| `sort` | `random` | Thứ tự: `random` \| `latest` \| `oldest`. |
+| `labels` | `@video` | Nhãn truy vấn feed. |
+| `hot-label` | `@video-hot` | Nhãn bài ưu tiên bán chéo. |
+| `hot-ratio` | `60%` | Tỷ lệ bài Hot trong tổng số khung (0%–100%). |
+| `extract` | `first` | Chọn clip đại diện: `first` (clip đầu) hoặc `random` (bốc ngẫu nhiên). |
+| `media` | `all` | Bộ lọc: `all` \| `video` \| `audio`. |
+| `cta-text` | `Xem chi tiết ➔` | Dòng chữ nút CTA dẫn về bài viết. |
+| `mode` | `auto` | `auto` (tự nhận ngữ cảnh) \| `slider` (ép thanh trượt) \| `single` (ép 1 khung). |
+| `play-mode` | `modal` | `modal` (Mở màn hình Reels Theater chuẩn TikTok/IG với phím mũi tên & lướt clip) \| `inline` (Phát trực tiếp tại khung thẻ). |
+
+### 16.6. Trải Nghiệm Reels Lightbox Theater Modal
+Khi `play-mode: modal` (mặc định), người dùng bấm Play sẽ mở ra **Màn hình rạp chiếu Reels chuyên dụng**:
+- 🎬 Khung hình 9:16 sắc nét ở trung tâm với phông nền mờ đen (`backdrop-filter: blur(16px)`).
+- 🔄 **Lướt clip liên tục**: Có nút điều hướng **Clip trước / Clip kế tiếp**, hỗ trợ phím mũi tên `↑` / `↓` hoặc `←` / `→` trên bàn phím máy tính.
+- 📱 **Vuốt ngón tay trên điện thoại**: Vuốt lên để chuyển clip sau, vuốt xuống để xem lại clip trước y hệt TikTok / Instagram Reels.
+- ✕ Đóng nhanh bằng phím `Esc` hoặc bấm ra ngoài màn hình mà không làm mất vị trí cuộn trang.
+- 🔗 Nút CTA nổi bật dẫn thẳng vào bài viết gốc.
+
+### 16.7. Ba Ngữ Cảnh Hiển Thị Tự Động
+
+| Vị Trí | Chế Độ Tự Động | Giao Diện |
+| :--- | :--- | :--- |
+| **Cột bên (Sidebar)** | `single` — 1 khung tràn viền tự động | Thẻ Reel tràn viền 100% cột bên (Edge-to-Edge) không tiêu đề thừa, tự động chuyển clip sau 6s (hover tạm dừng), nút điều hướng Prev/Next ẩn tinh tế và chỉ hiển thị khi rê chuột (Hover Reveal) |
+| **Đầu trang / Main Content** | `slider` — thanh trượt ngang | Khung Facebook Reels có border, tiêu đề "Video", 3–5 khung hiển thị cùng lúc, nút ◀ ▶ |
+| **Cột bên hẹp (≤ 360px)** | Container Query tự thu nhỏ | Card 160px, nút Play nhỏ hơn |
+
+### 16.8. Ví Dụ Thực Tế
+
+**Ví dụ 1 — Widget Reels cho sidebar (tự động xoay tua 6s + Prev/Next):**
+```text
+pattern: reels
+limit: 6
+mode: single
+```
+
+**Ví dụ 2 — Widget Reels slider đầu trang (nhiều khung):**
+```text
+pattern: reels
+title: Video
+limit: 8
+sort: random
+hot-ratio: 60%
+cta-text: Mua ngay & Ưu đãi ➔
+```
+
+**Ví dụ 3 — Chỉ hiển thị file âm thanh/Podcast:**
+```text
+pattern: reels
+title: 🎙️ Podcast & Voice
+limit: 5
+media: audio
+cta-text: Nghe ngay ➔
+```

@@ -1,23 +1,26 @@
 /**
- * Blogger Special Posts Widget Engine v2.1
+ * Blogger Special Posts Widget Engine v2.2
  * Multi-label Support & Pluggable Pattern Strategy
- * Spec: FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2
+ * Spec: FEAT-FLEXIBLE-SPECIAL-POSTS-WIDGET-V2 / OPEN_019
  *
  * Features:
  *  - Multi-label fetch (parallel) với deduplication
- *  - SessionStorage cache 5 phút
- *  - 5 renderers: ranked, spotlight, quote, digest, series
+ *  - SessionStorage cache (5 phút cho posts, 60 phút cho reels)
+ *  - 6 renderers: ranked, spotlight, quote, digest, series, reels
  *  - Skeleton shimmer (CLS = 0)
  *  - Anchor scroll highlight pulse
  *  - Label sanitization (lọc @ # _ ~)
  *  - Fallback: views → latest nếu API lỗi
+ *  - Video & Reels Showcase: Living Canvas, Blurred BG Fill, Hover/In-View Preview,
+ *    Audio Equalizer Waveform, Click-to-Play Facade, Hot/Regular Pool (60:40)
  */
 (function () {
   'use strict';
 
   /* ─── Constants ─────────────────────────────────────────────── */
-  const CACHE_PREFIX = 'editorial_sp_v3_';
-  const CACHE_TTL    = 5 * 60 * 1000; // 5 phút
+  const CACHE_PREFIX      = 'editorial_sp_v3_';
+  const CACHE_TTL         = 5 * 60 * 1000;  // 5 phút (posts thông thường)
+  const CACHE_TTL_REELS   = 60 * 60 * 1000; // 60 phút (reels feed)
 
   /* ─── Pattern → Renderer map (Pluggable Strategy) ───────────── */
   const PATTERN_RENDERERS = {
@@ -26,7 +29,7 @@
     quote:     renderQuotePattern,
     digest:    renderDigestPattern,
     series:    renderSeriesPattern,
-    // Mở rộng tương lai: video, slideshow
+    reels:     renderReelsPattern,
   };
 
   /* ═══════════════════════════════════════════════════════════════
@@ -43,7 +46,7 @@
       if (el.querySelector('.special-posts-widget')) return;
       const targetHost = el.querySelector('.widget-content') || el;
       const directContent = targetHost.textContent.trim();
-      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series)/i);
+      const match = directContent.match(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series|reels)/i);
       if (match) {
         const pattern = match[1].toLowerCase();
         const wrapper = document.createElement('div');
@@ -52,7 +55,7 @@
         const configDiv = document.createElement('div');
         configDiv.className = 'sp-raw-user-content';
         configDiv.style.display = 'none';
-        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series)\s*\|?/i, '').trim();
+        configDiv.textContent = directContent.replace(/^(?:pattern|kiểu)\s*:\s*(spotlight|ranked|quote|digest|series|reels)\s*\|?/i, '').trim();
         wrapper.appendChild(configDiv);
         targetHost.innerHTML = '';
         targetHost.appendChild(wrapper);
@@ -116,7 +119,15 @@
       }
 
       if (textOnly) {
-        const parts = textOnly.split('|').map(s => s.trim());
+        let lines = textOnly.split('\n').map(s => s.trim()).filter(Boolean);
+        let parts = [];
+        lines.forEach(line => {
+          if (line.includes('|') && !/^title\s*:/i.test(line)) {
+            parts.push(...line.split('|').map(s => s.trim()).filter(Boolean));
+          } else {
+            parts.push(line);
+          }
+        });
         parts.forEach(part => {
           if (/^limit\s*:\s*(\d+)/i.test(part)) {
             container.dataset.limit = part.match(/^limit\s*:\s*(\d+)/i)[1];
@@ -134,7 +145,25 @@
             container.dataset.posts = part.match(/^(?:posts|links)\s*:\s*(.+)/i)[1].trim();
           } else if (/^title\s*:\s*(.+)/i.test(part)) {
             container.dataset.title = part.match(/^title\s*:\s*(.+)/i)[1].trim();
-          } else {
+          } else if (/^(?:fetch-count|fetchCount)\s*:\s*(\d+)/i.test(part)) {
+            container.dataset.fetchCount = part.match(/^(?:fetch-count|fetchCount)\s*:\s*(\d+)/i)[1];
+          } else if (/^(?:hot-label|hotLabel)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.hotLabel = part.match(/^(?:hot-label|hotLabel)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^(?:hot-ratio|hotRatio)\s*:\s*(\d+)%?/i.test(part)) {
+            container.dataset.hotRatio = part.match(/^(?:hot-ratio|hotRatio)\s*:\s*(\d+)/i)[1];
+          } else if (/^extract\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.extract = part.match(/^extract\s*:\s*(\w+)/i)[1];
+          } else if (/^media\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.media = part.match(/^media\s*:\s*(\w+)/i)[1];
+          } else if (/^(?:cta-text|ctaText)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.ctaText = part.match(/^(?:cta-text|ctaText)\s*:\s*(.+)/i)[1].trim();
+          } else if (/^mode\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.mode = part.match(/^mode\s*:\s*(\w+)/i)[1];
+          } else if (/^(?:play-mode|playMode|chế-độ-phát)\s*:\s*(\w+)/i.test(part)) {
+            container.dataset.playMode = part.match(/^(?:play-mode|playMode|chế-độ-phát)\s*:\s*(\w+)/i)[1].trim();
+          } else if (/^(?:labels?|nhãn)\s*:\s*(.+)/i.test(part)) {
+            container.dataset.labels = part.match(/^(?:labels?|nhãn)\s*:\s*(.+)/i)[1].trim();
+          } else if (!part.includes(':') || /^[^:]+$/.test(part)) {
             const cleanedLabel = part.replace(/^(labels?|nhãn)\s*:\s*/i, '').trim();
             if (cleanedLabel) container.dataset.labels = cleanedLabel;
           }
@@ -150,7 +179,7 @@
 
     const pattern        = container.dataset.pattern  || 'digest';
     const rawLabels      = (container.dataset.labels  || container.dataset.label || '').trim();
-    const defaultLimit   = pattern === 'series' ? 5 : 4;
+    const defaultLimit   = pattern === 'series' ? 5 : (pattern === 'reels' ? 10 : 4);
     const limit          = Math.min(parseInt(container.dataset.limit, 10) || defaultLimit, 10);
     const sort           = container.dataset.sort     || (pattern === 'series' ? 'random' : 'latest');
     const handpickedRaw  = container.dataset.posts    || '';
@@ -159,13 +188,36 @@
     const lang           = window.currentLang || document.documentElement.lang || 'vi';
     const rawViewAll     = container.dataset.viewAllText;
     let viewAllText      = (rawViewAll === 'false' || rawViewAll === 'none') ? '' : (rawViewAll || 'Xem tất cả » | View All »');
-    let widgetTitle      = container.dataset.title || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : '');
+    let widgetTitle      = container.dataset.title || (pattern === 'series' ? '📚 Chuyên Đề | 📚 Series Topic' : (pattern === 'reels' ? 'Video' : ''));
 
     // Thêm class pattern cho container queries
     container.classList.add('pattern-' + pattern);
 
     // Skeleton loading trước — CLS = 0
     renderSkeleton(container, pattern, limit, widgetTitle, viewAllText, rawLabels);
+
+    // ── Reels widget handler ──
+    if (pattern === 'reels') {
+      try {
+        await renderReelsWidget(container, {
+          widgetTitle,
+          limit,
+          rawLabels: rawLabels || '@video',
+          hotLabel: container.dataset.hotLabel || '@video-hot',
+          hotRatio: parseInt(container.dataset.hotRatio, 10) || 60,
+          fetchCount: Math.min(parseInt(container.dataset.fetchCount, 10) || 40, 100),
+          sort: container.dataset.sort || 'random',
+          extract: container.dataset.extract || 'first',
+          media: container.dataset.media || 'all',
+          ctaText: container.dataset.ctaText || 'Xem chi tiết ➔',
+          mode: container.dataset.mode || 'auto',
+          playMode: container.dataset.playMode || 'modal',
+        });
+        return;
+      } catch (reelsErr) {
+        console.warn('[SpecialPostsWidget] Reels render error:', reelsErr);
+      }
+    }
 
     if (pattern === 'series') {
       try {
@@ -283,7 +335,18 @@
   function renderSkeleton(container, pattern, limit, title, viewAllText, rawLabels) {
     let skeletonBody = '';
 
-    if (pattern === 'spotlight') {
+    if (pattern === 'reels') {
+      const reelCount = Math.min(limit || 5, 6);
+      const cards = Array.from({ length: reelCount }).map(() => `
+        <div class="sp-reel-card sp-reel-skeleton">
+          <div class="sp-reel-skeleton-bg"></div>
+        </div>`).join('');
+      skeletonBody = `
+        <div class="sp-reels-container">
+          <div class="sp-reels-track sp-reels-track--skeleton">${cards}</div>
+        </div>`;
+
+    } else if (pattern === 'spotlight') {
       skeletonBody = `
         <div class="sp-skeleton" style="padding:0.75rem 1rem 1rem;">
           <div class="sp-skeleton-cover"></div>
@@ -341,7 +404,16 @@
       skeletonBody = `<div class="sp-skeleton">${items}</div>`;
     }
 
-    container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
+    if (pattern === 'reels') {
+      const inSidebar = !!container.closest('.sidebar, aside, [class*="sidebar"], .sidebar-widget');
+      if (inSidebar) {
+        const parentWidget = container.closest('.sidebar-widget');
+        if (parentWidget) parentWidget.classList.add('sidebar-widget--edge-to-edge');
+      }
+      container.innerHTML = buildReelsWidgetShell(title, skeletonBody, inSidebar);
+    } else {
+      container.innerHTML = buildWidgetShell(title, viewAllText, rawLabels, pattern, skeletonBody);
+    }
   }
 
   /* ── Helper: Tìm nhãn khớp chính xác từ bài viết thực tế trên blog ── */
@@ -394,6 +466,37 @@
       <div class="sp-widget-card pattern-${escapeHtml(pattern)}">
         ${headerHtml}
         <div class="sp-widget-body ${isSeries ? 'series-widget-body' : ''}">
+          ${bodyHtml}
+        </div>
+      </div>`;
+  }
+
+  /* ── Reels Widget Shell (Khung viền Facebook Reels sang trọng) ── */
+  function buildReelsWidgetShell(title, bodyHtml, isSidebar = false) {
+    const displayTitle = title ? title.trim() : 'Video';
+    const headerHtml = isSidebar ? '' : `
+        <div class="sp-reels-header">
+          <div class="sp-reels-header-left">
+            <svg class="sp-reels-header-icon" viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
+              <path d="M19.5 4h-15A2.5 2.5 0 0 0 2 6.5v11A2.5 2.5 0 0 0 4.5 20h15a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 19.5 4zm.5 13.5a.5.5 0 0 1-.5.5h-15a.5.5 0 0 1-.5-.5V10h16v7.5zm0-9.5H4V6.5a.5.5 0 0 1 .5-.5h2.15l1.62 2h2.23l-1.62-2h3.24l1.62 2h2.23l-1.62-2h2.65a.5.5 0 0 1 .5.5V8z"/>
+            </svg>
+            <h3 class="sp-reels-header-title">${escapeHtml(displayTitle)}</h3>
+          </div>
+          <div class="sp-reels-header-actions" aria-hidden="true">
+            <button class="sp-reels-more-btn" type="button" aria-label="Tùy chọn">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <circle cx="5" cy="12" r="2"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+                <circle cx="19" cy="12" r="2"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>`;
+
+    return `
+      <div class="sp-reels-shelf pattern-reels ${isSidebar ? 'sp-reels-shelf--sidebar' : ''}">
+        ${headerHtml}
+        <div class="sp-reels-body">
           ${bodyHtml}
         </div>
       </div>`;
@@ -1060,6 +1163,875 @@
     if (window.applyBilingualElements) {
       window.applyBilingualElements();
     }
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     REELS ENGINE — OPEN_019 (Video & Voice Reels Showcase)
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── Mock data cho chế độ preview / local dev (100% link thật, không bị chặn nhúng) ── */
+  const MOCK_REELS_DATA = [
+    {
+      type: 'youtube',
+      videoId: 'M7lc1UVf-VE',
+      isShorts: false,
+      isHot: true,
+      thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/M7lc1UVf-VE/mqdefault_6s.webp',
+      title: '🔥 YouTube: Google Developers IFrame Player Demo (Chuẩn Google)',
+      url: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+      duration: '4:20',
+      postThumbnail: ''
+    },
+    {
+      type: 'youtube',
+      videoId: 'aqz-KE-bpKQ',
+      isShorts: false,
+      isHot: true,
+      thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/aqz-KE-bpKQ/mqdefault_6s.webp',
+      title: '🔥 Phim Hoạt Hình 4K Siêu Nét (Blender Open Movie CC-BY)',
+      url: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ',
+      duration: '9:56',
+      postThumbnail: ''
+    },
+    {
+      type: 'mp4',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '🌸 Video Thiên Nhiên Cực Đẹp (HTML5 MP4 Trực Tiếp - MDN)',
+      url: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+      duration: '0:05',
+      postThumbnail: ''
+    },
+    {
+      type: 'audio',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '🎙️ Podcast Sống Chậm: Nghệ Thuật Lắng Nghe Bản Thân — Tập 12',
+      url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      duration: '6:12',
+      postThumbnail: ''
+    },
+    {
+      type: 'mp4',
+      videoId: '',
+      isShorts: false,
+      isHot: false,
+      src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80',
+      previewWebp: '',
+      title: '🎬 Hoạt Hình Big Buck Bunny HD (HTML5 MP4 - W3Schools)',
+      url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      duration: '0:10',
+      postThumbnail: ''
+    },
+    {
+      type: 'youtube',
+      videoId: 'jNQXAC9IVRw',
+      isShorts: false,
+      isHot: false,
+      thumbnail: 'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=600&auto=format&fit=crop&q=80',
+      previewWebp: 'https://i.ytimg.com/an_webp/jNQXAC9IVRw/mqdefault_6s.webp',
+      title: '⚡ Thước Phim Lịch Sử Đầu Tiên Trên YouTube: Me At The Zoo',
+      url: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+      duration: '0:19',
+      postThumbnail: ''
+    }
+  ];
+
+  /* ── Ma trận Nhận diện Phương tiện (Platform Regex Matchers) ── */
+  function extractPostMedia(post, opts) {
+    const extract = opts.extract || 'first';
+    const mediaFilter = opts.media || 'all';
+    const content = post.rawContent || post.snippet || '';
+    const postUrl = post.url || '';
+
+    const found = [];
+
+    // 1. YouTube (Chuẩn + Shorts + Embed)
+    if (mediaFilter === 'all' || mediaFilter === 'video') {
+      const ytRegex = /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=)([^#&?\s"'<>]{11})/g;
+      let m;
+      // Quét trong content HTML
+      const searchSrc = content + ' ' + postUrl;
+      while ((m = ytRegex.exec(searchSrc)) !== null) {
+        const videoId = m[1];
+        const isShorts = /shorts\//.test(m[0]);
+        found.push({
+          type: isShorts ? 'youtube-shorts' : 'youtube',
+          videoId,
+          isShorts,
+          thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          previewWebp: `https://i.ytimg.com/an_webp/${videoId}/mqdefault_6s.webp`,
+          postThumbnail: post.thumbnail || '',
+        });
+      }
+
+      // 2. TikTok
+      const ttRegex = /tiktok\.com\/@[\w.-]+\/video\/(\d+)/g;
+      while ((m = ttRegex.exec(content)) !== null) {
+        found.push({
+          type: 'tiktok', videoId: m[1], isShorts: true,
+          thumbnail: post.thumbnail || '',
+          previewWebp: '',
+          postThumbnail: post.thumbnail || '',
+        });
+      }
+
+      // 3. Facebook Reel / Video
+      const fbRegex = /facebook\.com\/(?:reel\/(\d+)|watch\/?\?v=(\d+)|video\/(\d+))/g;
+      while ((m = fbRegex.exec(content)) !== null) {
+        const fbId = m[1] || m[2] || m[3];
+        found.push({
+          type: 'facebook', videoId: fbId, isShorts: true,
+          thumbnail: post.thumbnail || '',
+          previewWebp: '',
+          postThumbnail: post.thumbnail || '',
+        });
+      }
+
+      // 4. Direct MP4 / WebM
+      const mp4Regex = /(https?:\/\/[^\s"'<>]+\.(?:mp4|webm))/gi;
+      while ((m = mp4Regex.exec(content)) !== null) {
+        found.push({
+          type: 'mp4', videoId: '', src: m[1], isShorts: false,
+          thumbnail: post.thumbnail || '',
+          previewWebp: '',
+          postThumbnail: post.thumbnail || '',
+        });
+      }
+    }
+
+    // 5. Audio / Voice / Podcast
+    if (mediaFilter === 'all' || mediaFilter === 'audio') {
+      const audioRegex = /(https?:\/\/[^\s"'<>]+\.(?:mp3|m4a|ogg|wav))/gi;
+      let m2;
+      while ((m2 = audioRegex.exec(content)) !== null) {
+        found.push({
+          type: 'audio', videoId: '', src: m2[1], isShorts: false,
+          thumbnail: post.thumbnail || '',
+          previewWebp: '',
+          postThumbnail: post.thumbnail || '',
+        });
+      }
+    }
+
+    if (found.length === 0) return null;
+    const chosen = (extract === 'random' && found.length > 1)
+      ? found[Math.floor(Math.random() * found.length)]
+      : found[0];
+
+    const hotTag = (opts && opts.hotLabel ? opts.hotLabel : '@video-hot').toLowerCase();
+    const isHot = (post.labels || []).some(l => {
+      const lower = l.toLowerCase();
+      return lower === hotTag || lower === '@video-hot' || lower === '@hotvideo';
+    });
+
+    return Object.assign({}, chosen, {
+      title: post.title || '',
+      url: post.url || '#',
+      isHot,
+      duration: '',
+    });
+  }
+
+  /* ── Fisher-Yates Shuffle ── */
+  function fisherYatesShuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* ── HTML cho 1 Reel Card ── */
+  function buildReelCard(item, itemIndex, totalCount) {
+    const isAudio = item.type === 'audio';
+    const isYouTube = item.type === 'youtube' || item.type === 'youtube-shorts';
+    const isShorts = item.isShorts;
+    const isHot = item.isHot;
+
+    // Blurred background mode: dùng cho YouTube 16:9 (không phải Shorts)
+    const useBlur = isYouTube && !isShorts;
+
+    // Story bars (tương thích cả playlist nhiều clip hoặc 3 bars mặc định)
+    const count = totalCount && totalCount > 1 ? Math.min(totalCount, 8) : 3;
+    const activeIdx = (itemIndex !== undefined && itemIndex >= 0) ? (itemIndex % count) : 1;
+    const storyBarsList = Array.from({ length: count }).map((_, bIdx) => {
+      if (bIdx < activeIdx) return '<span class="sp-reel-story-bar sp-reel-story-bar--done"></span>';
+      if (bIdx === activeIdx) return '<span class="sp-reel-story-bar sp-reel-story-bar--active"></span>';
+      return '<span class="sp-reel-story-bar"></span>';
+    }).join('');
+
+    const storyBars = `
+      <div class="sp-reel-story-bars" aria-hidden="true">
+        ${storyBarsList}
+      </div>`;
+
+    // Duration badge
+    const durationIcon = isAudio ? '🎙️' : '🎬';
+    const durationHtml = item.duration ? `<span class="sp-reel-duration">${durationIcon} ${escapeHtml(item.duration)}</span>` : '';
+
+    // Hot badge
+    const hotBadgeHtml = isHot ? `<span class="sp-reel-badge-hot">🔥 HOT REEL</span>` : '';
+
+    // Thumbnail
+    const thumb = item.thumbnail || item.postThumbnail || '';
+
+    // Audio mode: equalizer bars + spinning disc
+    const equalizerHtml = isAudio ? `
+      <div class="sp-reel-eq" aria-hidden="true">
+        <span class="sp-reel-eq-bar"></span>
+        <span class="sp-reel-eq-bar"></span>
+        <span class="sp-reel-eq-bar"></span>
+        <span class="sp-reel-eq-bar"></span>
+        <span class="sp-reel-eq-bar"></span>
+      </div>
+      <div class="sp-reel-disc" aria-hidden="true">
+        <span class="sp-reel-disc-inner">🎵</span>
+      </div>
+      <div class="sp-reel-marquee" aria-hidden="true">
+        <span class="sp-reel-marquee-text">♫ Âm thanh bài viết · Trà Đá Blog · ♪ ♫ Âm thanh bài viết · Trà Đá Blog ·</span>
+      </div>` : '';
+
+    // Play button
+    const playBtn = `
+      <button class="sp-reel-play-btn" aria-label="Phát video" data-video-type="${escapeHtml(item.type)}" data-video-id="${escapeHtml(item.videoId || '')}" data-src="${escapeHtml(item.src || '')}" data-url="${escapeHtml(item.url)}">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <span class="sp-reel-play-pulse"></span>
+      </button>`;
+
+    // Blurred background fill layout (16:9 YouTube)
+    const mediaInner = useBlur ? `
+      <div class="sp-reel-blur-backdrop" style="--reel-thumb: url('${thumb}')"></div>
+      <div class="sp-reel-media-center">
+        <img class="sp-reel-thumb" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>
+      </div>` : `
+      <img class="sp-reel-thumb sp-reel-thumb--cover" src="${escapeHtml(thumb)}" alt="${escapeHtml(item.title)}" loading="lazy" data-preview-webp="${escapeHtml(item.previewWebp || '')}"/>`;
+
+    return `
+      <div class="sp-reel-card ${isHot ? 'sp-reel-card--hot' : ''} ${isAudio ? 'sp-reel-card--audio' : ''} ${useBlur ? 'sp-reel-card--blur' : 'sp-reel-card--cover'}" data-post-url="${escapeHtml(item.url)}" data-reel-index="${itemIndex !== undefined ? itemIndex : 0}">
+        <div class="sp-reel-media">
+          ${mediaInner}
+          <div class="sp-reel-overlay">
+            ${storyBars}
+            <div class="sp-reel-top-row">
+              <div class="sp-reel-top-badges">
+                ${hotBadgeHtml}
+                ${durationHtml}
+              </div>
+              <span class="sp-reel-card-dots" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="5" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="19" r="2"></circle></svg>
+              </span>
+            </div>
+            ${playBtn}
+            ${equalizerHtml}
+            <div class="sp-reel-bottom-info">
+              <p class="sp-reel-title">${escapeHtml(item.title)}</p>
+            </div>
+          </div>
+          <div class="sp-reel-player-slot" hidden></div>
+        </div>
+      </div>`;
+  }
+
+  /* ── renderReelsPattern (pure HTML, dùng trong buildWidgetShell nếu cần) ── */
+  function renderReelsPattern(items, opts) {
+    if (!items || items.length === 0) return '';
+    const cards = items.map(buildReelCard).join('');
+    const showNav = items.length > 1;
+    return `
+      <div class="sp-reels-container">
+        ${showNav ? `<button class="sp-reels-btn sp-reels-btn-prev" aria-label="Trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>` : ''}
+        <div class="sp-reels-track">${cards}</div>
+        ${showNav ? `<button class="sp-reels-btn sp-reels-btn-next" aria-label="Tiếp theo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>` : ''}
+      </div>`;
+  }
+
+  /* ── Fetch reels feed với cache 60 phút ── */
+  async function fetchReelsFeed(label, fetchCount) {
+    const cacheKey = CACHE_PREFIX + 'reels_' + encodeURIComponent(label) + '_' + fetchCount;
+    // Đọc cache với TTL 60 phút
+    try {
+      const raw = sessionStorage.getItem(cacheKey);
+      if (raw) {
+        const { data, ts } = JSON.parse(raw);
+        if (Date.now() - ts <= CACHE_TTL_REELS) return data;
+        sessionStorage.removeItem(cacheKey);
+      }
+    } catch (_) {}
+
+    try {
+      const blogUrl = getBlogBaseUrl();
+      const url = `${blogUrl}/feeds/posts/default/-/${encodeURIComponent(label)}?alt=json&max-results=${fetchCount}&orderby=published`;
+      const res = await fetch(url);
+      if (!res.ok) return [];
+      const json = await res.json();
+      const entries = (json.feed && json.feed.entry) ? json.feed.entry : [];
+      const posts = parseFeedEntries(entries);
+      try { sessionStorage.setItem(cacheKey, JSON.stringify({ data: posts, ts: Date.now() })); } catch (_) {}
+      return posts;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /* ── renderReelsWidget — async orchestrator ── */
+  async function renderReelsWidget(container, opts) {
+    const { widgetTitle, limit, rawLabels, hotLabel, hotRatio, fetchCount, sort, extract, media, ctaText, mode, playMode } = opts;
+
+    const isLocalDev = typeof window !== 'undefined' &&
+      (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    let reelItems = [];
+
+    if (isLocalDev) {
+      // Chế độ preview/dev: dùng mock data
+      reelItems = fisherYatesShuffle(MOCK_REELS_DATA).slice(0, limit);
+    } else {
+      // Production: fetch feed thật
+      let posts = [];
+      try {
+        posts = await fetchReelsFeed(rawLabels, fetchCount);
+      } catch (_) { posts = []; }
+
+      if (!posts || posts.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      // Bóc tách media từ từng bài, đảm bảo mỗi bài chỉ xuất hiện 1 lần
+      const seen = new Set();
+      const allMedia = [];
+      for (const post of posts) {
+        if (seen.has(post.url)) continue;
+        seen.add(post.url);
+        const m = extractPostMedia(post, { extract, media, hotLabel });
+        if (m) allMedia.push(m);
+      }
+
+      if (allMedia.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      // Phân loại Hot / Regular
+      let poolHot = allMedia.filter(m => m.isHot);
+      let poolReg = allMedia.filter(m => !m.isHot);
+
+      // Fisher-Yates shuffle cả 2 pool
+      if (sort === 'random') {
+        poolHot = fisherYatesShuffle(poolHot);
+        poolReg = fisherYatesShuffle(poolReg);
+      }
+
+      // Phân bổ tỷ lệ Hot:Reg theo hotRatio
+      const hotCount = Math.min(Math.round(limit * hotRatio / 100), poolHot.length);
+      const regCount = Math.min(limit - hotCount, poolReg.length);
+      const selected = [
+        ...poolHot.slice(0, hotCount),
+        ...poolReg.slice(0, regCount),
+      ];
+
+      // Nếu thiếu (không đủ bài Hot hoặc Regular), bù vào
+      const remaining = limit - selected.length;
+      if (remaining > 0) {
+        const usedUrls = new Set(selected.map(m => m.url));
+        const extras = allMedia.filter(m => !usedUrls.has(m.url)).slice(0, remaining);
+        selected.push(...extras);
+      }
+
+      reelItems = selected.slice(0, limit);
+    }
+
+    if (reelItems.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    // Phát hiện ngữ cảnh hiển thị (mode)
+    let displayMode = mode;
+    const inSidebar = !!container.closest('.sidebar, aside, [class*="sidebar"], .sidebar-widget');
+    if (inSidebar) {
+      const parentWidget = container.closest('.sidebar-widget');
+      if (parentWidget) parentWidget.classList.add('sidebar-widget--edge-to-edge');
+    }
+    if (mode === 'auto') {
+      displayMode = inSidebar ? 'single' : 'slider';
+    }
+    const isSidebar = displayMode === 'single' || inSidebar;
+
+    const resolvedPlayMode = playMode || container.dataset.playMode || 'modal';
+
+    // Render HTML
+    const showNav = reelItems.length > 1 && displayMode !== 'single';
+    const singleInitialIndex = Math.floor(Math.random() * reelItems.length);
+    const singleItem = displayMode === 'single' ? [reelItems[singleInitialIndex]] : reelItems;
+    const cardsHtml = (displayMode === 'single' ? singleItem : reelItems).map((item, idx) => {
+      const gIdx = displayMode === 'single' ? singleInitialIndex : idx;
+      return buildReelCard(item, gIdx, reelItems.length);
+    }).join('');
+
+    const singleNavHtml = (displayMode === 'single' && reelItems.length > 1) ? `
+      <button class="sp-reels-single-nav sp-reels-single-prev" type="button" aria-label="Video trước" title="Video trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="sp-reels-single-nav sp-reels-single-next" type="button" aria-label="Video tiếp theo" title="Video tiếp theo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>` : '';
+
+    const bodyHtml = `
+      <div class="sp-reels-container ${displayMode === 'single' ? 'sp-reels-container--single' : ''}">
+        ${showNav ? `<button class="sp-reels-btn sp-reels-btn-prev" aria-label="Trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>` : ''}
+        ${singleNavHtml}
+        <div class="sp-reels-track">${cardsHtml}</div>
+        ${showNav ? `<button class="sp-reels-btn sp-reels-btn-next" aria-label="Tiếp theo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>` : ''}
+      </div>`;
+
+    container.innerHTML = buildReelsWidgetShell(widgetTitle, bodyHtml, isSidebar);
+    container.dataset.reelItems = JSON.stringify(reelItems);
+
+    // Gắn sự kiện
+    initReelsEvents(container, reelItems, displayMode, resolvedPlayMode);
+  }
+
+  /* ── Khởi tạo toàn bộ sự kiện interactive cho Reels widget ── */
+  function initReelsEvents(container, reelItems, displayMode, playMode) {
+    const track = container.querySelector('.sp-reels-track');
+    if (!track) return;
+    const modePlay = playMode || 'modal';
+
+    // ── 1. Slider Prev/Next navigation ──
+    const btnPrev = container.querySelector('.sp-reels-btn-prev');
+    const btnNext = container.querySelector('.sp-reels-btn-next');
+
+    function scrollBy(dir) {
+      const cardWidth = track.querySelector('.sp-reel-card') ? track.querySelector('.sp-reel-card').offsetWidth + 16 : 220;
+      track.scrollBy({ left: dir * cardWidth * 2, behavior: 'smooth' });
+    }
+    if (btnPrev) btnPrev.addEventListener('click', () => scrollBy(-1));
+    if (btnNext) btnNext.addEventListener('click', () => scrollBy(1));
+
+    // Ẩn nút khi không cần
+    function checkNavVisibility() {
+      if (!btnPrev && !btnNext) return;
+      const needNav = track.scrollWidth > track.clientWidth + 4;
+      if (btnPrev) btnPrev.style.display = needNav ? '' : 'none';
+      if (btnNext) btnNext.style.display = needNav ? '' : 'none';
+    }
+    checkNavVisibility();
+    window.addEventListener('resize', checkNavVisibility);
+
+    // ── 2. Hover Preview (Desktop) ──
+    track.querySelectorAll('.sp-reel-card').forEach(card => {
+      const thumb = card.querySelector('.sp-reel-thumb');
+      if (!thumb) return;
+      const previewWebp = thumb.dataset.previewWebp;
+      const origSrc = thumb.src;
+
+      card.addEventListener('mouseenter', () => {
+        if (previewWebp) {
+          thumb.src = previewWebp;
+          card.classList.add('sp-reel-card--previewing');
+        }
+      });
+      card.addEventListener('mouseleave', () => {
+        if (previewWebp) {
+          thumb.src = origSrc;
+          card.classList.remove('sp-reel-card--previewing');
+        }
+      });
+    });
+
+    // ── 3. Smart In-View Preview (Mobile — IntersectionObserver) ──
+    if ('IntersectionObserver' in window) {
+      const cards = track.querySelectorAll('.sp-reel-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const thumb = entry.target.querySelector('.sp-reel-thumb');
+          if (!thumb || !thumb.dataset.previewWebp) return;
+          if (entry.intersectionRatio >= 0.7) {
+            thumb.src = thumb.dataset.previewWebp;
+            entry.target.classList.add('sp-reel-card--previewing');
+          } else {
+            thumb.src = thumb.dataset.previewWebp ? thumb.dataset.previewWebp.replace('mqdefault_6s.webp', 'hqdefault.jpg').replace('/an_webp/', '/vi/') : thumb.src;
+            entry.target.classList.remove('sp-reel-card--previewing');
+            const ytId = entry.target.querySelector('.sp-reel-play-btn') ? entry.target.querySelector('.sp-reel-play-btn').dataset.videoId : '';
+            if (ytId) thumb.src = `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`;
+          }
+        });
+      }, { threshold: 0.7, root: track });
+      cards.forEach(c => observer.observe(c));
+    }
+
+    // ── 4. Click-to-Play Facade / Modal Trigger ──
+    const cards = track.querySelectorAll('.sp-reel-card');
+    cards.forEach((card, idx) => {
+      const itemIdx = parseInt(card.dataset.reelIndex, 10);
+      const targetIdx = isNaN(itemIdx) ? idx : itemIdx;
+      attachCardPlayTriggers(card, reelItems, targetIdx, modePlay);
+    });
+
+    // ── 5. Sidebar Single Mode: Prev/Next Buttons + Auto-advance (thay đổi sau 6s) ──
+    if (displayMode === 'single' && reelItems.length > 1) {
+      const initialCard = track.querySelector('.sp-reel-card');
+      let currentSingleIdx = initialCard ? (parseInt(initialCard.dataset.reelIndex, 10) || 0) : 0;
+      let singleTimer = null;
+      let isHovered = false;
+      let isTransitioning = false;
+
+      function switchToIndex(newIdx, direction = 'next') {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentSingleIdx = (newIdx + reelItems.length) % reelItems.length;
+        const newItem = reelItems[currentSingleIdx];
+        const cardEl = track.querySelector('.sp-reel-card');
+        if (!cardEl) {
+          isTransitioning = false;
+          return;
+        }
+
+        // Smooth transition effect
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = direction === 'next' ? 'scale(0.97) translateX(-8px)' : 'scale(0.97) translateX(8px)';
+        cardEl.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+
+        setTimeout(() => {
+          const newCardHtml = buildReelCard(newItem, currentSingleIdx, reelItems.length);
+          const tmp = document.createElement('div');
+          tmp.innerHTML = newCardHtml;
+          const newCard = tmp.firstElementChild;
+          newCard.style.opacity = '0';
+          newCard.style.transform = direction === 'next' ? 'scale(1.02) translateX(8px)' : 'scale(1.02) translateX(-8px)';
+          newCard.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+
+          track.replaceChild(newCard, cardEl);
+          initReelCardEvents(newCard, reelItems, currentSingleIdx, modePlay);
+
+          requestAnimationFrame(() => {
+            newCard.style.opacity = '1';
+            newCard.style.transform = 'scale(1) translateX(0)';
+            setTimeout(() => {
+              isTransitioning = false;
+            }, 250);
+          });
+        }, 220);
+      }
+
+      function resetAutoTimer() {
+        if (singleTimer) clearInterval(singleTimer);
+        singleTimer = setInterval(() => {
+          const modal = document.getElementById('sp-reels-modal');
+          const isModalOpen = modal && modal.classList.contains('sp-reels-modal--open');
+          const isInlinePlaying = container.querySelector('.sp-reel-card--playing');
+          if (!isHovered && !isModalOpen && !isInlinePlaying) {
+            switchToIndex(currentSingleIdx + 1, 'next');
+          }
+        }, 6000);
+      }
+
+      const btnSinglePrev = container.querySelector('.sp-reels-single-prev');
+      const btnSingleNext = container.querySelector('.sp-reels-single-next');
+
+      if (btnSinglePrev) {
+        btnSinglePrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          switchToIndex(currentSingleIdx - 1, 'prev');
+          resetAutoTimer();
+        });
+      }
+      if (btnSingleNext) {
+        btnSingleNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          switchToIndex(currentSingleIdx + 1, 'next');
+          resetAutoTimer();
+        });
+      }
+
+      container.addEventListener('mouseenter', () => { isHovered = true; });
+      container.addEventListener('mouseleave', () => { isHovered = false; });
+
+      resetAutoTimer();
+    }
+  }
+
+  /* ── Quản lý Reels Theater Lightbox Modal (Singleton) ── */
+  let activeModalPlaylist = [];
+  let activeModalIndex = 0;
+  let reelsModalEl = null;
+
+  function ensureReelsModal() {
+    if (reelsModalEl) return reelsModalEl;
+    let modal = document.getElementById('sp-reels-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'sp-reels-modal';
+      modal.className = 'sp-reels-modal';
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-label', 'Reels Video Theater');
+      modal.innerHTML = `
+        <div class="sp-reels-modal-backdrop"></div>
+        <div class="sp-reels-modal-dialog">
+          <div class="sp-reels-modal-header">
+            <div class="sp-reels-modal-badge">
+              <span class="sp-reels-modal-icon">🎬</span>
+              <span class="sp-reels-modal-counter">1 / 1</span>
+            </div>
+            <button class="sp-reels-modal-close" aria-label="Đóng (Esc)" title="Đóng (Esc)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <button class="sp-reels-modal-nav sp-reels-modal-nav--prev" aria-label="Clip trước (Phím mũi tên lên / trái)" title="Clip trước (↑)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="sp-reels-modal-nav sp-reels-modal-nav--next" aria-label="Clip tiếp theo (Phím mũi tên xuống / phải)" title="Clip tiếp theo (↓)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+
+          <div class="sp-reels-modal-stage">
+            <div class="sp-reels-modal-player-slot"></div>
+            <div class="sp-reels-modal-overlay">
+              <div class="sp-reels-modal-info">
+                <p class="sp-reels-modal-title"></p>
+                <a class="sp-reels-modal-cta" href="#" target="_blank" rel="noopener">
+                  <span>Đọc bài viết đầy đủ</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const closeBtn = modal.querySelector('.sp-reels-modal-close');
+      const backdrop = modal.querySelector('.sp-reels-modal-backdrop');
+      const btnPrev = modal.querySelector('.sp-reels-modal-nav--prev');
+      const btnNext = modal.querySelector('.sp-reels-modal-nav--next');
+
+      closeBtn.addEventListener('click', closeReelsModal);
+      backdrop.addEventListener('click', closeReelsModal);
+
+      btnPrev.addEventListener('click', (e) => { e.stopPropagation(); changeModalReel(-1); });
+      btnNext.addEventListener('click', (e) => { e.stopPropagation(); changeModalReel(1); });
+
+      document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('sp-reels-modal--open')) return;
+        if (e.key === 'Escape') {
+          closeReelsModal();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          changeModalReel(-1);
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          changeModalReel(1);
+        }
+      });
+
+      // Touch swipe gestures on mobile
+      const stage = modal.querySelector('.sp-reels-modal-stage');
+      let touchStartY = 0;
+      let touchStartX = 0;
+      stage.addEventListener('touchstart', function(e) {
+        if (e.touches && e.touches[0]) {
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+        }
+      }, { passive: true });
+      stage.addEventListener('touchend', function(e) {
+        if (!e.changedTouches || !e.changedTouches[0]) return;
+        const diffY = e.changedTouches[0].clientY - touchStartY;
+        const diffX = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(diffY) > 40 && Math.abs(diffY) > Math.abs(diffX)) {
+          if (diffY < 0) {
+            changeModalReel(1); // Vuốt lên -> clip sau
+          } else {
+            changeModalReel(-1); // Vuốt xuống -> clip trước
+          }
+        }
+      }, { passive: true });
+    }
+    reelsModalEl = modal;
+    return modal;
+  }
+
+  function openReelsModal(playlist, startIndex) {
+    if (!playlist || playlist.length === 0) return;
+    activeModalPlaylist = playlist;
+    activeModalIndex = (startIndex >= 0 && startIndex < playlist.length) ? startIndex : 0;
+
+    const modal = ensureReelsModal();
+    modal.classList.add('sp-reels-modal--open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    renderModalCurrentReel();
+  }
+
+  function closeReelsModal() {
+    if (!reelsModalEl) return;
+    reelsModalEl.classList.remove('sp-reels-modal--open');
+    reelsModalEl.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    const slot = reelsModalEl.querySelector('.sp-reels-modal-player-slot');
+    if (slot) slot.innerHTML = '';
+  }
+
+  function changeModalReel(dir) {
+    if (!activeModalPlaylist || activeModalPlaylist.length <= 1) return;
+    activeModalIndex = (activeModalIndex + dir + activeModalPlaylist.length) % activeModalPlaylist.length;
+    renderModalCurrentReel();
+  }
+
+  function renderModalCurrentReel() {
+    if (!reelsModalEl) return;
+    const item = activeModalPlaylist[activeModalIndex];
+    if (!item) return;
+
+    // Counter
+    const counter = reelsModalEl.querySelector('.sp-reels-modal-counter');
+    if (counter) counter.textContent = `${activeModalIndex + 1} / ${activeModalPlaylist.length}`;
+
+    // Title & CTA
+    const titleEl = reelsModalEl.querySelector('.sp-reels-modal-title');
+    if (titleEl) titleEl.textContent = item.title || '';
+
+    const ctaEl = reelsModalEl.querySelector('.sp-reels-modal-cta');
+    if (ctaEl) {
+      ctaEl.href = item.url || '#';
+    }
+
+    // Player slot
+    const slot = reelsModalEl.querySelector('.sp-reels-modal-player-slot');
+    if (!slot) return;
+
+    let mediaHtml = '';
+    const vType = item.type;
+    const vId = item.videoId;
+    const vSrc = item.src;
+
+    if (vType === 'youtube' || vType === 'youtube-shorts') {
+      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" title="Reels Video Player"></iframe>`;
+    } else if (vType === 'mp4') {
+      mediaHtml = `<video class="sp-reels-modal-video" src="${escapeHtml(vSrc)}" controls autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>`;
+    } else if (vType === 'audio') {
+      mediaHtml = `
+        <div class="sp-reels-modal-audio-view">
+          <div class="sp-reels-modal-disc">🎵</div>
+          <div class="sp-reels-modal-audio-name">${escapeHtml(item.title)}</div>
+          <audio class="sp-reels-modal-audio" src="${escapeHtml(vSrc)}" controls autoplay></audio>
+        </div>`;
+    } else if (vType === 'tiktok') {
+      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}" allow="fullscreen; autoplay" frameborder="0" title="TikTok player"></iframe>`;
+    } else if (vType === 'facebook') {
+      const fbUrl = encodeURIComponent(`https://www.facebook.com/video/${vId}`);
+      mediaHtml = `<iframe class="sp-reels-modal-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbUrl}&show_text=false&autoplay=true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen frameborder="0" title="Facebook video player"></iframe>`;
+    }
+
+    slot.innerHTML = mediaHtml;
+  }
+
+  /* ── Phát Video/Audio trong card (Click-to-Play Facade — chế độ inline) ── */
+  function playReelCard(card) {
+    if (!card || card.classList.contains('sp-reel-card--playing')) return;
+    const btn = card.querySelector('.sp-reel-play-btn');
+    const playerSlot = card.querySelector('.sp-reel-player-slot');
+    if (!playerSlot || !btn) return;
+
+    const vType = btn.dataset.videoType;
+    const vId = btn.dataset.videoId;
+    const vSrc = btn.dataset.src;
+
+    let playerHtml = '';
+    if (vType === 'youtube' || vType === 'youtube-shorts') {
+      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(vId)}?autoplay=1&playsinline=1&rel=0&enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" title="Video player"></iframe>`;
+    } else if (vType === 'mp4') {
+      playerHtml = `<video class="sp-reel-iframe" src="${escapeHtml(vSrc)}" controls autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>`;
+    } else if (vType === 'audio') {
+      playerHtml = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:1.5rem;text-align:center;background:#111;"><div style="font-size:3rem;margin-bottom:1rem;animation:sp-spin-disc 4s linear infinite;">💿</div><div style="color:#fff;font-size:0.85rem;font-weight:600;margin-bottom:1.25rem;">${escapeHtml(card.querySelector('.sp-reel-title') ? card.querySelector('.sp-reel-title').textContent : 'Đang phát Podcast')}</div><audio class="sp-reel-audio-player" src="${escapeHtml(vSrc)}" controls autoplay style="width:100%;"></audio></div>`;
+    } else if (vType === 'tiktok') {
+      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.tiktok.com/player/v1/${encodeURIComponent(vId)}" allow="fullscreen; autoplay" frameborder="0" title="TikTok player"></iframe>`;
+    } else if (vType === 'facebook') {
+      const fbUrl = encodeURIComponent(`https://www.facebook.com/video/${vId}`);
+      playerHtml = `<iframe class="sp-reel-iframe" src="https://www.facebook.com/plugins/video.php?href=${fbUrl}&show_text=false&autoplay=true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen frameborder="0" title="Facebook video player"></iframe>`;
+    }
+
+    if (!playerHtml) return;
+
+    card.classList.add('sp-reel-card--playing');
+    playerSlot.innerHTML = playerHtml + `<button class="sp-reel-close-btn" aria-label="Đóng" title="Đóng video">✕</button>`;
+    playerSlot.hidden = false;
+    playerSlot.style.display = 'flex';
+
+    const closeBtn = playerSlot.querySelector('.sp-reel-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(e2) {
+        e2.stopPropagation();
+        card.classList.remove('sp-reel-card--playing');
+        playerSlot.innerHTML = '';
+        playerSlot.hidden = true;
+        playerSlot.style.display = 'none';
+      });
+    }
+  }
+
+  /* ── Gắn trigger phát video cho card (hỗ trợ cả modal lẫn inline) ── */
+  function attachCardPlayTriggers(card, playlist, itemIndex, playMode) {
+    function handlePlayTrigger(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (playMode === 'inline') {
+        playReelCard(card);
+      } else {
+        openReelsModal(playlist, itemIndex);
+      }
+    }
+
+    const btn = card.querySelector('.sp-reel-play-btn');
+    if (btn) {
+      btn.addEventListener('click', handlePlayTrigger);
+    }
+    const media = card.querySelector('.sp-reel-media');
+    if (media) {
+      media.style.cursor = 'pointer';
+      media.addEventListener('click', function(e) {
+        if (e.target.closest('.sp-reel-close-btn')) return;
+        handlePlayTrigger(e);
+      });
+    }
+    const title = card.querySelector('.sp-reel-title');
+    if (title) {
+      title.style.cursor = 'pointer';
+      title.addEventListener('click', handlePlayTrigger);
+    }
+  }
+
+  /* ── Gắn events cho 1 card đơn lẻ (dùng khi rebuild card sau shuffle) ── */
+  function initReelCardEvents(card, playlist, itemIndex, playMode) {
+    const thumb = card.querySelector('.sp-reel-thumb');
+    if (thumb) {
+      const previewWebp = thumb.dataset.previewWebp;
+      const origSrc = thumb.src;
+      card.addEventListener('mouseenter', () => { if (previewWebp) { thumb.src = previewWebp; } });
+      card.addEventListener('mouseleave', () => { if (previewWebp) { thumb.src = origSrc; } });
+    }
+    attachCardPlayTriggers(card, playlist, itemIndex, playMode);
   }
 
   /* ═══════════════════════════════════════════════════════════════

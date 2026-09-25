@@ -36,11 +36,11 @@
   <link rel="stylesheet" href="styles/variables.css?v=2.0"/>
   <link rel="stylesheet" href="styles/typography.css?v=2.0"/>
   <link rel="stylesheet" href="styles/header-banner.css?v=2.0"/>
-  <link rel="stylesheet" href="styles/post-layout.css?v=2.0"/>
+  <link rel="stylesheet" href="styles/post-layout.css?v=20260925b"/>
   <link rel="stylesheet" href="styles/affiliate-ui.css?v=2.0"/>
   <link rel="stylesheet" href="styles/footer.css?v=2.0"/>
   <link rel="stylesheet" href="styles/archive-page.css?v=2.0"/>
-  <link rel="stylesheet" href="styles/special-posts.css?v=2.0"/>
+  <link rel="stylesheet" href="styles/special-posts.css?v=20260925j"/>
   <link rel="stylesheet" href="styles/ai-transparency.css?v=1.0"/>
   <link rel="stylesheet" href="styles/post-series.css?v=1.0"/>
   <link rel="stylesheet" href="styles/contact-page.css?v=1.0"/>
@@ -175,6 +175,18 @@
 
         <!-- ── TẦNG 1: ĐẦU LUỒNG BÀI VIẾT (HERO / SPOTLIGHT) ── -->
         <div id="main-above-feed">
+
+          <!-- DEMO: Video & Reels Showcase Widget — Main Content Slider (OPEN_019) -->
+          <div class="special-posts-widget"
+               id="widget-reels-main"
+               data-pattern="reels"
+               data-limit="6"
+               data-sort="random"
+               data-mode="slider"
+               data-play-mode="modal"
+               data-title="Video">
+          </div>
+
           <div class="special-posts-widget"
                id="widget-spotlight-hero-preview"
                data-pattern="spotlight"
@@ -938,6 +950,19 @@
                data-limit="5"
                data-sort="random"
                data-title="📚 Chuyên Đề | 📚 Series Topic">
+          </div>
+        </div>
+
+        <!-- DEMO 6: Video & Reels Showcase Widget — Sidebar (OPEN_019) -->
+        <div class="sidebar-widget">
+          <div class="special-posts-widget"
+               id="widget-reels-sidebar"
+               data-pattern="reels"
+               data-limit="6"
+               data-sort="random"
+               data-mode="single"
+               data-play-mode="modal"
+               data-title="Video">
           </div>
         </div>
 
@@ -1819,7 +1844,7 @@
   <script src="scripts/reading-time.js"></script>
   <script src="scripts/post-series.js"></script>
   <script src="scripts/footer.js"></script>
-  <script src="scripts/special-posts.js"></script>
+  <script src="scripts/special-posts.js?v=20260925i"></script>
   <script src="scripts/ai-transparency.js"></script>
   <script src="scripts/homepage-interleaved.js"></script>
   <script src="scripts/guest-author.js"></script>

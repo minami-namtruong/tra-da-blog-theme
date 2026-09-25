@@ -1272,6 +1272,9 @@
   border: none !important;
   background: transparent !important;
 }
+#main-above-feed > :first-child {
+  margin-top: 0 !important;
+}
 
 /* Tầng 2: Khoảng cách của vùng Xen Kẽ Giữa Các Bài (In-Feed) */
 #main-in-feed-section {

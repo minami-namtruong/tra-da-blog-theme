@@ -660,3 +660,1039 @@
 .sp-digest-thumb.sp-no-thumb {
   background: var(--cover-default-gradient, linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%));
 }
+
+/* ==========================================================================
+   PATTERN: REELS — Video & Voice Reels Showcase (OPEN_019)
+   Living Canvas · Blurred BG Fill · Equalizer · Click-to-Play Facade
+   ========================================================================== */
+
+/* ── Khung viền Facebook Reels (Clean Box/Border chuẩn Facebook) ── */
+.sp-reels-shelf {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  padding: 0.75rem 0.85rem 0.85rem;
+  margin: 0 0 1.5rem;
+  position: relative;
+}
+
+/* ── Tiêu đề Video chuẩn Facebook (Icon + Video + More Actions) ── */
+.sp-reels-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1rem 0.25rem 0.65rem;
+}
+.sp-reels-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.sp-reels-header-icon {
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+.sp-reels-header-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.sp-reels-header-actions {
+  display: flex;
+  align-items: center;
+}
+.sp-reels-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sp-reels-more-btn:hover {
+  background: var(--bg-surface);
+  color: var(--text-main);
+}
+
+/* ── Container & Track: Kệ cuộn ── */
+.sp-reels-body {
+  position: relative;
+  overflow: visible;
+}
+
+.sp-reels-container {
+  position: relative;
+  overflow: visible;
+  padding: 0;
+}
+.sp-reels-container--single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* ── Thanh trượt ngang (Scroll Snap — chuẩn Facebook Reels) ── */
+.sp-reels-track {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0.15rem 0.35rem;
+  margin: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.sp-reels-track::-webkit-scrollbar { display: none; }
+
+/* ── Skeleton track ── */
+.sp-reels-track--skeleton {
+  gap: 0.65rem;
+}
+
+/* ── Nút điều hướng Prev / Next (Chuẩn nút tròn Facebook) ── */
+.sp-reels-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18), 0 2px 4px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1c1e21;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sp-reels-btn:hover {
+  background: #f2f3f5;
+  color: #000;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.sp-reels-btn svg { width: 18px; height: 18px; }
+.sp-reels-btn-prev { left: 4px; }
+.sp-reels-btn-next { right: 4px; }
+
+
+/* ── Floating 9:16 Reel Cards (Thon gọn chuẩn Facebook Reels) ── */
+.sp-reel-card {
+  flex-shrink: 0;
+  width: 175px;
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.14), 0 2px 6px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  position: relative;
+  cursor: pointer;
+}
+.sp-reel-card:hover {
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.25), 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-rgb, 99, 102, 241), 0.5);
+}
+
+/* Hot card: viền sáng nổi bật */
+.sp-reel-card--hot {
+  border-color: rgba(255, 107, 107, 0.5);
+  box-shadow: 0 4px 16px -2px rgba(255, 107, 107, 0.25), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+}
+.sp-reel-card--hot:hover {
+  border-color: rgba(255, 107, 107, 0.85);
+  box-shadow: 0 14px 28px -4px rgba(255, 107, 107, 0.35), 0 6px 12px -2px rgba(0, 0, 0, 0.08);
+}
+
+/* Skeleton card */
+.sp-reel-skeleton {
+  flex-shrink: 0;
+  width: 175px;
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: default;
+}
+.sp-reel-skeleton:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+.sp-reel-skeleton-bg {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    var(--bg-surface) 25%,
+    var(--border-hover) 50%,
+    var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: sp-shimmer 1.4s infinite;
+}
+
+/* ── Media area: chiếm trọn 100% diện tích card unibody ── */
+.sp-reel-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ── Thumbnail (Shorts / TikTok / Audio: cover mode) ── */
+.sp-reel-thumb--cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.sp-reel-card--previewing .sp-reel-thumb--cover {
+  transform: scale(1.04);
+}
+
+/* ── Blurred Background Fill (YouTube 16:9) ── */
+.sp-reel-blur-backdrop {
+  position: absolute;
+  inset: 0;
+  background-image: var(--reel-thumb);
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.6);
+  transform: scale(1.15);
+}
+.sp-reel-media-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sp-reel-media-center .sp-reel-thumb {
+  width: 100%;
+  max-height: 62%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.sp-reel-card--previewing .sp-reel-media-center .sp-reel-thumb {
+  transform: scale(1.03);
+}
+
+/* ── Overlay gradient + controls ── */
+.sp-reel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  /* Top gradient for bars/duration */
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.55) 0%,
+    transparent 35%,
+    transparent 60%,
+    rgba(0,0,0,0.65) 100%
+  );
+}
+
+/* ── Story Bars (mép trên) ── */
+/* ── Story Bars (mép trên thon gọn) ── */
+.sp-reel-story-bars {
+  display: flex;
+  gap: 2px;
+  padding: 0.4rem 0.45rem 0;
+}
+.sp-reel-story-bar {
+  flex: 1;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255,255,255,0.35);
+}
+.sp-reel-story-bar--done {
+  background: rgba(255,255,255,0.9);
+}
+.sp-reel-story-bar--active {
+  background: rgba(255,255,255,0.75);
+  position: relative;
+  overflow: hidden;
+}
+.sp-reel-story-bar--active::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 60%;
+  background: #fff;
+  border-radius: 1px;
+  animation: sp-story-progress 3s linear infinite;
+}
+@keyframes sp-story-progress {
+  0%   { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ── Top row: Badge Hot + Duration + Facebook 3-dots ── */
+.sp-reel-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.45rem 0;
+  pointer-events: auto;
+}
+.sp-reel-top-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.sp-reel-card-dots {
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-left: auto;
+}
+.sp-reel-card-dots:hover {
+  color: #fff;
+  transform: scale(1.15);
+}
+
+.sp-reel-badge-hot {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  border-radius: var(--radius-xs);
+  padding: 0.15em 0.45em;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+}
+
+.sp-reel-duration {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* ── Play Button (nút chơi trung tâm thon gọn với Pulse) ── */
+.sp-reel-play-btn {
+  pointer-events: auto;
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease;
+  z-index: 5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+.sp-reel-play-btn:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+.sp-reel-play-btn svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 2px; /* optical centering */
+}
+
+/* Pulse ring animation */
+.sp-reel-play-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  border: 2px solid rgba(255,255,255,0.55);
+  animation: sp-reel-pulse 2s ease-out infinite;
+}
+@keyframes sp-reel-pulse {
+  0%   { transform: scale(1); opacity: 0.8; }
+  70%  { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* ── Audio Equalizer Waveform ── */
+.sp-reel-eq {
+  pointer-events: none;
+  position: absolute;
+  bottom: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+.sp-reel-eq-bar {
+  display: block;
+  width: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.85);
+  animation: sp-equalizer 1.1s ease-in-out infinite;
+}
+.sp-reel-eq-bar:nth-child(1) { animation-delay: 0s;     height: 40%; }
+.sp-reel-eq-bar:nth-child(2) { animation-delay: 0.15s;  height: 80%; }
+.sp-reel-eq-bar:nth-child(3) { animation-delay: 0.3s;   height: 60%; }
+.sp-reel-eq-bar:nth-child(4) { animation-delay: 0.45s;  height: 100%; }
+.sp-reel-eq-bar:nth-child(5) { animation-delay: 0.6s;   height: 50%; }
+
+@keyframes sp-equalizer {
+  0%, 100% { height: 20%; }
+  50%       { height: 100%; }
+}
+
+/* ── Spinning Disc (Đĩa than xoay — Audio) ── */
+.sp-reel-disc {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0.8rem;
+  right: 0.7rem;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: sp-spin-disc 4s linear infinite;
+}
+.sp-reel-disc-inner {
+  font-size: 1rem;
+  animation: sp-spin-disc 4s linear infinite reverse;
+}
+@keyframes sp-spin-disc {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Audio Marquee Ticker ── */
+.sp-reel-marquee {
+  pointer-events: none;
+  position: absolute;
+  bottom: 3.8rem;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+.sp-reel-marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+  animation: sp-marquee 12s linear infinite;
+  padding-left: 100%;
+}
+@keyframes sp-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ── Inline Player Slot (Click-to-Play Facade) ── */
+.sp-reel-player-slot {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  display: none;
+  flex-direction: column;
+}
+.sp-reel-card--playing .sp-reel-player-slot,
+.sp-reel-player-slot:not([hidden]) {
+  display: flex;
+}
+.sp-reel-card--playing .sp-reel-overlay,
+.sp-reel-card--playing .sp-reel-thumb,
+.sp-reel-card--playing .sp-reel-blur-backdrop,
+.sp-reel-card--playing .sp-reel-media-center {
+  visibility: hidden;
+}
+.sp-reel-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  object-fit: cover;
+}
+.sp-reel-audio-player {
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 1rem;
+}
+.sp-reel-close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  transition: background 0.2s ease;
+}
+.sp-reel-close-btn:hover { background: rgba(0,0,0,0.8); }
+
+/* ── Bottom Overlay Info (Chuẩn Facebook Reels: Title chữ trắng chìm trên nền gradient) ── */
+.sp-reel-bottom-info {
+  margin-top: auto;
+  padding: 2.2rem 0.65rem 0.75rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.7) 45%,
+    rgba(0, 0, 0, 0.25) 75%,
+    transparent 100%
+  );
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  z-index: 6;
+}
+
+.sp-reel-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.sp-reel-card:hover .sp-reel-title {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.7);
+  text-underline-offset: 2px;
+}
+
+/* ── Tràn viền Edge-to-Edge cho widget Reels trong Sidebar ── */
+.sidebar-widget.sidebar-widget--edge-to-edge,
+.sidebar-widget:has(.pattern-reels),
+.sidebar-widget:has([data-pattern="reels"]) {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.sp-reels-shelf--sidebar,
+.sidebar .sp-reels-shelf,
+.sidebar-widget .sp-reels-shelf {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.sp-reels-shelf--sidebar .sp-reels-header,
+.sidebar .sp-reels-shelf .sp-reels-header,
+.sidebar-widget .sp-reels-shelf .sp-reels-header {
+  display: none !important;
+}
+
+.sp-reels-container--single {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+.sp-reels-container--single .sp-reels-track {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.sp-reels-container--single .sp-reel-card {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  margin: 0;
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .sp-reels-container--single .sp-reel-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Nút Next/Prev kính mờ: Mặc định ẩn, chỉ hiện khi rê chuột (Hover Reveal) */
+.sp-reels-single-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(0.85);
+  z-index: 15;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s,
+              background 0.2s ease,
+              border-color 0.2s ease;
+}
+
+/* Hover vào container thì 2 nút hiện lên mượt mà */
+.sp-reels-container--single:hover .sp-reels-single-nav {
+  opacity: 0.9;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+
+.sp-reels-single-nav:hover {
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #ffffff;
+  transform: translateY(-50%) scale(1.14) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+.sp-reels-single-nav svg {
+  width: 18px;
+  height: 18px;
+}
+.sp-reels-single-prev {
+  left: 10px;
+}
+.sp-reels-single-next {
+  right: 10px;
+}
+
+/* Thiết bị cảm ứng không có hover: giữ hiển thị nhẹ */
+@media (hover: none) {
+  .sp-reels-container--single .sp-reels-single-nav {
+    opacity: 0.85;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+/* Vạch tiến trình ở single mode chạy 6s và tạm dừng khi rê chuột */
+.sp-reels-container--single .sp-reel-story-bar--active::after {
+  animation-duration: 6s;
+}
+.sp-reels-container--single:hover .sp-reel-story-bar--active::after {
+  animation-play-state: paused;
+}
+
+/* ── Container Query: Sidebar (≤ 360px) ── */
+@container special-widget (max-width: 360px) {
+  .sp-reels-track {
+    padding: 0.25rem 0.35rem 0.5rem;
+    gap: 0.65rem;
+  }
+  .sp-reel-card {
+    width: 160px;
+  }
+  .sp-reel-skeleton {
+    width: 160px;
+  }
+  .sp-reel-play-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .sp-reel-play-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ── Responsive: mobile (≤ 480px viewport) — hiện 1.5 - 2 cards ── */
+@media (max-width: 480px) {
+  .sp-reel-card {
+    width: clamp(150px, 48vw, 180px);
+  }
+  .sp-reel-skeleton {
+    width: clamp(150px, 48vw, 180px);
+  }
+}
+
+@media (max-width: 640px) {
+  .sp-reels-btn {
+    display: none;
+  }
+}
+
+/* ── Dark Mode tweaks ── */
+[data-theme="dark"] .sp-reels-shelf {
+  background: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+[data-theme="dark"] .sp-reel-card {
+  background: #000;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] .sp-reel-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 36px -6px rgba(0, 0, 0, 0.7);
+}
+[data-theme="dark"] .sp-reels-btn {
+  background: #242526;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REELS THEATER LIGHTBOX MODAL (DONE_019)
+   ═══════════════════════════════════════════════════════════════ */
+.sp-reels-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s;
+}
+
+.sp-reels-modal--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sp-reels-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+}
+
+.sp-reels-modal-dialog {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Header: Counter Badge & Close */
+.sp-reels-modal-header {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.sp-reels-modal-badge {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.sp-reels-modal-close {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full, 9999px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.sp-reels-modal-close:hover {
+  background: rgba(255, 255, 255, 0.32);
+  transform: scale(1.08);
+}
+
+/* Navigation buttons (Desktop) */
+.sp-reels-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full, 9999px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.sp-reels-modal-nav svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sp-reels-modal-nav:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.sp-reels-modal-nav--prev {
+  left: 2rem;
+}
+
+.sp-reels-modal-nav--next {
+  right: 2rem;
+}
+
+/* 9:16 Video Stage */
+.sp-reels-modal-stage {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: calc(100vh - 5.5rem);
+  max-height: 780px;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-reels-modal-player-slot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.sp-reels-modal-iframe,
+.sp-reels-modal-video {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  object-fit: cover;
+}
+
+/* Audio Player View inside Modal */
+.sp-reels-modal-audio-view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1e1e24 0%, #0d0d11 100%);
+  padding: 2rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.sp-reels-modal-disc {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: sp-spin-disc 5s linear infinite;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+
+.sp-reels-modal-audio-name {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  max-width: 90%;
+}
+
+.sp-reels-modal-audio {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Bottom Overlay Meta */
+.sp-reels-modal-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3.5rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.65) 55%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sp-reels-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: auto;
+}
+
+.sp-reels-modal-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sp-reels-modal-cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full, 9999px);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sp-reels-modal-cta:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.35);
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .sp-reels-modal-dialog {
+    padding: 0;
+  }
+  .sp-reels-modal-stage {
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    aspect-ratio: unset;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+  }
+  .sp-reels-modal-nav {
+    display: none;
+  }
+  .sp-reels-modal-header {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+  .sp-reels-modal-overlay {
+    padding-bottom: 2rem;
+  }
+}
+
+
